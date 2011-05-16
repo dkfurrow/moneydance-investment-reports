@@ -125,7 +125,10 @@ public static void writeIniFile(String pathString) {
     }
 
     public static String[] parseCSVLine(String s) {
-        return  s.split(",\\s*");
+        //return  s.split(",\\s*"); //old code replace with next line
+        return  s.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        //splits on commas, but ignores commas inside of quotes
+        //http://stackoverflow.com/questions/2241758/regarding-java-split-command-parsing-csv-file
     }
 
     /**
@@ -138,7 +141,7 @@ public static void writeIniFile(String pathString) {
         PrintWriter outputStream = null;
         try {
             outputStream = new PrintWriter(new FileWriter(outputFile));
-            if(!header.equals(null)) outputStream.println(header.toString());
+            if(!(header == null)) outputStream.println(header.toString());
             for (Iterator<String[]> it = writeArrayList.iterator(); it.hasNext();) {
                 String outputLine = writeCSVLine(it.next());
                 outputStream.println(outputLine);
