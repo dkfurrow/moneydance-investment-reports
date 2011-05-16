@@ -433,7 +433,7 @@ public class RepFromTo {
      */
     public static String[] loadTransValuesFromTo(RepFromTo thisFT, int reportType) {
         ArrayList<String> snapValues = new ArrayList<String>();
-
+          String tilde = "\u007e";
         switch (reportType) {
             case 1: // individual security
                 snapValues.add(thisFT.account.getParentAccount().getAccountName());
@@ -441,27 +441,27 @@ public class RepFromTo {
                 break;
             case 2: //aggregated securities
                 snapValues.add(thisFT.account.getAccountName());
-                snapValues.add("~AllSec");
+                snapValues.add(tilde + "AllSec");
                 break;
             case 3: //cash balance
                 snapValues.add(thisFT.account.getAccountName());
-                snapValues.add("~Cash");
+                snapValues.add(tilde + "Cash");
                 break;
             case 4: //aggregated securities + cash
                 snapValues.add(thisFT.account.getAccountName());
-                snapValues.add("~AllSec+Cash");
+                snapValues.add(tilde + "AllSec+Cash");
                 break;
             case 5: //all securities
-                snapValues.add("~ALL");
-                snapValues.add("~AllSec");
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec");
                 break;
             case 6: //all cash
-                snapValues.add("~ALL");
-                snapValues.add("~Cash");
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "Cash");
                 break;
             case 7: //all securities +  cash
-                snapValues.add("~ALL");
-                snapValues.add("~AllSec+Cash");
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec+Cash");
                 break;
         }
         snapValues.add(thisFT.ticker);

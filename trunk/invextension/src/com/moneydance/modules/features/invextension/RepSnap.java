@@ -442,6 +442,7 @@ public class RepSnap {
      */
     public static String[] loadTransValuesSnap(RepSnap thisSnap, int reportType) {
         ArrayList<String> snapValues = new ArrayList<String>();
+        String tilde = "\u007e";
 
         switch (reportType) {
             case 1: // individual security
@@ -450,27 +451,27 @@ public class RepSnap {
                 break;
             case 2: //aggregated securities
                 snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add("~AllSec");
+                snapValues.add(tilde + "AllSec");
                 break;
             case 3: //cash balance
                 snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add("~Cash");
+                snapValues.add(tilde + "Cash");
                 break;
             case 4: //aggregated securities + cash
                 snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add("~AllSec+Cash");
+                snapValues.add(tilde + "AllSec+Cash");
                 break;
             case 5: //all securities
-                snapValues.add("~ALL");
-                snapValues.add("~AllSec");
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec");
                 break;
             case 6: //all cash
-                snapValues.add("~ALL");
+                snapValues.add(tilde + "ALL");
                 snapValues.add("~Cash");
                 break;
             case 7: //all securities +  cash
-                snapValues.add("~ALL");
-                snapValues.add("~AllSec+Cash");
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec+Cash");
                 break;
         }
         snapValues.add(thisSnap.ticker);
