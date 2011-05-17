@@ -794,32 +794,6 @@ public final class SecReportProd {
         }
     }
 
-    //test method to output return primitives for use during debugging
-     private static void testWriteTotRet(String accountName, Double startValue,
-    double endValue, Double income, Double expense, TreeMap<Integer, Double> mdMap) {
-    File writeFile = new File("E:\\Temp\\" + accountName + ".csv");
-    PrintWriter outputStream = null;
-    try {
-    outputStream = new PrintWriter(new FileWriter(writeFile));
-    outputStream.println("dump of return values");
-    outputStream.println("startValue," + startValue);
-    outputStream.println("endValue," + endValue);
-    outputStream.println("income," + income);
-    outputStream.println("expense," + expense);
-    for (Iterator it = mdMap.keySet().iterator(); it.hasNext();) {
-    Integer dateInt = (Integer) it.next();
-    Double value = mdMap.get(dateInt);
-    outputStream.println(dateInt + "," + value);
-    }
-
-    } catch (Exception e) {
-    Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, e);
-    } finally {
-    outputStream.close();
-    }
-    }
-
-
 }
 
  

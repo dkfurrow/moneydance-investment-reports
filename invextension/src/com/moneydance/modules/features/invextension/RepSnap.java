@@ -409,7 +409,7 @@ public class RepSnap {
         snapValues.append(DateUtils.convertToShort(snapDateInt));
         snapValues.append("\r\n");
         snapValues.append("PrntAcct" + ",");
-        snapValues.append("Account" + ",");
+        snapValues.append("Security" + ",");
         snapValues.append("Ticker" + ",");
         snapValues.append("LastPrice,");
         snapValues.append("EndPos,");

@@ -344,14 +344,14 @@ public class RepFromTo {
             double mdValue = 0;
             double sumCF = 0;
             double weightCF = 0;
-            MinMax mmValues = new MinMax(new ArrayList(mdMap.keySet()));
-            Integer cd = DateUtils.getDaysBetween(mmValues.min, mmValues.max);
+
+            Integer cd = DateUtils.getDaysBetween(mdMap.firstKey(), mdMap.lastKey());
             Double cdD = cd.doubleValue();
 
             for (Iterator it = mdMap.keySet().iterator(); it.hasNext();) {
                 Integer thisDateInt = (Integer) it.next();
                 Double cf = mdMap.get(thisDateInt);
-                Integer dayBetw = DateUtils.getDaysBetween(mmValues.min, thisDateInt);
+                Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(), thisDateInt);
                 Double dayBetD = dayBetw.doubleValue();
                 double wSubI = (cdD - dayBetD) / cdD;
                 weightCF = weightCF + (wSubI * cf);
@@ -401,7 +401,7 @@ public class RepFromTo {
         snapValues.append(DateUtils.convertToShort(toDateInt));
         snapValues.append("\r\n");
         snapValues.append("PrntAcct,");
-        snapValues.append("Acct,");
+        snapValues.append("Security,");
         snapValues.append("Ticker,");
         snapValues.append("StartPos,");
         snapValues.append("EndPos,");
@@ -487,22 +487,5 @@ public class RepFromTo {
         return snapValues.toArray(new String[snapValues.size()]);
     }
 
-    /*
-     * "helper" class which gives min and max of ArrayList
-     */
-    public static class MinMax {
-
-        Integer min;
-        Integer max;
-
-        public MinMax(ArrayList<Integer> inputArrayList) {
-            this.min = Integer.MAX_VALUE;
-            this.max = Integer.MIN_VALUE;
-            for (Iterator<Integer> it = inputArrayList.iterator(); it.hasNext();) {
-                Integer integer = it.next();
-                this.min = Math.min(this.min, integer);
-                this.max = Math.max(this.max, integer);
-            }
-        }
-    }
+   
 }
