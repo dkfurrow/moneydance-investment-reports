@@ -433,6 +433,102 @@ public class RepSnap {
 
         return snapValues;
     }
+    
+    /* Generate Header Line for JTable Output
+     *
+     */
+    public static String[] getRepSnapHeader() {
+        ArrayList<String> snapValues = new ArrayList<String>();
+        snapValues.add("PrntAcct");
+        snapValues.add("Security");
+        snapValues.add("Ticker");
+        snapValues.add("LastPrice");
+        snapValues.add("EndPos");
+        snapValues.add("EndValue");
+        snapValues.add("AbsPrcChg");
+        snapValues.add("AbsValChg");
+        snapValues.add("PctPrcChg");
+        snapValues.add("TR1Day");
+        snapValues.add("TR1Wk");
+        snapValues.add("TR1Mth");
+        snapValues.add("TR3Mth");
+        snapValues.add("TR_YTD");
+        snapValues.add("TR1Year");
+        snapValues.add("TR3Year");
+        snapValues.add("TR_ALL");
+        snapValues.add("AnnRet_ALL");
+        snapValues.add("AvgCost");
+        snapValues.add("income");
+        snapValues.add("TotGain");
+//        snapValues.append("\n");
+
+        return snapValues.toArray(new String[snapValues.size()]);
+    }
+
+
+     /**
+     * generates individual line report body
+     * @param thisSnap report line
+     * @param reportType level of aggregation (security, account, aggregate, cash, etc)
+     * @return array of values
+     */
+    public Object[] getRepSnapObject(int reportType) {
+        ArrayList<Object> snapValues = new ArrayList<Object>();
+        String tilde = "\u007e";
+
+        switch (reportType) {
+            case 1: // individual security
+                snapValues.add(this.account.getParentAccount().getAccountName());
+                snapValues.add(this.account.getAccountName());
+                break;
+            case 2: //aggregated securities
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "AllSec");
+                break;
+            case 3: //cash balance
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "Cash");
+                break;
+            case 4: //aggregated securities + cash
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "AllSec+Cash");
+                break;
+            case 5: //all securities
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec");
+                break;
+            case 6: //all cash
+                snapValues.add(tilde + "ALL");
+                snapValues.add("~Cash");
+                break;
+            case 7: //all securities +  cash
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec+Cash");
+                break;
+        }
+        snapValues.add(this.ticker);
+        snapValues.add(this.lastPrice);
+        snapValues.add(this.endPos);
+        snapValues.add(this.endValue);
+        snapValues.add(this.absPriceChange);
+        snapValues.add(this.absValueChange);
+        snapValues.add(this.pctPriceChange);
+        snapValues.add(this.totRet1Day);
+        snapValues.add(this.totRetWk);
+        snapValues.add(this.totRet4Wk);
+        snapValues.add(this.totRet3Mnth);
+        snapValues.add(this.totRetYTD);
+        snapValues.add(this.totRetYear);
+        snapValues.add(this.totRet3year);
+        snapValues.add(this.totRetAll);
+        snapValues.add(this.annRetAll);
+        snapValues.add(this.avgCostBasis);
+        snapValues.add(this.income);
+        snapValues.add(this.totalGain);
+        return snapValues.toArray();
+    }
+
+
 
      /**
      * generates individual line report body

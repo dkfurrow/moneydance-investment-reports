@@ -55,6 +55,7 @@ public final class SecReportProd {
      */
     public static ArrayList<String[]> getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
         ArrayList<String[]> reportArrayList = new ArrayList<String[]>();
+        Object[][] FTData = null;
         RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
         RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
 
@@ -68,10 +69,12 @@ public final class SecReportProd {
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepFromTo thisSecFromTo = new RepFromTo(currentInfo, transSet, fromDateInt, toDateInt);
                 reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisSecFromTo, 1));
+                FTData = addElement(FTData, thisSecFromTo.getRepFromToObject(1));
                 thisInvFromTo = addFT(thisSecFromTo, thisInvFromTo);
             } // end securities loop
             thisInvFromTo = getFTAggReturns(thisInvFromTo); //get aggregated returns for securities in account
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisInvFromTo, 2));
+            FTData = addElement(FTData, thisInvFromTo.getRepFromToObject(2));
             allInvFromTo = addFT(thisInvFromTo, allInvFromTo); // add to aggregate securities.
 
             SortedSet<TransValuesCum> parentSet =
@@ -83,23 +86,28 @@ public final class SecReportProd {
             RepFromTo cashReport =
                     getFTCashReturns(thisCashFromTo, thisInvFromTo); //get returns for cash account
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(cashReport, 3));
+            FTData = addElement(FTData, cashReport.getRepFromToObject(3));
 
             RepFromTo thisAggRetFromTo =
                     getFTAggRetWCash(thisCashFromTo, thisInvFromTo); //get  aggregated returns with cash accounted for
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisAggRetFromTo, 4));
+            FTData = addElement(FTData, thisAggRetFromTo.getRepFromToObject(4));
         } //end investment account loop
         //get returns for aggregated investment accounts
         allInvFromTo =
                 getFTAggReturns(allInvFromTo); //get aggregated returns from all securities
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allInvFromTo, 5));
+        FTData = addElement(FTData, allInvFromTo.getRepFromToObject(5));
 
         RepFromTo allCashReport =
                 getFTCashReturns(allCashFromTo, allInvFromTo); //get cash returns for all accounts
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allCashReport, 6));
+        FTData = addElement(FTData, allCashReport.getRepFromToObject(6));
 
         RepFromTo allAggRetFromTo =
                 getFTAggRetWCash(allCashFromTo, allInvFromTo); //get  agg returns w/ cash for all accounts
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allAggRetFromTo, 7));
+        FTData = addElement(FTData, allAggRetFromTo.getRepFromToObject(7));
 
         Collections.sort(reportArrayList, PrntAcct_Order);
         return reportArrayList;
@@ -113,6 +121,7 @@ public final class SecReportProd {
      */
     public static ArrayList<String[]> getSnapReport(BulkSecInfo currentInfo, int snapDateInt) {
         ArrayList<String[]> reportArrayList = new ArrayList<String[]>();
+        Object[][] SnapData = null;
         RepSnap allInvSnap = new RepSnap(null, snapDateInt);
         RepSnap allCashSnap = new RepSnap(null, snapDateInt);
         /*loop through investment accounts */
@@ -125,11 +134,13 @@ public final class SecReportProd {
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepSnap thisSecSnap = new RepSnap(currentInfo, transSet, snapDateInt);
                 reportArrayList.add(RepSnap.loadTransValuesSnap(thisSecSnap, 1));
+                SnapData = addElement(SnapData, thisSecSnap.getRepSnapObject(1));
                 thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
             }// end securities loop
             RepSnap thisInvRepSnap =
                     getSnapAggReturns(thisInvSnap); //get aggregated returns for securities
             reportArrayList.add(RepSnap.loadTransValuesSnap(thisInvRepSnap, 2));
+            SnapData = addElement(SnapData, thisInvRepSnap.getRepSnapObject(2));
             allInvSnap = addSnap(thisInvSnap, allInvSnap); // add to aggregate securities.
 
             SortedSet<TransValuesCum> parentSet =
@@ -140,21 +151,26 @@ public final class SecReportProd {
             RepSnap cashReport =
                     getSnapCashReturns(thisCashSnap, thisInvSnap); //get returns for cash account
             reportArrayList.add(RepSnap.loadTransValuesSnap(cashReport, 3));
+            SnapData = addElement(SnapData, cashReport.getRepSnapObject(4));
 
             RepSnap thisAggRetSnap =
                     getSnapAggRetWCash(thisCashSnap, thisInvSnap); //get  aggregated returns with cash accounted for
             reportArrayList.add(RepSnap.loadTransValuesSnap(thisAggRetSnap, 4));
+            SnapData = addElement(SnapData, thisAggRetSnap.getRepSnapObject(4));
         }//end investment account loop
 
         //get returns for aggregated investment accounts
         allInvSnap = getSnapAggReturns(allInvSnap); //get aggregated returns from all securities
         reportArrayList.add(RepSnap.loadTransValuesSnap(allInvSnap, 5));
+        SnapData = addElement(SnapData, allInvSnap.getRepSnapObject(5));
 
         RepSnap allCashReport = getSnapCashReturns(allCashSnap, allInvSnap); //get cash returns for all accounts
         reportArrayList.add(RepSnap.loadTransValuesSnap(allCashReport, 6));
+        SnapData = addElement(SnapData, allCashReport.getRepSnapObject(6));
 
         RepSnap allAggRetSnap = getSnapAggRetWCash(allCashSnap, allInvSnap); //get  agg returns w/ cash for all accounts
         reportArrayList.add(RepSnap.loadTransValuesSnap(allAggRetSnap, 7));
+        SnapData = addElement(SnapData, allAggRetSnap.getRepSnapObject(7));
 
         Collections.sort(reportArrayList, PrntAcct_Order);
         return reportArrayList;
@@ -777,6 +793,29 @@ public final class SecReportProd {
         outObj.totRetYTD = thisInvSnap.retDateMap.get("YTD") == null ? Double.NaN : outObj.mdReturns.get("YTD");
 
         return outObj;
+    }
+
+    /*
+     * generic method to add a one-dimensional object array to a
+     * two-dimensional object array
+     */
+
+    public static Object[][] addElement(Object[][] inArray, Object[] element) {
+
+        if (inArray == null) {
+            Object[][] outArray = new Object[1][element.length];
+            outArray[0] = element;
+            return outArray;
+        } else {
+            //Dimension new array (note initialized to 1st Row)
+            Object[][] outArray = new Object[inArray.length + 1][inArray[0].length];
+            for (int i = 0; i < inArray.length; i++) {
+                System.arraycopy(inArray[i], 0, outArray[i], 0, inArray[i].length);
+            }
+            outArray[inArray.length] = element;
+            return outArray;
+
+        }
     }
 
 

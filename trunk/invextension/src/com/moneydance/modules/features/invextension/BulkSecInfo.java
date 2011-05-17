@@ -32,6 +32,7 @@ import com.moneydance.apps.md.model.SplitTxn;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -320,6 +321,22 @@ public class BulkSecInfo {
         Collections.sort(txnInfo, PrntAcct_Order);
         return txnInfo;
     }
+
+     /*
+      * Generates total number of line items for report
+      * Assuming one line per security, 3 lines for Account
+      * + 3 lines for Total
+      */
+
+     public int getNumReportRows(){
+         int AcctRows = this.invSec.keySet().size() * 3 + 3; //3 rows per account + 3 for Total
+         int SecRows = 0;
+         for (Iterator<Account> it = this.invSec.keySet().iterator(); it.hasNext();) {
+             Account invAcct = it.next();
+             SecRows = SecRows + this.invSec.get(invAcct).size();
+         }
+         return SecRows + AcctRows;
+     }
 
     public static final Comparator<String[]> PrntAcct_Order =
                                  new Comparator<String[]>() {

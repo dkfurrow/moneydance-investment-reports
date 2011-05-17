@@ -425,6 +425,40 @@ public class RepFromTo {
         return snapValues;
     }
 
+    /*
+     * returns Tableheader for report
+     */
+
+    public static String[] getRepFromToHeader() {
+        ArrayList<String> snapValues = new ArrayList<String>();
+
+        snapValues.add("PrntAcct");
+        snapValues.add("Security");
+        snapValues.add("Ticker");
+        snapValues.add("StartPos");
+        snapValues.add("EndPos");
+        snapValues.add("StartPrice");
+        snapValues.add("EndPrice");
+        snapValues.add("StartValue");
+        snapValues.add("EndValue");
+        snapValues.add("buy");
+        snapValues.add("sell");
+        snapValues.add("shortSell");
+        snapValues.add("coverShort");
+        snapValues.add("income");
+        snapValues.add("Expense");
+        snapValues.add("longBasis");
+        snapValues.add("shortBasis");
+        snapValues.add("realizedGain");
+        snapValues.add("unrealizedGain");
+        snapValues.add("periodReturn");
+        snapValues.add("percentReturn");
+        snapValues.add("annualPercentReturn");
+        
+       return snapValues.toArray(new String[snapValues.size()]);
+    }
+
+
     /**
      * generates individual line report body
      * @param thisFT report line
@@ -485,6 +519,68 @@ public class RepFromTo {
         snapValues.add(Double.toString(thisFT.percentReturn));
         snapValues.add(Double.toString(thisFT.annualPercentReturn));
         return snapValues.toArray(new String[snapValues.size()]);
+    }
+
+    /**
+     * generates individual line report body
+     * @param thisFT report line
+     * @param reportType level of aggregation (security, account, aggregate, cash, etc)
+     * @return array of values
+     */
+    public Object[] getRepFromToObject(int reportType) {
+        ArrayList<Object> snapValues = new ArrayList<Object>();
+          String tilde = "\u007e";
+        switch (reportType) {
+            case 1: // individual security
+                snapValues.add(this.account.getParentAccount().getAccountName());
+                snapValues.add(this.account.getAccountName());
+                break;
+            case 2: //aggregated securities
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "AllSec");
+                break;
+            case 3: //cash balance
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "Cash");
+                break;
+            case 4: //aggregated securities + cash
+                snapValues.add(this.account.getAccountName());
+                snapValues.add(tilde + "AllSec+Cash");
+                break;
+            case 5: //all securities
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec");
+                break;
+            case 6: //all cash
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "Cash");
+                break;
+            case 7: //all securities +  cash
+                snapValues.add(tilde + "ALL");
+                snapValues.add(tilde + "AllSec+Cash");
+                break;
+        }
+        snapValues.add(this.ticker);
+        snapValues.add(this.startPos);
+        snapValues.add(this.endPos);
+        snapValues.add(this.startPrice);
+        snapValues.add(this.endPrice);
+        snapValues.add(this.startValue);
+        snapValues.add(this.endValue);
+        snapValues.add(this.buy);
+        snapValues.add(this.sell);
+        snapValues.add(this.shortSell);
+        snapValues.add(this.coverShort);
+        snapValues.add(this.income);
+        snapValues.add(this.expense);
+        snapValues.add(this.longBasis);
+        snapValues.add(this.shortBasis);
+        snapValues.add(this.realizedGain);
+        snapValues.add(this.unrealizedGain);
+        snapValues.add(this.periodReturn);
+        snapValues.add(this.percentReturn);
+        snapValues.add(this.annualPercentReturn);
+        return snapValues.toArray();
     }
 
    
