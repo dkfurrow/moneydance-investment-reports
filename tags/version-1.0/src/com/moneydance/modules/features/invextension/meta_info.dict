@@ -1,0 +1,8 @@
+{
+  "vendor" = "Dale Furrow"
+  "module_build" = "3"
+  "vendor.url" = "http://sites.google.com/site/dkfurrow/investment-reports"
+  "module_name" = "Investment Reports v 1.0"
+  "module_desc" = "<html><body><title>Investment Reports Download</title><p>Useful reports on security/investment performance</p></body></html>"
+  "desc" = "Reports in CSV form at user-designated location. Reports include downloads of security prices and transaction activity, Two-Date reports with accounting and performance data ('From/To'), and a Single-date, standardized report ('Snapshot')"
+}
