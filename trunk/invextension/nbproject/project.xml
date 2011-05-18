@@ -46,12 +46,13 @@
                     <ide-action name="clean"/>
                 </context-menu>
             </view>
+            <subprojects/>
         </general-data>
-        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/3">
             <compilation-unit>
                 <package-root>src</package-root>
                 <classpath mode="compile">lib/commons-lang-2.5-javadoc.jar;lib/commons-lang-2.5-sources.jar;lib/commons-lang-2.5.jar;lib/commons-logging-1.1.1-javadoc.jar;lib/commons-logging-1.1.1-sources.jar;lib/commons-logging-1.1.1.jar;lib/commons-logging-adapters-1.1.1.jar;lib/commons-logging-api-1.1.1.jar;lib/commons-logging-tests.jar;lib/extadmin.jar;lib/moneydance.jar</classpath>
-                <source-level>1.5</source-level>
+                <source-level>1.6</source-level>
             </compilation-unit>
         </java-data>
     </configuration>
