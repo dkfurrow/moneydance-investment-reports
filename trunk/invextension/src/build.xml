@@ -42,9 +42,9 @@ http://jakarta.apache.org/ant/index.html
   <target name="invextension" depends="init">
     <mkdir dir="${dist}"/>
     <mkdir dir="${build}"/>
-    <javac  target="1.5" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+    <javac  target="1.6" srcdir="${src}" debug="${debug}" optimize="${optimize}"
       classpathref="classpath"  destdir="${build}"
-      includes="com/moneydance/modules/features/invextension/**">
+      includes="com/moneydance/modules/features/invextension/**"> <!--changed to 1.6 -->
     <compilerarg value = "-Xlint:all"/>
     </javac>
     
