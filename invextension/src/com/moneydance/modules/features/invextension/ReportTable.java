@@ -67,7 +67,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
+
 
 
 
@@ -866,7 +866,7 @@ public class ReportTable extends JScrollPane {
                     column.setHeaderRenderer(new ArrowHeader(this.lockedTable, 3,
                             thirdOrder == SortOrder.DESCENDING ? true : false));
                 } else {
-                    column.setHeaderRenderer(new DefaultTableCellHeaderRenderer()); //TODO: changed for testing
+                    column.setHeaderRenderer(new DefaultTableCellHeaderRenderer()); 
                 }
             } else {
                 viewCol = this.scrollTable.convertColumnIndexToView(i);
@@ -1091,11 +1091,11 @@ public class ReportTable extends JScrollPane {
          outerFrame.getContentPane().setLayout(new GridBagLayout());
          JPanel controlPanel = new JPanel( new FlowLayout(FlowLayout.LEFT,10,10));
          JPanel freezeColsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0,0));
-
+         
          Integer[] freezeCols = new Integer [] {0,1,2,3,4,5};
          JLabel freezeColsLabel = new JLabel("Set Frozen Columns  ");
          JComboBox freezeColsBox = new JComboBox(freezeCols);
-         freezeColsBox.setSelectedIndex(numFreezeCols); //TODO: Make field
+         freezeColsBox.setSelectedIndex(numFreezeCols); 
          JButton buttonSort = new JButton("Sort Table");
          JCheckBox hideClosedBox = new JCheckBox("Hide Closed Positions", false);
          JButton copyCB = new JButton("Copy Table to Clipboard");
@@ -1171,7 +1171,6 @@ public class ReportTable extends JScrollPane {
                 (int) (screenSize.getHeight() * 0.8));
         outerFrame.setSize(frameSize);
         outerFrame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
-        outerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); TODO://Remove in final version
         outerFrame.setVisible(true);
 
 
