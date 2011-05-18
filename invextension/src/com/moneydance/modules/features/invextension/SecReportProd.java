@@ -20,9 +20,11 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.modules.features.invextension.ReportTable.ColType;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 
 
 
@@ -35,6 +37,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.AbstractTableModel;
+import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
 
 /** produces FromTo and Snap reports
  * @author Dale Furrow
@@ -42,6 +46,13 @@ import java.util.logging.Logger;
  * @since 1.0
 */
 public final class SecReportProd {
+
+    private static final ColType[] ftColTypes = new ColType[] {
+        ColType.STRING, ColType.STRING, ColType.STRING, ColType.DOUBLE3,ColType.DOUBLE3,
+        ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
+        ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
+        ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
+        ColType.PERCENT1,ColType.PERCENT1};
 
     private SecReportProd(){
     }
@@ -55,7 +66,7 @@ public final class SecReportProd {
      */
     public static ArrayList<String[]> getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
         ArrayList<String[]> reportArrayList = new ArrayList<String[]>();
-        Object[][] FTData = null;
+        Object[][]ftData = null;
         RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
         RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
 
@@ -69,12 +80,12 @@ public final class SecReportProd {
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepFromTo thisSecFromTo = new RepFromTo(currentInfo, transSet, fromDateInt, toDateInt);
                 reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisSecFromTo, 1));
-                FTData = addElement(FTData, thisSecFromTo.getRepFromToObject(1));
+                ftData = addElement(ftData, thisSecFromTo.getRepFromToObject(1));
                 thisInvFromTo = addFT(thisSecFromTo, thisInvFromTo);
             } // end securities loop
             thisInvFromTo = getFTAggReturns(thisInvFromTo); //get aggregated returns for securities in account
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisInvFromTo, 2));
-            FTData = addElement(FTData, thisInvFromTo.getRepFromToObject(2));
+            ftData = addElement(ftData, thisInvFromTo.getRepFromToObject(2));
             allInvFromTo = addFT(thisInvFromTo, allInvFromTo); // add to aggregate securities.
 
             SortedSet<TransValuesCum> parentSet =
@@ -86,31 +97,50 @@ public final class SecReportProd {
             RepFromTo cashReport =
                     getFTCashReturns(thisCashFromTo, thisInvFromTo); //get returns for cash account
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(cashReport, 3));
-            FTData = addElement(FTData, cashReport.getRepFromToObject(3));
+            ftData = addElement(ftData, cashReport.getRepFromToObject(3));
 
             RepFromTo thisAggRetFromTo =
                     getFTAggRetWCash(thisCashFromTo, thisInvFromTo); //get  aggregated returns with cash accounted for
             reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisAggRetFromTo, 4));
-            FTData = addElement(FTData, thisAggRetFromTo.getRepFromToObject(4));
+            ftData = addElement(ftData, thisAggRetFromTo.getRepFromToObject(4));
         } //end investment account loop
         //get returns for aggregated investment accounts
         allInvFromTo =
                 getFTAggReturns(allInvFromTo); //get aggregated returns from all securities
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allInvFromTo, 5));
-        FTData = addElement(FTData, allInvFromTo.getRepFromToObject(5));
+        ftData = addElement(ftData, allInvFromTo.getRepFromToObject(5));
 
         RepFromTo allCashReport =
                 getFTCashReturns(allCashFromTo, allInvFromTo); //get cash returns for all accounts
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allCashReport, 6));
-        FTData = addElement(FTData, allCashReport.getRepFromToObject(6));
+        ftData = addElement(ftData, allCashReport.getRepFromToObject(6));
 
         RepFromTo allAggRetFromTo =
                 getFTAggRetWCash(allCashFromTo, allInvFromTo); //get  agg returns w/ cash for all accounts
         reportArrayList.add(RepFromTo.loadTransValuesFromTo(allAggRetFromTo, 7));
-        FTData = addElement(FTData, allAggRetFromTo.getRepFromToObject(7));
+        ftData = addElement(ftData, allAggRetFromTo.getRepFromToObject(7));
 
         Collections.sort(reportArrayList, PrntAcct_Order);
+
+        //Report Table Code
+        FTTableModel ftModel = new FTTableModel(ftData, RepFromTo.getRepFromToHeader());
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        String infoString = "Investment Performance--From: " +
+                DateUtils.convertToShort(fromDateInt) + " To: " +
+                DateUtils.convertToShort(toDateInt);
+        ReportTable.CreateAndShowTable(ftModel, ftColTypes, ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
+
+
+
+
+
+
+        
         return reportArrayList;
+
+
+
+
     }
 
     /**
@@ -173,6 +203,12 @@ public final class SecReportProd {
         SnapData = addElement(SnapData, allAggRetSnap.getRepSnapObject(7));
 
         Collections.sort(reportArrayList, PrntAcct_Order);
+        //insert GUI Code
+       
+
+
+
+
         return reportArrayList;
 
     }
@@ -833,7 +869,55 @@ public final class SecReportProd {
         }
     }
 
-}
+    static class FTTableModel extends AbstractTableModel {
+        public String[] columnNames;
+        public Object[][] data;
+
+        public FTTableModel(Object[][] data, String[] columnNames) {
+        super();
+        this.data = data;
+        this.columnNames = columnNames;
+        }
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+        public int getRowCount() {
+            return data.length;
+        }
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
+        public String[] getColumnNames(){
+            return this.columnNames;
+        }
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+        //allows table to be editable
+        public boolean isCellEditable(int row, int col) {
+            //Note that the data/cell address is constant,
+            //no matter where the cell appears onscreen.
+            if (col < 2) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        //allows table to be editable
+        public void setValueAt(Object value, int row, int col) {
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
+
+    }
+    
+
+} //end SecReportProd Class
+
+
 
  
 
