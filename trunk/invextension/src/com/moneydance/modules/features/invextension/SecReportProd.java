@@ -53,6 +53,16 @@ public final class SecReportProd {
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
         ColType.PERCENT1,ColType.PERCENT1};
+    
+    private static final ColType[] snapColTypes = new ColType[] {
+        ColType.STRING, ColType.STRING, ColType.STRING, ColType.DOUBLE2,ColType.DOUBLE3,
+        ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.PERCENT1,ColType.PERCENT1,
+        ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,
+        ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,ColType.DOUBLE2,ColType.DOUBLE2,
+        ColType.DOUBLE2};
+    
+    
+    
 
     private SecReportProd(){
     }
@@ -123,19 +133,13 @@ public final class SecReportProd {
         Collections.sort(reportArrayList, PrntAcct_Order);
 
         //Report Table Code
-        FTTableModel ftModel = new FTTableModel(ftData, RepFromTo.getRepFromToHeader());
+        RptTableModel ftModel = new RptTableModel(ftData, RepFromTo.getRepFromToHeader());
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         String infoString = "Investment Performance--From: " +
                 DateUtils.convertToShort(fromDateInt) + " To: " +
                 DateUtils.convertToShort(toDateInt);
-        ReportTable.CreateAndShowTable(ftModel, ftColTypes, ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
-
-
-
-
-
-
-        
+        ReportTable.CreateAndShowTable(ftModel, ftColTypes, 8 ,ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
+        // end report table code
         return reportArrayList;
 
 
@@ -203,11 +207,13 @@ public final class SecReportProd {
         SnapData = addElement(SnapData, allAggRetSnap.getRepSnapObject(7));
 
         Collections.sort(reportArrayList, PrntAcct_Order);
-        //insert GUI Code
-       
-
-
-
+         //Report Table Code
+        RptTableModel repSnapModel = new RptTableModel(SnapData, RepSnap.getRepSnapHeader());
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        String infoString = "Investment Performance Snapshot: " + DateUtils.convertToShort(snapDateInt);
+                
+        ReportTable.CreateAndShowTable(repSnapModel, snapColTypes, 5, ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
+        // end report table code
 
         return reportArrayList;
 
@@ -869,11 +875,11 @@ public final class SecReportProd {
         }
     }
 
-    static class FTTableModel extends AbstractTableModel {
+    static class RptTableModel extends AbstractTableModel {
         public String[] columnNames;
         public Object[][] data;
 
-        public FTTableModel(Object[][] data, String[] columnNames) {
+        public RptTableModel(Object[][] data, String[] columnNames) {
         super();
         this.data = data;
         this.columnNames = columnNames;

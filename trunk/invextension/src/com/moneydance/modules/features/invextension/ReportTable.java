@@ -83,19 +83,21 @@ public class ReportTable extends JScrollPane {
     int frozenColumns = 0;
     private final JScrollPaneAdjuster adjuster;
     public int firstSort = 0;
-    public int secondSort = 0;
+    public int secondSort = 1;
     public int thirdSort = 0;
-    public SortOrder firstOrder = SortOrder.UNSORTED;
-    public SortOrder secondOrder = SortOrder.UNSORTED;
+    public SortOrder firstOrder = SortOrder.ASCENDING;
+    public SortOrder secondOrder = SortOrder.ASCENDING;
     public SortOrder thirdOrder = SortOrder.UNSORTED;
     public TableModel model;
     public boolean closedPosHidden = false;
+    public int closedPosColumn;
 
-    public ReportTable(TableModel model, int numFrozenColumns, ColType[] colTypes, ColSizeOption sizeOption) {
+    public ReportTable(TableModel model, int numFrozenColumns, int indClosedPosColumn, ColType[] colTypes, ColSizeOption sizeOption) {
         super();
         adjuster = new JScrollPaneAdjuster(this);
         this.model = model;
         frozenColumns = numFrozenColumns;
+        closedPosColumn = indClosedPosColumn;
         // create the two tables
         lockedTable = new FormattedTable(model, colTypes, sizeOption);
         scrollTable = new FormattedTable(model, colTypes, sizeOption);
@@ -505,7 +507,7 @@ public class ReportTable extends JScrollPane {
                 int modelRow = convertRowIndexToModel(row);
                 String accType = (String) getModel().getValueAt(modelRow, 0);
                 String aggType = (String) getModel().getValueAt(modelRow, 1);
-                Double endPos = (Double) getModel().getValueAt(modelRow, 8);
+                Double endPos = (Double) getModel().getValueAt(modelRow, closedPosColumn);
 
                 if (!accType.startsWith("~") && aggType.startsWith("~")) {
                     c.setBackground(Color.lightGray);
@@ -695,7 +697,7 @@ public class ReportTable extends JScrollPane {
         //apply row sorter
         RowFilter<TableModel, Object> rf = null;
         if (closedPosHidden) {
-            rf = RowFilter.numberFilter(RowFilter.ComparisonType.NOT_EQUAL, 0.0, 8);
+            rf = RowFilter.numberFilter(RowFilter.ComparisonType.NOT_EQUAL, 0.0, closedPosColumn);
             rowSorter.setRowFilter(rf);
         } else {
             rowSorter.setRowFilter(rf);
@@ -1082,9 +1084,9 @@ public class ReportTable extends JScrollPane {
         system.setContents(stsel, stsel);
     }
 
-     public static void CreateAndShowTable(TableModel thisModel, ColType[] colTypes,
+     public static void CreateAndShowTable(TableModel thisModel, ColType[] colTypes, int indClosedPosColumn,
              ColSizeOption sizeOption,int numFreezeCols, String frameText) {
-         final ReportTable thisTable = new ReportTable(thisModel, numFreezeCols, colTypes,sizeOption);
+         final ReportTable thisTable = new ReportTable(thisModel, numFreezeCols, indClosedPosColumn, colTypes,sizeOption);
          
          final JFrame outerFrame = new JFrame(frameText) ;
              
@@ -1163,6 +1165,8 @@ public class ReportTable extends JScrollPane {
         c.weighty = 1;
         c.gridwidth = 3;
         c.fill = GridBagConstraints.BOTH;
+
+        thisTable.sortRows();
         outerFrame.getContentPane().add(thisTable, c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
