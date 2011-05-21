@@ -21,12 +21,28 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.RootAccount;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.TitledBorder;
 
 /** produces panel for reports
  * @author Dale Furrow
@@ -35,9 +51,29 @@ import javax.swing.JFileChooser;
 */
 public class SecReportPanel extends javax.swing.JPanel { //implements ActionListener
 
-    JFileChooser chooser;
+    //variable declarations
+    //MD Data
     Main extension;
     RootAccount root;
+    BulkSecInfo currentInfo;
+    //GUI Fields
+    JLabel snapDateLabel = new javax.swing.JLabel("Report Snapshot Date");
+    JDateFieldAlt snapDateField = new JDateFieldAlt();
+    JLabel fromDateLabel = new javax.swing.JLabel("Report \"From\" Date");
+    JDateFieldAlt fromDateField = new JDateFieldAlt();
+    JLabel toDateLabel = new javax.swing.JLabel("Report \"To\" Date");
+    JDateFieldAlt toDateField = new JDateFieldAlt();
+    JButton dirChooserButton = new javax.swing.JButton("Set output folder");
+    JTextField directoryOutputField = new javax.swing.JTextField(getLastFileUsed());
+    JCheckBox snapReportCheckbox = new javax.swing.JCheckBox("Shapshot Report");
+    JCheckBox fromToReportCheckbox = new javax.swing.JCheckBox("\"From/To\" Report");
+    JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transaction Activity");
+    JCheckBox secPricesCheckbox = new javax.swing.JCheckBox("Securities Prices");
+    JButton runReportsButton = new javax.swing.JButton("Run Reports");
+    JTextField reportStatusField = new javax.swing.JTextField("Choose Reports to Run");
+
+    JFileChooser chooser;
+
     boolean snapReportRun;
     boolean fromToReportRun;
     boolean transActivityReportRun;
@@ -48,11 +84,13 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         initComponents();
         this.extension = extension;
         this.root = root;
+        this.currentInfo = new BulkSecInfo(extension, root);
     }
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
+        //Set up  date input fields to defaults
         Date todayDate = DateUtils.convertToDate(DateUtils
                 .getLastCurrentDateInt());
         
@@ -60,131 +98,146 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
                 .convertToDate(DateUtils.addMonthsInt(DateUtils
                 .convertToDateInt(todayDate), -12));
 
+        snapDateField.setDate(todayDate);
+        toDateField.setDate(todayDate);
+        fromDateField.setDate(yearAgoDate);
         
+        Dimension textFields = new Dimension(400, 14);
+        directoryOutputField.setPreferredSize(textFields);
+        reportStatusField.setPreferredSize(textFields);
+        runReportsButton.setForeground(Color.red);
+        //add action listeners
 
-        snapDateLabel = new javax.swing.JLabel();
-        snapDateField = new com.moneydance.modules.features.invextension.JDateFieldAlt(todayDate);
-        fromDateLabel = new javax.swing.JLabel();
-        fromDateField = new com.moneydance.modules.features.invextension.JDateFieldAlt(yearAgoDate);
-        toDateLabel = new javax.swing.JLabel();
-        toDateField = new com.moneydance.modules.features.invextension.JDateFieldAlt(todayDate);
-        dirChooserButton = new javax.swing.JButton();
-        runReportsButton = new javax.swing.JButton();
-        directoryOutputField = new javax.swing.JTextField();
-        snapReportCheckbox = new javax.swing.JCheckBox();
-        fromToReportCheckbox = new javax.swing.JCheckBox();
-        transActivityCheckbox = new javax.swing.JCheckBox();
-        secPricesCheckbox = new javax.swing.JCheckBox();
-        reportStatusField = new javax.swing.JTextField();
-        snapDateLabel.setText("Report Snapshot Date");
-        fromDateLabel.setText("Report \"From\" Date");
-        toDateLabel.setText("Report \"To\" Date");
-
-        dirChooserButton.setText("set output folder");
         dirChooserButton.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dirChooserButtonActionPerformed(evt);
             }
         });
-
-        runReportsButton.setText("Run Reports");
         runReportsButton.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runReportsButtonActionPerformed(evt);
             }
         });
-        
-        directoryOutputField.setText(getLastFileUsed());
-        reportStatusField.setText("Choose Reports to Run");
-
-
-        snapReportCheckbox.setText("Shapshot Report");
         snapReportCheckbox.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 snapReportCheckboxActionPerformed(evt);
             }
         });
-
-        fromToReportCheckbox.setText("\"From/To\" Report");
         fromToReportCheckbox.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fromToReportCheckboxActionPerformed(evt);
             }
         });
-
-        transActivityCheckbox.setText("Transaction Activity");
         transActivityCheckbox.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 transActivityCheckboxActionPerformed(evt);
             }
         });
-
-        secPricesCheckbox.setText("Securities Prices");
         secPricesCheckbox.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 secPricesCheckboxActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(directoryOutputField, javax.swing.GroupLayout.Alignment.LEADING,
-                javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
-                .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(snapDateLabel).addComponent(fromDateLabel).addComponent(toDateLabel))
-                .addGap(29, 29, 29).addGroup(layout.createParallelGroup(
-                javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(toDateField)
-                .addComponent(snapDateField).addComponent(fromDateField,
-                javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))).
-                addComponent(dirChooserButton)).addPreferredGap(javax.swing.LayoutStyle
-                .ComponentPlacement.RELATED, 56, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(snapReportCheckbox).addComponent(fromToReportCheckbox).addComponent(transActivityCheckbox).addComponent(secPricesCheckbox))))).addGroup(layout.createSequentialGroup().addGap(200, 200, 200) //174
-                .addComponent(runReportsButton)).addGroup(layout.createSequentialGroup().
-                addContainerGap().addComponent(reportStatusField, javax.swing.GroupLayout.DEFAULT_SIZE, 446,
-                Short.MAX_VALUE))).addContainerGap()));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addComponent(snapReportCheckbox)
-                .addGap(18, 18, 18).addComponent(fromToReportCheckbox).addGap(18, 18, 18)
-                .addComponent(transActivityCheckbox).addGap(18, 18, 18)
-                .addComponent(secPricesCheckbox)).addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addGap(52, 52, 52) //38, 38, 38
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(fromDateLabel).addComponent(fromDateField,
-                javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(snapDateLabel).addComponent(snapDateField,
-                javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.PREFERRED_SIZE))).addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(toDateField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(toDateLabel)).addGap(20, 20, 20).addComponent(dirChooserButton)))
-                .addGap(29, 29, 29).addComponent(directoryOutputField,
-                javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.PREFERRED_SIZE).addGap(32, 32, 32)
-                .addComponent(runReportsButton).addPreferredGap(javax.swing.LayoutStyle
-                .ComponentPlacement.UNRELATED).addComponent(reportStatusField,
-                javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(55, Short.MAX_VALUE)));
+
+
+        //create and format blocks to load into main panel
+        JPanel datePanel = new JPanel();
+        JPanel checkBoxPanel = new JPanel();
+        JPanel folderPanel = new JPanel();
+        JPanel runPanel = new JPanel();
+
+        //borders
+        datePanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Report Dates"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        checkBoxPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Reports to Run"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        folderPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Download Location"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        runPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Report Status"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        //change all title colors
+        ArrayList<JPanel> panels = new ArrayList<JPanel>(
+                Arrays.asList(datePanel, checkBoxPanel, folderPanel, runPanel));
+        for (Iterator<JPanel> it = panels.iterator(); it.hasNext();) {
+            JPanel jPanel = it.next();
+            CompoundBorder thisBorder = (CompoundBorder) jPanel.getBorder();
+            TitledBorder outsideBorder = (TitledBorder) thisBorder.getOutsideBorder();
+            outsideBorder.setTitleColor(new Color(100, 100, 100));
+        }
+        //layout panels
+        //date Panel
+        datePanel.setLayout(new GridLayout(3, 2));
+        datePanel.add(snapDateLabel);
+        datePanel.add(snapDateField);
+        datePanel.add(fromDateLabel);
+        datePanel.add(fromDateField);
+        datePanel.add(toDateLabel);
+        datePanel.add(toDateField);
+        //Check Box Panel
+        checkBoxPanel.setLayout(new GridLayout(4, 1));
+        checkBoxPanel.add(snapReportCheckbox);
+        checkBoxPanel.add(fromToReportCheckbox);
+        checkBoxPanel.add(transActivityCheckbox);
+        checkBoxPanel.add(secPricesCheckbox);
+        // Folder Panel
+        folderPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(5, 5, 0, 5);
+        folderPanel.add(dirChooserButton, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.ipady = 12;
+        folderPanel.add(directoryOutputField, c);
+
+        // run panel (for program results)
+        runPanel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
+        c.ipady = 12;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1;
+        runPanel.add(reportStatusField, c);
+
+        //lay out main panel
+        this.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
+        //add date panel
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(5, 5, 0, 5);
+        this.add(datePanel, c);
+        // add Check Box Panel
+        c.gridx = 1;
+        c.gridy = 0;
+        this.add(checkBoxPanel, c);
+        // add Folder Panel
+        c.gridx = 0;
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.WEST;
+        this.add(folderPanel, c);
+        // add Run Reports Button
+        c.gridy = 2;
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(10, 5, 5, 5);
+        c.gridwidth = 2;
+        this.add(runReportsButton, c);
+        // add Run Panel (Program Results)
+        c.gridy = 3;
+        c.anchor = GridBagConstraints.WEST;
+        c.ipady = 12;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5, 5, 5, 5);
+        this.add(runPanel, c);
+
     } // end initcomponents
 
     private void dirChooserButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,7 +252,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         int snapDateInt = DateUtils.convertToDateInt(snapDateField.getDate());
 
         try {
-            BulkSecInfo currentInfo = new BulkSecInfo(this.extension, this.root);
+//
 
             if (snapReportRun) {
                 ArrayList<String[]> snapReport = SecReportProd.getSnapReport(currentInfo, snapDateInt);
@@ -287,22 +340,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
             System.out.println("No Selection ");
         }
     }
-    // Variables declaration - do not modify
-    private javax.swing.JButton dirChooserButton;
-    private javax.swing.JTextField directoryOutputField;
-    private JDateFieldAlt fromDateField;
-    private javax.swing.JLabel fromDateLabel;
-    private javax.swing.JCheckBox fromToReportCheckbox;
-    private javax.swing.JTextField reportStatusField;
-    private javax.swing.JButton runReportsButton;
-    private javax.swing.JCheckBox secPricesCheckbox;
-    private JDateFieldAlt snapDateField;
-    private javax.swing.JLabel snapDateLabel;
-    private javax.swing.JCheckBox snapReportCheckbox;
-    private JDateFieldAlt toDateField;
-    private javax.swing.JLabel toDateLabel;
-    private javax.swing.JCheckBox transActivityCheckbox;
-    // End of variables declaration
+    
 
      public static StringBuffer getStackTrace(Exception e)
     {
