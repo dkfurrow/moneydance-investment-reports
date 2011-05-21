@@ -27,6 +27,7 @@ import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.model.SplitTxn;
+import com.moneydance.apps.md.model.TxnUtil;
 
 
 import java.util.HashMap;
@@ -62,9 +63,35 @@ public class BulkSecInfo {
     public HashMap<Account, SortedSet<TransValues>> transValuesMap; /*Map of Accounts to basic transaction data */
     public HashMap<Account, SortedSet<TransValuesCum>> transValuesCumMap;/*Map of Accounts to cumulative transaction data */
 
-   
 
+    // static hashmap for report generation
+    public static final HashMap<Integer, String> txnDesc = new HashMap<Integer, String>();
 
+    static {
+        HashMap<Integer, String> aMap = new HashMap<Integer, String>();
+        txnDesc.put(TxnUtil.TXN_TYPE_BUY, "Buy");
+        txnDesc.put(TxnUtil.TXN_TYPE_BUY_XFER, "BuyTransfer");
+        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDEND_REINVEST, "DivReinvest");
+        txnDesc.put(TxnUtil.TXN_TYPE_SELL, "Sell");
+        txnDesc.put(TxnUtil.TXN_TYPE_SELL_XFER, "SellTransfer");
+        txnDesc.put(TxnUtil.TXN_TYPE_SHORT, "ShortSell");
+        txnDesc.put(TxnUtil.TXN_TYPE_COVER, "CoverShort");
+        txnDesc.put(TxnUtil.TXN_TYPE_MISCINC, "MiscIncome");
+        txnDesc.put(TxnUtil.TXN_TYPE_MISCEXP, "MiscExpense");
+        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDEND, "Dividend");
+        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDENDXFR, "DividendTransfer");
+        txnDesc.put(TxnUtil.TXN_TYPE_BANK, "Bank");
+    }
+
+    public enum AGG_TYPE{
+        SEC, //Individual Security
+        ACCT_SEC, //Securities Aggregated at Account Level
+        ACCT_SEC_PLUS_CASH, //Previous plus Account Cash
+        ACCT_CASH, //Account Cash Only
+        ALL_SEC, //Securities in All Accounts
+        ALL_CASH, //All Cash in Accounts
+        ALL_SEC_PLUS_CASH //All Cash, All Securities
+    }
 
     public BulkSecInfo(Main extension, RootAccount root) {
         this.extension = extension;
@@ -303,7 +330,7 @@ public class BulkSecInfo {
     
      /**
       * generates array list of string arrays for cumulative transaction info
-      * to facilitate output ot file
+      * to facilitate output to file
       * @param transValuesCumMap HashSet of Accounts to cumulative transaction info
       * @return ArrayList of String Arrays for output
       */

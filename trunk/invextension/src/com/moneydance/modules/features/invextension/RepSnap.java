@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
+import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
 
 /** produces report for security defined by one date ("snapDate")
  * @author Dale Furrow
@@ -469,39 +470,39 @@ public class RepSnap {
      /**
      * generates individual line report body
      * @param thisSnap report line
-     * @param reportType level of aggregation (security, account, aggregate, cash, etc)
+     * @param AGG_TYPE level of aggregation (security, account, aggregate, cash, etc)
      * @return array of values
      */
-    public Object[] getRepSnapObject(int reportType) {
+    public Object[] getRepSnapObject(AGG_TYPE aggType) {
         ArrayList<Object> snapValues = new ArrayList<Object>();
         String tilde = "\u007e";
 
-        switch (reportType) {
-            case 1: // individual security
+        switch (aggType) {
+            case SEC : // individual security
                 snapValues.add(this.account.getParentAccount().getAccountName());
                 snapValues.add(this.account.getAccountName());
                 break;
-            case 2: //aggregated securities
+            case ACCT_SEC: //aggregated securities
                 snapValues.add(this.account.getAccountName());
                 snapValues.add(tilde + "AllSec");
                 break;
-            case 3: //cash balance
+            case ACCT_CASH: //cash balance
                 snapValues.add(this.account.getAccountName());
                 snapValues.add(tilde + "Cash");
                 break;
-            case 4: //aggregated securities + cash
+            case ACCT_SEC_PLUS_CASH: //aggregated securities + cash
                 snapValues.add(this.account.getAccountName());
                 snapValues.add(tilde + "AllSec+Cash");
                 break;
-            case 5: //all securities
+            case ALL_SEC: //all securities
                 snapValues.add(tilde + "ALL");
                 snapValues.add(tilde + "AllSec");
                 break;
-            case 6: //all cash
+            case ALL_CASH: //all cash
                 snapValues.add(tilde + "ALL");
                 snapValues.add("~Cash");
                 break;
-            case 7: //all securities +  cash
+            case ALL_SEC_PLUS_CASH: //all securities +  cash
                 snapValues.add(tilde + "ALL");
                 snapValues.add(tilde + "AllSec+Cash");
                 break;
@@ -533,39 +534,39 @@ public class RepSnap {
      /**
      * generates individual line report body
      * @param thisSnap report line
-     * @param reportType level of aggregation (security, account, aggregate, cash, etc)
+     * @param AGG_TYPE level of aggregation (security, account, aggregate, cash, etc)
      * @return array of values
      */
-    public static String[] loadTransValuesSnap(RepSnap thisSnap, int reportType) {
+    public static String[] loadTransValuesSnap(RepSnap thisSnap, AGG_TYPE aggType) {
         ArrayList<String> snapValues = new ArrayList<String>();
         String tilde = "\u007e";
 
-        switch (reportType) {
-            case 1: // individual security
+        switch (aggType) {
+            case SEC: // individual security
                 snapValues.add(thisSnap.account.getParentAccount().getAccountName());
                 snapValues.add(thisSnap.account.getAccountName());
                 break;
-            case 2: //aggregated securities
+            case ACCT_SEC: //aggregated securities
                 snapValues.add(thisSnap.account.getAccountName());
                 snapValues.add(tilde + "AllSec");
                 break;
-            case 3: //cash balance
+            case ACCT_CASH: //cash balance
                 snapValues.add(thisSnap.account.getAccountName());
                 snapValues.add(tilde + "Cash");
                 break;
-            case 4: //aggregated securities + cash
+            case ACCT_SEC_PLUS_CASH: //aggregated securities + cash
                 snapValues.add(thisSnap.account.getAccountName());
                 snapValues.add(tilde + "AllSec+Cash");
                 break;
-            case 5: //all securities
+            case ALL_SEC: //all securities
                 snapValues.add(tilde + "ALL");
                 snapValues.add(tilde + "AllSec");
                 break;
-            case 6: //all cash
+            case ALL_CASH: //all cash
                 snapValues.add(tilde + "ALL");
                 snapValues.add("~Cash");
                 break;
-            case 7: //all securities +  cash
+            case ALL_SEC_PLUS_CASH: //all securities +  cash
                 snapValues.add(tilde + "ALL");
                 snapValues.add(tilde + "AllSec+Cash");
                 break;

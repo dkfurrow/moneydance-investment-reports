@@ -22,6 +22,7 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.*;
 import java.util.*;
+import com.moneydance.apps.md.model.TxnUtil;
 
 
 /** produces cumulative transaction data from basic transaction data
@@ -206,12 +207,13 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
      */
     public static String[] loadArrayTransValuesCum(TransValuesCum transValuesCum) {
         ArrayList<String> txnInfo = new ArrayList<String>();
+        String transType = BulkSecInfo.txnDesc.get(TxnUtil.getInvstTxnType(transValuesCum.transValues.parent));
 
         txnInfo.add(transValuesCum.transValues.accountRef.getParentAccount().getAccountName());
         txnInfo.add(transValuesCum.transValues.accountRef.getAccountName());
         txnInfo.add(Long.toString(transValuesCum.transValues.parent.getTxnId()));
         txnInfo.add(DateUtils.convertToShort(transValuesCum.transValues.dateint));
-        txnInfo.add(Integer.toString(TxnUtil.getInvstTxnType(transValuesCum.transValues.parent)));
+        txnInfo.add(transType);
         txnInfo.add(transValuesCum.transValues.parent.getDescription());
         txnInfo.add(Double.toString(transValuesCum.transValues.buy));
         txnInfo.add(Double.toString(transValuesCum.transValues.sell));
@@ -238,4 +240,4 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 
     }
 
-}
+    }
