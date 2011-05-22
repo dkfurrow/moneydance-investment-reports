@@ -212,7 +212,8 @@ public final class SecReportProd {
      * @return output map
      */
     public static TreeMap<Integer, Double> combineDateMaps(TreeMap<Integer, Double> map1, TreeMap<Integer, Double> map2, String combType) {
-        TreeMap<Integer, Double> outMap = new TreeMap<Integer, Double>(map1);
+        TreeMap<Integer, Double> outMap = new TreeMap<Integer, Double>();
+        if (map1 != null) outMap.putAll(map1);
 
         if (map2 != null) {
             for (Iterator it = map2.keySet().iterator(); it.hasNext();) {
@@ -231,11 +232,11 @@ public final class SecReportProd {
                 } else {
                     if ("add".equals(combType)) {
                         outMap.put(dateint2,
-                                map1.get(dateint2) + value2);
+                                map1 == null ? 0 : map1.get(dateint2) + value2);
                     }
                     if ("subtract".equals(combType)) {
                         outMap.put(dateint2,
-                                map1.get(dateint2) - value2);
+                                 map1 == null ? 0 : map1.get(dateint2) - value2);
                     }
                 }
             }
@@ -533,10 +534,13 @@ public final class SecReportProd {
         /*now add transfer map to map of buys/sells/income/expense (effectively, purchase/sales of cash
          caused by security activity*/
         comboTransMDMap = combineDateMaps(comboTransMDMap, thisInvFromTo.arMap, "add");
-        /* cashRetMap effectively reverses sign of comboTransMDMap */
+         /* cashRetMap effectively reverses sign of previous map (so cash
+         buys/sells with correct sign for returns calc), and adds
+         account-level income/expense transactions from arMap (e.g. account interest)*/
         TreeMap<Integer, Double> cashRetMap = combineDateMaps(thisCashFromTo.arMap, comboTransMDMap, "subtract");
         /* this handles case where fromDateInt < first transaction,
-         since startValue will not equal zero if initBal != 0 */
+         AND initBal != 0 (i.e. startValue = initBal. In that case,
+         start date needs to be adjusted to day prior to  first transaction date */
         int adjFromDateInt = cashValue.fromDateInt;
         int minDateInt = comboTransMDMap.isEmpty() ? 0 :
             DateUtils.getPrevBusinessDay(comboTransMDMap.firstKey());
@@ -565,17 +569,19 @@ public final class SecReportProd {
      * @return RepSnap representing income/returns for cash portion of Investment Account
      */
     private static RepSnap getSnapCashReturns(RepSnap thisCashSnap, RepSnap thisInvSnap) {
+        //cashValue has start, end cash positions, income and expenses
         RepSnap cashValue = new RepSnap(thisInvSnap.account, thisInvSnap.snapDateInt);
-
+        //comboTransMDMap has purchases/sales of cash (i.e. reverse of security transactions)
+        //start by adding transfers in and out of securities and investment accounts
         LinkedHashMap<String, TreeMap<Integer, Double>> comboTransMDMap =
                 combineDateMapMap(thisInvSnap.transMap, thisCashSnap.transMap, "add");
-        
+        //may need to adjust start dates, so create map for that
         LinkedHashMap<String, Integer> adjRetDateMap = 
                 new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
 
 
         double initBal = thisCashSnap.initBalance;
-
+        //generate starting and ending cash balances, non-security related acount transactions
         for (Iterator it = thisInvSnap.retDateMap.keySet().iterator(); it.hasNext();) {
             String retCat = (String) it.next();
             cashValue.startValues.put(retCat, cleanedValue(thisInvSnap.startCashs.get(retCat)
@@ -583,7 +589,8 @@ public final class SecReportProd {
             cashValue.incomes.put(retCat, thisCashSnap.incomes.get(retCat));
             cashValue.expenses.put(retCat, thisCashSnap.expenses.get(retCat));
             /* this handles case where fromDateInt < first transaction,
-            since start value will not equal zero if there's an account starting balance*/
+            AND initBal != 0 (i.e. startValue = initBal. In that case,
+            start date needs to be adjusted to day prior to  first transaction date */
             int minDateInt = comboTransMDMap.get(retCat).isEmpty()? 0 :
                 DateUtils.getPrevBusinessDay(
                 comboTransMDMap.get(retCat).firstKey());
@@ -610,7 +617,8 @@ public final class SecReportProd {
                     adjAnnRetValues.get(retCat), cashValue.snapDateInt, 0.0);
         }
 
-        /*add transfer map to map of buys/sells/income/expense */
+        /*now add transfer map to map of buys/sells/income/expense (effectively, purchase/sales of cash
+         caused by security activity*/
         comboTransMDMap = combineDateMapMap(comboTransMDMap, adjAnnRetValues, "add");
         /*calculate period returns and annual return for all dates */
         for (Iterator it = thisInvSnap.retDateMap.keySet().iterator(); it.hasNext();) {
@@ -621,7 +629,9 @@ public final class SecReportProd {
             cashValue.mdReturns.put(retCat, thisPercentReturn);
 
             if ("All".equals(retCat)) {
-                /* cash RetMap adds in investment-account-level interest/expenses */
+                /* cashRetMap effectively reverses sign of previous map (so cash
+                 buys/sells with correct sign for returns calc), and adds
+                 account-level income/expense transactions from arMap (e.g. account interest)*/
                 TreeMap<Integer, Double> cashRetMap = combineDateMaps(
                         thisCashSnap.arMap.get(retCat),
                         comboTransMDMap.get(retCat), "subtract");
@@ -692,10 +702,10 @@ public final class SecReportProd {
         //get MD returns
         TreeMap<Integer, Double> mdMap = outObj.transMap;
         /* reverse transfer map for returns calc purposes */
-        TreeMap<Integer, Double> retMap = combineDateMaps(new TreeMap<Integer, Double>(),
-                outObj.transMap, "subtract");
+        TreeMap<Integer, Double> retMap = combineDateMaps(null, outObj.transMap, "subtract");
         /* this handles case where fromDateInt < first transaction,
-        since start value will not equal zero if there's an account starting balance*/
+        AND initBal != 0 (i.e. startValue = initBal. In that case,
+        start date needs to be adjusted to day prior to  first transaction date */
         int adjFromDateInt = outObj.fromDateInt;
         int minDateInt = mdMap.isEmpty() ? 0 :
                     DateUtils.getPrevBusinessDay(mdMap.firstKey());
@@ -754,7 +764,8 @@ public final class SecReportProd {
                     + thisInvSnap.startValues.get(retCat) + 
                     thisCashSnap.startValues.get(retCat) + startBal));
             /* this handles case where fromDateInt < first transaction,
-            since start value will not equal zero if there's an account starting balance*/
+            AND initBal != 0 (i.e. startValue = initBal. In that case,
+            start date needs to be adjusted to day prior to  first transaction date */
             int minDateInt = outObj.transMap.get(retCat).isEmpty() ? 0 :
                         DateUtils.getPrevBusinessDay(
                         outObj.transMap.get(retCat).firstKey());
@@ -783,7 +794,7 @@ public final class SecReportProd {
             outObj.mdReturns.put(retCat, thisMDReturn);
             // get annualized returns
             if ("All".equals(retCat)) {
-                TreeMap<Integer, Double> retMap = combineDateMaps(new TreeMap<Integer, Double>(),
+                TreeMap<Integer, Double> retMap = combineDateMaps(null,
                         outObj.transMap.get(retCat), "subtract");
                 //add start and end values
                 if(Math.abs(outObj.startValues.get(retCat)) > 0.0001)
