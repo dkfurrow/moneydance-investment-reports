@@ -47,9 +47,9 @@ public class RepFromTo {
     double endPrice;                /*ending price */
     double startValue;              /*starting value */
     double endValue;                /*ending value */
-    double startCash;               /*starting "cash effect" (security affect on account cash) */
+    double startCash;               /*starting "cash effect" (security effect on account cash) */
     double endCash;                 /*ending "cash effect" (security affect on account cash) */
-    double startBalance;            /*initial balance of account */
+    double initBalance;            /*initial balance of account */
     double buy;                     /*cumulative cash effect of buys (including commission) */
     double sell;                    /*cumulative cash effect of sells (including commission)  */
     double shortSell;               /*cumulative cash effect of shorts (including commission) */
@@ -60,8 +60,8 @@ public class RepFromTo {
     double shortBasis;              /*ending average cost basis of short positions*/
     double realizedGain;            /*cumulative realized gains (against avg cost) */
     double unrealizedGain;          /*cumulative unrealized gains */
-    double periodReturn;            /*sum of realized and unrealized gains */
-    double percentReturn;           /*period total return (Mod-Dietz method) */
+    double totalGain;            /*sum of realized and unrealized gains */
+    double mdReturn;           /*period total return (Mod-Dietz method) */
     double annualPercentReturn;     /*period annualized return (Mod-Dietz method) */
     TreeMap<Integer, Double> arMap; /*date map of annual return data */
     TreeMap<Integer, Double> mdMap; /*date map of Mod-Dietz return data */
@@ -87,7 +87,7 @@ public class RepFromTo {
         this.endValue = 0.0;
         this.startCash = 0;
         this.endCash = 0;
-        this.startBalance = 0.0;
+        this.initBalance = 0.0;
         this.buy = 0.0;
         this.sell = 0.0;
         this.shortSell = 0.0;
@@ -98,8 +98,8 @@ public class RepFromTo {
         this.shortBasis = 0.0;
         this.realizedGain = 0.0;
         this.unrealizedGain = 0.0;
-        this.periodReturn = 0.0;
-        this.percentReturn = 0.0;
+        this.totalGain = 0.0;
+        this.mdReturn = 0.0;
         this.annualPercentReturn = 0.0;
         this.arMap = new TreeMap<Integer, Double>();
         this.mdMap = new TreeMap<Integer, Double>();
@@ -135,11 +135,11 @@ public class RepFromTo {
         this.startCash = 0;
         this.endCash = 0;
         if (transSet.first().transValues.accountRef.getAccountType() ==
-                Account.ACCOUNT_TYPE_INVESTMENT) {this.startBalance =
+                Account.ACCOUNT_TYPE_INVESTMENT) {this.initBalance =
                         SecReportProd.longToDouble(transSet.first().
                         transValues.accountRef.getStartBalance()) / 100.0;
         } else {
-            this.startBalance = 0.0;
+            this.initBalance = 0.0;
         }
         this.buy = 0;
         this.sell = 0;
@@ -151,8 +151,8 @@ public class RepFromTo {
         this.shortBasis = 0;
         this.realizedGain = 0;
         this.unrealizedGain = 0;
-        this.periodReturn = 0;
-        this.percentReturn = 0;
+        this.totalGain = 0;
+        this.mdReturn = 0;
         this.annualPercentReturn = 0;
         this.arMap = new TreeMap<Integer, Double>();
         this.mdMap = new TreeMap<Integer, Double>();
@@ -254,7 +254,7 @@ public class RepFromTo {
             endCumUnrealizedGain = this.endValue - this.shortBasis;
         }
         this.unrealizedGain = endCumUnrealizedGain - startCumUnrealGain;
-        this.periodReturn = this.realizedGain + this.unrealizedGain;
+        this.totalGain = this.realizedGain + this.unrealizedGain;
 
         /*get performance date--first Mod Dietz Returns */
 
@@ -269,12 +269,12 @@ public class RepFromTo {
             addValueToDateMap(this.mdMap, toDateInt, 0.0); //adds dummy value for mod-dietz
         }
 
-        this.percentReturn = getMDCalc(this.startValue, this.endValue,
+        this.mdReturn = getMDCalc(this.startValue, this.endValue,
                 this.income, this.expense, this.mdMap);
 
         //then, get annualized returns
 
-        this.annualPercentReturn = getAnnualReturn(this.arMap, this.percentReturn);
+        this.annualPercentReturn = getAnnualReturn(this.arMap, this.mdReturn);
 
         // remove start and end values from ar date map for ease of aggregation
         if (this.startPos != 0) {
@@ -516,8 +516,8 @@ public class RepFromTo {
         snapValues.add(Double.toString(thisFT.shortBasis));
         snapValues.add(Double.toString(thisFT.realizedGain));
         snapValues.add(Double.toString(thisFT.unrealizedGain));
-        snapValues.add(Double.toString(thisFT.periodReturn));
-        snapValues.add(Double.toString(thisFT.percentReturn));
+        snapValues.add(Double.toString(thisFT.totalGain));
+        snapValues.add(Double.toString(thisFT.mdReturn));
         snapValues.add(Double.toString(thisFT.annualPercentReturn));
         return snapValues.toArray(new String[snapValues.size()]);
     }
@@ -578,8 +578,8 @@ public class RepFromTo {
         snapValues.add(this.shortBasis);
         snapValues.add(this.realizedGain);
         snapValues.add(this.unrealizedGain);
-        snapValues.add(this.periodReturn);
-        snapValues.add(this.percentReturn);
+        snapValues.add(this.totalGain);
+        snapValues.add(this.mdReturn);
         snapValues.add(this.annualPercentReturn);
         return snapValues.toArray();
     }

@@ -252,20 +252,11 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         int snapDateInt = DateUtils.convertToDateInt(snapDateField.getDate());
 
         try {
-//
-
             if (snapReportRun) {
-                ArrayList<String[]> snapReport = SecReportProd.getSnapReport(currentInfo, snapDateInt);
-                File snapReportFile = new File(directoryOutputField.getText() + "\\SnapReport.csv");
-                IOUtils.writeArrayListToCSV(RepSnap.listTransValuesSnapHeader(snapDateInt),
-                        snapReport, snapReportFile);
-                
+                SecReportProd.getSnapReport(currentInfo, snapDateInt);
             }
             if (fromToReportRun) {
-//                ArrayList<String[]> fromToReport = SecReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
-                ArrayList<String[]> fromToReport = SecReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
-                File fromToReportFile = new File(directoryOutputField.getText() + "\\FromToReport.csv");
-                IOUtils.writeArrayListToCSV(RepFromTo.listTransValuesFTHeader(fromDateInt,toDateInt), fromToReport, fromToReportFile);
+                SecReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
             }
 
             if (transActivityReportRun) {

@@ -46,7 +46,7 @@ public class RepSnap {
     double endPos;                              //ending position
     double endValue;                            //ending value
     double endCash;                             //ending effect of security on account cash
-    double startBalance;                        // initial investment account balance
+    double initBalance;                        // initial investment account balance
     double avgCostBasis;                        //final average cost balance
     //one day values
     double absPriceChange;                      //absolute price change (from previous day to snapDate)
@@ -90,7 +90,7 @@ public class RepSnap {
         this.endPos = 0.0;
         this.endValue = 0.0;
         this.endCash = 0.0;
-        this.startBalance = 0.0;
+        this.initBalance = 0.0;
         this.avgCostBasis = 0.0;
         this.absPriceChange = 0.0;
         this.pctPriceChange = 0.0;
@@ -140,9 +140,9 @@ public class RepSnap {
         this.snapDateInt = snapDateInt;
         this.lastPrice = (1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(snapDateInt)));
         if (transSet.first().transValues.accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            this.startBalance = SecReportProd.longToDouble(transSet.first().transValues.accountRef.getStartBalance()) / 100.0;
+            this.initBalance = SecReportProd.longToDouble(transSet.first().transValues.accountRef.getStartBalance()) / 100.0;
         } else {
-            this.startBalance = 0.0;
+            this.initBalance = 0.0;
         }
 
         //create dates for returns calculations
