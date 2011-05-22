@@ -75,8 +75,7 @@ public final class SecReportProd {
      * @param toDateInt to date
      * @return ArrayList of String Arrays for all securities
      */
-    public static ArrayList<String[]> getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
-        ArrayList<String[]> reportArrayList = new ArrayList<String[]>();
+    public static void getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
         Object[][]ftData = null;
         RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
         RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
@@ -90,12 +89,10 @@ public final class SecReportProd {
                 Account secAcct = (Account) it1.next();
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepFromTo thisSecFromTo = new RepFromTo(currentInfo, transSet, fromDateInt, toDateInt);
-                reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisSecFromTo, AGG_TYPE.SEC));
                 ftData = addElement(ftData, thisSecFromTo.getRepFromToObject(AGG_TYPE.SEC));
                 thisInvFromTo = addFT(thisSecFromTo, thisInvFromTo);
             } // end securities loop
             thisInvFromTo = getFTAggReturns(thisInvFromTo); //get aggregated returns for securities in account
-            reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisInvFromTo, AGG_TYPE.ACCT_SEC));
             ftData = addElement(ftData, thisInvFromTo.getRepFromToObject(AGG_TYPE.ACCT_SEC));
             allInvFromTo = addFT(thisInvFromTo, allInvFromTo); // add to aggregate securities.
 
@@ -107,31 +104,24 @@ public final class SecReportProd {
                     addFT(thisCashFromTo, allCashFromTo); //add to investment accounts (bank txns)
             RepFromTo cashReport =
                     getFTCashReturns(thisCashFromTo, thisInvFromTo); //get returns for cash account
-            reportArrayList.add(RepFromTo.loadTransValuesFromTo(cashReport, AGG_TYPE.ACCT_CASH));
             ftData = addElement(ftData, cashReport.getRepFromToObject(AGG_TYPE.ACCT_CASH));
 
             RepFromTo thisAggRetFromTo =
                     getFTAggRetWCash(thisCashFromTo, thisInvFromTo); //get  aggregated returns with cash accounted for
-            reportArrayList.add(RepFromTo.loadTransValuesFromTo(thisAggRetFromTo, AGG_TYPE.ACCT_SEC_PLUS_CASH));
             ftData = addElement(ftData, thisAggRetFromTo.getRepFromToObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
         } //end investment account loop
         //get returns for aggregated investment accounts
         allInvFromTo =
                 getFTAggReturns(allInvFromTo); //get aggregated returns from all securities
-        reportArrayList.add(RepFromTo.loadTransValuesFromTo(allInvFromTo, AGG_TYPE.ALL_SEC));
         ftData = addElement(ftData, allInvFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC));
 
         RepFromTo allCashReport =
                 getFTCashReturns(allCashFromTo, allInvFromTo); //get cash returns for all accounts
-        reportArrayList.add(RepFromTo.loadTransValuesFromTo(allCashReport, AGG_TYPE.ALL_CASH));
         ftData = addElement(ftData, allCashReport.getRepFromToObject(AGG_TYPE.ALL_CASH));
 
         RepFromTo allAggRetFromTo =
                 getFTAggRetWCash(allCashFromTo, allInvFromTo); //get  agg returns w/ cash for all accounts
-        reportArrayList.add(RepFromTo.loadTransValuesFromTo(allAggRetFromTo, AGG_TYPE.ALL_SEC_PLUS_CASH));
-        ftData = addElement(ftData, allAggRetFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
-
-        Collections.sort(reportArrayList, PrntAcct_Order);
+        ftData = addElement(ftData, allAggRetFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC_PLUS_CASH));        
 
         //Report Table Code
         RptTableModel ftModel = new RptTableModel(ftData, RepFromTo.getRepFromToHeader());
@@ -140,11 +130,6 @@ public final class SecReportProd {
                 DateUtils.convertToShort(fromDateInt) + " To: " +
                 DateUtils.convertToShort(toDateInt);
         ReportTable.CreateAndShowTable(ftModel, ftColTypes, 8 ,ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
-        // end report table code
-        return reportArrayList;
-
-
-
 
     }
 
@@ -154,8 +139,7 @@ public final class SecReportProd {
      * @param snapDateInt report date
      * @return ArrayList of String Arrays for all securities
      */
-    public static ArrayList<String[]> getSnapReport(BulkSecInfo currentInfo, int snapDateInt) {
-        ArrayList<String[]> reportArrayList = new ArrayList<String[]>();
+    public static void getSnapReport(BulkSecInfo currentInfo, int snapDateInt) {
         Object[][] SnapData = null;
         RepSnap allInvSnap = new RepSnap(null, snapDateInt);
         RepSnap allCashSnap = new RepSnap(null, snapDateInt);
@@ -168,13 +152,11 @@ public final class SecReportProd {
                 Account secAcct = (Account) it1.next();
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepSnap thisSecSnap = new RepSnap(currentInfo, transSet, snapDateInt);
-                reportArrayList.add(RepSnap.loadTransValuesSnap(thisSecSnap, AGG_TYPE.SEC));
                 SnapData = addElement(SnapData, thisSecSnap.getRepSnapObject(AGG_TYPE.SEC));
                 thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
             }// end securities loop
             RepSnap thisInvRepSnap =
                     getSnapAggReturns(thisInvSnap); //get aggregated returns for securities
-            reportArrayList.add(RepSnap.loadTransValuesSnap(thisInvRepSnap, AGG_TYPE.ACCT_SEC));
             SnapData = addElement(SnapData, thisInvRepSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC));
             allInvSnap = addSnap(thisInvSnap, allInvSnap); // add to aggregate securities.
 
@@ -185,38 +167,29 @@ public final class SecReportProd {
                     addSnap(thisCashSnap, allCashSnap); //add to cash accounts
             RepSnap cashReport =
                     getSnapCashReturns(thisCashSnap, thisInvSnap); //get returns for cash account
-            reportArrayList.add(RepSnap.loadTransValuesSnap(cashReport, AGG_TYPE.ACCT_CASH));
             SnapData = addElement(SnapData, cashReport.getRepSnapObject(AGG_TYPE.ACCT_CASH));
 
             RepSnap thisAggRetSnap =
                     getSnapAggRetWCash(thisCashSnap, thisInvSnap); //get  aggregated returns with cash accounted for
-            reportArrayList.add(RepSnap.loadTransValuesSnap(thisAggRetSnap, AGG_TYPE.ACCT_SEC_PLUS_CASH));
             SnapData = addElement(SnapData, thisAggRetSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
         }//end investment account loop
 
         //get returns for aggregated investment accounts
         allInvSnap = getSnapAggReturns(allInvSnap); //get aggregated returns from all securities
-        reportArrayList.add(RepSnap.loadTransValuesSnap(allInvSnap, AGG_TYPE.ALL_SEC));
         SnapData = addElement(SnapData, allInvSnap.getRepSnapObject(AGG_TYPE.ALL_SEC));
 
         RepSnap allCashReport = getSnapCashReturns(allCashSnap, allInvSnap); //get cash returns for all accounts
-        reportArrayList.add(RepSnap.loadTransValuesSnap(allCashReport, AGG_TYPE.ALL_CASH));
         SnapData = addElement(SnapData, allCashReport.getRepSnapObject(AGG_TYPE.ALL_CASH));
 
         RepSnap allAggRetSnap = getSnapAggRetWCash(allCashSnap, allInvSnap); //get  agg returns w/ cash for all accounts
-        reportArrayList.add(RepSnap.loadTransValuesSnap(allAggRetSnap, AGG_TYPE.ALL_SEC_PLUS_CASH));
         SnapData = addElement(SnapData, allAggRetSnap.getRepSnapObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
-
-        Collections.sort(reportArrayList, PrntAcct_Order);
+        
          //Report Table Code
         RptTableModel repSnapModel = new RptTableModel(SnapData, RepSnap.getRepSnapHeader());
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         String infoString = "Investment Performance Snapshot: " + DateUtils.convertToShort(snapDateInt);
                 
         ReportTable.CreateAndShowTable(repSnapModel, snapColTypes, 5, ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
-        // end report table code
-
-        return reportArrayList;
 
     }
     public static final Comparator<String[]> PrntAcct_Order =
@@ -370,20 +343,20 @@ public final class SecReportProd {
         outObj.shortBasis = thisInvFromTo.shortBasis + thisSecFromTo.shortBasis;
         outObj.realizedGain = thisInvFromTo.realizedGain + thisSecFromTo.realizedGain;
         outObj.unrealizedGain = thisInvFromTo.unrealizedGain + thisSecFromTo.unrealizedGain;
-        outObj.periodReturn = thisInvFromTo.periodReturn + thisSecFromTo.periodReturn;
+        outObj.totalGain = thisInvFromTo.totalGain + thisSecFromTo.totalGain;
         outObj.startCash = thisInvFromTo.startCash + thisSecFromTo.startCash;
         outObj.endCash = thisInvFromTo.endCash + thisSecFromTo.endCash;
 
         if (thisSecFromTo.account == null) { //need to handle both cases of aggregation at investment account and across investment accounts
-            outObj.startBalance = thisSecFromTo.startBalance;
+            outObj.initBalance = thisSecFromTo.initBalance;
         } else if (thisSecFromTo.account.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            outObj.startBalance = thisInvFromTo.startBalance + thisSecFromTo.startBalance;
+            outObj.initBalance = thisInvFromTo.initBalance + thisSecFromTo.initBalance;
         }
 
         outObj.arMap = combineDateMaps(thisInvFromTo.arMap, thisSecFromTo.arMap, "add");
         outObj.mdMap = combineDateMaps(thisInvFromTo.mdMap, thisSecFromTo.mdMap, "add");
         outObj.transMap = combineDateMaps(thisInvFromTo.transMap, thisSecFromTo.transMap, "add");
-        outObj.percentReturn = 0.0;
+        outObj.mdReturn = 0.0;
         outObj.annualPercentReturn = 0.0;
 
         return outObj;
@@ -404,9 +377,9 @@ public final class SecReportProd {
         outObj.endValue = thisSecSnap.endValue + thisInvSnap.endValue;
         outObj.endCash = thisSecSnap.endCash + thisInvSnap.endCash;
         if (thisSecSnap.account == null) { //need to handle both cases of aggregation at investment account and across investment accounts
-            outObj.startBalance = thisSecSnap.startBalance;
+            outObj.initBalance = thisSecSnap.initBalance;
         } else if (thisSecSnap.account.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            outObj.startBalance = thisInvSnap.startBalance + thisSecSnap.startBalance;
+            outObj.initBalance = thisInvSnap.initBalance + thisSecSnap.initBalance;
         }
         outObj.avgCostBasis = thisSecSnap.avgCostBasis + thisInvSnap.avgCostBasis;
         outObj.absPriceChange = 0.0;
@@ -446,10 +419,11 @@ public final class SecReportProd {
     private static RepFromTo getFTAggReturns(RepFromTo thisInvFromTo) {
         RepFromTo outObj = thisInvFromTo;
         //get Mod-Dietz Returns
-        double mdReturn = RepFromTo.getMDCalc(outObj.startValue,
+        double mdReturnVal = RepFromTo.getMDCalc(outObj.startValue,
                 outObj.endValue, outObj.income, outObj.expense,
                 outObj.mdMap);
-        outObj.percentReturn = mdReturn;
+//        outObj.RepFromTo.this.mdReturn = thisReturn;
+        outObj.mdReturn = mdReturnVal;
 
         //add start and end values to return date maps
         if (thisInvFromTo.startValue != 0) {
@@ -462,7 +436,7 @@ public final class SecReportProd {
         }
 
         //get annualized returns
-        outObj.annualPercentReturn = RepFromTo.getAnnualReturn(thisInvFromTo.arMap, mdReturn);
+        outObj.annualPercentReturn = RepFromTo.getAnnualReturn(thisInvFromTo.arMap, mdReturnVal);
 
         //remove start and end values from return date maps (to avoid conflicts in aggregation)
         if (thisInvFromTo.startValue != 0) {
@@ -541,31 +515,34 @@ public final class SecReportProd {
      * @return RepFrontTo representing income/returns for cash portion of Investment Account
      */
     private static RepFromTo getFTCashReturns(RepFromTo thisCashFromTo, RepFromTo thisInvFromTo) {
+        //cashValue has start, end cash positions, income and expenses
         RepFromTo cashValue = new RepFromTo(thisInvFromTo.account, thisInvFromTo.fromDateInt, thisInvFromTo.toDateInt);
+        //comboTransMDMap has purchases/sales of cash (i.e. reverse of security transactions)
+        //start by adding transfers in and out of securities and investment accounts
         TreeMap<Integer, Double> comboTransMDMap = combineDateMaps(thisInvFromTo.transMap, thisCashFromTo.transMap, "add");
 
-        double startBal = thisCashFromTo.startBalance;
-        cashValue.startValue = cleanedValue(thisInvFromTo.startCash + thisCashFromTo.startCash + startBal);
-        cashValue.endValue = cleanedValue(thisInvFromTo.endCash + thisCashFromTo.endCash + startBal);
+        //generate starting and ending cash balances, non-security related acount transactions
+        double initBal = thisCashFromTo.initBalance;
+        cashValue.startValue = cleanedValue(thisInvFromTo.startCash + thisCashFromTo.startCash + initBal);
+        cashValue.endValue = cleanedValue(thisInvFromTo.endCash + thisCashFromTo.endCash + initBal);
         cashValue.startPos = cashValue.startValue;
         cashValue.endPos = cashValue.endValue;
         cashValue.income = thisCashFromTo.income;
         cashValue.expense = thisCashFromTo.expense;
 
-
-
-        /*add transfer map to map of buys/sells/income/expense */
+        /*now add transfer map to map of buys/sells/income/expense (effectively, purchase/sales of cash
+         caused by security activity*/
         comboTransMDMap = combineDateMaps(comboTransMDMap, thisInvFromTo.arMap, "add");
-        /* cash RetMap adds in investment-account-level interest/expenses */
+        /* cashRetMap effectively reverses sign of comboTransMDMap */
         TreeMap<Integer, Double> cashRetMap = combineDateMaps(thisCashFromTo.arMap, comboTransMDMap, "subtract");
         /* this handles case where fromDateInt < first transaction,
-         since start value will not equal zero if there's an account starting balance*/
+         since startValue will not equal zero if initBal != 0 */
         int adjFromDateInt = cashValue.fromDateInt;
         int minDateInt = comboTransMDMap.isEmpty() ? 0 :
             DateUtils.getPrevBusinessDay(comboTransMDMap.firstKey());
-        if(cashValue.startValue == startBal && cashValue.fromDateInt <= minDateInt)
+        if(cashValue.startValue == initBal && cashValue.fromDateInt <= minDateInt)
             adjFromDateInt = Math.max(cashValue.fromDateInt, minDateInt );
-        // add dummy values to Mod-Dietz date maps, start and end to return maps
+        // add dummy (zero) values to Mod-Dietz date maps, start and end to return maps
         if(Math.abs(cashValue.startValue) > 0.0001){
             RepFromTo.addValueToDateMap(comboTransMDMap, adjFromDateInt, 0.0);
             RepFromTo.addValueToDateMap(cashRetMap, adjFromDateInt, -cashValue.startValue);
@@ -575,9 +552,9 @@ public final class SecReportProd {
             RepFromTo.addValueToDateMap(cashRetMap, thisInvFromTo.toDateInt, cashValue.endValue);//add start and end values w/ cash balances for ret Calc
         }
         //calculate returns
-        cashValue.percentReturn = RepFromTo.getMDCalc(cashValue.startValue,
+        cashValue.mdReturn = RepFromTo.getMDCalc(cashValue.startValue,
                 cashValue.endValue, cashValue.income, cashValue.expense, comboTransMDMap);
-        cashValue.annualPercentReturn = RepFromTo.getAnnualReturn(cashRetMap, cashValue.percentReturn);
+        cashValue.annualPercentReturn = RepFromTo.getAnnualReturn(cashRetMap, cashValue.mdReturn);
          return cashValue;
     }
 
@@ -597,12 +574,12 @@ public final class SecReportProd {
                 new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
 
 
-        double startBal = thisCashSnap.startBalance;
+        double initBal = thisCashSnap.initBalance;
 
         for (Iterator it = thisInvSnap.retDateMap.keySet().iterator(); it.hasNext();) {
             String retCat = (String) it.next();
             cashValue.startValues.put(retCat, cleanedValue(thisInvSnap.startCashs.get(retCat)
-                    + thisCashSnap.startCashs.get(retCat) + startBal));
+                    + thisCashSnap.startCashs.get(retCat) + initBal));
             cashValue.incomes.put(retCat, thisCashSnap.incomes.get(retCat));
             cashValue.expenses.put(retCat, thisCashSnap.expenses.get(retCat));
             /* this handles case where fromDateInt < first transaction,
@@ -610,13 +587,13 @@ public final class SecReportProd {
             int minDateInt = comboTransMDMap.get(retCat).isEmpty()? 0 :
                 DateUtils.getPrevBusinessDay(
                 comboTransMDMap.get(retCat).firstKey());
-            if(cashValue.startValues.get(retCat) == startBal &&
+            if(cashValue.startValues.get(retCat) == initBal &&
                     thisInvSnap.retDateMap.get(retCat) <= minDateInt)
                 adjRetDateMap.put(retCat, Math.max(
                         thisInvSnap.retDateMap.get(retCat), minDateInt));
         }
 
-        cashValue.endValue = cleanedValue(thisInvSnap.endCash + thisCashSnap.endCash + startBal);
+        cashValue.endValue = cleanedValue(thisInvSnap.endCash + thisCashSnap.endCash + initBal);
         cashValue.endPos = cashValue.endValue;
         cashValue.income = thisCashSnap.income; //note, we do not display expenses in this object
         //but they are tracked for returns calculations
@@ -642,12 +619,6 @@ public final class SecReportProd {
                     cashValue.endValue, cashValue.incomes.get(retCat),
                     cashValue.expenses.get(retCat), comboTransMDMap.get(retCat));
             cashValue.mdReturns.put(retCat, thisPercentReturn);
-//            if(retCat.equals("All") && thisInvSnap.account
-//                    .getAccountName().equals("USAATaxExemptFund")){
-//                testWriteTotRet("USAA-Cash-All", cashValue.startValues.get(retCat),
-//                        cashValue.endValue, 0.0, 0.0, comboTransMDMap.get(retCat));
-//
-//            }
 
             if ("All".equals(retCat)) {
                 /* cash RetMap adds in investment-account-level interest/expenses */
@@ -698,7 +669,7 @@ public final class SecReportProd {
         outObj.shortBasis = thisInvFromTo.shortBasis;
         outObj.realizedGain = thisInvFromTo.realizedGain;
         outObj.unrealizedGain = thisInvFromTo.unrealizedGain;
-        outObj.periodReturn = thisInvFromTo.periodReturn;
+        outObj.totalGain = thisInvFromTo.totalGain;
         //add balance sheet and income statement values where applicable
         outObj.startValue = thisInvFromTo.startValue + thisCashFromTo.startValue;
         outObj.endValue = thisInvFromTo.endValue + thisCashFromTo.endValue;
@@ -711,7 +682,7 @@ public final class SecReportProd {
         outObj.transMap = combineDateMaps(thisInvFromTo.transMap, thisCashFromTo.transMap, "add");
 
         //get correct start and end balances w/ cash accounted for
-        double startBal = thisCashFromTo.startBalance;
+        double startBal = thisCashFromTo.initBalance;
         outObj.startValue = cleanedValue(outObj.startValue + outObj.startCash + startBal);
         outObj.endValue = cleanedValue(outObj.endValue + outObj.endCash + startBal);
 
@@ -743,7 +714,7 @@ public final class SecReportProd {
         i.e. endValue includes income/expenses*/
         double allMDReturn = RepFromTo.getMDCalc(outObj.startValue, outObj.endValue, 0.0, 0.0,
                 mdMap);
-        outObj.percentReturn = allMDReturn;
+        outObj.mdReturn = allMDReturn;
         //get annualized returns
         outObj.annualPercentReturn = RepFromTo.getAnnualReturn(retMap, allMDReturn);
 
@@ -763,7 +734,7 @@ public final class SecReportProd {
         LinkedHashMap<String, Integer> adjRetDateMap =
                 new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
 
-        double startBal = thisCashSnap.startBalance;
+        double startBal = thisCashSnap.initBalance;
 
         //copy over aggregate values from aggregated securities
         outObj.totalGain = thisInvSnap.totalGain;
