@@ -44,6 +44,7 @@ import javax.swing.JTextField;
  */
 public class JDateFieldAlt extends JTextField
 {
+    private static final long serialVersionUID = 8029898487336547036L;
     private final static DateFormat dateFormat =
         new SimpleDateFormat("MM/dd/yyyy"); //"yyyy/MM/dd HH:mm:ss"
 
@@ -73,6 +74,7 @@ public class JDateFieldAlt extends JTextField
         Calendar.DAY_OF_MONTH, // D
 
         };
+
 
     /**
      * Create a DateField with the specified date.

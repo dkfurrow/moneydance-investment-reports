@@ -79,7 +79,7 @@ public class BulkSecInfo {
         txnDesc.put(TxnUtil.TXN_TYPE_MISCINC, "MiscIncome");
         txnDesc.put(TxnUtil.TXN_TYPE_MISCEXP, "MiscExpense");
         txnDesc.put(TxnUtil.TXN_TYPE_DIVIDEND, "Dividend");
-        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDENDXFR, "DividendTransfer");
+        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDENDXFR, "DivTransfer");
         txnDesc.put(TxnUtil.TXN_TYPE_BANK, "Bank");
     }
 
@@ -233,7 +233,7 @@ public class BulkSecInfo {
         HashMap<CurrencyType, HashSet<Account>> CurrAcct =
                 new HashMap<CurrencyType, HashSet<Account>>();
         for (Iterator<Account> it = AcctCur.keySet().iterator(); it.hasNext();) {
-            Account account = (Account) it.next();
+            Account account = it.next();
             CurrencyType thisCur = AcctCur.get(account);
             HashSet<Account> acctSet = new HashSet<Account>();
             // add relationship to map
@@ -272,7 +272,7 @@ public class BulkSecInfo {
                 new HashMap<Account, SortedSet<TransValues>>();
         //add ParentTxns to map
         for (Iterator<Account> it = assocSecTnsMap.keySet().iterator(); it.hasNext();) {
-            Account account = (Account) it.next();
+            Account account = it.next();
             HashSet<AbstractTxn> tns = new HashSet<AbstractTxn>(assocSecTnsMap.get(account));
             SortedSet<TransValues> transValues = new TreeSet<TransValues>();
             for (Iterator<AbstractTxn> it1 = tns.iterator(); it1.hasNext();) {
@@ -314,7 +314,7 @@ public class BulkSecInfo {
      private HashMap<Account, HashSet<Account>> getMapInvSec(HashMap<Account, HashSet<AbstractTxn>> assocSecTnsMap) {
         HashMap<Account, HashSet<Account>> thisInvSec = new HashMap<Account, HashSet<Account>>();
         for (Iterator<Account> it = assocSecTnsMap.keySet().iterator(); it.hasNext();) {
-            Account account = (Account) it.next();
+            Account account = it.next();
             HashSet<Account> secs = new HashSet<Account>();
             if (account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
                 if (thisInvSec.get(account.getParentAccount()) == null) {

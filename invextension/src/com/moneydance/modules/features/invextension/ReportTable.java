@@ -1,6 +1,5 @@
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.modules.features.invextension.ReportProd.RptTableModel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -57,11 +56,12 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.UIResource;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -78,6 +78,7 @@ import javax.swing.table.TableRowSorter;
  * @author Dale Furrow
  */
 public class ReportTable extends JScrollPane {
+    private static final long serialVersionUID = 1654873977162641532L;
 
     private final FormattedTable lockedTable;
     private final FormattedTable scrollTable;
@@ -257,6 +258,7 @@ public class ReportTable extends JScrollPane {
     
 
     private final class LockedTableSelectLastColumnCellAction extends AbstractAction {
+        private static final long serialVersionUID = -7498538141653234651L;
 
         private LockedTableSelectLastColumnCellAction() {
             super();
@@ -271,6 +273,7 @@ public class ReportTable extends JScrollPane {
     }
 
     private final class ScrollableSelectFirstColumnCellAction extends AbstractAction {
+        private static final long serialVersionUID = 7004700943224579977L;
 
         private ScrollableSelectFirstColumnCellAction() {
             super();
@@ -285,6 +288,7 @@ public class ReportTable extends JScrollPane {
     }
 
     private final class LockedTableSelectNextColumnCellAction extends AbstractAction {
+        private static final long serialVersionUID = 2820241653505999596L;
 
         private final Action lockedTableNextColumnCellAction;
 
@@ -304,6 +308,7 @@ public class ReportTable extends JScrollPane {
     }
 
     private final class ScrollTableSelectNextColumnCellAction extends AbstractAction {
+        private static final long serialVersionUID = 135412121274189994L;
 
         private final Action scrollTableNextColumnCellAction;
 
@@ -324,7 +329,7 @@ public class ReportTable extends JScrollPane {
     }
 
     private final class ScrollTableSelectPreviousColumnCellAction extends AbstractAction {
-
+        private static final long serialVersionUID = -6293074638490971318L;
         private final Action scrollTablePrevColumnCellAction;
 
         private ScrollTableSelectPreviousColumnCellAction(Action scrollTablePrevColumnCellAction) {
@@ -344,6 +349,7 @@ public class ReportTable extends JScrollPane {
     }
 
     private final class LockedTableSelectPreviousColumnCellAction extends AbstractAction {
+        private static final long serialVersionUID = -290336911634305126L;
 
         private final Action lockedTablePrevColumnCellAction;
 
@@ -364,6 +370,7 @@ public class ReportTable extends JScrollPane {
     }
 
     public class JScrollPaneAdjuster implements PropertyChangeListener, Serializable {
+        private static final long serialVersionUID = -6372520752839570952L;
 
         private JScrollPane pane;
         private transient Adjuster x, y;
@@ -476,6 +483,7 @@ public class ReportTable extends JScrollPane {
     }
 
     class FormattedTable extends JTable {
+        private static final long serialVersionUID = 1616850162785345995L;
 
         private FormattedTable(TableModel model, ColType[] colFormats, ColSizeOption sizeOption) {
             super(model);
@@ -527,6 +535,7 @@ public class ReportTable extends JScrollPane {
         }
 
         class NumberTableCellRenderer extends DefaultTableCellRenderer {
+            private static final long serialVersionUID = -1219099935272135292L;
 
             int minDecPlaces;
             int maxDecPlaces;
@@ -572,6 +581,7 @@ public class ReportTable extends JScrollPane {
         }
 
         class PercentTableCellRenderer extends DefaultTableCellRenderer {
+            private static final long serialVersionUID = -7691747688266451996L;
 
             int minDecPlaces;
             int maxDecPlaces;
@@ -604,6 +614,7 @@ public class ReportTable extends JScrollPane {
         }
 
         class StringTableCellRenderer extends DefaultTableCellRenderer {
+            private static final long serialVersionUID = 2532342046629811880L;
 
             public StringTableCellRenderer() {
                 super();
@@ -741,18 +752,19 @@ public class ReportTable extends JScrollPane {
 
         public int compare(String o1, String o2) {
             if (o1.startsWith("~") && o2.startsWith("~")) {
-                return o1.compareTo(o2);
+                return o1.compareToIgnoreCase(o2);
             } else if (o1.startsWith("~") && !o2.startsWith("~")) {
                 return 1;
             } else if (!o1.startsWith("~") && o2.startsWith("~")) {
                 return -1;
             } else {
-                return o1.compareTo(o2);
+                return o1.compareToIgnoreCase(o2);
             }
         }
     };
 
     private class RowSortGui extends JPanel {
+        private static final long serialVersionUID = -8349629256510555172L;
 
         public ReportTable tablePane;
 
@@ -869,7 +881,7 @@ public class ReportTable extends JScrollPane {
                     column.setHeaderRenderer(new ArrowHeader(this.lockedTable, 3,
                             thirdOrder == SortOrder.DESCENDING ? true : false));
                 } else {
-                    column.setHeaderRenderer(new DefaultTableCellHeaderRenderer()); 
+                    column.setHeaderRenderer(new RegularHeader());
                 }
             } else {
                 viewCol = this.scrollTable.convertColumnIndexToView(i);
@@ -888,7 +900,7 @@ public class ReportTable extends JScrollPane {
                     column.setHeaderRenderer(new ArrowHeader(this.scrollTable, 3,
                             thirdOrder == SortOrder.DESCENDING ? true : false));
                 } else {
-                    column.setHeaderRenderer(new DefaultTableCellHeaderRenderer());
+                    column.setHeaderRenderer(new RegularHeader());
                 }
             }
             //TOD0: Review this section for elimination
@@ -910,6 +922,7 @@ public class ReportTable extends JScrollPane {
     }
 
     class ArrowHeader extends JLabel implements TableCellRenderer {
+        private static final long serialVersionUID = -1175683155743555445L;
 
         JTable table;
         int column;
@@ -1019,7 +1032,63 @@ public class ReportTable extends JScrollPane {
         }
     } // end ArrowHeader Class
 
+    class RegularHeader extends DefaultTableCellRenderer implements UIResource {
+
+        private static final long serialVersionUID = 191983300055624975L;
+        private boolean horizontalTextPositionSet;
+
+        public RegularHeader() {
+            setHorizontalAlignment(JLabel.CENTER);
+        }
+
+        public void setHorizontalTextPosition(int textPosition) {
+            horizontalTextPositionSet = true;
+            super.setHorizontalTextPosition(textPosition);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            JTableHeader header = table.getTableHeader();
+
+            if (header != null) {
+                Color fgColor = null;
+                Color bgColor = null;
+                if (hasFocus) {
+                    fgColor = UIManager.getColor("TableHeader.focusCellForeground");
+                    bgColor = UIManager.getColor("TableHeader.focusCellBackground");
+                }
+                if (fgColor == null) {
+                    fgColor = header.getForeground();
+                }
+                if (bgColor == null) {
+                    bgColor = header.getBackground();
+                }
+                setForeground(fgColor);
+                setBackground(bgColor);
+
+                setFont(header.getFont());
+            }
+
+
+            setText(value == null ? "" : value.toString());
+            Border border = null;
+            if (hasFocus) {
+                border = UIManager.getBorder("TableHeader.focusCellBorder");
+            }
+            if (border == null) {
+                border = UIManager.getBorder("TableHeader.cellBorder");
+            }
+            setBorder(border);
+
+
+            return this;
+        }
+    } // end RegularHeader Class
+
+
     class LocationFrame extends JFrame implements ComponentListener{
+        private static final long serialVersionUID = -624700278151394528L;
         private Point frameLoc;
 
         public LocationFrame(){

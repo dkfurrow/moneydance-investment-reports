@@ -6,7 +6,6 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.awt.*;
 import com.moneydance.apps.md.model.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -19,7 +18,8 @@ public class SecReportFrame
   extends JFrame
 
 {
-  private Main extension;
+    private static final long serialVersionUID = 334888425056725292L;
+    private Main extension;
 
     public SecReportFrame(Main extension) {
     super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
