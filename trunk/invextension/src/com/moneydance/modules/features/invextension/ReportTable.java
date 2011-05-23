@@ -1236,7 +1236,7 @@ public class ReportTable extends JScrollPane {
         c.gridwidth = 3;
         c.fill = GridBagConstraints.BOTH;
 
-        thisTable.sortRows();
+        
         outerFrame.getContentPane().add(thisTable, c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1246,6 +1246,7 @@ public class ReportTable extends JScrollPane {
         outerFrame.setSize(frameSize);
         outerFrame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
         outerFrame.setVisible(true);
+        thisTable.sortRows();
 
 
 
