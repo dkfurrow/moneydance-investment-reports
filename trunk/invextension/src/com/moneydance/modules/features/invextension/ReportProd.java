@@ -40,13 +40,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
+import javax.swing.table.TableModel;
 
 /** produces FromTo and Snap reports
  * @author Dale Furrow
  * @version 1.0
  * @since 1.0
 */
-public final class SecReportProd {
+public final class ReportProd {
 
     private static final ColType[] ftColTypes = new ColType[] {
         ColType.STRING, ColType.STRING, ColType.STRING, ColType.DOUBLE3,ColType.DOUBLE3,
@@ -65,7 +66,7 @@ public final class SecReportProd {
     
     
 
-    private SecReportProd(){
+    private ReportProd(){
     }
 
     /**
@@ -630,7 +631,7 @@ public final class SecReportProd {
 
             if ("All".equals(retCat)) {
                 /* cashRetMap effectively reverses sign of previous map (so cash
-                 buys/sells with correct sign for returns calc), and adds
+                 buys/sells with correct sign for returns calc), and adds to that
                  account-level income/expense transactions from arMap (e.g. account interest)*/
                 TreeMap<Integer, Double> cashRetMap = combineDateMaps(
                         thisCashSnap.arMap.get(retCat),
@@ -692,9 +693,9 @@ public final class SecReportProd {
         outObj.transMap = combineDateMaps(thisInvFromTo.transMap, thisCashFromTo.transMap, "add");
 
         //get correct start and end balances w/ cash accounted for
-        double startBal = thisCashFromTo.initBalance;
-        outObj.startValue = cleanedValue(outObj.startValue + outObj.startCash + startBal);
-        outObj.endValue = cleanedValue(outObj.endValue + outObj.endCash + startBal);
+        double initBal = thisCashFromTo.initBalance;
+        outObj.startValue = cleanedValue(outObj.startValue + outObj.startCash + initBal);
+        outObj.endValue = cleanedValue(outObj.endValue + outObj.endCash + initBal);
 
         //from account returns perspective, only transfers matter, so they
         //become the "buys" and "sells" for MD returns calculations and annual returns calcs
@@ -704,12 +705,12 @@ public final class SecReportProd {
         /* reverse transfer map for returns calc purposes */
         TreeMap<Integer, Double> retMap = combineDateMaps(null, outObj.transMap, "subtract");
         /* this handles case where fromDateInt < first transaction,
-        AND initBal != 0 (i.e. startValue = initBal. In that case,
+        AND initBal != 0 (i.e. startValue = initBal). In that case,
         start date needs to be adjusted to day prior to  first transaction date */
         int adjFromDateInt = outObj.fromDateInt;
         int minDateInt = mdMap.isEmpty() ? 0 :
                     DateUtils.getPrevBusinessDay(mdMap.firstKey());
-        if(outObj.startValue == startBal && outObj.fromDateInt <= minDateInt)
+        if(outObj.startValue == initBal && outObj.fromDateInt <= minDateInt)
             adjFromDateInt = Math.max(outObj.fromDateInt, minDateInt );
         // add dummy values to Mod-Dietz date maps, start and end to return maps
         if(Math.abs(outObj.startValue) > 0.0001){
@@ -744,7 +745,7 @@ public final class SecReportProd {
         LinkedHashMap<String, Integer> adjRetDateMap =
                 new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
 
-        double startBal = thisCashSnap.initBalance;
+        double initBal = thisCashSnap.initBalance;
 
         //copy over aggregate values from aggregated securities
         outObj.totalGain = thisInvSnap.totalGain;
@@ -762,21 +763,21 @@ public final class SecReportProd {
                     + thisCashSnap.startCashs.get(retCat));
             outObj.startValues.put(retCat, cleanedValue(outObj.startCashs.get(retCat)
                     + thisInvSnap.startValues.get(retCat) + 
-                    thisCashSnap.startValues.get(retCat) + startBal));
+                    thisCashSnap.startValues.get(retCat) + initBal));
             /* this handles case where fromDateInt < first transaction,
             AND initBal != 0 (i.e. startValue = initBal. In that case,
             start date needs to be adjusted to day prior to  first transaction date */
             int minDateInt = outObj.transMap.get(retCat).isEmpty() ? 0 :
                         DateUtils.getPrevBusinessDay(
                         outObj.transMap.get(retCat).firstKey());
-            if(outObj.startValues.get(retCat) == startBal &&
+            if(outObj.startValues.get(retCat) == initBal &&
                     thisInvSnap.retDateMap.get(retCat) <= minDateInt)
                 adjRetDateMap.put(retCat, Math.max(
                         thisInvSnap.retDateMap.get(retCat), minDateInt));
         }
         outObj.endValue = cleanedValue(thisInvSnap.endValue + thisCashSnap.endValue
-                + thisInvSnap.endCash + thisCashSnap.endCash + startBal);
-        outObj.endCash = thisInvSnap.endCash + thisCashSnap.endCash + startBal;
+                + thisInvSnap.endCash + thisCashSnap.endCash + initBal);
+        outObj.endCash = thisInvSnap.endCash + thisCashSnap.endCash + initBal;
         //get returns
         for (Iterator it = thisInvSnap.retDateMap.keySet().iterator(); it.hasNext();) {
             String retCat = (String) it.next();
@@ -822,7 +823,8 @@ public final class SecReportProd {
 
     /*
      * generic method to add a one-dimensional object array to a
-     * two-dimensional object array
+     * two-dimensional object array, so that line items in from/to
+     * report and snap report can be aggregated for output
      */
 
     public static Object[][] addElement(Object[][] inArray, Object[] element) {
@@ -857,6 +859,10 @@ public final class SecReportProd {
             return input;
         }
     }
+
+    /* Class provides a generic TableModel which receives
+     * data from the reporting methods above.
+     */
 
     static class RptTableModel extends AbstractTableModel {
         public String[] columnNames;
@@ -904,12 +910,7 @@ public final class SecReportProd {
     }
     
 
-} //end SecReportProd Class
-
-
-
- 
-
+} //end ReportProd Class
     //unused methods follow
    // <editor-fold defaultstate="collapsed" desc="comment">
 /*public static Double testSum(TreeMap<Integer, Double> inMap) {

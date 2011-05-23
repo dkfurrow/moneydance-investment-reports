@@ -1,5 +1,6 @@
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.modules.features.invextension.ReportProd.RptTableModel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -89,7 +90,7 @@ public class ReportTable extends JScrollPane {
     public SortOrder secondOrder = SortOrder.ASCENDING;
     public SortOrder thirdOrder = SortOrder.UNSORTED;
     public TableModel model;
-    public boolean closedPosHidden = false;
+    public boolean closedPosHidden = true;
     public int closedPosColumn;
 
     public ReportTable(TableModel model, int numFrozenColumns, int indClosedPosColumn, ColType[] colTypes, ColSizeOption sizeOption) {
@@ -693,7 +694,7 @@ public class ReportTable extends JScrollPane {
 
     public void sortRows() {
 
-        TableRowSorter rowSorter = new TableRowSorter(this.model);
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(this.model);
         //apply row sorter
         RowFilter<TableModel, Object> rf = null;
         if (closedPosHidden) {
@@ -1099,7 +1100,7 @@ public class ReportTable extends JScrollPane {
          JComboBox freezeColsBox = new JComboBox(freezeCols);
          freezeColsBox.setSelectedIndex(numFreezeCols); 
          JButton buttonSort = new JButton("Sort Table");
-         JCheckBox hideClosedBox = new JCheckBox("Hide Closed Positions", false);
+         JCheckBox hideClosedBox = new JCheckBox("Hide Closed Positions", true);
          JButton copyCB = new JButton("Copy Table to Clipboard");
 
           Border blackline = BorderFactory.createLineBorder(Color.BLACK);
