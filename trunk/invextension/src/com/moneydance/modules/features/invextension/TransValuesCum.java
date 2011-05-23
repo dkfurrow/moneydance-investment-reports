@@ -172,7 +172,7 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
     public static StringBuffer listTransValuesCumHeader() {
         StringBuffer txnInfo = new StringBuffer();
         txnInfo.append("ParentAcct " + ",");    
-        txnInfo.append("Account " + ",");
+        txnInfo.append("Security " + ",");
         txnInfo.append("TxnNum " + ",");
         txnInfo.append("Date" + ",");
         txnInfo.append("TxnType"+ ",");

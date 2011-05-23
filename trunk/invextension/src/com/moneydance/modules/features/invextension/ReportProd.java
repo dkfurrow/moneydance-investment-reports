@@ -21,26 +21,15 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.Account;
 import com.moneydance.modules.features.invextension.ReportTable.ColType;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
-
-
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
-import javax.swing.table.TableModel;
 
 /** produces FromTo and Snap reports
  * @author Dale Furrow
@@ -464,7 +453,7 @@ public final class ReportProd {
 //
 
         for (Iterator<String> it1 = thisInvSnap.retDateMap.keySet().iterator(); it1.hasNext();) {
-            String retCat = (String) it1.next();
+            String retCat = it1.next();
             // get MD returns on all start dates, only get annualized return for "All" dates
 
             outObj.mdReturns.put(retCat, RepFromTo.getMDCalc(thisInvSnap.startValues.get(retCat),
@@ -865,6 +854,7 @@ public final class ReportProd {
      */
 
     static class RptTableModel extends AbstractTableModel {
+        private static final long serialVersionUID = 5838000411345317854L;
         public String[] columnNames;
         public Object[][] data;
 

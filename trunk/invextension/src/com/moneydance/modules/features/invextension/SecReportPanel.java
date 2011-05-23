@@ -50,7 +50,7 @@ import javax.swing.border.TitledBorder;
  * @since 1.0
 */
 public class SecReportPanel extends javax.swing.JPanel { //implements ActionListener
-
+    private static final long serialVersionUID = 1020488211446251526L;
     //variable declarations
     //MD Data
     Main extension;

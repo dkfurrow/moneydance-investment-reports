@@ -200,14 +200,14 @@ public class RepSnap {
         // fill startPrice Array List
         
         for (Iterator<String> it = this.retDateMap.keySet().iterator(); it.hasNext();) {
-            String retCat = (String) it.next();
+            String retCat = it.next();
             int thisDateInt = this.retDateMap.get(retCat);
             startPrice.put(retCat, 1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(thisDateInt)));
         }
         //initialize ArrayLists values to zero (so we can use "set" method later
         
         for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-            String retCat = (String) it1.next();
+            String retCat = it1.next();
             startPos.put(retCat, 0.0);
             this.startValues.put(retCat, 0.0);
             this.incomes.put(retCat, 0.0);
@@ -248,7 +248,7 @@ public class RepSnap {
             TransValuesCum transValuesCum = it.next();
             //iterate through return dates
             for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-                String retCat = (String) it1.next();
+                String retCat = it1.next();
                 int thisFromDateInt = this.retDateMap.get(retCat);
                 //where transactions are before report dates
                 if (transValuesCum.transValues.dateint <= thisFromDateInt) {
@@ -329,7 +329,7 @@ public class RepSnap {
 
         //now go through arrays and get returns/calc values
         for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-            String retCat = (String) it1.next();
+            String retCat = it1.next();
             int thisFromDateInt = this.retDateMap.get(retCat);
             // add the first value in return arrays (if startpos != 0)
             if (startPos.get(retCat) != 0) {
