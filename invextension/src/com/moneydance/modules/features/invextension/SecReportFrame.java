@@ -15,13 +15,13 @@ import javax.swing.*;
   ------------------------------------------------------------------------
 */
 
-public class ReportWindow
+public class SecReportFrame
   extends JFrame
 
 {
   private Main extension;
 
-    public ReportWindow(Main extension) {
+    public SecReportFrame(Main extension) {
     super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
     this.extension = extension;
     RootAccount root = extension.getUnprotectedContext().getRootAccount();

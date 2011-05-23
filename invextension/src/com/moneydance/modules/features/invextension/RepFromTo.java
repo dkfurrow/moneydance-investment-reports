@@ -136,7 +136,7 @@ public class RepFromTo {
         this.endCash = 0;
         if (transSet.first().transValues.accountRef.getAccountType() ==
                 Account.ACCOUNT_TYPE_INVESTMENT) {this.initBalance =
-                        SecReportProd.longToDouble(transSet.first().
+                        ReportProd.longToDouble(transSet.first().
                         transValues.accountRef.getStartBalance()) / 100.0;
         } else {
             this.initBalance = 0.0;
@@ -457,69 +457,6 @@ public class RepFromTo {
         snapValues.add("annualPercentReturn");
         
        return snapValues.toArray(new String[snapValues.size()]);
-    }
-
-
-    /**
-     * generates individual line report body
-     * @param thisFT report line
-     * @param AGG_TYPE level of aggregation (security, account, aggregate, cash, etc)
-     * @return array of values
-     */
-    public static String[] loadTransValuesFromTo(RepFromTo thisFT, AGG_TYPE aggType) {
-        ArrayList<String> snapValues = new ArrayList<String>();
-          String tilde = "\u007e";
-        switch (aggType) {
-            case SEC: // individual security
-                snapValues.add(thisFT.account.getParentAccount().getAccountName());
-                snapValues.add(thisFT.account.getAccountName());
-                break;
-            case ACCT_SEC: //aggregated securities
-                snapValues.add(thisFT.account.getAccountName());
-                snapValues.add(tilde + "AllSec");
-                break;
-            case ACCT_CASH: //cash balance
-                snapValues.add(thisFT.account.getAccountName());
-                snapValues.add(tilde + "Cash");
-                break;
-            case ACCT_SEC_PLUS_CASH: //aggregated securities + cash
-                snapValues.add(thisFT.account.getAccountName());
-                snapValues.add(tilde + "AllSec+Cash");
-                break;
-            case ALL_SEC: //all securities
-                snapValues.add(tilde + "ALL");
-                snapValues.add(tilde + "AllSec");
-                break;
-            case ALL_CASH: //all cash
-                snapValues.add(tilde + "ALL");
-                snapValues.add(tilde + "Cash");
-                break;
-            case ALL_SEC_PLUS_CASH: //all securities +  cash
-                snapValues.add(tilde + "ALL");
-                snapValues.add(tilde + "AllSec+Cash");
-                break;
-        }
-        snapValues.add(thisFT.ticker);
-        snapValues.add(Double.toString(thisFT.startPos));
-        snapValues.add(Double.toString(thisFT.endPos));
-        snapValues.add(Double.toString(thisFT.startPrice));
-        snapValues.add(Double.toString(thisFT.endPrice));
-        snapValues.add(Double.toString(thisFT.startValue));
-        snapValues.add(Double.toString(thisFT.endValue));
-        snapValues.add(Double.toString(thisFT.buy));
-        snapValues.add(Double.toString(thisFT.sell));
-        snapValues.add(Double.toString(thisFT.shortSell));
-        snapValues.add(Double.toString(thisFT.coverShort));
-        snapValues.add(Double.toString(thisFT.income));
-        snapValues.add(Double.toString(thisFT.expense));
-        snapValues.add(Double.toString(thisFT.longBasis));
-        snapValues.add(Double.toString(thisFT.shortBasis));
-        snapValues.add(Double.toString(thisFT.realizedGain));
-        snapValues.add(Double.toString(thisFT.unrealizedGain));
-        snapValues.add(Double.toString(thisFT.totalGain));
-        snapValues.add(Double.toString(thisFT.mdReturn));
-        snapValues.add(Double.toString(thisFT.annualPercentReturn));
-        return snapValues.toArray(new String[snapValues.size()]);
     }
 
     /**

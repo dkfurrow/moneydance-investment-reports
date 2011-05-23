@@ -140,7 +140,7 @@ public class RepSnap {
         this.snapDateInt = snapDateInt;
         this.lastPrice = (1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(snapDateInt)));
         if (transSet.first().transValues.accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            this.initBalance = SecReportProd.longToDouble(transSet.first().transValues.accountRef.getStartBalance()) / 100.0;
+            this.initBalance = ReportProd.longToDouble(transSet.first().transValues.accountRef.getStartBalance()) / 100.0;
         } else {
             this.initBalance = 0.0;
         }
@@ -528,68 +528,5 @@ public class RepSnap {
         snapValues.add(this.totalGain);
         return snapValues.toArray();
     }
-
-
-
-     /**
-     * generates individual line report body
-     * @param thisSnap report line
-     * @param AGG_TYPE level of aggregation (security, account, aggregate, cash, etc)
-     * @return array of values
-     */
-    public static String[] loadTransValuesSnap(RepSnap thisSnap, AGG_TYPE aggType) {
-        ArrayList<String> snapValues = new ArrayList<String>();
-        String tilde = "\u007e";
-
-        switch (aggType) {
-            case SEC: // individual security
-                snapValues.add(thisSnap.account.getParentAccount().getAccountName());
-                snapValues.add(thisSnap.account.getAccountName());
-                break;
-            case ACCT_SEC: //aggregated securities
-                snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add(tilde + "AllSec");
-                break;
-            case ACCT_CASH: //cash balance
-                snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add(tilde + "Cash");
-                break;
-            case ACCT_SEC_PLUS_CASH: //aggregated securities + cash
-                snapValues.add(thisSnap.account.getAccountName());
-                snapValues.add(tilde + "AllSec+Cash");
-                break;
-            case ALL_SEC: //all securities
-                snapValues.add(tilde + "ALL");
-                snapValues.add(tilde + "AllSec");
-                break;
-            case ALL_CASH: //all cash
-                snapValues.add(tilde + "ALL");
-                snapValues.add("~Cash");
-                break;
-            case ALL_SEC_PLUS_CASH: //all securities +  cash
-                snapValues.add(tilde + "ALL");
-                snapValues.add(tilde + "AllSec+Cash");
-                break;
-        }
-        snapValues.add(thisSnap.ticker);
-        snapValues.add(Double.toString(thisSnap.lastPrice));
-        snapValues.add(Double.toString(thisSnap.endPos));
-        snapValues.add(Double.toString(thisSnap.endValue));
-        snapValues.add(Double.toString(thisSnap.absPriceChange));
-        snapValues.add(Double.toString(thisSnap.absValueChange));
-        snapValues.add(Double.toString(thisSnap.pctPriceChange));
-        snapValues.add(Double.toString(thisSnap.totRet1Day));
-        snapValues.add(Double.toString(thisSnap.totRetWk));
-        snapValues.add(Double.toString(thisSnap.totRet4Wk));
-        snapValues.add(Double.toString(thisSnap.totRet3Mnth));
-        snapValues.add(Double.toString(thisSnap.totRetYTD));
-        snapValues.add(Double.toString(thisSnap.totRetYear));
-        snapValues.add(Double.toString(thisSnap.totRet3year));
-        snapValues.add(Double.toString(thisSnap.totRetAll));
-        snapValues.add(Double.toString(thisSnap.annRetAll));
-        snapValues.add(Double.toString(thisSnap.avgCostBasis));
-        snapValues.add(Double.toString(thisSnap.income));
-        snapValues.add(Double.toString(thisSnap.totalGain));
-        return snapValues.toArray(new String[snapValues.size()]);
-    }
+     
 }

@@ -253,10 +253,10 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
         try {
             if (snapReportRun) {
-                SecReportProd.getSnapReport(currentInfo, snapDateInt);
+                ReportProd.getSnapReport(currentInfo, snapDateInt);
             }
             if (fromToReportRun) {
-                SecReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
+                ReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
             }
 
             if (transActivityReportRun) {

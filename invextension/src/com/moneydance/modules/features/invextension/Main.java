@@ -35,7 +35,7 @@ import java.awt.*;
 public class Main
   extends FeatureModule
 {
-  private ReportWindow reportWindow = null;
+  private SecReportFrame reportWindow = null;
 
   public void init() {
     // the first thing we will do is register this module to be invoked
@@ -100,7 +100,7 @@ public class Main
 
   private synchronized void showReportWindow() {
     if(reportWindow==null) {
-      reportWindow = new ReportWindow(this);
+      reportWindow = new SecReportFrame(this);
       reportWindow.setVisible(true);
     }
     else {
@@ -114,7 +114,7 @@ public class Main
     return getContext();
   }
 
-  synchronized void closeConsole() { //called from ReportWindow on Close Button
+  synchronized void closeConsole() { //called from SecReportFrame on Close Button
     if(reportWindow!=null) {
       reportWindow.goAway(); //method which sets visible to false and disposes
       reportWindow = null;
