@@ -28,6 +28,7 @@ import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.model.SplitTxn;
 import com.moneydance.apps.md.model.TxnUtil;
+import com.moneydance.apps.md.model.InvestTxnType;
 
 
 import java.util.HashMap;
@@ -65,22 +66,22 @@ public class BulkSecInfo {
 
 
     // static hashmap for report generation
-    public static final HashMap<Integer, String> txnDesc = new HashMap<Integer, String>();
+    public static final HashMap<InvestTxnType, String> txnDesc = new HashMap<InvestTxnType, String>();
 
     static {
-        HashMap<Integer, String> aMap = new HashMap<Integer, String>();
-        txnDesc.put(TxnUtil.TXN_TYPE_BUY, "Buy");
-        txnDesc.put(TxnUtil.TXN_TYPE_BUY_XFER, "BuyTransfer");
-        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDEND_REINVEST, "DivReinvest");
-        txnDesc.put(TxnUtil.TXN_TYPE_SELL, "Sell");
-        txnDesc.put(TxnUtil.TXN_TYPE_SELL_XFER, "SellTransfer");
-        txnDesc.put(TxnUtil.TXN_TYPE_SHORT, "ShortSell");
-        txnDesc.put(TxnUtil.TXN_TYPE_COVER, "CoverShort");
-        txnDesc.put(TxnUtil.TXN_TYPE_MISCINC, "MiscIncome");
-        txnDesc.put(TxnUtil.TXN_TYPE_MISCEXP, "MiscExpense");
-        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDEND, "Dividend");
-        txnDesc.put(TxnUtil.TXN_TYPE_DIVIDENDXFR, "DivTransfer");
-        txnDesc.put(TxnUtil.TXN_TYPE_BANK, "Bank");
+        HashMap<InvestTxnType, String> aMap = new HashMap<InvestTxnType, String>();
+        txnDesc.put(InvestTxnType.BUY, "Buy");
+        txnDesc.put(InvestTxnType.BUY_XFER, "BuyTransfer");
+        txnDesc.put(InvestTxnType.DIVIDEND_REINVEST, "DivReinvest");
+        txnDesc.put(InvestTxnType.SELL, "Sell");
+        txnDesc.put(InvestTxnType.SELL_XFER, "SellTransfer");
+        txnDesc.put(InvestTxnType.SHORT, "ShortSell");
+        txnDesc.put(InvestTxnType.COVER, "CoverShort");
+        txnDesc.put(InvestTxnType.MISCINC, "MiscIncome");
+        txnDesc.put(InvestTxnType.MISCEXP, "MiscExpense");
+        txnDesc.put(InvestTxnType.DIVIDEND, "Dividend");
+        txnDesc.put(InvestTxnType.DIVIDENDXFR, "DivTransfer");
+        txnDesc.put(InvestTxnType.BANK, "Bank");
     }
 
     public enum AGG_TYPE{
