@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build error="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:70: Unable to remove existing file E:\DKF\COMPUTER\NetBeansProjects\invextension\dist\invextension.mxt" time="12 seconds">
+<build error="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:67: Unable to remove existing file E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt" time="21 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.6 in: C:\Program Files (x86)\Java\jdk1.6.0_24\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.ComponentHelper]]></message>
-	<message priority="debug"><![CDATA[Setting ro project property: ant.file -> E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml]]></message>
+	<message priority="debug"><![CDATA[Setting ro project property: ant.file -> E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.file.type -> file]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.projectHelper]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.parsing.context]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.targets]]></message>
-	<message priority="debug"><![CDATA[parsing buildfile E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml with URI = file:/E:/DKF/COMPUTER/NetBeansProjects/invextension/src/build.xml]]></message>
+	<message priority="debug"><![CDATA[parsing buildfile E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml with URI = file:/E:/DKF/COMPUTER/EclipseWorkspace/invextension/src/build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.name -> invextension]]></message>
 	<message priority="debug"><![CDATA[Adding reference: invextension]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.default-target -> all]]></message>
-	<message priority="debug"><![CDATA[Setting ro project property: ant.file.invextension -> E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml]]></message>
+	<message priority="debug"><![CDATA[Setting ro project property: ant.file.invextension -> E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.file.type.invextension -> file]]></message>
-	<message priority="debug"><![CDATA[Project base dir set to: E:\DKF\COMPUTER\NetBeansProjects\invextension\src]]></message>
+	<message priority="debug"><![CDATA[Project base dir set to: E:\DKF\COMPUTER\EclipseWorkspace\invextension\src]]></message>
 	<message priority="debug"><![CDATA[ +Target: ]]></message>
 	<message priority="debug"><![CDATA[ +Target: init]]></message>
 	<message priority="debug"><![CDATA[ +Target: invextension]]></message>
@@ -26,53 +26,50 @@
 	<message priority="debug"><![CDATA[Adding reference: ant.LocalProperties]]></message>
 	<message priority="debug"><![CDATA[parsing buildfile jar:file:/C:/Program%20Files%20(x86)/Ant/apache-ant-1.8.1/lib/ant.jar!/org/apache/tools/ant/antlib.xml with URI = jar:file:/C:/Program%20Files%20(x86)/Ant/apache-ant-1.8.1/lib/ant.jar!/org/apache/tools/ant/antlib.xml from a zip file]]></message>
 	<message priority="debug"><![CDATA[Setting project property: version -> 2.2]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:7: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:7: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: src -> .]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:8: " name="property" time="0 seconds" />
-	<message priority="debug"><![CDATA[Setting project property: build -> ./build]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:9: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:8: " name="property" time="0 seconds" />
+	<message priority="debug"><![CDATA[Setting project property: build -> ../classes]]></message>
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:9: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: privkeyfile -> ./priv_key]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:10: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:10: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: pubkeyfile -> ./pub_key]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:11: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:11: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: privkeyid -> 99]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:12: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:12: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: build.compiler -> modern]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:14: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:14: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: build.compiler.fulldepend -> true]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:15: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:16: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: dist -> ../dist]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:16: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:17: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: tmp -> ../tmp]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:17: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:18: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: debug -> on]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:18: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:19: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: optimize -> off]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:19: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:20: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Adding reference: classpath]]></message>
-	<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:21: " name="path" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:22: " name="path" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.invoked-targets -> all]]></message>
 	<message priority="debug"><![CDATA[Attempting to create object of type org.apache.tools.ant.helper.DefaultExecutor]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.executor]]></message>
 	<message priority="debug"><![CDATA[Build sequence for target(s) `all' is [init, invextension, all]]]></message>
 	<message priority="debug"><![CDATA[Complete build sequence is [init, invextension, all, genkeys, ]]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes with patternSet{ includes: [**/*] excludes: [] }]]></message>
 	<target name="init" time="0 seconds">
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:37: " name="delete" time="0 seconds" />
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:38: " name="delete" time="0 seconds" />
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:31: " name="delete" time="0 seconds" />
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:34: " name="delete" time="0 seconds" />
 	</target>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\NetBeansProjects\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[dropping E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-adapters-1.1.1-sources.jar from path as it doesn't exist]]></message>
-	<message priority="debug"><![CDATA[dropping E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-api-1.1.1-sources.jar from path as it doesn't exist]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\NetBeansProjects\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[dropping E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-adapters-1.1.1-sources.jar from path as it doesn't exist]]></message>
-	<message priority="debug"><![CDATA[dropping E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-api-1.1.1-sources.jar from path as it doesn't exist]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
 	<message priority="debug"><![CDATA[force loading com.moneydance.admin.KeyAdmin]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.admin.KeyAdmin]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/admin/KeyAdmin.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/admin/KeyAdmin.class]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Object loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.SecretKeyCallback]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.SecretKeyCallback loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileOutputStream loaded from parent loader (parentFirst)]]></message>
@@ -85,15 +82,15 @@
 	<message priority="debug"><![CDATA[Class java.lang.Exception loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.File loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.admin.KeyAdmin$4]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/admin/KeyAdmin$4.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/admin/KeyAdmin$4.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.admin.KeyAdmin$4 loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamTable]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StreamTable.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StreamTable.class]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamObject]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StreamObject.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StreamObject.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamObject loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.DeepClone]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/DeepClone.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/DeepClone.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.DeepClone loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamTable loaded from ant loader]]></message>
@@ -102,11 +99,11 @@
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Vector loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamVector]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StreamVector.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StreamVector.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamVector loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.PrintStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StringEncodingException]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StringEncodingException.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StringEncodingException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StringEncodingException loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
@@ -116,12 +113,12 @@
 	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamUtil]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StreamUtil.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StreamUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.EOFException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuffer loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
@@ -138,7 +135,7 @@
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StringUtils]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/util/StringUtils.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StringUtils loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Stack loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.NumberFormat loaded from parent loader (parentFirst)]]></message>
@@ -155,40 +152,40 @@
 	<message priority="debug"><![CDATA[Class javax.crypto.SecretKeyFactory loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.Cipher loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.DSAPrivateKeyImpl]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/security/DSAPrivateKeyImpl.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/security/DSAPrivateKeyImpl.class]]></message>
 	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAPrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.DSAPrivateKeyImpl loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.DSAParamsImpl]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar com/moneydance/security/DSAParamsImpl.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar com/moneydance/security/DSAParamsImpl.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.DSAParamsImpl loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.MDException loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.ByteArrayInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.FeatureModuleContext]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.FeatureModuleContext loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuilder loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipFile loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="12 seconds">
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:43: " name="mkdir" time="0 seconds">
-			<message priority="info"><![CDATA[Created dir: E:\DKF\COMPUTER\NetBeansProjects\invextension\dist]]></message>
+	<target name="invextension" time="20 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:39: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:44: " name="mkdir" time="0 seconds">
-			<message priority="info"><![CDATA[Created dir: E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build]]></message>
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:40: " name="mkdir" time="0 seconds">
+			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:48: " name="javac" time="1 second">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:44: " name="javac" time="0 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo.java added as com\moneydance\modules\features\invextension\BulkSecInfo.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils.java added as com\moneydance\modules\features\invextension\DateUtils.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeek.java added as com\moneydance\modules\features\invextension\GoalSeek.class doesn't exist.]]></message>
@@ -209,17 +206,17 @@
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRR.java added as com\moneydance\modules\features\invextension\XIRR.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRData.java added as com\moneydance\modules\features\invextension\XIRRData.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRNPV.java added as com\moneydance\modules\features\invextension\XIRRNPV.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\icon.gif skipped - don't know how to handle it]]></message>
-			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\meta_info.dict skipped - don't know how to handle it]]></message>
-			<message priority="info"><![CDATA[Compiling 20 source files to E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build]]></message>
+			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\icon.gif skipped - don't know how to handle it]]></message>
+			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\meta_info.dict skipped - don't know how to handle it]]></message>
+			<message priority="info"><![CDATA[Compiling 20 source files to E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes]]></message>
 			<message priority="debug"><![CDATA[Using modern compiler]]></message>
 			<message priority="debug"><![CDATA[Compilation arguments:
 '-d'
-'E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build'
+'E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes'
 '-classpath'
-'E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\extadmin.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\moneydance.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-lang-2.5.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-lang-2.5-javadoc.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-lang-2.5-sources.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-1.1.1.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-1.1.1-javadoc.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-1.1.1-sources.jar;E:\DKF\COMPUTER\NetBeansProjects\invextension\lib\commons-logging-tests.jar'
+'E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes;E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\extadmin.jar;E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\moneydance.jar;E:\DKF\COMPUTER\EclipseWorkspace\invextension\lib\commons-logging-1.1.1.jar'
 '-sourcepath'
-'E:\DKF\COMPUTER\NetBeansProjects\invextension\src'
+'E:\DKF\COMPUTER\EclipseWorkspace\invextension\src'
 '-target'
 '1.6'
 '-g'
@@ -228,29 +225,29 @@
 The ' characters around the executable and arguments are
 not part of the command.]]></message>
 			<message priority="debug"><![CDATA[Files to be compiled:
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\DateUtils.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\GoalSeek.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\GoalSeekData.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\GoalSeekFunction.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\GoalSeekStatus.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\IOUtils.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\JDateFieldAlt.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\Main.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\RepSnap.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\ReportTable.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\SecReportFrame.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\SecReportPanel.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\TransValues.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\TransValuesCum.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\XIRR.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\XIRRData.java
-    E:\DKF\COMPUTER\NetBeansProjects\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\DateUtils.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeek.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeekData.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeekFunction.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeekStatus.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\IOUtils.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\JDateFieldAlt.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\Main.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepSnap.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportTable.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecReportFrame.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecReportPanel.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\TransValues.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\TransValuesCum.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRR.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRRData.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:52: " name="jar" time="0 seconds">
-			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\NetBeansProjects\invextension\dist\invextension.mxt]]></message>
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:49: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt]]></message>
 			<message priority="debug"><![CDATA[adding directory META-INF/]]></message>
 			<message priority="debug"><![CDATA[adding entry META-INF/MANIFEST.MF]]></message>
 			<message priority="debug"><![CDATA[adding directory com/]]></message>
@@ -329,9 +326,9 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
-Location: E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:52: ]]></message>
+Location: E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:49: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:63: " name="java" time="10 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:60: " name="java" time="19 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -425,12 +422,12 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
 			<message priority="info"><![CDATA[writing 9696 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:70: " name="move" time="0 seconds">
-			<message priority="info"><![CDATA[Moving 1 file to E:\DKF\COMPUTER\NetBeansProjects\invextension\dist]]></message>
-			<message priority="debug"><![CDATA[Attempting to rename: E:\DKF\COMPUTER\NetBeansProjects\invextension\src\s-invextension.mxt to E:\DKF\COMPUTER\NetBeansProjects\invextension\dist\invextension.mxt]]></message>
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:67: " name="move" time="0 seconds">
+			<message priority="info"><![CDATA[Moving 1 file to E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist]]></message>
+			<message priority="debug"><![CDATA[Attempting to rename: E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\s-invextension.mxt to E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt]]></message>
 		</task>
 	</target>
-	<stacktrace><![CDATA[E:\DKF\COMPUTER\NetBeansProjects\invextension\src\build.xml:70: Unable to remove existing file E:\DKF\COMPUTER\NetBeansProjects\invextension\dist\invextension.mxt
+	<stacktrace><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:67: Unable to remove existing file E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt
 	at org.apache.tools.ant.taskdefs.Move.renameFile(Move.java:346)
 	at org.apache.tools.ant.taskdefs.Move.moveFile(Move.java:198)
 	at org.apache.tools.ant.taskdefs.Move.doFileOperations(Move.java:142)
