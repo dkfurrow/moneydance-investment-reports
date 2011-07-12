@@ -21,6 +21,7 @@ package com.moneydance.modules.features.invextension;
 
 
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.InvestTxnType;
 import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.SplitTxn;
 import com.moneydance.apps.md.model.TxnUtil;
@@ -113,43 +114,43 @@ public class TransValues implements Comparable<TransValues> {
     }
 
     public Integer getTxnSortOrder() {
-        Integer transType = TxnUtil.getInvstTxnType(parent);
+        InvestTxnType transType = TxnUtil.getInvestTxnType(parent);
         Integer txnOrder = 0;
         switch (transType) {
-            case TxnUtil.TXN_TYPE_BUY:
+            case BUY:
                 txnOrder = 0;
                 break;
-            case TxnUtil.TXN_TYPE_BUY_XFER:
+            case BUY_XFER:
                 txnOrder = 1;
                 break;
-            case TxnUtil.TXN_TYPE_DIVIDEND_REINVEST:
+            case DIVIDEND_REINVEST:
                 txnOrder = 2;
                 break;
-            case TxnUtil.TXN_TYPE_SELL:
+            case SELL:
                 txnOrder = 3;
                 break;
-            case TxnUtil.TXN_TYPE_SELL_XFER:
+            case SELL_XFER:
                 txnOrder = 4;
                 break;
-            case TxnUtil.TXN_TYPE_SHORT:
+            case SHORT:
                 txnOrder = 5;
                 break;
-            case TxnUtil.TXN_TYPE_COVER:
+            case COVER:
                 txnOrder = 6;
                 break;
-            case TxnUtil.TXN_TYPE_MISCINC:
+            case MISCINC:
                 txnOrder = 7;
                 break;
-            case TxnUtil.TXN_TYPE_MISCEXP:
+            case MISCEXP:
                 txnOrder = 8;
                 break;
-            case TxnUtil.TXN_TYPE_DIVIDEND:
+            case DIVIDEND:
                 txnOrder = 9;
                 break;
-            case TxnUtil.TXN_TYPE_DIVIDENDXFR:
+            case DIVIDENDXFR:
                 txnOrder = 10;
                 break;
-            case TxnUtil.TXN_TYPE_BANK:
+            case BANK:
                 txnOrder = 11;
                 break;
         }
@@ -180,7 +181,7 @@ public class TransValues implements Comparable<TransValues> {
             this.split = thisSplit;
             this.accountRef = accountRef;
             this.dateint = thisSplit.getDateInt();
-            int txnType = TxnUtil.getInvstTxnType(thisSplit.getParentTxn());
+            InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());
             int acctType = thisSplit.getAccount().getAccountType();
             int parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
             Long amountLong = thisSplit.getAmount();
@@ -203,8 +204,8 @@ public class TransValues implements Comparable<TransValues> {
             /*goes through each transaction type, assigns values for each variable based
              on indicated transaction type and account type*/
             switch (txnType) {
-                case TxnUtil.TXN_TYPE_BUY://consists of buy, commission, and (potentially) transfer
-                case TxnUtil.TXN_TYPE_BUY_XFER: //no net cash effect (transfer offsets buy)
+                case BUY://consists of buy, commission, and (potentially) transfer
+                case BUY_XFER: //no net cash effect (transfer offsets buy)
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.buy = amountDouble;
@@ -224,8 +225,8 @@ public class TransValues implements Comparable<TransValues> {
                     this.cashEffect = this.buy + this.commision
                             + this.income + this.transfer;
                     break;
-                case TxnUtil.TXN_TYPE_SELL://consists of sell, commission, and (potentially) transfer
-                case TxnUtil.TXN_TYPE_SELL_XFER: //no net cash effect (transfer offsets sell)
+                case SELL://consists of sell, commission, and (potentially) transfer
+                case SELL_XFER: //no net cash effect (transfer offsets sell)
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.sell = amountDouble;
@@ -245,7 +246,7 @@ public class TransValues implements Comparable<TransValues> {
                     this.cashEffect = this.sell + this.commision
                             + this.income + this.transfer;
                     break;
-                case TxnUtil.TXN_TYPE_BANK: //Account-level transfers, interest, and expenses
+                case BANK: //Account-level transfers, interest, and expenses
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:// Only count if parent is investment
                             if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
@@ -274,8 +275,8 @@ public class TransValues implements Comparable<TransValues> {
                             break;
                     }  
                     break;
-                case TxnUtil.TXN_TYPE_DIVIDEND:
-                case TxnUtil.TXN_TYPE_DIVIDENDXFR: //income/expense transactions
+                case DIVIDEND:
+                case DIVIDENDXFR: //income/expense transactions
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
                             this.expense = amountDouble;
@@ -290,7 +291,7 @@ public class TransValues implements Comparable<TransValues> {
                     }
                     this.cashEffect = this.expense + this.income + this.transfer;
                     break;
-                case TxnUtil.TXN_TYPE_SHORT: //short sales + commission
+                case SHORT: //short sales + commission
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.shortSell = amountDouble;
@@ -305,7 +306,7 @@ public class TransValues implements Comparable<TransValues> {
                     }
                     this.cashEffect = this.shortSell + this.commision + this.income;
                     break;
-                case TxnUtil.TXN_TYPE_COVER://short covers + commission
+                case COVER://short covers + commission
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.coverShort = amountDouble;
@@ -320,7 +321,7 @@ public class TransValues implements Comparable<TransValues> {
                     }
                     this.cashEffect = this.coverShort + this.commision + this.income;
                     break;
-                case TxnUtil.TXN_TYPE_MISCINC: //misc income and expense
+                case MISCINC: //misc income and expense
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
                             this.expense = amountDouble;
@@ -334,7 +335,7 @@ public class TransValues implements Comparable<TransValues> {
                     }
                     this.cashEffect = amountDouble;
                     break;
-                case TxnUtil.TXN_TYPE_MISCEXP: //misc income and expense
+                case MISCEXP: //misc income and expense
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
                             this.expense = amountDouble;
@@ -348,7 +349,7 @@ public class TransValues implements Comparable<TransValues> {
                     }
                     this.cashEffect = amountDouble;
                     break;
-                case TxnUtil.TXN_TYPE_DIVIDEND_REINVEST: //income and buy with no net cash effect
+                case DIVIDEND_REINVEST: //income and buy with no net cash effect
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
                             this.commision = amountDouble;
