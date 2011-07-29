@@ -38,14 +38,14 @@ import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
 */
 public final class ReportProd {
 
-    private static final ColType[] ftColTypes = new ColType[] {
+    public static final ColType[] ftColTypes = new ColType[] {
         ColType.STRING, ColType.STRING, ColType.STRING, ColType.DOUBLE3,ColType.DOUBLE3,
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,
         ColType.PERCENT1,ColType.PERCENT1};
     
-    private static final ColType[] snapColTypes = new ColType[] {
+    public static final ColType[] snapColTypes = new ColType[] {
         ColType.STRING, ColType.STRING, ColType.STRING, ColType.DOUBLE2,ColType.DOUBLE3,
         ColType.DOUBLE2,ColType.DOUBLE2,ColType.DOUBLE2,ColType.PERCENT1,ColType.PERCENT1,
         ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,ColType.PERCENT1,
@@ -65,7 +65,7 @@ public final class ReportProd {
      * @param toDateInt to date
      * @return ArrayList of String Arrays for all securities
      */
-    public static void getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
+    public static Object[][] getFromToReport(BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
         Object[][]ftData = null;
         RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
         RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
@@ -111,16 +111,23 @@ public final class ReportProd {
 
         RepFromTo allAggRetFromTo =
                 getFTAggRetWCash(allCashFromTo, allInvFromTo); //get  agg returns w/ cash for all accounts
-        ftData = addElement(ftData, allAggRetFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC_PLUS_CASH));        
+        ftData = addElement(ftData, allAggRetFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
+        
+        return ftData;
 
-        //Report Table Code
+
+
+    }
+
+    public static void outputFTObjToTable(int fromDateInt, int toDateInt,
+	    Object[][] ftData) {
+	//Report Table Code
         RptTableModel ftModel = new RptTableModel(ftData, RepFromTo.getRepFromToHeader());
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         String infoString = "Investment Performance--From: " +
                 DateUtils.convertToShort(fromDateInt) + " To: " +
                 DateUtils.convertToShort(toDateInt);
         ReportTable.CreateAndShowTable(ftModel, ftColTypes, 8 ,ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
-
     }
 
     /**
@@ -129,8 +136,8 @@ public final class ReportProd {
      * @param snapDateInt report date
      * @return ArrayList of String Arrays for all securities
      */
-    public static void getSnapReport(BulkSecInfo currentInfo, int snapDateInt) {
-        Object[][] SnapData = null;
+    public static Object[][] getSnapReport(BulkSecInfo currentInfo, int snapDateInt) {
+        Object[][] snapData = null;
         RepSnap allInvSnap = new RepSnap(null, snapDateInt);
         RepSnap allCashSnap = new RepSnap(null, snapDateInt);
         /*loop through investment accounts */
@@ -142,12 +149,12 @@ public final class ReportProd {
                 Account secAcct = (Account) it1.next();
                 SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap.get(secAcct);
                 RepSnap thisSecSnap = new RepSnap(currentInfo, transSet, snapDateInt);
-                SnapData = addElement(SnapData, thisSecSnap.getRepSnapObject(AGG_TYPE.SEC));
+                snapData = addElement(snapData, thisSecSnap.getRepSnapObject(AGG_TYPE.SEC));
                 thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
             }// end securities loop
             RepSnap thisInvRepSnap =
                     getSnapAggReturns(thisInvSnap); //get aggregated returns for securities
-            SnapData = addElement(SnapData, thisInvRepSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC));
+            snapData = addElement(snapData, thisInvRepSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC));
             allInvSnap = addSnap(thisInvSnap, allInvSnap); // add to aggregate securities.
 
             SortedSet<TransValuesCum> parentSet =
@@ -157,30 +164,36 @@ public final class ReportProd {
                     addSnap(thisCashSnap, allCashSnap); //add to cash accounts
             RepSnap cashReport =
                     getSnapCashReturns(thisCashSnap, thisInvSnap); //get returns for cash account
-            SnapData = addElement(SnapData, cashReport.getRepSnapObject(AGG_TYPE.ACCT_CASH));
+            snapData = addElement(snapData, cashReport.getRepSnapObject(AGG_TYPE.ACCT_CASH));
 
             RepSnap thisAggRetSnap =
                     getSnapAggRetWCash(thisCashSnap, thisInvSnap); //get  aggregated returns with cash accounted for
-            SnapData = addElement(SnapData, thisAggRetSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
+            snapData = addElement(snapData, thisAggRetSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
         }//end investment account loop
 
         //get returns for aggregated investment accounts
         allInvSnap = getSnapAggReturns(allInvSnap); //get aggregated returns from all securities
-        SnapData = addElement(SnapData, allInvSnap.getRepSnapObject(AGG_TYPE.ALL_SEC));
+        snapData = addElement(snapData, allInvSnap.getRepSnapObject(AGG_TYPE.ALL_SEC));
 
         RepSnap allCashReport = getSnapCashReturns(allCashSnap, allInvSnap); //get cash returns for all accounts
-        SnapData = addElement(SnapData, allCashReport.getRepSnapObject(AGG_TYPE.ALL_CASH));
+        snapData = addElement(snapData, allCashReport.getRepSnapObject(AGG_TYPE.ALL_CASH));
 
         RepSnap allAggRetSnap = getSnapAggRetWCash(allCashSnap, allInvSnap); //get  agg returns w/ cash for all accounts
-        SnapData = addElement(SnapData, allAggRetSnap.getRepSnapObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
+        snapData = addElement(snapData, allAggRetSnap.getRepSnapObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
         
-         //Report Table Code
+        return snapData;
+
+
+    }
+
+    public static void outputSnapObjToTable(int snapDateInt,
+	    Object[][] SnapData) {
+	//Report Table Code
         RptTableModel repSnapModel = new RptTableModel(SnapData, RepSnap.getRepSnapHeader());
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         String infoString = "Investment Performance Snapshot: " + DateUtils.convertToShort(snapDateInt);
                 
         ReportTable.CreateAndShowTable(repSnapModel, snapColTypes, 5, ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
-
     }
     public static final Comparator<String[]> PrntAcct_Order =
             new Comparator<String[]>() {

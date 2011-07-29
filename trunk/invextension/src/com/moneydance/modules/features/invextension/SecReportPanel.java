@@ -53,7 +53,6 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     private static final long serialVersionUID = 1020488211446251526L;
     //variable declarations
     //MD Data
-    Main extension;
     RootAccount root;
     BulkSecInfo currentInfo;
     //GUI Fields
@@ -80,11 +79,10 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     boolean secPricesReportRun;
 
     /** Creates new form NewJPanel */
-    public SecReportPanel(Main extension, RootAccount root) {
+    public SecReportPanel(RootAccount root) {
         initComponents();
-        this.extension = extension;
         this.root = root;
-        this.currentInfo = new BulkSecInfo(extension, root);
+        this.currentInfo = new BulkSecInfo(root);
     }
 
     @SuppressWarnings("unchecked")
@@ -253,10 +251,12 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
         try {
             if (snapReportRun) {
-                ReportProd.getSnapReport(currentInfo, snapDateInt);
+                Object[][] snapData = ReportProd.getSnapReport(currentInfo, snapDateInt);
+                ReportProd.outputSnapObjToTable(snapDateInt, snapData);
             }
             if (fromToReportRun) {
-                ReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
+        	Object[][] ftData = ReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
+        	ReportProd.outputFTObjToTable(fromDateInt, toDateInt, ftData);
             }
 
             if (transActivityReportRun) {

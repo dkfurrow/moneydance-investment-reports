@@ -28,11 +28,12 @@ http://jakarta.apache.org/ant/index.html
 
 	<target name="init">
 			<!--i.e. "clean"...gets rid of old build files/directories -->
-			<delete includeemptydirs="true">
+			<delete includeemptydirs="true" verbose = "true">
 				<fileset dir="${build}" includes="**/*" />
 			</delete>
-			<delete dir="${dist}" verbose="true" />
-			<!--<delete file="../dist/dwnlextension.mxt" verbose="true"/> -->
+			<delete includeemptydirs="true" verbose = "true">
+				<fileset dir="${dist}" includes="**/*" />
+			</delete>	
 	</target>
 
 	<target name="invextension" depends="init">
@@ -64,7 +65,6 @@ http://jakarta.apache.org/ant/index.html
 			<arg value="invextension"/>
 			<arg line="${dist}/invextension.mxt"/>
 		</java>
-		<move file="${src}/s-invextension.mxt" tofile="${dist}/invextension.mxt"/>
 	</target>
 
 	<target name="genkeys">

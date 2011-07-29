@@ -33,21 +33,21 @@ import com.moneydance.apps.md.model.TxnUtil;
 */
 public class TransValues implements Comparable<TransValues> {
 
-    ParentTxn parent;       //parent account
-    Account accountRef;     // reference account (to determine correct sign for transfers)
-    Account secAccount;     //security account
-    Integer dateint;        //transaction date
-    Long txnID;             //transaction ID
-    double buy;             //buy amount
-    double sell;            //sell amount
-    double shortSell;       //short sell amount
-    double coverShort;      //cover short amount
-    double commision;       //commission amount
-    double income;          //income amount
-    double expense;         //expense amount
-    double transfer;        //transfer amount
-    double cashEffect;      //net cash effect on Investment Account
-    double secQuantity;     //security quantitiy
+    public ParentTxn parent;       //parent account
+    public Account accountRef;     // reference account (to determine correct sign for transfers)
+    public Account secAccount;     //security account
+    public Integer dateint;        //transaction date
+    public Long txnID;             //transaction ID
+    public double buy;             //buy amount
+    public double sell;            //sell amount
+    public double shortSell;       //short sell amount
+    public double coverShort;      //cover short amount
+    public double commision;       //commission amount
+    public double income;          //income amount
+    public double expense;         //expense amount
+    public double transfer;        //transfer amount
+    public double cashEffect;      //net cash effect on Investment Account
+    public double secQuantity;     //security quantitiy
 
     /**
      * generates values in appropriate categories for each Parent transaction
