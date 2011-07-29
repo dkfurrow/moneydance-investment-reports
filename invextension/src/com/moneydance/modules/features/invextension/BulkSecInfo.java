@@ -63,26 +63,7 @@ public class BulkSecInfo {
     public HashMap<Account, HashSet<Account>> invSec;               /*Map of Investment Accounts to Security Accounts */
     public HashMap<Account, SortedSet<TransValues>> transValuesMap; /*Map of Accounts to basic transaction data */
     public HashMap<Account, SortedSet<TransValuesCum>> transValuesCumMap;/*Map of Accounts to cumulative transaction data */
-
-
-    // static hashmap for report generation
-    public static final HashMap<InvestTxnType, String> txnDesc = new HashMap<InvestTxnType, String>();
-
-    static {
-        HashMap<InvestTxnType, String> aMap = new HashMap<InvestTxnType, String>();
-        txnDesc.put(InvestTxnType.BUY, "Buy");
-        txnDesc.put(InvestTxnType.BUY_XFER, "BuyTransfer");
-        txnDesc.put(InvestTxnType.DIVIDEND_REINVEST, "DivReinvest");
-        txnDesc.put(InvestTxnType.SELL, "Sell");
-        txnDesc.put(InvestTxnType.SELL_XFER, "SellTransfer");
-        txnDesc.put(InvestTxnType.SHORT, "ShortSell");
-        txnDesc.put(InvestTxnType.COVER, "CoverShort");
-        txnDesc.put(InvestTxnType.MISCINC, "MiscIncome");
-        txnDesc.put(InvestTxnType.MISCEXP, "MiscExpense");
-        txnDesc.put(InvestTxnType.DIVIDEND, "Dividend");
-        txnDesc.put(InvestTxnType.DIVIDENDXFR, "DivTransfer");
-        txnDesc.put(InvestTxnType.BANK, "Bank");
-    }
+   
 
     public enum AGG_TYPE{
         SEC, //Individual Security
@@ -94,7 +75,7 @@ public class BulkSecInfo {
         ALL_SEC_PLUS_CASH //All Cash, All Securities
     }
 
-    public BulkSecInfo(Main extension, RootAccount root) {
+    public BulkSecInfo(RootAccount root) {
         this.extension = extension;
         this.root = root;
         this.secAccts = getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT, Account.ACCOUNT_TYPE_SECURITY);

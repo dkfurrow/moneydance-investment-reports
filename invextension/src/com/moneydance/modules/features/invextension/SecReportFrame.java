@@ -25,7 +25,7 @@ public class SecReportFrame
     super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
     this.extension = extension;
     RootAccount root = extension.getUnprotectedContext().getRootAccount();
-    SecReportPanel panel = new SecReportPanel(extension, root);
+    SecReportPanel panel = new SecReportPanel(root);
 
     panel.setOpaque(true);
     this.setContentPane(panel);

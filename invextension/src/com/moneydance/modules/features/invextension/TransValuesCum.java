@@ -32,18 +32,18 @@ import com.moneydance.apps.md.model.TxnUtil;
 */
 public class TransValuesCum implements Comparable<TransValuesCum> {
 
-    TransValues transValues;       //transValues (basic trans data)
-    double position;               //net position after completion of transaction
-    double mktPrice;               //market price on close of transaction day
-    double longBasis;              //net average cost long basis after completion of transaction
-    double shortBasis;             //net average cost short basis after completion of transaction
-    double openValue;              //net open value after completion of transaction
-    double cumUnrealizedGain;      //net cumulative unrealized gains after completion of transaction
-    double perUnrealizedGain;      //period unrealized gain (one transaction to next) after completion of transaction
-    double perRealizedGain;        //period realized gain (one transaction to next) after completion of transaction
-    double perIncomeExpense;       //period income and expense gain (one transaction to next) after completion of transaction
-    double perTotalGain;           //period total gain (one transaction to next) after completion of transaction
-    double cumTotalGain;           //cumulative total gain after completion of transaction
+    public TransValues transValues;       //transValues (basic trans data)
+    public double position;               //net position after completion of transaction
+    public double mktPrice;               //market price on close of transaction day
+    public double longBasis;              //net average cost long basis after completion of transaction
+    public double shortBasis;             //net average cost short basis after completion of transaction
+    public double openValue;              //net open value after completion of transaction
+    public double cumUnrealizedGain;      //net cumulative unrealized gains after completion of transaction
+    public double perUnrealizedGain;      //period unrealized gain (one transaction to next) after completion of transaction
+    public double perRealizedGain;        //period realized gain (one transaction to next) after completion of transaction
+    public double perIncomeExpense;       //period income and expense gain (one transaction to next) after completion of transaction
+    public double perTotalGain;           //period total gain (one transaction to next) after completion of transaction
+    public double cumTotalGain;           //cumulative total gain after completion of transaction
 
     public static SortedSet<TransValuesCum> getTransValuesCum
             (SortedSet<TransValues> theseTransValues, BulkSecInfo currentInfo) {
@@ -207,13 +207,13 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
      */
     public static String[] loadArrayTransValuesCum(TransValuesCum transValuesCum) {
         ArrayList<String> txnInfo = new ArrayList<String>();
-        String transType = BulkSecInfo.txnDesc.get(TxnUtil.getInvstTxnType(transValuesCum.transValues.parent));
+        InvestTxnType transType = TxnUtil.getInvestTxnType(transValuesCum.transValues.parent);
 
         txnInfo.add(transValuesCum.transValues.accountRef.getParentAccount().getAccountName());
         txnInfo.add(transValuesCum.transValues.accountRef.getAccountName());
         txnInfo.add(Long.toString(transValuesCum.transValues.parent.getTxnId()));
         txnInfo.add(DateUtils.convertToShort(transValuesCum.transValues.dateint));
-        txnInfo.add(transType);
+        txnInfo.add(transType.toString());
         txnInfo.add(transValuesCum.transValues.parent.getDescription());
         txnInfo.add(Double.toString(transValuesCum.transValues.buy));
         txnInfo.add(Double.toString(transValuesCum.transValues.sell));
