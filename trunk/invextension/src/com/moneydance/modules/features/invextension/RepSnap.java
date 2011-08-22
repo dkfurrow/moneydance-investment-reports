@@ -41,6 +41,7 @@ public class RepSnap {
     Account account;
     CurrencyType cur;
     String ticker;
+    AGG_TYPE aggType;
 
     double lastPrice;                           //ending price
     double endPos;                              //ending position
@@ -68,10 +69,13 @@ public class RepSnap {
     // intermediate values
     LinkedHashMap<String, Integer> retDateMap;              //maps return category to start dates
     LinkedHashMap<String, Double> startValues;              //maps return category to start values
+    LinkedHashMap<String, Double> startPoses;		    //maps return category to start positions		
+    LinkedHashMap<String, Double> startPrices;		    //maps return category to start positions
     LinkedHashMap<String, Double> incomes;                  //maps return category to income
     LinkedHashMap<String, Double> expenses;                 //maps return category to expense
     LinkedHashMap<String, Double> mdReturns;                //maps return category to Mod-Dietz returns
-    LinkedHashMap<String, Double> startCashs;               //maps return category to starting cash effect
+    LinkedHashMap<String, Double> startCashs;		    //maps return category to starting cash effect
+    
     LinkedHashMap<String, TreeMap<Integer, Double>> mdMap;  //maps return category to Mod-Dietz date map
     LinkedHashMap<String, TreeMap<Integer, Double>> arMap;  //maps return category to Annualized Return Date Map
     LinkedHashMap<String, TreeMap<Integer, Double>> transMap;//maps return category to transfer date map
@@ -86,6 +90,7 @@ public class RepSnap {
         this.snapDateInt = snapDateInt;
         this.account = account;
         this.ticker = "~Null";
+        this.aggType = null;
         this.lastPrice = 0.0;
         this.endPos = 0.0;
         this.endValue = 0.0;
@@ -108,6 +113,8 @@ public class RepSnap {
         this.totRet3year = 0.0;
         this.retDateMap = new LinkedHashMap<String, Integer>();
         this.startValues = new LinkedHashMap<String, Double>();
+        this.startPoses = new LinkedHashMap<String, Double>();
+        this.startPrices = new LinkedHashMap<String, Double>();
         this.incomes = new LinkedHashMap<String, Double>();
         this.expenses = new LinkedHashMap<String, Double>();
         this.mdReturns = new LinkedHashMap<String, Double>();
@@ -134,6 +141,7 @@ public class RepSnap {
         CurrencyType thisCur = currentInfo.secCur.get(this.account);
         this.cur = thisCur;
         this.ticker = "~Null";
+        this.aggType = AGG_TYPE.SEC;
         if(thisCur != null) this.ticker =
                 thisCur.getTickerSymbol().isEmpty() ?
                     "NoTicker" : thisCur.getTickerSymbol();
@@ -184,9 +192,9 @@ public class RepSnap {
         double annualPercentReturn = 0;
 
         // initialize array lists needed for returns calculations
-        LinkedHashMap<String, Double> startPos = new LinkedHashMap<String, Double>();
+        this.startPoses = new LinkedHashMap<String, Double>();
         this.startValues = new LinkedHashMap<String, Double>();
-        LinkedHashMap<String, Double> startPrice = new LinkedHashMap<String, Double>();
+        this.startPrices = new LinkedHashMap<String, Double>();
         this.startCashs = new LinkedHashMap<String, Double>();
         this.incomes = new LinkedHashMap<String, Double>();
         this.expenses = new LinkedHashMap<String, Double>();
@@ -202,13 +210,13 @@ public class RepSnap {
         for (Iterator<String> it = this.retDateMap.keySet().iterator(); it.hasNext();) {
             String retCat = it.next();
             int thisDateInt = this.retDateMap.get(retCat);
-            startPrice.put(retCat, 1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(thisDateInt)));
+            startPrices.put(retCat, 1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(thisDateInt)));
         }
         //initialize ArrayLists values to zero (so we can use "set" method later
         
         for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
             String retCat = it1.next();
-            startPos.put(retCat, 0.0);
+            startPoses.put(retCat, 0.0);
             this.startValues.put(retCat, 0.0);
             this.incomes.put(retCat, 0.0);
             this.expenses.put(retCat, 0.0);
@@ -258,8 +266,8 @@ public class RepSnap {
                     double splitAdjust = (thisCur == null ? 1
                             : thisCur.adjustRateForSplitsInt(transValuesCum.transValues.dateint,
                             currentRate, thisFromDateInt) / currentRate);
-                    startPos.put(retCat, transValuesCum.position * splitAdjust); //split adjusts last position from TransValuesCum
-                    this.startValues.put(retCat, startPrice.get(retCat) * startPos.get(retCat));
+                    startPoses.put(retCat, transValuesCum.position * splitAdjust); //split adjusts last position from TransValuesCum
+                    this.startValues.put(retCat, startPrices.get(retCat) * startPoses.get(retCat));
                     this.startCashs.put(retCat, this.startCashs.get(retCat)
                             + transValuesCum.transValues.cashEffect);
 
@@ -332,7 +340,7 @@ public class RepSnap {
             String retCat = it1.next();
             int thisFromDateInt = this.retDateMap.get(retCat);
             // add the first value in return arrays (if startpos != 0)
-            if (startPos.get(retCat) != 0) {
+            if (startPoses.get(retCat) != 0) {
                 RepFromTo.addValueToDateMap(
                         this.arMap.get(retCat),
                         thisFromDateInt, -this.startValues.get(retCat));
@@ -364,7 +372,7 @@ public class RepSnap {
             }
 
             //remove start and end values from return date maps for ease of aggregation
-            if (startPos.get(retCat) != 0) {
+            if (startPoses.get(retCat) != 0) {
                 RepFromTo.addValueToDateMap(this.arMap.get(retCat),
                         thisFromDateInt, +this.startValues.get(retCat));
             }
@@ -527,6 +535,154 @@ public class RepSnap {
         snapValues.add(this.income);
         snapValues.add(this.totalGain);
         return snapValues.toArray();
+    }
+
+    public int getSnapDateInt() {
+        return snapDateInt;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public CurrencyType getCur() {
+        return cur;
+    }
+
+    public String getTicker() {
+        return ticker;
+    }
+
+    public double getLastPrice() {
+        return lastPrice;
+    }
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+    public double getEndCash() {
+        return endCash;
+    }
+
+    public double getInitBalance() {
+        return initBalance;
+    }
+
+    public double getAvgCostBasis() {
+        return avgCostBasis;
+    }
+
+    public double getAbsPriceChange() {
+        return absPriceChange;
+    }
+
+    public double getPctPriceChange() {
+        return pctPriceChange;
+    }
+
+    public double getAbsValueChange() {
+        return absValueChange;
+    }
+
+    public double getIncome() {
+        return income;
+    }
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+    public double getTotRetAll() {
+        return totRetAll;
+    }
+
+    public double getAnnRetAll() {
+        return annRetAll;
+    }
+
+    public double getTotRet1Day() {
+        return totRet1Day;
+    }
+
+    public double getTotRetWk() {
+        return totRetWk;
+    }
+
+    public double getTotRet4Wk() {
+        return totRet4Wk;
+    }
+
+    public double getTotRet3Mnth() {
+        return totRet3Mnth;
+    }
+
+    public double getTotRetYTD() {
+        return totRetYTD;
+    }
+
+    public double getTotRetYear() {
+        return totRetYear;
+    }
+
+    public double getTotRet3year() {
+        return totRet3year;
+    }
+
+    public LinkedHashMap<String, Integer> getRetDateMap() {
+        return retDateMap;
+    }
+
+    public LinkedHashMap<String, Double> getStartValues() {
+        return startValues;
+    }
+
+    public LinkedHashMap<String, Double> getIncomes() {
+        return incomes;
+    }
+
+    public LinkedHashMap<String, Double> getExpenses() {
+        return expenses;
+    }
+
+    public LinkedHashMap<String, Double> getMdReturns() {
+        return mdReturns;
+    }
+
+    public LinkedHashMap<String, Double> getStartCashs() {
+        return startCashs;
+    }
+
+    public LinkedHashMap<String, TreeMap<Integer, Double>> getMdMap() {
+        return mdMap;
+    }
+
+    public LinkedHashMap<String, TreeMap<Integer, Double>> getArMap() {
+        return arMap;
+    }
+
+    public LinkedHashMap<String, TreeMap<Integer, Double>> getTransMap() {
+        return transMap;
+    }
+
+    public AGG_TYPE getAggType() {
+        return aggType;
+    }
+
+    public void setAggType(AGG_TYPE aggType) {
+        this.aggType = aggType;
+    }
+
+    public LinkedHashMap<String, Double> getStartPoses() {
+        return startPoses;
+    }
+
+    public LinkedHashMap<String, Double> getStartPrices() {
+        return startPrices;
     }
      
 }
