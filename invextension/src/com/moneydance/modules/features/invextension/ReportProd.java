@@ -300,7 +300,7 @@ public final class ReportProd {
         return outMap;
     }
 
-    private static LinkedHashMap<String, Integer> combineCatMap(LinkedHashMap<String, Integer> map1, LinkedHashMap<String, Integer> map2) {
+    public static LinkedHashMap<String, Integer> combineCatMap(LinkedHashMap<String, Integer> map1, LinkedHashMap<String, Integer> map2) {
         LinkedHashMap<String, Integer> outMap = new LinkedHashMap<String, Integer>(map1);
         for (Iterator it = map2.keySet().iterator(); it.hasNext();) {
             String cat2 = (String) it.next();
@@ -326,7 +326,7 @@ public final class ReportProd {
      * @param thisInvFromTo RepFromTo associated with Investment Account
      * @return output RepFromTo
      */
-    private static RepFromTo addFT(RepFromTo thisSecFromTo, RepFromTo thisInvFromTo) {
+    public static RepFromTo addFT(RepFromTo thisSecFromTo, RepFromTo thisInvFromTo) {
         RepFromTo outObj = thisInvFromTo;
         outObj.fromDateInt = thisInvFromTo.fromDateInt;
         outObj.toDateInt = thisInvFromTo.toDateInt;
@@ -373,7 +373,7 @@ public final class ReportProd {
      * @param thisInvFromTo RepSnap associated with Investment Account
      * @return output RepSnap
      */
-    private static RepSnap addSnap(RepSnap thisSecSnap, RepSnap thisInvSnap) {
+    public static RepSnap addSnap(RepSnap thisSecSnap, RepSnap thisInvSnap) {
         RepSnap outObj = thisInvSnap;
 
         outObj.lastPrice = 0.0;
@@ -420,7 +420,7 @@ public final class ReportProd {
      * @param thisInvFromTo aggregated securities RepFromTo
      * @return RepFromTo with correct return information
      */
-    private static RepFromTo getFTAggReturns(RepFromTo thisInvFromTo) {
+    public static RepFromTo getFTAggReturns(RepFromTo thisInvFromTo) {
         RepFromTo outObj = thisInvFromTo;
         //get Mod-Dietz Returns
         double mdReturnVal = RepFromTo.getMDCalc(outObj.startValue,
@@ -461,7 +461,7 @@ public final class ReportProd {
      * @param thisInvFromTo aggregated securities RepSnap
      * @return RepSnap with correct return information
      */
-    private static RepSnap getSnapAggReturns(RepSnap thisInvSnap) {
+    public static RepSnap getSnapAggReturns(RepSnap thisInvSnap) {
         RepSnap outObj = thisInvSnap;
 //
 
@@ -518,14 +518,14 @@ public final class ReportProd {
      * @param thisInvFromTo RepFromTo associated with Securities
      * @return RepFrontTo representing income/returns for cash portion of Investment Account
      */
-    private static RepFromTo getFTCashReturns(RepFromTo thisCashFromTo, RepFromTo thisInvFromTo) {
+    public static RepFromTo getFTCashReturns(RepFromTo thisCashFromTo, RepFromTo thisInvFromTo) {
         //cashValue has start, end cash positions, income and expenses
         RepFromTo cashValue = new RepFromTo(thisInvFromTo.account, thisInvFromTo.fromDateInt, thisInvFromTo.toDateInt);
         //comboTransMDMap has purchases/sales of cash (i.e. reverse of security transactions)
         //start by adding transfers in and out of securities and investment accounts
         TreeMap<Integer, Double> comboTransMDMap = combineDateMaps(thisInvFromTo.transMap, thisCashFromTo.transMap, "add");
 
-        //generate starting and ending cash balances, non-security related acount transactions
+        //generate starting and ending cash balances, non-security related account transactions
         double initBal = thisCashFromTo.initBalance;
         cashValue.startValue = cleanedValue(thisInvFromTo.startCash + thisCashFromTo.startCash + initBal);
         cashValue.endValue = cleanedValue(thisInvFromTo.endCash + thisCashFromTo.endCash + initBal);
@@ -562,7 +562,7 @@ public final class ReportProd {
         cashValue.mdReturn = RepFromTo.getMDCalc(cashValue.startValue,
                 cashValue.endValue, cashValue.income, cashValue.expense, comboTransMDMap);
         cashValue.annualPercentReturn = RepFromTo.getAnnualReturn(cashRetMap, cashValue.mdReturn);
-         return cashValue;
+        return cashValue;
     }
 
     /**
@@ -571,7 +571,7 @@ public final class ReportProd {
      * @param thisInvSnap RepSnapo associated with Securities
      * @return RepSnap representing income/returns for cash portion of Investment Account
      */
-    private static RepSnap getSnapCashReturns(RepSnap thisCashSnap, RepSnap thisInvSnap) {
+    public static RepSnap getSnapCashReturns(RepSnap thisCashSnap, RepSnap thisInvSnap) {
         //cashValue has start, end cash positions, income and expenses
         RepSnap cashValue = new RepSnap(thisInvSnap.account, thisInvSnap.snapDateInt);
         //comboTransMDMap has purchases/sales of cash (i.e. reverse of security transactions)
@@ -649,6 +649,7 @@ public final class ReportProd {
                 cashValue.annRetAll = RepFromTo.getAnnualReturn(cashRetMap,
                         cashValue.mdReturns.get(retCat));
                 cashValue.income = thisCashSnap.incomes.get(retCat);
+                
             }
         }
         cashValue.totRet1Day = thisInvSnap.retDateMap.get("PREV") == null ? Double.NaN : cashValue.mdReturns.get("PREV");
@@ -670,7 +671,7 @@ public final class ReportProd {
      * @return RepFrontTo representing income/returns for Investment Account,
      * Cash and Securities included
      */
-    private static RepFromTo getFTAggRetWCash(RepFromTo thisCashFromTo, RepFromTo thisInvFromTo) {
+    public static RepFromTo getFTAggRetWCash(RepFromTo thisCashFromTo, RepFromTo thisInvFromTo) {
         RepFromTo outObj = new RepFromTo(thisInvFromTo.account, thisInvFromTo.fromDateInt, thisInvFromTo.toDateInt);
 
         //copy over aggregate values from aggregated securities
@@ -730,7 +731,7 @@ public final class ReportProd {
         outObj.mdReturn = allMDReturn;
         //get annualized returns
         outObj.annualPercentReturn = RepFromTo.getAnnualReturn(retMap, allMDReturn);
-
+        
         return outObj;
     }
 
@@ -741,7 +742,7 @@ public final class ReportProd {
      * @return RepFrontTo representing income/returns for Investment Account,
      * Cash and Securities included
      */
-    private static RepSnap getSnapAggRetWCash(RepSnap thisCashSnap, RepSnap thisInvSnap) {
+    public static RepSnap getSnapAggRetWCash(RepSnap thisCashSnap, RepSnap thisInvSnap) {
         RepSnap outObj = new RepSnap(thisInvSnap.account, thisInvSnap.snapDateInt);
 
         LinkedHashMap<String, Integer> adjRetDateMap =

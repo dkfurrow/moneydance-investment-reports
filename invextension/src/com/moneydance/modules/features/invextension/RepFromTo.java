@@ -63,6 +63,7 @@ public class RepFromTo {
     double totalGain;            /*sum of realized and unrealized gains */
     double mdReturn;           /*period total return (Mod-Dietz method) */
     double annualPercentReturn;     /*period annualized return (Mod-Dietz method) */
+    AGG_TYPE aggType;		    /* aggregation type (e.g. security, investment, etc); */
     TreeMap<Integer, Double> arMap; /*date map of annual return data */
     TreeMap<Integer, Double> mdMap; /*date map of Mod-Dietz return data */
     TreeMap<Integer, Double> transMap;  /*date map of transfer data */
@@ -104,6 +105,7 @@ public class RepFromTo {
         this.arMap = new TreeMap<Integer, Double>();
         this.mdMap = new TreeMap<Integer, Double>();
         this.transMap = new TreeMap<Integer, Double>();
+        this.aggType = null;
     }
 
     /**
@@ -157,6 +159,7 @@ public class RepFromTo {
         this.arMap = new TreeMap<Integer, Double>();
         this.mdMap = new TreeMap<Integer, Double>();
         this.transMap = new TreeMap<Integer, Double>();
+        this.aggType = AGG_TYPE.SEC;
 
         /* intialize intermediate calculation variables */
         double startCumUnrealGain = 0;
@@ -321,8 +324,8 @@ public class RepFromTo {
             excelDates[i] = d;
         }
         double totYrs = (excelDates[numPeriods - 1] - excelDates[0]) / 365;
-        double guess = (1 + mdRet / totYrs); // modified dietz return divided by number of years
-        //(have to add 1 because of returns algorithm)
+        double guess = Math.max((1 + mdRet / totYrs), 0.01); // modified dietz return divided by number of years
+        //(have to add 1 because of returns algorithm), must be greater than zero
         XIRRData thisData = new XIRRData(numPeriods, guess, annRetValuesArray, excelDates);
         double annualReturn = XIRR.xirr(thisData);
 
@@ -519,6 +522,130 @@ public class RepFromTo {
         snapValues.add(this.mdReturn);
         snapValues.add(this.annualPercentReturn);
         return snapValues.toArray();
+    }
+
+    public int getFromDateInt() {
+        return fromDateInt;
+    }
+
+    public int getToDateInt() {
+        return toDateInt;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public String getTicker() {
+        return ticker;
+    }
+
+    public double getStartPos() {
+        return startPos;
+    }
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+
+    public double getEndPrice() {
+        return endPrice;
+    }
+
+    public double getStartValue() {
+        return startValue;
+    }
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+    public double getStartCash() {
+        return startCash;
+    }
+
+    public double getEndCash() {
+        return endCash;
+    }
+
+    public double getInitBalance() {
+        return initBalance;
+    }
+
+    public double getBuy() {
+        return buy;
+    }
+
+    public double getSell() {
+        return sell;
+    }
+
+    public double getShortSell() {
+        return shortSell;
+    }
+
+    public double getCoverShort() {
+        return coverShort;
+    }
+
+    public double getIncome() {
+        return income;
+    }
+
+    public double getExpense() {
+        return expense;
+    }
+
+    public double getLongBasis() {
+        return longBasis;
+    }
+
+    public double getShortBasis() {
+        return shortBasis;
+    }
+
+    public double getRealizedGain() {
+        return realizedGain;
+    }
+
+    public double getUnrealizedGain() {
+        return unrealizedGain;
+    }
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+    public double getMdReturn() {
+        return mdReturn;
+    }
+
+    public double getAnnualPercentReturn() {
+        return annualPercentReturn;
+    }
+
+    public TreeMap<Integer, Double> getArMap() {
+        return arMap;
+    }
+
+    public TreeMap<Integer, Double> getMdMap() {
+        return mdMap;
+    }
+
+    public TreeMap<Integer, Double> getTransMap() {
+        return transMap;
+    }
+
+    public AGG_TYPE getAggType() {
+        return aggType;
+    }
+
+    public void setAggType(AGG_TYPE aggType) {
+        this.aggType = aggType;
     }
 
    
