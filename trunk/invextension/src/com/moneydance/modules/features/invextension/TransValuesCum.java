@@ -45,6 +45,54 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
     public double perTotalGain;           //period total gain (one transaction to next) after completion of transaction
     public double cumTotalGain;           //cumulative total gain after completion of transaction
 
+    public TransValues getTransValues() {
+        return transValues;
+    }
+
+    public double getPosition() {
+        return position;
+    }
+
+    public double getMktPrice() {
+        return mktPrice;
+    }
+
+    public double getLongBasis() {
+        return longBasis;
+    }
+
+    public double getShortBasis() {
+        return shortBasis;
+    }
+
+    public double getOpenValue() {
+        return openValue;
+    }
+
+    public double getCumUnrealizedGain() {
+        return cumUnrealizedGain;
+    }
+
+    public double getPerUnrealizedGain() {
+        return perUnrealizedGain;
+    }
+
+    public double getPerRealizedGain() {
+        return perRealizedGain;
+    }
+
+    public double getPerIncomeExpense() {
+        return perIncomeExpense;
+    }
+
+    public double getPerTotalGain() {
+        return perTotalGain;
+    }
+
+    public double getCumTotalGain() {
+        return cumTotalGain;
+    }
+
     public static SortedSet<TransValuesCum> getTransValuesCum
             (SortedSet<TransValues> theseTransValues, BulkSecInfo currentInfo) {
         TreeSet<TransValuesCum> transSet = new TreeSet<TransValuesCum>();

@@ -49,6 +49,81 @@ public class TransValues implements Comparable<TransValues> {
     public double cashEffect;      //net cash effect on Investment Account
     public double secQuantity;     //security quantitiy
 
+    public ParentTxn getParent() {
+        return parent;
+    }
+
+
+    public Account getAccountRef() {
+        return accountRef;
+    }
+
+
+    public Account getSecAccount() {
+        return secAccount;
+    }
+
+
+    public Integer getDateint() {
+        return dateint;
+    }
+
+
+    public Long getTxnID() {
+        return txnID;
+    }
+
+
+    public double getBuy() {
+        return buy;
+    }
+
+
+    public double getSell() {
+        return sell;
+    }
+
+
+    public double getShortSell() {
+        return shortSell;
+    }
+
+
+    public double getCoverShort() {
+        return coverShort;
+    }
+
+
+    public double getCommision() {
+        return commision;
+    }
+
+
+    public double getIncome() {
+        return income;
+    }
+
+
+    public double getExpense() {
+        return expense;
+    }
+
+
+    public double getTransfer() {
+        return transfer;
+    }
+
+
+    public double getCashEffect() {
+        return cashEffect;
+    }
+
+
+    public double getSecQuantity() {
+        return secQuantity;
+    }
+
+
     /**
      * generates values in appropriate categories for each Parent transaction
      * constructed at Parent by adding relevant split values for each split

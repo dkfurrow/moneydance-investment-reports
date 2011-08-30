@@ -20,6 +20,7 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.view.gui.MDAccountProxy;
 import com.moneydance.modules.features.invextension.ReportTable.ColType;
 import java.text.DateFormat;
 import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
@@ -562,6 +563,9 @@ public final class ReportProd {
         cashValue.mdReturn = RepFromTo.getMDCalc(cashValue.startValue,
                 cashValue.endValue, cashValue.income, cashValue.expense, comboTransMDMap);
         cashValue.annualPercentReturn = RepFromTo.getAnnualReturn(cashRetMap, cashValue.mdReturn);
+        //add maps for auditing purposes
+        cashValue.mdMap = comboTransMDMap;
+        cashValue.arMap = cashRetMap;
         return cashValue;
     }
 
@@ -579,8 +583,10 @@ public final class ReportProd {
         LinkedHashMap<String, TreeMap<Integer, Double>> comboTransMDMap =
                 combineDateMapMap(thisInvSnap.transMap, thisCashSnap.transMap, "add");
         //may need to adjust start dates, so create map for that
-        LinkedHashMap<String, Integer> adjRetDateMap = 
-                new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
+        LinkedHashMap<String, Integer> adjRetDateMap =
+                new LinkedHashMap<String, Integer>(
+                	combineCatMap(thisCashSnap.getRetDateMap(), 
+                		thisInvSnap.getRetDateMap()));
 
 
         double initBal = thisCashSnap.initBalance;
@@ -630,7 +636,9 @@ public final class ReportProd {
                     cashValue.endValue, cashValue.incomes.get(retCat),
                     cashValue.expenses.get(retCat), comboTransMDMap.get(retCat));
             cashValue.mdReturns.put(retCat, thisPercentReturn);
-
+          //add map values for auditing
+          cashValue.getMdMap().put(retCat, comboTransMDMap.get(retCat));
+          
             if ("All".equals(retCat)) {
                 /* cashRetMap effectively reverses sign of previous map (so cash
                  buys/sells with correct sign for returns calc), and adds to that
@@ -649,7 +657,7 @@ public final class ReportProd {
                 cashValue.annRetAll = RepFromTo.getAnnualReturn(cashRetMap,
                         cashValue.mdReturns.get(retCat));
                 cashValue.income = thisCashSnap.incomes.get(retCat);
-                
+                cashValue.getArMap().put("All", cashRetMap);
             }
         }
         cashValue.totRet1Day = thisInvSnap.retDateMap.get("PREV") == null ? Double.NaN : cashValue.mdReturns.get("PREV");
@@ -731,6 +739,9 @@ public final class ReportProd {
         outObj.mdReturn = allMDReturn;
         //get annualized returns
         outObj.annualPercentReturn = RepFromTo.getAnnualReturn(retMap, allMDReturn);
+        //add maps for auditing purposes
+        outObj.mdMap = mdMap;
+        outObj.arMap = retMap;
         
         return outObj;
     }
@@ -746,7 +757,9 @@ public final class ReportProd {
         RepSnap outObj = new RepSnap(thisInvSnap.account, thisInvSnap.snapDateInt);
 
         LinkedHashMap<String, Integer> adjRetDateMap =
-                new LinkedHashMap<String, Integer>(thisInvSnap.retDateMap);
+                new LinkedHashMap<String, Integer>(
+                	combineCatMap(thisCashSnap.getRetDateMap(), 
+                		thisInvSnap.getRetDateMap()));
 
         double initBal = thisCashSnap.initBalance;
 
@@ -796,6 +809,8 @@ public final class ReportProd {
             double thisMDReturn = RepFromTo.getMDCalc(
                     outObj.startValues.get(retCat), outObj.endValue, 0.0, 0.0, mdMap);
             outObj.mdReturns.put(retCat, thisMDReturn);
+            //add map for auditing
+            outObj.mdMap.put(retCat, mdMap);
             // get annualized returns
             if ("All".equals(retCat)) {
                 TreeMap<Integer, Double> retMap = combineDateMaps(null,
@@ -810,6 +825,8 @@ public final class ReportProd {
                 //calculate returns
                 outObj.annRetAll = RepFromTo.getAnnualReturn(retMap,
                         outObj.mdReturns.get(retCat));
+                //add map for auditing
+                outObj.arMap.put("All",	retMap);
             }
         }
         outObj.totRet1Day = thisInvSnap.retDateMap.get("PREV") == null ? Double.NaN : outObj.mdReturns.get("PREV");
@@ -820,6 +837,8 @@ public final class ReportProd {
         outObj.totRetYear = thisInvSnap.retDateMap.get("1Yr") == null ? Double.NaN : outObj.mdReturns.get("1Yr");
         outObj.totRet3year = thisInvSnap.retDateMap.get("3Yr") == null ? Double.NaN : outObj.mdReturns.get("3Yr");
         outObj.totRetYTD = thisInvSnap.retDateMap.get("YTD") == null ? Double.NaN : outObj.mdReturns.get("YTD");
+        
+       
 
         return outObj;
     }
