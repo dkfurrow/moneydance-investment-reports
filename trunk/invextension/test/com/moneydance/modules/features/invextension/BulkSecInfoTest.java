@@ -14,7 +14,25 @@ import org.junit.Test;
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
 
+/**
+ * Class which compares transaction report lines (i.e. allows for sorting of
+ * transaction report lines, and compares generated report to stored report)
+ * 
+ * Version 1.0
+ * 
+ * @author Dale Furrow
+ * 
+ */
 public class BulkSecInfoTest {
+    /**
+     * Class with only one element, String array of transaction report
+     * elements.  Implements comparable based on transaction id 
+     * so that generated report and stored report can be sorted and compared.
+     *
+     * Version 1.0 
+     * @author Dale Furrow
+     *
+     */
     private static class TransLine implements Comparable<TransLine> {
 	String[] row;
 
@@ -22,6 +40,14 @@ public class BulkSecInfoTest {
 	    this.row = inputArray;
 	}
 
+	/**Compares two transaction lines, based on 
+	 * decimal place threshold.
+	 * @param compRpt
+	 * @param baseRpt
+	 * @param decPlaces
+	 * @param limitPrecision
+	 * @return
+	 */
 	private static boolean compareTransLines(TransLine compRpt,
 		TransLine baseRpt, int decPlaces, boolean limitPrecision) {
 	    boolean errorFound = false;
@@ -66,25 +92,36 @@ public class BulkSecInfoTest {
 	}
 
     }
-
+    //Stored Test Database
     public static final File mdTestFile = new File("./resources/testMD01.md");
+    //stored csv file of transaction activity report
     public static final File transBaseFile = new File(
 	    "./resources/transActivityReport.csv");
     // the following two elements determine precision of testing
+    // decimal places for comparison
     public static final int precCompare = 10;
+    // limits precision to minimum digits of file or report output
+    // to generate a failed test, set to false--generated report and stored
+    // report have different decimal place precisions
+    public static final boolean limitPrecision = true; 
+    
 
-    public static final boolean limitPrecision = true; /*
-						        * limits precision to
-						        * minimum digits of file
-						        * or report output
-						        */
-
+    /**
+     * gets BulkSecInfo from stored moneydance data file
+     * @return
+     * @throws Exception
+     */
     public static BulkSecInfo getBaseSecurityInfo() throws Exception {
 	RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
 	BulkSecInfo currentInfo = new BulkSecInfo(root);
 	return currentInfo;
     }
 
+    /** returns number of digits in double, either in basic or exponential
+     * format
+     * @param d input double
+     * @return number of digits in double
+     */
     public static int getPrecisionDigits(double d) {
 	String s = Double.toString(d).toUpperCase();
 	if (!s.contains(".")) {
@@ -98,12 +135,16 @@ public class BulkSecInfoTest {
 	}
     }
 
+    /** Determines if string is numeric based on regex test
+     * @param inString
+     * @return true if numeric
+     */
     public static boolean isNumeric(String inString) {
-	Pattern pattern = Pattern.compile("^\\-?[0-9]{1,3}(\\,[0-9]{3})*"
-		+ "(\\.[0-9]+)?$|^[0-9]+(\\.[0-9]+)?$");
-	Pattern pattern1 = Pattern
-		.compile("(^N/A$)|(^[-]?(\\d+)(\\.\\d{0,3})?$)|(^[-]?"
-			+ "(\\d{1,3},(\\d{3},)*\\d{3}(\\.\\d{1,3})?|\\d{1,3}(\\.\\d{1,3})?)$)");
+//	Pattern pattern = Pattern.compile("^\\-?[0-9]{1,3}(\\,[0-9]{3})*"
+//		+ "(\\.[0-9]+)?$|^[0-9]+(\\.[0-9]+)?$");
+//	Pattern pattern1 = Pattern
+//		.compile("(^N/A$)|(^[-]?(\\d+)(\\.\\d{0,3})?$)|(^[-]?"
+//			+ "(\\d{1,3},(\\d{3},)*\\d{3}(\\.\\d{1,3})?|\\d{1,3}(\\.\\d{1,3})?)$)");
 	Pattern pattern2 = Pattern.compile("^(?:(?:[+\\-]?\\$?)|(?:\\$?[+\\-]"
 		+ "?))?(?:(?:\\d{1,3}(?:(?:,\\d{3})|(?:\\d))*"
 		+ "(?:\\.(?:\\d*|\\d+[eE][+\\-]\\d+))?)|"
@@ -116,13 +157,23 @@ public class BulkSecInfoTest {
 	return matcher.find();
     }
 
+    /**Compares two strings--if not numeric, returns string comparison.
+     * If numeric, determines whether numbers are within specified 
+     * difference of each other.
+     * @param s1
+     * @param s2
+     * @param decPlaces
+     * @param limitPrecision
+     * @return
+     */
     public static boolean similarElements(String s1, String s2, int decPlaces,
 	    boolean limitPrecision) {
-	if (isNumeric(s1) && isNumeric(s2)) {
+	if (isNumeric(s1) && isNumeric(s2)) { //numeric elements
 	    double d1 = Double.parseDouble(s1);
 	    double d2 = Double.parseDouble(s2);
 	    int lowDigits = Math.min(getPrecisionDigits(d1),
-		    getPrecisionDigits(d2));
+		    getPrecisionDigits(d2)); //gets least number of digits after
+	    //decimal place
 	    double threshold = Math.pow(10,
 		    limitPrecision ? -Math.min(decPlaces, lowDigits)
 			    : -decPlaces);
@@ -133,6 +184,12 @@ public class BulkSecInfoTest {
 	}
     }
 
+    /**Compares ArrayLists of transaction lines, returns true if error is found
+     * @param compRpt
+     * @param baseRpt
+     * @param decPlaces
+     * @return true if error found
+     */
     private static boolean compareTransactions(ArrayList<TransLine> compRpt,
 	    ArrayList<TransLine> baseRpt, int decPlaces) {
 	boolean errorFound = false;
@@ -149,6 +206,10 @@ public class BulkSecInfoTest {
 	return errorFound;
     }
 
+    /**Reads stored file, places data into sorted array of TransLine objects
+     * @param readFile
+     * @return
+     */
     private static ArrayList<TransLine> readCSVIntoTransLine(File readFile) {
 	ArrayList<String[]> inputStrAL = IOUtils.readCSVIntoArrayList(readFile);
 	inputStrAL.remove(0); // remove header row
@@ -163,6 +224,11 @@ public class BulkSecInfoTest {
 	return outputTransAL;
     }
 
+    /**Generates transaction report from stored md file, places data into 
+     * sorted array of TransLine objects
+     * @param currentInfo
+     * @return
+     */
     private static ArrayList<TransLine> readStringArrayIntoTransLine(
 	    BulkSecInfo currentInfo) {
 	ArrayList<String[]> transActivityReport = currentInfo
@@ -178,19 +244,19 @@ public class BulkSecInfoTest {
 	return outputTransAL;
     }
 
-    private static boolean testTransactions(BulkSecInfo currentInfo) {
-	boolean errorFound = false;
-	ArrayList<TransLine> transBase = readCSVIntoTransLine(transBaseFile);
-	ArrayList<TransLine> transTest = readStringArrayIntoTransLine(currentInfo);
-	errorFound = compareTransactions(transTest, transBase, precCompare);
-	return errorFound;
-    }
 
+    /**
+     * Test Method which compares TransValuesCum generated from test database
+     * with stored report.
+     * @throws Exception
+     */
     @Test
     public void testListTransValuesCumMap() throws Exception {
 	boolean errorFound = false;
 	BulkSecInfo currentInfo = getBaseSecurityInfo();
-	if (testTransactions(currentInfo))
+	ArrayList<TransLine> transBase = readCSVIntoTransLine(transBaseFile);
+	ArrayList<TransLine> transTest = readStringArrayIntoTransLine(currentInfo);
+	if (compareTransactions(transTest, transBase, precCompare))
 	    errorFound = true;
 	String msg = errorFound ? " -- Errors Found!" : " -- No Errors Found";
 	System.out.println("Finished TransValuesCumMap Test " + msg);

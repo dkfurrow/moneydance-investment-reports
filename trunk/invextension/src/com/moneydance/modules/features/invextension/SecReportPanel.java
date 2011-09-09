@@ -72,12 +72,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     JTextField reportStatusField = new javax.swing.JTextField("Choose Reports to Run");
 
     JFileChooser chooser;
-
-    boolean snapReportRun;
-    boolean fromToReportRun;
-    boolean transActivityReportRun;
-    boolean secPricesReportRun;
-
+    
     /** Creates new form NewJPanel */
     public SecReportPanel(RootAccount root) {
         initComponents();
@@ -85,7 +80,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         this.currentInfo = new BulkSecInfo(root);
     }
 
-    @SuppressWarnings("unchecked")
+
     private void initComponents() {
 
         //Set up  date input fields to defaults
@@ -115,30 +110,8 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runReportsButtonActionPerformed(evt);
             }
-        });
-        snapReportCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                snapReportCheckboxActionPerformed(evt);
-            }
-        });
-        fromToReportCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fromToReportCheckboxActionPerformed(evt);
-            }
-        });
-        transActivityCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transActivityCheckboxActionPerformed(evt);
-            }
-        });
-        secPricesCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                secPricesCheckboxActionPerformed(evt);
-            }
-        });
-
-
-
+        });  
+        
         //create and format blocks to load into main panel
         JPanel datePanel = new JPanel();
         JPanel checkBoxPanel = new JPanel();
@@ -162,12 +135,13 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         //change all title colors
         ArrayList<JPanel> panels = new ArrayList<JPanel>(
                 Arrays.asList(datePanel, checkBoxPanel, folderPanel, runPanel));
-        for (Iterator<JPanel> it = panels.iterator(); it.hasNext();) {
-            JPanel jPanel = it.next();
-            CompoundBorder thisBorder = (CompoundBorder) jPanel.getBorder();
-            TitledBorder outsideBorder = (TitledBorder) thisBorder.getOutsideBorder();
-            outsideBorder.setTitleColor(new Color(100, 100, 100));
-        }
+	for (Iterator<JPanel> it = panels.iterator(); it.hasNext();) {
+	    JPanel jPanel = it.next();
+	    CompoundBorder thisBorder = (CompoundBorder) jPanel.getBorder();
+	    TitledBorder outsideBorder = (TitledBorder) thisBorder
+		    .getOutsideBorder();
+	    outsideBorder.setTitleColor(new Color(100, 100, 100));
+	}
         //layout panels
         //date Panel
         datePanel.setLayout(new GridLayout(3, 2));
@@ -243,93 +217,78 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     }
 
     private void runReportsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        reportStatusField.setText(null);
-        reportStatusField.setText("Reports are running...");
-        int fromDateInt =DateUtils.convertToDateInt(fromDateField.getDate());
-        int toDateInt = DateUtils.convertToDateInt(toDateField.getDate());
-        int snapDateInt = DateUtils.convertToDateInt(snapDateField.getDate());
+	reportStatusField.setText(null);
+	reportStatusField.setText("Reports are running...");
+	int fromDateInt = DateUtils.convertToDateInt(fromDateField.getDate());
+	int toDateInt = DateUtils.convertToDateInt(toDateField.getDate());
+	int snapDateInt = DateUtils.convertToDateInt(snapDateField.getDate());
 
-        try {
-            if (snapReportRun) {
-                Object[][] snapData = ReportProd.getSnapReport(currentInfo, snapDateInt);
-                ReportProd.outputSnapObjToTable(snapDateInt, snapData);
-            }
-            if (fromToReportRun) {
-        	Object[][] ftData = ReportProd.getFromToReport(currentInfo, fromDateInt, toDateInt);
-        	ReportProd.outputFTObjToTable(fromDateInt, toDateInt, ftData);
-            }
+	try {
+	    if (snapReportCheckbox.isSelected()) {
+		Object[][] snapData = ReportProd.getSnapReport(currentInfo,
+			snapDateInt);
+		ReportProd.outputSnapObjToTable(snapDateInt, snapData);
+	    }
+	    if (fromToReportCheckbox.isSelected()) {
+		Object[][] ftData = ReportProd.getFromToReport(currentInfo,
+			fromDateInt, toDateInt);
+		ReportProd.outputFTObjToTable(fromDateInt, toDateInt, ftData);
+	    }
 
-            if (transActivityReportRun) {
-                ArrayList<String[]> transActivityReport = currentInfo.listTransValuesCumMap(currentInfo.transValuesCumMap);
-                File transActivityReportFile = new File(directoryOutputField.getText() + "\\transActivityReport.csv");
-                IOUtils.writeArrayListToCSV(TransValuesCum.listTransValuesCumHeader(),
-                        transActivityReport, transActivityReportFile);
-                
-            }
+	    if (transActivityCheckbox.isSelected()) {
+		ArrayList<String[]> transActivityReport = currentInfo
+			.listTransValuesCumMap(currentInfo.transValuesCumMap);
+		File transActivityReportFile = new File(
+			directoryOutputField.getText()
+				+ "\\transActivityReport.csv");
+		IOUtils.writeArrayListToCSV(
+			TransValuesCum.listTransValuesCumHeader(),
+			transActivityReport, transActivityReportFile);
 
-            if (secPricesReportRun) {
-                ArrayList<String[]> secPricesReport = BulkSecInfo.ListAllCurrenciesInfo(currentInfo.allCurrTypes);
-                File secPricesReportFile = new File(directoryOutputField.getText() + "\\secPricesReport.csv");
-                IOUtils.writeArrayListToCSV(BulkSecInfo.listCurrencySnapshotHeader(),
-                        secPricesReport, secPricesReportFile);
-            }
-        } catch (Exception e) {
+	    }
 
-            File errorFile = new File(directoryOutputField.getText() + "\\errlog.txt");
-            StringBuffer erLOG = getStackTrace(e);
-            IOUtils.writeResultsToFile(erLOG, errorFile);
-        }
+	    if (secPricesCheckbox.isSelected()) {
+		ArrayList<String[]> secPricesReport = BulkSecInfo
+			.ListAllCurrenciesInfo(currentInfo.allCurrTypes);
+		File secPricesReportFile = new File(
+			directoryOutputField.getText()
+				+ "\\secPricesReport.csv");
+		IOUtils.writeArrayListToCSV(
+			BulkSecInfo.listCurrencySnapshotHeader(),
+			secPricesReport, secPricesReportFile);
+	    }
+	} catch (Exception e) {
 
-        reportStatusField.setText(null);
-        IOUtils.writeIniFile(directoryOutputField.getText());
-        reportStatusField.setText("Reports have been run!");
+	    File errorFile = new File(directoryOutputField.getText()
+		    + "\\errlog.txt");
+	    StringBuffer erLOG = getStackTrace(e);
+	    IOUtils.writeResultsToFile(erLOG, errorFile);
+	}
+
+	reportStatusField.setText(null);
+	IOUtils.writeIniFile(directoryOutputField.getText());
+	reportStatusField.setText("Reports have been run!");
 
     }
 
-    private void snapReportCheckboxActionPerformed(java.awt.event.ActionEvent evt) {
-        this.snapReportRun = false;
-        if (snapReportCheckbox.isSelected()) {
-            this.snapReportRun = true;
-        }
-    }
-
-    private void fromToReportCheckboxActionPerformed(java.awt.event.ActionEvent evt) {
-        this.fromToReportRun = false;
-        if (fromToReportCheckbox.isSelected()) {
-            this.fromToReportRun = true;
-        }
-    }
-
-    private void transActivityCheckboxActionPerformed(java.awt.event.ActionEvent evt) {
-        this.transActivityReportRun = false;
-        if (transActivityCheckbox.isSelected()) {
-            this.transActivityReportRun = true;
-        }
-    }
-
-    private void secPricesCheckboxActionPerformed(java.awt.event.ActionEvent evt) {
-        this.secPricesReportRun = false;
-        if (secPricesCheckbox.isSelected()) {
-            this.secPricesReportRun = true;
-        }
-    }
 
     public void showFileChooser() {
-        chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File("."));
+	chooser = new JFileChooser();
+	chooser.setCurrentDirectory(new File("."));
 
-        chooser.setDialogTitle("Choose Output Directory");
-        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                    + chooser.getCurrentDirectory().getAbsolutePath());
-            directoryOutputField.setText(null);
-            directoryOutputField.setText(chooser.getCurrentDirectory().getAbsolutePath());
+	chooser.setDialogTitle("Choose Output Directory");
+	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	chooser.setAcceptAllFileFilterUsed(false);
+	if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+	    System.out.println("getCurrentDirectory(): "
+		    + chooser.getCurrentDirectory().getAbsolutePath());
+	    directoryOutputField.setText(null);
+	    directoryOutputField.setText(chooser.getCurrentDirectory()
+		    .getAbsolutePath());
 
-        } else {
-            System.out.println("No Selection ");
-        }
+	} else {
+	    System.out.println("No Selection ");
+	}
     }
     
 

@@ -9,13 +9,33 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.SortedSet;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.moneydance.apps.md.model.Account;
 
+/**
+ * Generates 3 tests:
+ * (1) Compares generated "From/To" report from stored MD file to base version
+ * saved in CSV Form.
+ * (2) Compares generated "Snapshot" report from stored MD file to base version
+ * saved in CSV Form.
+ * (3) Compares generated "SnapShot" report to iterated "From/To" report, to
+ * ensure consistency between generated data between the two reports
+ * Version 1.0 
+ * @author Dale Furrow
+ *
+ */
 public class ReportProdTest {
+    /**
+     * Class with only one element, String array of transaction report
+     * elements.  Implements comparable based on investment account and security 
+     * so that generated report and stored report can be sorted and compared.
+     *
+     * Version 1.0 
+     * @author Dale Furrow
+     *
+     */
     public static class ReportLine implements Comparable<ReportLine> {
 	private String[] row;
 
@@ -38,6 +58,14 @@ public class ReportProdTest {
 	    this.row = inputArray;
 	}
 
+	/**Compares two report lines, based on 
+	 * decimal place threshold.
+	 * @param compRpt
+	 * @param baseRpt
+	 * @param decPlaces
+	 * @param limitPrecision
+	 * @return
+	 */
 	private static boolean compareRptLines(ReportLine compRpt,
 		ReportLine baseRpt, int decPlaces, boolean limitPrecision) {
 	    boolean errorFound = false;
@@ -66,6 +94,10 @@ public class ReportProdTest {
 		    + " Should = " + baseRpt.getRow()[i]);
 	}
 
+	/* Compares based on concatenation of investment name
+	 * and security name
+	 * 
+	 */
 	@Override
 	public int compareTo(ReportLine r) {
 	    String cStrComp = r.getRow()[0] + r.getRow()[1];
@@ -80,31 +112,40 @@ public class ReportProdTest {
     }
 
     private static BulkSecInfo currentInfo;
+    // Report Dates for comparison
     private static final int fromDateInt = 20090601;
     private static final int toDateInt = 20100601;
+    //Stored CSV Files
     public static final File ftBaseFile = new File("./resources/ft20100601.csv");
     public static final File snapBaseFile = new File(
 	    "./resources/snap20100601.csv");
+    
 
+    /**returns minimum transaction date for all transactions in md file
+     * @param currentInfo
+     * @return
+     */
     public static int getMinTransDate(BulkSecInfo currentInfo) {
 	int minDateInt = Integer.MAX_VALUE;
 
 	for (Iterator<Account> it = currentInfo.transValuesCumMap.keySet()
 		.iterator(); it.hasNext();) {
 	    Account account = (Account) it.next();
+	    
 	    SortedSet<TransValuesCum> tvcSet = currentInfo.transValuesCumMap
 		    .get(account);
-	    for (Iterator<TransValuesCum> it1 = tvcSet.iterator(); it1
-		    .hasNext();) {
-		TransValuesCum transValuesCum = (TransValuesCum) it1.next();
-		minDateInt = Math.min(minDateInt, transValuesCum
-			.getTransValues().getDateint());
-	    }
+	    // TransValuesCum sorts by Date, so first element is earliest
+	    minDateInt = Math.min(tvcSet.first().getTransValues().getDateint(),
+		    minDateInt);
 	}
 
 	return minDateInt;
     }
 
+    /**Reads object array into reportLine object
+     * @param inObj
+     * @return
+     */
     public static ArrayList<ReportLine> readObjArrayIntoRptLine(Object[][] inObj) {
 	ArrayList<ReportLine> outputRptAL = new ArrayList<ReportLine>();
 	for (int i = 0; i < inObj.length; i++) {
@@ -116,6 +157,12 @@ public class ReportProdTest {
 	return outputRptAL;
     }
 
+    /**Compares ArrayLists of report lines, returns true if error is found
+     * @param compRpt
+     * @param baseRpt
+     * @param decPlaces
+     * @return true if error found
+     */
     private static boolean compareRpts(String info,
 	    ArrayList<ReportLine> compRpt, ArrayList<ReportLine> baseRpt,
 	    int decPlaces) {
@@ -133,6 +180,11 @@ public class ReportProdTest {
 	return errorFound;
     }
 
+    /**Generates Return Date Map for 9 standardized return dates
+     *  (same as code in snap report)
+     * @param currentInfo
+     * @return
+     */
     private static LinkedHashMap<String, Integer> getRetDateMap(
 	    BulkSecInfo currentInfo) {
 
@@ -165,6 +217,10 @@ public class ReportProdTest {
 
     }
 
+    /**Reads stored file, places data into sorted array of ReportLine objects
+     * @param readFile
+     * @return
+     */
     private static ArrayList<ReportLine> readCSVIntoRptLine(File readFile) {
 	ArrayList<String[]> inputStrAL = IOUtils.readCSVIntoArrayList(readFile);
 	inputStrAL.remove(0); // remove header row
@@ -179,6 +235,14 @@ public class ReportProdTest {
 	return outputRptAL;
     }
 
+    /**Test column in snap report against column in "From/To" Report
+     * to check for consistency
+     * @param snapTest
+     * @param ftTest
+     * @param snapCol
+     * @param ftCol
+     * @return
+     */
     private static boolean testRepSnapCol(ArrayList<ReportLine> snapTest,
 	    ArrayList<ReportLine> ftTest, int snapCol, int ftCol) {
 	boolean errorFound = false;
@@ -208,6 +272,9 @@ public class ReportProdTest {
 	currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
     }
 
+    /**Tests "From/To" Report generated from MD File 
+     * against saved version in CSV File
+     */
     @Test
     public void testGetFromToReport() {
 	boolean errorFound = false;
@@ -224,6 +291,9 @@ public class ReportProdTest {
 	assertFalse(errorFound);
     }
 
+    /**Tests "Snap" Report generated from MD File 
+     * against saved version in CSV File
+     */
     @Test
     public void testGetSnapReport() {
 	boolean errorFound = false;
@@ -240,6 +310,10 @@ public class ReportProdTest {
 
     }
 
+
+    /**Tests "Snap" Report generated from MD File against iterations of 
+     * "From/To" Reports, to ensure that reports are consistent     * 
+     */
     @Test
     public void testRepSnapAgainstFT() {
 
@@ -248,7 +322,8 @@ public class ReportProdTest {
 	Object[][] snapObj = ReportProd.getSnapReport(currentInfo, toDateInt);
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 
-	for (Iterator iterator = retDateMap.keySet().iterator(); iterator
+	// print out Return Dates for the various return categories for reference
+	for (Iterator<String> iterator = retDateMap.keySet().iterator(); iterator
 		.hasNext();) {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);
@@ -256,8 +331,11 @@ public class ReportProdTest {
 		    + DateUtils.convertToShort(dateInt));
 
 	}
-
-	for (Iterator iterator = retDateMap.keySet().iterator(); iterator
+	
+	//Iterate through start dates in Returns Date Map, generate associated
+	//"From/To" Report, compare appropriate column in "Snap" Report with like
+	// column in "From/To" Report
+	for (Iterator<String> iterator = retDateMap.keySet().iterator(); iterator
 		.hasNext();) {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);

@@ -33,8 +33,9 @@ import com.moneydance.apps.md.model.TxnUtil;
 */
 public class TransValues implements Comparable<TransValues> {
 
-    public ParentTxn parent;       //parent account
-    public Account accountRef;     // reference account (to determine correct sign for transfers)
+    public ParentTxn parentTxn;       //parentTxn account
+    // reference account (to determine correct sign for transfers)
+    public Account accountRef;     
     public Account secAccount;     //security account
     public Integer dateint;        //transaction date
     public Long txnID;             //transaction ID
@@ -49,76 +50,49 @@ public class TransValues implements Comparable<TransValues> {
     public double cashEffect;      //net cash effect on Investment Account
     public double secQuantity;     //security quantitiy
 
+    //getters and setters (supports use of compiled JAR)
     public ParentTxn getParent() {
-        return parent;
+        return parentTxn;
     }
-
-
     public Account getAccountRef() {
         return accountRef;
     }
-
-
     public Account getSecAccount() {
         return secAccount;
     }
-
-
     public Integer getDateint() {
         return dateint;
     }
-
-
     public Long getTxnID() {
         return txnID;
     }
-
-
     public double getBuy() {
         return buy;
     }
-
-
     public double getSell() {
         return sell;
     }
-
-
     public double getShortSell() {
         return shortSell;
     }
-
-
     public double getCoverShort() {
         return coverShort;
     }
-
-
     public double getCommision() {
         return commision;
     }
-
-
     public double getIncome() {
         return income;
     }
-
-
     public double getExpense() {
         return expense;
     }
-
-
     public double getTransfer() {
         return transfer;
     }
-
-
     public double getCashEffect() {
         return cashEffect;
     }
-
-
     public double getSecQuantity() {
         return secQuantity;
     }
@@ -127,16 +101,16 @@ public class TransValues implements Comparable<TransValues> {
     /**
      * generates values in appropriate categories for each Parent transaction
      * constructed at Parent by adding relevant split values for each split
-     * @param thisParent Parent Transaction
+     * @param thisParentTxn Parent Transaction
      * @param accountRef Investment Account associated with Security or bank transaction
      */
-    public TransValues(ParentTxn thisParent, Account accountRef) {
+    public TransValues(ParentTxn thisParentTxn, Account accountRef) {
         //intitalize values
-        this.parent = thisParent;
+        this.parentTxn = thisParentTxn;
         this.accountRef = accountRef;
         this.secAccount = accountRef;
-        this.dateint = Integer.valueOf(thisParent.getDateInt());
-        this.txnID = Long.valueOf(thisParent.getTxnId());
+        this.dateint = Integer.valueOf(thisParentTxn.getDateInt());
+        this.txnID = Long.valueOf(thisParentTxn.getTxnId());
         this.buy = 0;
         this.sell = 0;
         this.shortSell = 0;
@@ -148,9 +122,11 @@ public class TransValues implements Comparable<TransValues> {
         this.cashEffect = 0;
         this.secQuantity = 0;
         //iterate through splits
-        for (int i = 0; i < parent.getSplitCount(); i++) {
-
-            SplitValues thisSplit = new SplitValues(parent.getSplit(i),
+        for (int i = 0; i < parentTxn.getSplitCount(); i++) {
+            //gets values for each split.  Account Reference is parentTxn 
+            //account in the case of a security, investment account
+            //(i.e. itself) in the case of an investment account.
+            SplitValues thisSplit = new SplitValues(parentTxn.getSplit(i),
                     accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT
                     ? accountRef : accountRef.getParentAccount());
 
@@ -171,25 +147,30 @@ public class TransValues implements Comparable<TransValues> {
 
     
     public int compareTo(TransValues transValues) {
-        // sort by date, then by date if like transaction types
-        //then make a custom order based on transtype
-        // to ensure that buys will precede sells, shorts before covers.
-        Integer dateCmp = dateint.compareTo(transValues.dateint);
-        Long txnID = transValues.parent.getTxnId();
-        Integer transType = TxnUtil.getInvstTxnType(parent);
-        if (dateCmp == 0) {
-            if (TxnUtil.getInvstTxnType(parent) == transType) {
-                return Long.valueOf(parent.getTxnId()).compareTo(txnID);
-            } else {
-                return getTxnSortOrder().compareTo(transValues.getTxnSortOrder());
-            }
-        } else {
-            return dateCmp;
-        }
+	// sort by date, then by a custom order based on transtype
+	// then by TxnId if like transaction types to ensure that buys
+	// will precede sells, shorts before covers.
+	Integer dateCmp = this.dateint.compareTo(transValues.dateint);
+	Long cmpTxnID = transValues.parentTxn.getTxnId();
+	Integer cmpTransType = TxnUtil.getInvstTxnType(transValues.parentTxn);
+	if (dateCmp == 0) {// same date
+	    // if like trans types, use TxnID
+	    if (TxnUtil.getInvstTxnType(this.parentTxn) == cmpTransType) {
+		return Long.valueOf(this.parentTxn.getTxnId()).compareTo(cmpTxnID);
+	    } else {// use custom sort order
+		return this.getTxnSortOrder().compareTo(
+			transValues.getTxnSortOrder());
+	    }
+	} else { // sort by date
+	    return dateCmp;
+	}
     }
 
+    /**Custom sort order to put buys before sells, shorts before covers
+     * @return
+     */
     public Integer getTxnSortOrder() {
-        InvestTxnType transType = TxnUtil.getInvestTxnType(parent);
+        InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
         Integer txnOrder = 0;
         switch (transType) {
             case BUY:
@@ -234,218 +215,222 @@ public class TransValues implements Comparable<TransValues> {
 
     /**
      * determines buy/sell/income, etc values for split based upon
-     * parent transaction type.  variable names are same as TransValues
+     * parentTxn transaction type.  variable names are same as TransValues
      */
     private class SplitValues {
 
-        SplitTxn split;
-        Account accountRef;
-        int dateint;
-        double buy;
-        double sell;
-        double shortSell;
-        double coverShort;
-        double commision;
-        double income;
-        double expense;
-        double transfer;
-        double cashEffect;
-        double secQuantity;
+	SplitTxn split;
+	double buy;
+	double sell;
+	double shortSell;
+	double coverShort;
+	double commision;
+	double income;
+	double expense;
+	double transfer;
+	double cashEffect;
+	double secQuantity;
 
-        public SplitValues(SplitTxn thisSplit, Account accountRef) {
-            this.split = thisSplit;
-            this.accountRef = accountRef;
-            this.dateint = thisSplit.getDateInt();
-            InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());
-            int acctType = thisSplit.getAccount().getAccountType();
-            int parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
-            Long amountLong = thisSplit.getAmount();
-            double amountDouble = (Double.valueOf(amountLong.toString())) / 100;
-            Long valueLong = thisSplit.getValue();
-            double valueDouble = (Double.valueOf(valueLong.toString())) / 10000;
+	public SplitValues(SplitTxn thisSplit, Account accountRef) {
+	    this.split = thisSplit;
+	    thisSplit.getDateInt();
+	    InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit
+		    .getParentTxn());
+	    int acctType = thisSplit.getAccount().getAccountType();
+	    int parentAcctType = thisSplit.getParentTxn().getAccount()
+		    .getAccountType();
+	    Long amountLong = thisSplit.getAmount();
+	    double amountDouble = (Double.valueOf(amountLong.toString())) / 100;
+	    Long valueLong = thisSplit.getValue();
+	    double valueDouble = (Double.valueOf(valueLong.toString())) / 10000;
 
+	    this.buy = 0;
+	    this.sell = 0;
+	    this.shortSell = 0;
+	    this.coverShort = 0;
+	    this.commision = 0;
+	    this.income = 0;
+	    this.expense = 0;
+	    this.transfer = 0;
+	    this.cashEffect = 0;
+	    this.secQuantity = 0;
 
-            this.buy = 0;
-            this.sell = 0;
-            this.shortSell = 0;
-            this.coverShort = 0;
-            this.commision = 0;
-            this.income = 0;
-            this.expense = 0;
-            this.transfer = 0;
-            this.cashEffect = 0;
-            this.secQuantity = 0;
-
-            /*goes through each transaction type, assigns values for each variable based
-             on indicated transaction type and account type*/
-            switch (txnType) {
-                case BUY://consists of buy, commission, and (potentially) transfer
-                case BUY_XFER: //no net cash effect (transfer offsets buy)
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.buy = amountDouble;
-                            this.secQuantity = valueDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.commision = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        default:
-                            this.transfer = split.getAccount() == accountRef
-                                    ? -amountDouble : amountDouble;
-                            break;
-                    }
-                    this.cashEffect = this.buy + this.commision
-                            + this.income + this.transfer;
-                    break;
-                case SELL://consists of sell, commission, and (potentially) transfer
-                case SELL_XFER: //no net cash effect (transfer offsets sell)
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.sell = amountDouble;
-                            this.secQuantity = valueDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.commision = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        default:
-                            this.transfer = split.getAccount() == accountRef
-                                    ? -amountDouble : amountDouble;
-                            break;
-                    }
-                    this.cashEffect = this.sell + this.commision
-                            + this.income + this.transfer;
-                    break;
-                case BANK: //Account-level transfers, interest, and expenses
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_EXPENSE:// Only count if parent is investment
-                            if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
-                                this.expense = amountDouble;
-                                this.cashEffect = amountDouble;
-                            }
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME: // Only count if parent is investment
-                            if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
-                                this.income = amountDouble;
-                                this.cashEffect = amountDouble;
-                            }
-                            break;
-                        //next cases cover transfer between Assets/Investments, Bank.
-                        case Account.ACCOUNT_TYPE_INVESTMENT:
-                        case Account.ACCOUNT_TYPE_BANK:
-                        case Account.ACCOUNT_TYPE_ASSET:
-                        case Account.ACCOUNT_TYPE_LIABILITY:
-                            if (split.getAccount() == accountRef) {
-                                this.transfer = -amountDouble;
-                                this.cashEffect = -amountDouble;
-                            } else {
-                                this.transfer = amountDouble;
-                                this.cashEffect = amountDouble;
-                            }
-                            break;
-                    }  
-                    break;
-                case DIVIDEND:
-                case DIVIDENDXFR: //income/expense transactions
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.expense = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        default:
-                            this.transfer = split.getAccount() == accountRef
-                                    ? -amountDouble : amountDouble;
-                            break;
-                    }
-                    this.cashEffect = this.expense + this.income + this.transfer;
-                    break;
-                case SHORT: //short sales + commission
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.shortSell = amountDouble;
-                            this.secQuantity = valueDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.commision = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                    }
-                    this.cashEffect = this.shortSell + this.commision + this.income;
-                    break;
-                case COVER://short covers + commission
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.coverShort = amountDouble;
-                            this.secQuantity = valueDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.commision = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                    }
-                    this.cashEffect = this.coverShort + this.commision + this.income;
-                    break;
-                case MISCINC: //misc income and expense
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.expense = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.buy = amountDouble; //provides for return of capital
-                            break;
-                    }
-                    this.cashEffect = amountDouble;
-                    break;
-                case MISCEXP: //misc income and expense
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.expense = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.shortSell = amountDouble; //provides for adjustment of short basis
-                            break;
-                    }
-                    this.cashEffect = amountDouble;
-                    break;
-                case DIVIDEND_REINVEST: //income and buy with no net cash effect
-                    switch (acctType) {
-                        case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.commision = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_INCOME:
-                            this.income = amountDouble;
-                            break;
-                        case Account.ACCOUNT_TYPE_SECURITY:
-                            this.buy = amountDouble;
-                            this.secQuantity = valueDouble;
-                            break;
-                    }
-                    this.cashEffect = this.buy + this.commision
-                            + this.income;
-            } // end txnType Switch Statement
-        } // end splitValues Contstructor
+	    /*
+	     * goes through each transaction type, assigns values for each
+	     * variable based on indicated transaction type and account type
+	     */
+	    switch (txnType) {
+	    case BUY:// consists of buy, commission, and (potentially) transfer
+	    case BUY_XFER: // no net cash effect (transfer offsets buy)
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.buy = amountDouble;
+		    this.secQuantity = valueDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.commision = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		default:
+		    this.transfer = split.getAccount() == accountRef 
+		    ? -amountDouble : amountDouble;
+		    break;
+		}
+		this.cashEffect = this.buy + this.commision + this.income
+			+ this.transfer;
+		break;
+	    case SELL:// consists of sell, commission, and (potentially)
+		      // transfer
+	    case SELL_XFER: // no net cash effect (transfer offsets sell)
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.sell = amountDouble;
+		    this.secQuantity = valueDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.commision = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		default:
+		    this.transfer = split.getAccount() == accountRef 
+		    ? -amountDouble : amountDouble;
+		    break;
+		}
+		this.cashEffect = this.sell + this.commision + this.income
+			+ this.transfer;
+		break;
+	    case BANK: // Account-level transfers, interest, and expenses
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_EXPENSE:// Only count if parentTxn is
+		     // investment
+		    if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
+			this.expense = amountDouble;
+			this.cashEffect = amountDouble;
+		    }
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME: // Only count if parentTxn is
+		    // investment
+		    if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
+			this.income = amountDouble;
+			this.cashEffect = amountDouble;
+		    }
+		    break;
+		// next cases cover transfer between Assets/Investments, Bank.
+		case Account.ACCOUNT_TYPE_INVESTMENT:
+		case Account.ACCOUNT_TYPE_BANK:
+		case Account.ACCOUNT_TYPE_ASSET:
+		case Account.ACCOUNT_TYPE_LIABILITY:
+		    if (split.getAccount() == accountRef) {
+			this.transfer = -amountDouble;
+			this.cashEffect = -amountDouble;
+		    } else {
+			this.transfer = amountDouble;
+			this.cashEffect = amountDouble;
+		    }
+		    break;
+		}
+		break;
+	    case DIVIDEND:
+	    case DIVIDENDXFR: // income/expense transactions
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.expense = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		default:
+		    this.transfer = split.getAccount() == accountRef ?
+			    -amountDouble : amountDouble;
+		    break;
+		}
+		this.cashEffect = this.expense + this.income + this.transfer;
+		break;
+	    case SHORT: // short sales + commission
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.shortSell = amountDouble;
+		    this.secQuantity = valueDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.commision = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		}
+		this.cashEffect = this.shortSell + this.commision + this.income;
+		break;
+	    case COVER:// short covers + commission
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.coverShort = amountDouble;
+		    this.secQuantity = valueDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.commision = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		}
+		this.cashEffect = this.coverShort + this.commision
+			+ this.income;
+		break;
+	    case MISCINC: // misc income and expense
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.expense = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.buy = amountDouble; // provides for return of capital
+		    break;
+		}
+		this.cashEffect = amountDouble;
+		break;
+	    case MISCEXP: // misc income and expense
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.expense = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.shortSell = amountDouble; // provides for adjustment of
+						   // short basis
+		    break;
+		}
+		this.cashEffect = amountDouble;
+		break;
+	    case DIVIDEND_REINVEST: // income and buy with no net cash effect
+		switch (acctType) {
+		case Account.ACCOUNT_TYPE_EXPENSE:
+		    this.commision = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_INCOME:
+		    this.income = amountDouble;
+		    break;
+		case Account.ACCOUNT_TYPE_SECURITY:
+		    this.buy = amountDouble;
+		    this.secQuantity = valueDouble;
+		    break;
+		}
+		this.cashEffect = this.buy + this.commision + this.income;
+	    } // end txnType Switch Statement
+	} // end splitValues Contstructor
     } // end splitValues subClass
 } // end TransValues Class
 
 //unused methods
-// <editor-fold defaultstate="collapsed" desc="comment">
+
 /*
 public static StringBuffer listTransValues(TransValues txnValues) {
 StringBuffer txnInfo = new StringBuffer();

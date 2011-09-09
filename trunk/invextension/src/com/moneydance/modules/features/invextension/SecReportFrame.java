@@ -37,7 +37,7 @@ public class SecReportFrame
   }
 
 
-  public final void processEvent(AWTEvent evt) { //relates to window event--should add to SecReportPanel
+  public final void processEvent(AWTEvent evt) { 
     if(evt.getID()==WindowEvent.WINDOW_CLOSING) {
       extension.closeConsole();
       return;
