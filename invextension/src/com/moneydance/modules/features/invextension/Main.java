@@ -42,9 +42,9 @@ public class Main
     // via the application toolbar
     FeatureModuleContext context = getContext();
     try {
-      context.registerFeature(this, "showreportwindow", //relates to "invoke" method below
-        getIcon("invextension"),
-        getName());
+	//relates to "invoke" method below
+	context.registerFeature(this, "showreportwindow", 
+        getIcon("invextension"), getName());
     }
     catch (Exception e) {
       e.printStackTrace(System.err);
@@ -73,9 +73,10 @@ public class Main
   }
   
   /** Process an invocation of this module with the given URI */
-  //also has no usages elsewhere, must be utilized by moneydance
+  //no usages elsewhere, utilized by moneydance
   public void invoke(String uri) {
     String command = uri;
+    @SuppressWarnings("unused")
     String parameters = "";
     int theIdx = uri.indexOf('?');
     if(theIdx>=0) {
@@ -89,7 +90,8 @@ public class Main
       }
     }
 
-    if(command.equals("showreportwindow")) { //relates to "showreportpanel" in init
+    if(command.equals("showreportwindow")) { 
+	//relates to "showreportpanel" in init
       showReportWindow();
     }    
   }

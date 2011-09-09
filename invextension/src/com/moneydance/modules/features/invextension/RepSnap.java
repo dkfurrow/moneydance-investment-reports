@@ -43,42 +43,53 @@ public class RepSnap {
     String ticker;
     AGG_TYPE aggType;
 
-    double lastPrice;                           //ending price
-    double endPos;                              //ending position
-    double endValue;                            //ending value
-    double endCash;                             //ending effect of security on account cash
-    double initBalance;                        // initial investment account balance
-    double avgCostBasis;                        //final average cost balance
+    double lastPrice;//ending price
+    double endPos;//ending position
+    double endValue;//ending value
+    double endCash; //ending effect of security on account cash
+    double initBalance;// initial investment account balance
+    double avgCostBasis;//final average cost balance
     //one day values
-    double absPriceChange;                      //absolute price change (from previous day to snapDate)
-    double pctPriceChange;                      //percent price change (from previous day to snapDate)
-    double absValueChange;                      //absolute value change (from previous day to snapDate)
+    double absPriceChange;//absolute price change (from previous day to snapDate)
+    double pctPriceChange;//percent price change (from previous day to snapDate)
+    double absValueChange;//absolute value change (from previous day to snapDate)
     //total numbers
-    double income;                              //total income (all dates)
-    double totalGain;                           //total absolute gain (all dates)
-    double totRetAll;                           //total Mod-Dietz return (all dates)
-    double annRetAll;                           //annualized return (all dates)
+    double income;//total income (all dates)
+    double totalGain;//total absolute gain (all dates)
+    double totRetAll;//total Mod-Dietz return (all dates)
+    double annRetAll;//annualized return (all dates)
     //returns
-    double totRet1Day;                          //Mod-Dietz return (1 day)
-    double totRetWk;                            //Mod-Dietz return (1 week)
-    double totRet4Wk;                           //Mod-Dietz return (1 month)
-    double totRet3Mnth;                         //Mod-Dietz return (3 month)
-    double totRetYTD;                           //Mod-Dietz return (Year-to-Date)
-    double totRetYear;                          //Mod-Dietz return (1 Year)
-    double totRet3year;                         //Mod-Dietz return (1 Years)
+    double totRet1Day;//Mod-Dietz return (1 day)
+    double totRetWk;//Mod-Dietz return (1 week)
+    double totRet4Wk;//Mod-Dietz return (1 month)
+    double totRet3Mnth;//Mod-Dietz return (3 month)
+    double totRetYTD; //Mod-Dietz return (Year-to-Date)
+    double totRetYear;//Mod-Dietz return (1 Year)
+    double totRet3year;//Mod-Dietz return (1 Years)
     // intermediate values
-    LinkedHashMap<String, Integer> retDateMap;              //maps return category to start dates
-    LinkedHashMap<String, Double> startValues;              //maps return category to start values
-    LinkedHashMap<String, Double> startPoses;		    //maps return category to start positions		
-    LinkedHashMap<String, Double> startPrices;		    //maps return category to start positions
-    LinkedHashMap<String, Double> incomes;                  //maps return category to income
-    LinkedHashMap<String, Double> expenses;                 //maps return category to expense
-    LinkedHashMap<String, Double> mdReturns;                //maps return category to Mod-Dietz returns
-    LinkedHashMap<String, Double> startCashs;		    //maps return category to starting cash effect
+    //maps return category to start dates
+    LinkedHashMap<String, Integer> retDateMap;
+    //maps return category to start values
+    LinkedHashMap<String, Double> startValues;
+    //maps return category to start positions
+    LinkedHashMap<String, Double> startPoses;
+    //maps return category to start positions
+    LinkedHashMap<String, Double> startPrices;		    
+    //maps return category to income
+    LinkedHashMap<String, Double> incomes;                  
+    //maps return category to expense
+    LinkedHashMap<String, Double> expenses;
+    //maps return category to Mod-Dietz returns
+    LinkedHashMap<String, Double> mdReturns;                
+    //maps return category to starting cash effect
+    LinkedHashMap<String, Double> startCashs;		    
     
-    LinkedHashMap<String, TreeMap<Integer, Double>> mdMap;  //maps return category to Mod-Dietz date map
-    LinkedHashMap<String, TreeMap<Integer, Double>> arMap;  //maps return category to Annualized Return Date Map
-    LinkedHashMap<String, TreeMap<Integer, Double>> transMap;//maps return category to transfer date map
+    //maps return category to Mod-Dietz date map
+    LinkedHashMap<String, TreeMap<Integer, Double>> mdMap;  
+    //maps return category to Annualized Return Date Map
+    LinkedHashMap<String, TreeMap<Integer, Double>> arMap;
+    //maps return category to transfer date map
+    LinkedHashMap<String, TreeMap<Integer, Double>> transMap;
 
     /**
      * Generic constructor, used to aggregate values
@@ -135,277 +146,319 @@ public class RepSnap {
      * @param snapDateInt  report date date
      */
 
-    public RepSnap(BulkSecInfo currentInfo, SortedSet<TransValuesCum> transSet, int snapDateInt) {
+    public RepSnap(BulkSecInfo currentInfo, SortedSet<TransValuesCum> transSet,
+	    int snapDateInt) {
 
-        this.account = transSet.first().transValues.secAccount;
-        CurrencyType thisCur = currentInfo.secCur.get(this.account);
-        this.cur = thisCur;
-        this.ticker = "~Null";
-        this.aggType = AGG_TYPE.SEC;
-        if(thisCur != null) this.ticker =
-                thisCur.getTickerSymbol().isEmpty() ?
-                    "NoTicker" : thisCur.getTickerSymbol();
-        this.snapDateInt = snapDateInt;
-        this.lastPrice = (1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(snapDateInt)));
-        if (transSet.first().transValues.accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            this.initBalance = ReportProd.longToDouble(transSet.first().transValues.accountRef.getStartBalance()) / 100.0;
-        } else {
-            this.initBalance = 0.0;
-        }
+	this.account = transSet.first().transValues.secAccount;
+	CurrencyType thisCur = currentInfo.secCur.get(this.account);
+	this.cur = thisCur;
+	this.ticker = "~Null";
+	this.aggType = AGG_TYPE.SEC;
+	if (thisCur != null)
+	    this.ticker = thisCur.getTickerSymbol().isEmpty() ? "NoTicker"
+		    : thisCur.getTickerSymbol();
+	this.snapDateInt = snapDateInt;
+	this.lastPrice = (1 / (thisCur == null ? 1 : thisCur
+		.getUserRateByDateInt(snapDateInt)));
+	if (transSet.first().transValues.accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
+	    this.initBalance = ReportProd
+		    .longToDouble(transSet.first().transValues.accountRef
+			    .getStartBalance()) / 100.0;
+	} else {
+	    this.initBalance = 0.0;
+	}
 
-        //create dates for returns calculations
+	// create dates for returns calculations
 
-        int fromDateInt = DateUtils.getPrevBusinessDay(transSet.first().transValues.dateint); //ensures all dates for appropriate variables
-        int prevFromDateInt = DateUtils.getPrevBusinessDay(snapDateInt);
-        int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addDaysInt(snapDateInt, -7));
-        int mnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -1));
-        int threeMnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -3));
-        int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -12));
-        int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -36));
-        int ytdFromDateInt = DateUtils.getStartYear(snapDateInt);
+	int fromDateInt = DateUtils
+		.getPrevBusinessDay(transSet.first().transValues.dateint); // ensures
+									   // all
+									   // dates
+									   // for
+									   // appropriate
+									   // variables
+	int prevFromDateInt = DateUtils.getPrevBusinessDay(snapDateInt);
+	int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addDaysInt(snapDateInt, -7));
+	int mnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -1));
+	int threeMnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -3));
+	int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -12));
+	int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -36));
+	int ytdFromDateInt = DateUtils.getStartYear(snapDateInt);
 
+	// put dates in return map
+	this.retDateMap = new LinkedHashMap<String, Integer>();
 
-        //put dates in return map
-        this.retDateMap = new LinkedHashMap<String, Integer>();
+	this.retDateMap.put("All", fromDateInt);
+	this.retDateMap.put("PREV", prevFromDateInt);
+	this.retDateMap.put("1Wk", wkFromDateInt);
+	this.retDateMap.put("4Wk", mnthFromDateInt);
+	this.retDateMap.put("3Mnth", threeMnthFromDateInt);
+	this.retDateMap.put("1Yr", oneYearFromDateInt);
+	this.retDateMap.put("3Yr", threeYearFromDateInt);
+	this.retDateMap.put("YTD", ytdFromDateInt);
 
-        this.retDateMap.put("All", fromDateInt);
-        this.retDateMap.put("PREV", prevFromDateInt);
-        this.retDateMap.put("1Wk", wkFromDateInt);
-        this.retDateMap.put("4Wk", mnthFromDateInt);
-        this.retDateMap.put("3Mnth", threeMnthFromDateInt);
-        this.retDateMap.put("1Yr", oneYearFromDateInt);
-        this.retDateMap.put("3Yr", threeYearFromDateInt);
-        this.retDateMap.put("YTD", ytdFromDateInt);
+	// these values dependent only on snapDate
 
-        //these values dependent only on snapDate
+	double endCumUnrealizedGain = 0;
+	double longBasis = 0;
+	double shortBasis = 0;
 
-        double endCumUnrealizedGain = 0;
-        double longBasis = 0;
-        double shortBasis = 0;
-        
+	// these values calculated once, based on total transaction history
 
-        // these values calculated once, based on total transaction history
+	double realizedGain = 0;
+	double unrealizedGain = 0;
+	double startCumUnrealGain = 0; // by definition, since this calculation
+				       // covers all transactions
+	double annualPercentReturn = 0;
 
-        double realizedGain = 0;
-        double unrealizedGain = 0;
-        double startCumUnrealGain = 0; // by definition, since this calculation covers all transactions
-        double annualPercentReturn = 0;
+	// initialize array lists needed for returns calculations
+	this.startPoses = new LinkedHashMap<String, Double>();
+	this.startValues = new LinkedHashMap<String, Double>();
+	this.startPrices = new LinkedHashMap<String, Double>();
+	this.startCashs = new LinkedHashMap<String, Double>();
+	this.incomes = new LinkedHashMap<String, Double>();
+	this.expenses = new LinkedHashMap<String, Double>();
+	this.mdReturns = new LinkedHashMap<String, Double>();
 
-        // initialize array lists needed for returns calculations
-        this.startPoses = new LinkedHashMap<String, Double>();
-        this.startValues = new LinkedHashMap<String, Double>();
-        this.startPrices = new LinkedHashMap<String, Double>();
-        this.startCashs = new LinkedHashMap<String, Double>();
-        this.incomes = new LinkedHashMap<String, Double>();
-        this.expenses = new LinkedHashMap<String, Double>();
-        this.mdReturns = new LinkedHashMap<String, Double>();
+	this.arMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
+	this.mdMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
+	this.transMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
 
-        this.arMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        this.mdMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        this.transMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        
+	// fill startPrice Array List
 
-        // fill startPrice Array List
-        
-        for (Iterator<String> it = this.retDateMap.keySet().iterator(); it.hasNext();) {
-            String retCat = it.next();
-            int thisDateInt = this.retDateMap.get(retCat);
-            startPrices.put(retCat, 1 / (thisCur == null ? 1 : thisCur.getUserRateByDateInt(thisDateInt)));
-        }
-        //initialize ArrayLists values to zero (so we can use "set" method later
-        
-        for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-            String retCat = it1.next();
-            startPoses.put(retCat, 0.0);
-            this.startValues.put(retCat, 0.0);
-            this.incomes.put(retCat, 0.0);
-            this.expenses.put(retCat, 0.0);
-            this.startCashs.put(retCat, 0.0);
-            this.mdReturns.put(retCat, 0.0);
+	for (Iterator<String> it = this.retDateMap.keySet().iterator(); it
+		.hasNext();) {
+	    String retCat = it.next();
+	    int thisDateInt = this.retDateMap.get(retCat);
+	    startPrices.put(
+		    retCat,
+		    1 / (thisCur == null ? 1 : thisCur
+			    .getUserRateByDateInt(thisDateInt)));
+	}
+	// initialize ArrayLists values to zero (so we can use "set" method
+	// later
 
-            this.arMap.put(retCat, new TreeMap<Integer, Double>());
-            this.mdMap.put(retCat, new TreeMap<Integer, Double>());
-            this.transMap.put(retCat, new TreeMap<Integer, Double>());
-        }
+	for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1
+		.hasNext();) {
+	    String retCat = it1.next();
+	    startPoses.put(retCat, 0.0);
+	    this.startValues.put(retCat, 0.0);
+	    this.incomes.put(retCat, 0.0);
+	    this.expenses.put(retCat, 0.0);
+	    this.startCashs.put(retCat, 0.0);
+	    this.mdReturns.put(retCat, 0.0);
 
-        /* intialize other variables */
-        this.endPos = 0.0;
-        this.endValue = 0.0;
-        this.endCash = 0.0;
-        this.avgCostBasis = 0.0;
-        //one day values
-        this.absPriceChange = 0.0;
-        this.pctPriceChange = 0.0;
-        this.absValueChange = 0.0;
-        //total numbers
-        this.income = 0.0;
-        this.totalGain = 0.0;
-        this.totRetAll = 0.0;
-        this.annRetAll = 0.0;
-        //returns
-        this.totRet1Day = 0.0;
-        this.totRetWk = 0.0;
-        this.totRet4Wk = 0.0;
-        this.totRet3Mnth = 0.0;
-        this.totRetYTD = 0.0;
-        this.totRetYear = 0.0;
-        this.totRet3year = 0.0;
+	    this.arMap.put(retCat, new TreeMap<Integer, Double>());
+	    this.mdMap.put(retCat, new TreeMap<Integer, Double>());
+	    this.transMap.put(retCat, new TreeMap<Integer, Double>());
+	}
 
-        // iterate through transaction values list
-        for (Iterator<TransValuesCum> it = transSet.iterator(); it.hasNext();) {
-            TransValuesCum transValuesCum = it.next();
-            //iterate through return dates
-            for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-                String retCat = it1.next();
-                int thisFromDateInt = this.retDateMap.get(retCat);
-                //where transactions are before report dates
-                if (transValuesCum.transValues.dateint <= thisFromDateInt) {
+	/* intialize other variables */
+	this.endPos = 0.0;
+	this.endValue = 0.0;
+	this.endCash = 0.0;
+	this.avgCostBasis = 0.0;
+	// one day values
+	this.absPriceChange = 0.0;
+	this.pctPriceChange = 0.0;
+	this.absValueChange = 0.0;
+	// total numbers
+	this.income = 0.0;
+	this.totalGain = 0.0;
+	this.totRetAll = 0.0;
+	this.annRetAll = 0.0;
+	// returns
+	this.totRet1Day = 0.0;
+	this.totRetWk = 0.0;
+	this.totRet4Wk = 0.0;
+	this.totRet3Mnth = 0.0;
+	this.totRetYTD = 0.0;
+	this.totRetYear = 0.0;
+	this.totRet3year = 0.0;
 
-                    double currentRate = (thisCur == null ? 1
-                            : thisCur.getUserRateByDateInt(thisFromDateInt));
-                    double splitAdjust = (thisCur == null ? 1
-                            : thisCur.adjustRateForSplitsInt(transValuesCum.transValues.dateint,
-                            currentRate, thisFromDateInt) / currentRate);
-                    startPoses.put(retCat, transValuesCum.position * splitAdjust); //split adjusts last position from TransValuesCum
-                    this.startValues.put(retCat, startPrices.get(retCat) * startPoses.get(retCat));
-                    this.startCashs.put(retCat, this.startCashs.get(retCat)
-                            + transValuesCum.transValues.cashEffect);
+	// iterate through transaction values list
+	for (Iterator<TransValuesCum> it = transSet.iterator(); it.hasNext();) {
+	    TransValuesCum transValuesCum = it.next();
+	    // iterate through return dates
+	    for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1
+		    .hasNext();) {
+		String retCat = it1.next();
+		int thisFromDateInt = this.retDateMap.get(retCat);
+		// where transactions are before report dates
+		if (transValuesCum.transValues.dateint <= thisFromDateInt) {
 
-                    if ("All".equals(retCat)) {
-                        //end cash increment, only needs to be done once ("All" loop for convenience)
-                        this.endCash = this.endCash + transValuesCum.transValues.cashEffect;
-                    }
+		    double currentRate = (thisCur == null ? 1 : thisCur
+			    .getUserRateByDateInt(thisFromDateInt));
+		    double splitAdjust = (thisCur == null ? 1 : thisCur
+			    .adjustRateForSplitsInt(
+				    transValuesCum.transValues.dateint,
+				    currentRate, thisFromDateInt)
+			    / currentRate);
+		    startPoses.put(retCat, transValuesCum.position
+			    * splitAdjust); // split adjusts last position from
+					    // TransValuesCum
+		    this.startValues.put(retCat, startPrices.get(retCat)
+			    * startPoses.get(retCat));
+		    this.startCashs.put(retCat, this.startCashs.get(retCat)
+			    + transValuesCum.transValues.cashEffect);
 
-                }
+		    if ("All".equals(retCat)) {
+			// end cash increment, only needs to be done once ("All"
+			// loop for convenience)
+			this.endCash = this.endCash
+				+ transValuesCum.transValues.cashEffect;
+		    }
 
-                //where transaction period intersects report period
-                if (transValuesCum.transValues.dateint > thisFromDateInt
-                        && transValuesCum.transValues.dateint <= snapDateInt) { 
+		}
 
-                    // MDCalc variable--net effect of calculation is to return buys and sells, including commission
-                    double cf = -(transValuesCum.transValues.buy
-                            + transValuesCum.transValues.sell
-                            + transValuesCum.transValues.shortSell 
-                            + transValuesCum.transValues.coverShort
-                            + transValuesCum.transValues.commision);
+		// where transaction period intersects report period
+		if (transValuesCum.transValues.dateint > thisFromDateInt
+			&& transValuesCum.transValues.dateint <= snapDateInt) {
 
-                    //add variables to arrays needed for returns calculation
+		    // MDCalc variable--net effect of calculation is to return
+		    // buys and sells, including commission
+		    double cf = -(transValuesCum.transValues.buy
+			    + transValuesCum.transValues.sell
+			    + transValuesCum.transValues.shortSell
+			    + transValuesCum.transValues.coverShort + 
+			    transValuesCum.transValues.commision);
 
-                    RepFromTo.addValueToDateMap(this.arMap.get(retCat),
-                            transValuesCum.transValues.dateint,
-                            transValuesCum.transValues.cashEffect
-                            - transValuesCum.transValues.transfer);
-                    RepFromTo.addValueToDateMap(this.mdMap.get(retCat),
-                            transValuesCum.transValues.dateint, cf);
-                    RepFromTo.addValueToDateMap(this.transMap.get(retCat),
-                            transValuesCum.transValues.dateint,
-                            transValuesCum.transValues.transfer);
+		    // add variables to arrays needed for returns calculation
 
-                    this.incomes.put(retCat, this.incomes.get(retCat)
-                            + transValuesCum.transValues.income);
-                    this.expenses.put(retCat, this.expenses.get(retCat)
-                            + transValuesCum.transValues.expense);
+		    RepFromTo.addValueToDateMap(this.arMap.get(retCat),
+			    transValuesCum.transValues.dateint,
+			    transValuesCum.transValues.cashEffect
+				    - transValuesCum.transValues.transfer);
+		    RepFromTo.addValueToDateMap(this.mdMap.get(retCat),
+			    transValuesCum.transValues.dateint, cf);
+		    RepFromTo.addValueToDateMap(this.transMap.get(retCat),
+			    transValuesCum.transValues.dateint,
+			    transValuesCum.transValues.transfer);
 
-                    if ("All".equals(retCat)) {//end cash increment--only needs to be done once
-                        realizedGain = transValuesCum.perRealizedGain + realizedGain;
-                        this.endCash = this.endCash + transValuesCum.transValues.cashEffect;
-                    }
+		    this.incomes.put(retCat, this.incomes.get(retCat)
+			    + transValuesCum.transValues.income);
+		    this.expenses.put(retCat, this.expenses.get(retCat)
+			    + transValuesCum.transValues.expense);
 
-                    double currentRate = (thisCur == null ? 1 :
-                        thisCur.getUserRateByDateInt(snapDateInt));
-                    double splitAdjust = (thisCur == null ? 1 :
-                        thisCur.adjustRateForSplitsInt(transValuesCum.transValues.dateint,
-                            currentRate, snapDateInt) / currentRate);
+		    if ("All".equals(retCat)) {// end cash increment--only needs
+					       // to be done once
+			realizedGain = transValuesCum.perRealizedGain
+				+ realizedGain;
+			this.endCash = this.endCash
+				+ transValuesCum.transValues.cashEffect;
+		    }
 
-                    this.endPos = transValuesCum.position * splitAdjust;
-                    this.endValue = this.endPos * this.lastPrice;
-                    longBasis = transValuesCum.longBasis;
-                    shortBasis = transValuesCum.shortBasis;
-                    this.avgCostBasis = longBasis + shortBasis;
+		    double currentRate = (thisCur == null ? 1 : thisCur
+			    .getUserRateByDateInt(snapDateInt));
+		    double splitAdjust = (thisCur == null ? 1 : thisCur
+			    .adjustRateForSplitsInt(
+				    transValuesCum.transValues.dateint,
+				    currentRate, snapDateInt)
+			    / currentRate);
 
-                } //end--where transaction period intersects report period
-            } //end of start date iterative loop
-        } // end of input transaction set loop
+		    this.endPos = transValuesCum.position * splitAdjust;
+		    this.endValue = this.endPos * this.lastPrice;
+		    longBasis = transValuesCum.longBasis;
+		    shortBasis = transValuesCum.shortBasis;
+		    this.avgCostBasis = longBasis + shortBasis;
 
-        if (this.endPos > 0) {
-            endCumUnrealizedGain = this.endValue - longBasis;
-        } else if (this.endPos < 0) {
-            endCumUnrealizedGain = this.endValue - shortBasis;
-        }
-        unrealizedGain = endCumUnrealizedGain - startCumUnrealGain; //startCumUnrealGain is zero by definition
-        this.totalGain = realizedGain + unrealizedGain;
+		} // end--where transaction period intersects report period
+	    } // end of start date iterative loop
+	} // end of input transaction set loop
 
-        //now go through arrays and get returns/calc values
-        for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1.hasNext();) {
-            String retCat = it1.next();
-            int thisFromDateInt = this.retDateMap.get(retCat);
-            // add the first value in return arrays (if startpos != 0)
-            if (startPoses.get(retCat) != 0) {
-                RepFromTo.addValueToDateMap(
-                        this.arMap.get(retCat),
-                        thisFromDateInt, -this.startValues.get(retCat));
-                RepFromTo.addValueToDateMap(
-                        this.mdMap.get(retCat),
-                        thisFromDateInt, 0.0); //Dummy Value for Mod-Dietz
-            }
-            // add the last value in return arrays (if endpos != 0)
-            if (this.endPos != 0) {
-                RepFromTo.addValueToDateMap(
-                        this.arMap.get(retCat),
-                        snapDateInt, this.endValue);
-                RepFromTo.addValueToDateMap(
-                        this.mdMap.get(retCat),
-                        snapDateInt, 0.0);//Dummy Value for Mod-Dietz
-            }
+	if (this.endPos > 0) {
+	    endCumUnrealizedGain = this.endValue - longBasis;
+	} else if (this.endPos < 0) {
+	    endCumUnrealizedGain = this.endValue - shortBasis;
+	}
+	// startCumUnrealGain is zero by definition
+	unrealizedGain = endCumUnrealizedGain - startCumUnrealGain;
+	this.totalGain = realizedGain + unrealizedGain;
 
-            // get MD returns on all start dates, only get annualized return on all dates
+	// now go through arrays and get returns/calc values
+	for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1
+		.hasNext();) {
+	    String retCat = it1.next();
+	    int thisFromDateInt = this.retDateMap.get(retCat);
+	    // add the first value in return arrays (if startpos != 0)
+	    if (startPoses.get(retCat) != 0) {
+		RepFromTo.addValueToDateMap(this.arMap.get(retCat),
+			thisFromDateInt, -this.startValues.get(retCat));
+		RepFromTo.addValueToDateMap(this.mdMap.get(retCat),
+			thisFromDateInt, 0.0); // Dummy Value for Mod-Dietz
+	    }
+	    // add the last value in return arrays (if endpos != 0)
+	    if (this.endPos != 0) {
+		RepFromTo.addValueToDateMap(this.arMap.get(retCat),
+			snapDateInt, this.endValue);
+		RepFromTo.addValueToDateMap(this.mdMap.get(retCat),
+			snapDateInt, 0.0);// Dummy Value for Mod-Dietz
+	    }
 
-            this.mdReturns.put(retCat, RepFromTo.getMDCalc(this.startValues.get(retCat),
-                    this.endValue, this.incomes.get(retCat), this.expenses.get(retCat),
-                    this.mdMap.get(retCat)));
+	    // get MD returns on all start dates, only get annualized return on
+	    // all dates
 
-            if ("All".equals(retCat)) {
-                annualPercentReturn = RepFromTo.getAnnualReturn(this.arMap.get(retCat),
-                        this.mdReturns.get("All"));
-                this.annRetAll = annualPercentReturn;
-                this.income = this.incomes.get(retCat);
-            }
+	    this.mdReturns.put(retCat, RepFromTo.getMDCalc(
+		    this.startValues.get(retCat), this.endValue,
+		    this.incomes.get(retCat), this.expenses.get(retCat),
+		    this.mdMap.get(retCat)));
 
-            //remove start and end values from return date maps for ease of aggregation
-            if (startPoses.get(retCat) != 0) {
-                RepFromTo.addValueToDateMap(this.arMap.get(retCat),
-                        thisFromDateInt, +this.startValues.get(retCat));
-            }
-            //remove start and end values from return date maps for ease of aggregation
-            if (this.endPos != 0) {
-                RepFromTo.addValueToDateMap(this.arMap.get(retCat),
-                        snapDateInt, -this.endValue);
-            }
-        } // end of start date iterative loop
+	    if ("All".equals(retCat)) {
+		annualPercentReturn = RepFromTo.getAnnualReturn(
+			this.arMap.get(retCat), this.mdReturns.get("All"));
+		this.annRetAll = annualPercentReturn;
+		this.income = this.incomes.get(retCat);
+	    }
 
-        //Produce output
+	    // remove start and end values from return date maps for ease of
+	    // aggregation
+	    if (startPoses.get(retCat) != 0) {
+		RepFromTo.addValueToDateMap(this.arMap.get(retCat),
+			thisFromDateInt, +this.startValues.get(retCat));
+	    }
+	    // remove start and end values from return date maps for ease of
+	    // aggregation
+	    if (this.endPos != 0) {
+		RepFromTo.addValueToDateMap(this.arMap.get(retCat),
+			snapDateInt, -this.endValue);
+	    }
+	} // end of start date iterative loop
 
-        if (this.retDateMap.get("PREV") == null) {
-            this.absPriceChange = Double.NaN;
-            this.absValueChange = Double.NaN;
-            this.pctPriceChange = Double.NaN;
-        } else {
-            double prevPrice = (thisCur == null ? 1 :
-                1 / thisCur.getUserRateByDateInt(this.retDateMap.get("PREV")));
-            this.absPriceChange = this.lastPrice - prevPrice;
-            this.absValueChange = this.endPos * this.absPriceChange;
-            this.pctPriceChange = this.lastPrice / prevPrice - 1;
-        }
-        this.totRet1Day = this.mdReturns.get("PREV") == null ? Double.NaN : this.mdReturns.get("PREV");
-        this.totRetAll = this.mdReturns.get("All") == null ? Double.NaN : this.mdReturns.get("All");
-        this.totRetWk = this.mdReturns.get("1Wk") == null ? Double.NaN : this.mdReturns.get("1Wk");
-        this.totRet4Wk = this.mdReturns.get("4Wk") == null ? Double.NaN : this.mdReturns.get("4Wk");
-        this.totRet3Mnth = this.mdReturns.get("3Mnth") == null ? Double.NaN : this.mdReturns.get("3Mnth");
-        this.totRetYear = this.mdReturns.get("1Yr") == null ? Double.NaN : this.mdReturns.get("1Yr");
-        this.totRet3year = this.mdReturns.get("3Yr") == null ? Double.NaN : this.mdReturns.get("3Yr");
-        this.totRetYTD = this.mdReturns.get("YTD") == null ? Double.NaN : this.mdReturns.get("YTD");
-        
-        
+	// Produce output
+
+	if (this.retDateMap.get("PREV") == null) {
+	    this.absPriceChange = Double.NaN;
+	    this.absValueChange = Double.NaN;
+	    this.pctPriceChange = Double.NaN;
+	} else {
+	    double prevPrice = (thisCur == null ? 1 : 1 / thisCur
+		    .getUserRateByDateInt(this.retDateMap.get("PREV")));
+	    this.absPriceChange = this.lastPrice - prevPrice;
+	    this.absValueChange = this.endPos * this.absPriceChange;
+	    this.pctPriceChange = this.lastPrice / prevPrice - 1;
+	}
+	this.totRet1Day = this.mdReturns.get("PREV") == null ? Double.NaN
+		: this.mdReturns.get("PREV");
+	this.totRetAll = this.mdReturns.get("All") == null ? Double.NaN
+		: this.mdReturns.get("All");
+	this.totRetWk = this.mdReturns.get("1Wk") == null ? Double.NaN
+		: this.mdReturns.get("1Wk");
+	this.totRet4Wk = this.mdReturns.get("4Wk") == null ? Double.NaN
+		: this.mdReturns.get("4Wk");
+	this.totRet3Mnth = this.mdReturns.get("3Mnth") == null ? Double.NaN
+		: this.mdReturns.get("3Mnth");
+	this.totRetYear = this.mdReturns.get("1Yr") == null ? Double.NaN
+		: this.mdReturns.get("1Yr");
+	this.totRet3year = this.mdReturns.get("3Yr") == null ? Double.NaN
+		: this.mdReturns.get("3Yr");
+	this.totRetYTD = this.mdReturns.get("YTD") == null ? Double.NaN
+		: this.mdReturns.get("YTD");
+
     }
 
      /*
