@@ -102,6 +102,8 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
     public static SortedSet<TransValuesCum> getTransValuesCum(
 	    SortedSet<TransValues> theseTransValues, BulkSecInfo currentInfo) {
 	TreeSet<TransValuesCum> transSet = new TreeSet<TransValuesCum>();
+	double cumRealizedGain = 0;
+	double cumIncExp = 0;
 	// fill in transvalues
 	for (Iterator<TransValues> it = theseTransValues.iterator(); it
 		.hasNext();) {
@@ -120,16 +122,27 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 
 	    int currentDateInt = transValuesCum.transValues.parentTxn
 		    .getDateInt();
+	    double currentRate = cur == null ? 1.0 : cur
+			.getUserRateByDateInt(currentDateInt);
+	    int prevDateInt = Integer.MIN_VALUE;
+	    double splitAdjust = 1;
+	    double prevMktPrc = prevTransValuesCum == null ? 0 : 
+		    prevTransValuesCum.mktPrice;
+	    
+	    // mktPrice (Set to 1 if cur is null: Implies Investment Account
+	    // (i.e. cash)
+	    transValuesCum.mktPrice = (cur == null ? 1.0 : 1 / cur
+		    .getUserRateByDateInt(currentDateInt));
+	    
 	    // position
 	    if (prevTransValuesCum == null) { // first transaction (must be buy
 					      // or short)
 		transValuesCum.position = transValuesCum.transValues.secQuantity;
+		
 	    } else { // subsequent transaction
-		int prevDateInt = prevTransValuesCum.transValues.parentTxn
+		prevDateInt = prevTransValuesCum.transValues.parentTxn
 			.getDateInt();
-		double currentRate = cur == null ? 1.0 : cur
-			.getUserRateByDateInt(currentDateInt);
-		double splitAdjust = cur == null ? 1.0 : cur
+		splitAdjust = cur == null ? 1.0 : cur
 			.adjustRateForSplitsInt(prevDateInt, currentRate,
 				currentDateInt)
 			/ currentRate;
@@ -141,10 +154,7 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 		    transValuesCum.position = 0; 
 						
 	    }
-	    // mktPrice (Set to 1 if cur is null: Implies Investment Account
-	    // (i.e. cash)
-	    transValuesCum.mktPrice = (cur == null ? 1.0 : 1 / cur
-		    .getUserRateByDateInt(currentDateInt));
+	   
 
 	    // long basis (includes commission)
 	    
@@ -207,9 +217,31 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 	    if (transValuesCum.position == 0) {
 		transValuesCum.perUnrealizedGain = 0;
 	    } else {
-		transValuesCum.perUnrealizedGain = transValuesCum.cumUnrealizedGain
-			- (prevTransValuesCum == null ? 0
-				: prevTransValuesCum.cumUnrealizedGain);
+		// income/expense transaction,  period gain is
+		// change in cum unreal gains
+		if (transValuesCum.transValues.secQuantity == 0){
+		    transValuesCum.perUnrealizedGain = 
+			    transValuesCum.cumUnrealizedGain - 
+			    (prevTransValuesCum == null ? 0
+					: prevTransValuesCum.cumUnrealizedGain);
+		} else {// must have buy, sell, short, or cover transaction
+		    //first case, add to long or add to short
+		    // change in cumulative gains accounts for trans quantity
+		    if (transValuesCum.transValues.secQuantity
+			    * transValuesCum.position > 0) {
+			transValuesCum.perUnrealizedGain = transValuesCum.cumUnrealizedGain
+				- (prevTransValuesCum == null ? 0
+					: prevTransValuesCum.cumUnrealizedGain);
+
+		    } else { //reduce long or short
+			// must adjust for transfer of previous unrealized to cash
+			transValuesCum.perUnrealizedGain = 
+				transValuesCum.position * 
+				(transValuesCum.mktPrice - prevMktPrc / splitAdjust);
+			
+		    }
+		}
+		
 	    }
 
 	    // Period Realized gains
@@ -230,10 +262,12 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 		// (on last trade)
 		transValuesCum.perRealizedGain = 0;
 	    }
+	    cumRealizedGain = cumRealizedGain + transValuesCum.perRealizedGain;
 
 	    // period income/expense
 	    transValuesCum.perIncomeExpense = transValuesCum.transValues.income
 		    + transValuesCum.transValues.expense;
+	    cumIncExp = cumIncExp + transValuesCum.perIncomeExpense;
 
 	    // period total gain
 	    transValuesCum.perTotalGain = transValuesCum.perUnrealizedGain
@@ -241,9 +275,8 @@ public class TransValuesCum implements Comparable<TransValuesCum> {
 		    + transValuesCum.perIncomeExpense;
 
 	    // cumulative total gain
-	    transValuesCum.cumTotalGain = transValuesCum.perTotalGain
-		    + (prevTransValuesCum == null ? 0
-			    : prevTransValuesCum.cumTotalGain);
+	    transValuesCum.cumTotalGain = transValuesCum.cumUnrealizedGain + 
+		    cumRealizedGain + cumIncExp;
 	}
 	return transSet;
 
