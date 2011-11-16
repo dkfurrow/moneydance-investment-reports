@@ -20,8 +20,11 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.jgoodies.forms.factories.Borders.EmptyBorder;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
+import com.moneydance.awt.JDateField;
+import com.moneydance.util.CustomDateFormat;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,6 +47,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
@@ -59,12 +63,13 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     RootAccount root;
     BulkSecInfo currentInfo;
     //GUI Fields
+    CustomDateFormat df = new CustomDateFormat("M/d/yyyy");
     JLabel snapDateLabel = new javax.swing.JLabel("Report Snapshot Date");
-    JDateFieldAlt snapDateField = new JDateFieldAlt();
+    JDateField snapDateField = new JDateField(df);
     JLabel fromDateLabel = new javax.swing.JLabel("Report \"From\" Date");
-    JDateFieldAlt fromDateField = new JDateFieldAlt();
+    JDateField fromDateField = new JDateField(df);
     JLabel toDateLabel = new javax.swing.JLabel("Report \"To\" Date");
-    JDateFieldAlt toDateField = new JDateFieldAlt();
+    JDateField toDateField = new JDateField(df);
     JButton dirChooserButton = new javax.swing.JButton("Set output folder");
     JTextField directoryOutputField = new javax.swing.JTextField(getLastFileUsed());
     JCheckBox snapReportCheckbox = new javax.swing.JCheckBox("Shapshot Report");
@@ -92,23 +97,27 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     private void initComponents() {
 
         //Set up  date input fields to defaults
-        Date todayDate = DateUtils.convertToDate(DateUtils
-                .getLastCurrentDateInt());
-        
-        Date yearAgoDate = DateUtils
-                .convertToDate(DateUtils.addMonthsInt(DateUtils
-                .convertToDateInt(todayDate), -12));
+        int todayDateInt = DateUtils.getLastCurrentDateInt();
+        int yearAgoDateInt = DateUtils.addMonthsInt(todayDateInt, -12);
 
-        snapDateField.setDate(todayDate);
-        toDateField.setDate(todayDate);
-        fromDateField.setDate(yearAgoDate);
+        snapDateField.setDateInt(todayDateInt);
+        toDateField.setDateInt(todayDateInt);
+        fromDateField.setDateInt(yearAgoDateInt);
+        //alignment
+        snapDateField.setHorizontalAlignment(JTextField.RIGHT);
+        toDateField.setHorizontalAlignment(JTextField.RIGHT);
+        fromDateField.setHorizontalAlignment(JTextField.RIGHT);
         
-        Dimension textFields = new Dimension(400, 14);
+        //set text field width, button color
+        //arbitrary max width for text fields
+	Dimension textFields = new Dimension(Math.max(
+		directoryOutputField.getPreferredSize().width, 400), 14);  
         directoryOutputField.setPreferredSize(textFields);
         reportStatusField.setPreferredSize(textFields);
         runReportsButton.setForeground(Color.red);
         //add action listeners
 
+        //button action listeners
         dirChooserButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dirChooserButtonActionPerformed(evt);
@@ -120,54 +129,66 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
             }
         });  
         
-        //create and format blocks to load into main panel
+        //create and format sub-panels to load into main panel
         JPanel datePanel = new JPanel();
         JPanel checkBoxPanel = new JPanel();
         JPanel folderPanel = new JPanel();
         JPanel runPanel = new JPanel();
+        
+        // set all panel borders the same
+        
+	String[] titles = { "Report Dates", "Reports to Run",
+		"Download Location", "Report Status" };
+	JPanel[] panels = { datePanel, checkBoxPanel, folderPanel, runPanel };
 
-        //borders
-        datePanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Report Dates"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        checkBoxPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Reports to Run"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        folderPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Download Location"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        runPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Report Status"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
-        //change all title colors
-        ArrayList<JPanel> panels = new ArrayList<JPanel>(
-                Arrays.asList(datePanel, checkBoxPanel, folderPanel, runPanel));
-	for (Iterator<JPanel> it = panels.iterator(); it.hasNext();) {
-	    JPanel jPanel = it.next();
-	    CompoundBorder thisBorder = (CompoundBorder) jPanel.getBorder();
-	    TitledBorder outsideBorder = (TitledBorder) thisBorder
-		    .getOutsideBorder();
-	    outsideBorder.setTitleColor(new Color(100, 100, 100));
+	for (int i = 0; i < panels.length; i++) {
+	    JPanel panel = panels[i];
+	    String title = titles[i];
+	    TitledBorder titledBorder = BorderFactory
+		    .createTitledBorder(titles[i]);
+	    Border emptyBorder = BorderFactory
+		    .createEmptyBorder(5, 5, 5, 5);
+	    titledBorder.setTitleColor(new Color(100, 100, 100));
+	    panel.setBorder(BorderFactory.createCompoundBorder(titledBorder,
+		    emptyBorder));
 	}
-        //layout panels
-        //date Panel
-        datePanel.setLayout(new GridLayout(3, 2));
-        datePanel.add(snapDateLabel);
-        datePanel.add(snapDateField);
-        datePanel.add(fromDateLabel);
-        datePanel.add(fromDateField);
-        datePanel.add(toDateLabel);
-        datePanel.add(toDateField);
-        //Check Box Panel
+       
+        //layout sub-panels
+	
+        //date sub-panel
+        datePanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(0, 5, 0, 5); // left-right padding only
+        c.weighty = 1; //justify everything vertically
+        //labels
+        c.anchor = GridBagConstraints.WEST;
+        c.weightx = 1; // fill space w/ labels
+        c.gridx = 0;
+        datePanel.add(snapDateLabel, c);
+        c.gridy = 1;
+        datePanel.add(fromDateLabel, c);
+        c.gridy = 2;
+        datePanel.add(toDateLabel, c);
+        // date fields 
+        c.weightx = 0; //normal-width date fields
+        c.gridx = 1;
+        c.gridy = 0;
+        datePanel.add(snapDateField, c);
+        c.gridy = 1;
+        datePanel.add(fromDateField, c);
+        c.gridy = 2;
+        datePanel.add(toDateField, c);
+        
+        //check box sub-panel
         checkBoxPanel.setLayout(new GridLayout(4, 1));
         checkBoxPanel.add(snapReportCheckbox);
         checkBoxPanel.add(fromToReportCheckbox);
         checkBoxPanel.add(transActivityCheckbox);
         checkBoxPanel.add(secPricesCheckbox);
-        // Folder Panel
+        
+        // directory sub-panel
         folderPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
@@ -178,44 +199,41 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
         c.ipady = 12;
         folderPanel.add(directoryOutputField, c);
 
-        // run panel (for program results)
+        // run sub-panel (for program results)
         runPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         c.ipady = 12;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         runPanel.add(reportStatusField, c);
 
         //lay out main panel
         this.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
-        //add date panel
+        c.fill = GridBagConstraints.BOTH; //fill all components to button
+        //add date sub-panel
         c.gridx = 0;
         c.gridy = 0;
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(5, 5, 0, 5);
+        c.insets = new Insets(5, 5, 5, 5);
         this.add(datePanel, c);
-        // add Check Box Panel
+        // add check box sub-panel
         c.gridx = 1;
         c.gridy = 0;
         this.add(checkBoxPanel, c);
-        // add Folder Panel
+        // all remaining components center, panel-width
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridwidth = 2;
+        // add folder sub-panel
         c.gridx = 0;
-        c.gridy = 1;
-        c.anchor = GridBagConstraints.WEST;
+        c.gridy = 1;        
         this.add(folderPanel, c);
         // add Run Reports Button
+        c.fill = GridBagConstraints.NONE; //want normal-sized button
         c.gridy = 2;
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(10, 5, 5, 5);
-        c.gridwidth = 2;
         this.add(runReportsButton, c);
-        // add Run Panel (Program Results)
+        // add Run sub-panel (Program Results)
+        c.fill = GridBagConstraints.BOTH;// back to fill all components
         c.gridy = 3;
-        c.anchor = GridBagConstraints.WEST;
-        c.ipady = 12;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5, 5, 5, 5);
         this.add(runPanel, c);
 
     } // end initcomponents
@@ -227,9 +245,9 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     private void runReportsButtonActionPerformed(java.awt.event.ActionEvent evt) {
 	reportStatusField.setText(null);
 	reportStatusField.setText("Reports are running...");
-	int fromDateInt = DateUtils.convertToDateInt(fromDateField.getDate());
-	int toDateInt = DateUtils.convertToDateInt(toDateField.getDate());
-	int snapDateInt = DateUtils.convertToDateInt(snapDateField.getDate());
+	int fromDateInt = fromDateField.getDateInt();
+	int toDateInt = toDateField.getDateInt();
+	int snapDateInt = snapDateField.getDateInt();
 
 	try {
 	    if (snapReportCheckbox.isSelected()) {
@@ -285,7 +303,6 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 	testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	SecReportPanel testPanel = new SecReportPanel(null);
 	testPanel.setOpaque(true);
-	testPanel.initComponents();
 	testFrame.setContentPane(testPanel);
 	testFrame.pack();
 	AwtUtil.centerWindow(testFrame);
