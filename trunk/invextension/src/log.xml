@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="9 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.6 in: C:\Program Files (x86)\Java\jdk1.6.0_24\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -61,7 +61,6 @@
 	<target name="init" time="0 seconds">
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:31: " name="delete" time="0 seconds">
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\BUILD_ANT_LOCAL.bat]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\InvExtensionNotes.doc]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\build.xml]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\AllTests.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfo$1.class]]></message>
@@ -143,9 +142,7 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:34: " name="delete" time="0 seconds">
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt]]></message>
-		</task>
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:34: " name="delete" time="0 seconds" />
 	</target>
 	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
 	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg] excludes: [] }]]></message>
@@ -264,14 +261,14 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="9 seconds">
+	<target name="invextension" time="8 seconds">
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:40: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist because it already exists.]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:41: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="2 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="0 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo.java added as com\moneydance\modules\features\invextension\BulkSecInfo.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils.java added as com\moneydance\modules\features\invextension\DateUtils.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeek.java added as com\moneydance\modules\features\invextension\GoalSeek.class doesn't exist.]]></message>

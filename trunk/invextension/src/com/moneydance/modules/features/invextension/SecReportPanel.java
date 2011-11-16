@@ -21,6 +21,8 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.awt.AwtUtil;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -38,6 +40,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -77,7 +80,12 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     public SecReportPanel(RootAccount root) {
         initComponents();
         this.root = root;
-        this.currentInfo = new BulkSecInfo(root);
+        if(root != null){
+            this.currentInfo = new BulkSecInfo(root);
+        } else {
+            this.currentInfo = null;
+        }
+        
     }
 
 
@@ -269,6 +277,21 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 	IOUtils.writeIniFile(directoryOutputField.getText());
 	reportStatusField.setText("Reports have been run!");
 
+    }
+    
+    public static void main(String[] args) {
+	
+	JFrame testFrame = new JFrame("Test Investment Reports Panel");
+	testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	SecReportPanel testPanel = new SecReportPanel(null);
+	testPanel.setOpaque(true);
+	testPanel.initComponents();
+	testFrame.setContentPane(testPanel);
+	testFrame.pack();
+	AwtUtil.centerWindow(testFrame);
+	testFrame.setVisible(true);
+	
+	
     }
 
 
