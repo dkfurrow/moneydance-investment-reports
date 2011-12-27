@@ -248,17 +248,20 @@ public class BulkSecInfo {
         return CurrAcct;
     }
 
-    /**
-     * generates HashSet of all Currencies
-     * @return "no-duplicates" list of currencies from SecCur
+    /*
+     * generates HashSet of all Currencies (including those without associated
+     * accounts or transactions)
+     * 
+     * @return "no-duplicates" list of currencies
      */
-     private HashSet<CurrencyType> getAllCurTypes() {
-        HashSet<CurrencyType> CurNoDupes = new HashSet<CurrencyType>();
-	for (Iterator<CurrencyType> it = secCur.values().iterator(); it.hasNext();) {
-            CurrencyType cur = (CurrencyType) it.next();
-            CurNoDupes.add(cur);
-        }
-        return CurNoDupes;
+    private HashSet<CurrencyType> getAllCurTypes() {
+	CurrencyType[] currencies = root.getCurrencyTable().getAllCurrencies();
+	HashSet<CurrencyType> currencyHashSet = new HashSet<CurrencyType>();
+	for (CurrencyType currency : currencies) {
+	    if (currency.getCurrencyType() == CurrencyType.CURRTYPE_SECURITY)
+		currencyHashSet.add(currency);
+	}
+	return currencyHashSet;
     }
 
     /**
