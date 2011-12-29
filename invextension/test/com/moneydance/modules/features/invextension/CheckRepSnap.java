@@ -28,7 +28,7 @@ public class CheckRepSnap {
 
     public static void main(String[] args) throws Exception {
 	BulkSecInfo currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
-	ArrayList<RepSnap> snapReports = getRepSnapReports(currentInfo,
+	ArrayList<RepSnap> snapReports = ReportProd.getSnapReports(currentInfo,
 		toDateInt);
 	for (Iterator<RepSnap> iterator = snapReports.iterator(); iterator.hasNext();) {
 	    RepSnap repSnap = (RepSnap) iterator.next();
@@ -37,77 +37,7 @@ public class CheckRepSnap {
 
     }
 
-    public static ArrayList<RepSnap> getRepSnapReports(BulkSecInfo currentInfo,
-	    int toDateInt) {
-	ArrayList<RepSnap> snapData = new ArrayList<RepSnap>();
-	RepSnap allInvSnap = new RepSnap(null, toDateInt);
-	RepSnap allCashSnap = new RepSnap(null, toDateInt);
-
-	/* loop through investment accounts */
-	for (Iterator<Account> it = currentInfo.invSec.keySet().iterator(); it.hasNext();) {
-	    Account invAcct = (Account) it.next();
-	    RepSnap thisInvSnap = new RepSnap(invAcct, toDateInt);
-
-	    /* loop through securities */
-	    for (Iterator<Account> it1 = currentInfo.invSec.get(invAcct).iterator(); it1
-		    .hasNext();) {
-		Account secAcct = (Account) it1.next();
-		SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
-			.get(secAcct);
-		RepSnap thisSecSnap = new RepSnap(currentInfo, transSet,
-			toDateInt);
-		snapData.add(thisSecSnap);
-		thisInvSnap = ReportProd.addSnap(thisSecSnap, thisInvSnap);
-	    } // end securities loop
-	    
-	    // gets aggregated returns for securities in account
-	    thisInvSnap = ReportProd.getSnapAggReturns(thisInvSnap); 
-	    thisInvSnap.setAggType(AGG_TYPE.ACCT_SEC);
-	    snapData.add(thisInvSnap);
-	    // add to aggregate securities
-	    allInvSnap = ReportProd.addSnap(thisInvSnap, allInvSnap); 
-	    // gets investment account transactions (bank txns)
-	    SortedSet<TransValuesCum> parentSet = currentInfo.transValuesCumMap
-		    .get(invAcct); 
-	    
-	    RepSnap thisCashSnap = new RepSnap(currentInfo, parentSet,
-		    toDateInt); // get report for investment account
-	    thisCashSnap.setAggType(AGG_TYPE.ACCT_CASH);
-
-	    // add to investment accounts (bank txns)
-	    allCashSnap = ReportProd.addSnap(thisCashSnap, allCashSnap); 
-	    RepSnap cashReport = ReportProd.getSnapCashReturns(thisCashSnap,
-		    thisInvSnap); // get returns for cash account
-
-	    allCashSnap.setAggType(AGG_TYPE.ALL_CASH);
-	    cashReport.setAggType(AGG_TYPE.ACCT_CASH);
-	    snapData.add(cashReport);
-
-	    RepSnap thisAggRetSnap = ReportProd.getSnapAggRetWCash(
-		    thisCashSnap, thisInvSnap); // get aggregated returns with
-						// cash accounted for
-	    thisAggRetSnap.setAggType(AGG_TYPE.ACCT_SEC_PLUS_CASH);
-	    snapData.add(thisAggRetSnap);
-	} // end investment account loop
-	  // get returns for aggregated investment accounts
-	allInvSnap = ReportProd.getSnapAggReturns(allInvSnap);
-	// get aggregated returns from all securities
-	allInvSnap.setAggType(AGG_TYPE.ALL_SEC);
-	snapData.add(allInvSnap);
-
-	RepSnap allCashReport = ReportProd.getSnapCashReturns(allCashSnap,
-		allInvSnap); // get cash returns for all accounts
-	allCashReport.setAggType(AGG_TYPE.ALL_CASH);
-	snapData.add(allCashReport);
-
-	RepSnap allAggRetSnap = ReportProd.getSnapAggRetWCash(allCashSnap,
-		allInvSnap); // get agg returns w/ cash for all accounts
-	allAggRetSnap.setAggType(AGG_TYPE.ALL_SEC_PLUS_CASH);
-	snapData.add(allAggRetSnap);
-
-	return snapData;
-
-    }
+   
 
     public static void printSnap(RepSnap inSnap) {
 	String tab = "\u0009";

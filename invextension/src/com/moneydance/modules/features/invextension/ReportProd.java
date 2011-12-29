@@ -20,6 +20,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -62,90 +63,119 @@ public final class ReportProd {
     }
 
     /**
+     * produces Object Array RepFromTo's
+     * 
+     * @param currentInfo current transaction info
+     * @param fromDateInt from date
+     * @param toDateInt   to date
+     * @return Object Array representation of RepFromTo's
+     */
+    public static Object[][] getFromToReportObjs(BulkSecInfo currentInfo,
+	    int fromDateInt, int toDateInt) {
+	
+	ArrayList<RepFromTo> fromToReports = 
+		getFromToReports(currentInfo, fromDateInt, toDateInt);
+	Object[][] ftData = null;
+	for (Iterator iterator = fromToReports.iterator(); iterator.hasNext();) {
+	    RepFromTo repFromTo = (RepFromTo) iterator.next();
+	    ftData = addElement(ftData, 
+		    repFromTo.getRepFromToObject(repFromTo.getAggType()));
+	}
+	return ftData;
+    }
+    
+    /**
      * produces FromTo Report for securities, accounts, and aggregate of
      * accounts
      * 
-     * @param currentInfo
-     *            current transaction info
-     * @param fromDateInt
-     *            from date
-     * @param toDateInt
-     *            to date
-     * @return ArrayList of String Arrays for all securities
+     * @param currentInfo current transaction info
+     * @param fromDateInt from date
+     * @param toDateInt to date
+     * @return ArrayList of RepFromTo's for all securities
      */
-    public static Object[][] getFromToReport(BulkSecInfo currentInfo,
+    public static ArrayList<RepFromTo> getFromToReports(BulkSecInfo currentInfo,
 	    int fromDateInt, int toDateInt) {
-	Object[][] ftData = null;
+	ArrayList<RepFromTo> ftData = new ArrayList<RepFromTo>();
 	RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
+	allInvFromTo.setAggType(AGG_TYPE.ALL_SEC);
 	RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
+	allInvFromTo.setAggType(AGG_TYPE.ALL_CASH);
 
 	/* loop through investment accounts */
 	for (Iterator it = currentInfo.invSec.keySet().iterator(); it.hasNext();) {
 	    Account invAcct = (Account) it.next();
 	    RepFromTo thisInvFromTo = new RepFromTo(invAcct, fromDateInt,
 		    toDateInt);
-	    /* loop through securities */
-	    for (Iterator it1 = currentInfo.invSec.get(invAcct).iterator(); it1
-		    .hasNext();) {
-		Account secAcct = (Account) it1.next();
-		SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
-			.get(secAcct);
-		RepFromTo thisSecFromTo = new RepFromTo(currentInfo, transSet,
-			fromDateInt, toDateInt);
-		ftData = addElement(ftData,
-			thisSecFromTo.getRepFromToObject(AGG_TYPE.SEC));
-		thisInvFromTo = addFT(thisSecFromTo, thisInvFromTo);
-	    } // end securities loop
-	    // get aggregated returns for securities in account
-	    thisInvFromTo = getFTAggReturns(thisInvFromTo);
-	    ftData = addElement(ftData,
-		    thisInvFromTo.getRepFromToObject(AGG_TYPE.ACCT_SEC));
-	    // add to aggregate securities
-	    allInvFromTo = addFT(thisInvFromTo, allInvFromTo);
-	    
-	    // gets investment account transactions (bank txns)
+	    if (currentInfo.invSec.get(invAcct) != null) {
+		/* loop through securities */
+		for (Iterator it1 = currentInfo.invSec.get(invAcct).iterator(); it1
+			.hasNext();) {
+		    Account secAcct = (Account) it1.next();
+		    SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
+			    .get(secAcct);
+		    RepFromTo thisSecFromTo = transSet == null ? 
+			    new RepFromTo(secAcct, fromDateInt, toDateInt) : 
+				new RepFromTo(currentInfo, transSet, 
+					fromDateInt, toDateInt);
+		    thisSecFromTo.setAggType(AGG_TYPE.SEC);
+		    ftData.add(thisSecFromTo);
+		    thisInvFromTo = addFT(thisSecFromTo, thisInvFromTo);
+		} // end securities loop
+		  // get aggregated returns for securities in account
+		thisInvFromTo = getFTAggReturns(thisInvFromTo);
+		thisInvFromTo.setAggType(AGG_TYPE.ACCT_SEC);
+		ftData.add(thisInvFromTo);
+		// add to aggregate securities
+		allInvFromTo = addFT(thisInvFromTo, allInvFromTo);
+	    } // end iterate through securities
+	    // get investment account transactions (bank txns)
 	    SortedSet<TransValuesCum> parentSet = currentInfo.transValuesCumMap
 		    .get(invAcct); 
 	    
 	    //get report for investment account cash
-	    RepFromTo thisCashFromTo = new RepFromTo(currentInfo, parentSet,
-		    fromDateInt, toDateInt); 
-	    // investment account cash to all cash
+	    RepFromTo thisCashFromTo = parentSet == null ? 
+		    new RepFromTo(invAcct, fromDateInt, toDateInt) : 
+			new RepFromTo(currentInfo, parentSet, fromDateInt, 
+				toDateInt);
+	    // add investment account cash to all cash
 	    allCashFromTo = addFT(thisCashFromTo, allCashFromTo); 
 	    
 	    // get returns for cash account
 	    RepFromTo cashReport = getFTCashReturns(thisCashFromTo,
-		    thisInvFromTo); 
-	    ftData = addElement(ftData,
-		    cashReport.getRepFromToObject(AGG_TYPE.ACCT_CASH));
-
+		    thisInvFromTo);
+	    cashReport.setAggType(AGG_TYPE.ACCT_CASH);
+	    ftData.add(cashReport);
+	    
 	    //get aggregated returns with cash accounted for
 	    RepFromTo thisAggRetFromTo = getFTAggRetWCash(thisCashFromTo,
-		    thisInvFromTo); 
+		    thisInvFromTo);
+	    thisAggRetFromTo.setAggType(AGG_TYPE.ACCT_SEC_PLUS_CASH);
+	    ftData.add(thisAggRetFromTo);
 	    
-	    ftData = addElement(ftData, thisAggRetFromTo
-		    .getRepFromToObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
 	} // end investment account loop
 	  
 	// get returns for aggregated investment accounts
-	allInvFromTo = getFTAggReturns(allInvFromTo);
 	// get aggregated returns for all securities
-	ftData = addElement(ftData,
-		allInvFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC));
+	allInvFromTo = getFTAggReturns(allInvFromTo);
+	allInvFromTo.setAggType(AGG_TYPE.ALL_SEC);
+	ftData.add(allInvFromTo);
+	    
 	// get cash returns for all accounts
-	RepFromTo allCashReport = getFTCashReturns(allCashFromTo, allInvFromTo); 
-	ftData = addElement(ftData,
-		allCashReport.getRepFromToObject(AGG_TYPE.ALL_CASH));
-
+	RepFromTo allCashReport = getFTCashReturns(allCashFromTo, allInvFromTo);
+	allCashReport.setAggType(AGG_TYPE.ALL_CASH);
+	ftData.add(allCashReport);
+	
 	// get aggregated returns w/ cash accounted for, for all accounts
 	RepFromTo allAggRetFromTo = getFTAggRetWCash(allCashFromTo,
 		allInvFromTo); 
-	ftData = addElement(ftData,
-		allAggRetFromTo.getRepFromToObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
-
+	allAggRetFromTo.setAggType(AGG_TYPE.ALL_SEC_PLUS_CASH);
+	ftData.add(allAggRetFromTo);
+	
 	return ftData;
 
     }
+    
+    
 
     public static void outputFTObjToTable(int fromDateInt, int toDateInt,
 	    Object[][] ftData) {
@@ -159,80 +189,99 @@ public final class ReportProd {
 	ReportTable.CreateAndShowTable(ftModel, ftColTypes, 8,
 		ColSizeOption.MAXCONTCOLRESIZE, 3, infoString);
     }
-
+    
     /**
      * produces FromTo Report for securities, accounts, and aggregate of
      * accounts
-     * 
-     * @param currentInfo
-     *            current transaction info
-     * @param snapDateInt
-     *            report date
-     * @return ArrayList of String Arrays for all securities
+     * @param currentInfo current transaction info
+     * @param snapDateInt report date
+     * @return ArrayList SnapReport Objects
      */
-    public static Object[][] getSnapReport(BulkSecInfo currentInfo,
+    public static ArrayList<RepSnap> getSnapReports(BulkSecInfo currentInfo,
 	    int snapDateInt) {
-	Object[][] snapData = null;
+	ArrayList<RepSnap> snapData = new ArrayList<RepSnap>();
 	RepSnap allInvSnap = new RepSnap(null, snapDateInt);
 	RepSnap allCashSnap = new RepSnap(null, snapDateInt);
 	/* loop through investment accounts */
 	for (Iterator it = currentInfo.invSec.keySet().iterator(); it.hasNext();) {
 	    Account invAcct = (Account) it.next();
 	    RepSnap thisInvSnap = new RepSnap(invAcct, snapDateInt);
-	    /* loop through securities */
-	    for (Iterator it1 = currentInfo.invSec.get(invAcct).iterator(); it1
-		    .hasNext();) {
-		Account secAcct = (Account) it1.next();
-		SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
-			.get(secAcct);
-		RepSnap thisSecSnap = new RepSnap(currentInfo, transSet,
-			snapDateInt);
-		snapData = addElement(snapData,
-			thisSecSnap.getRepSnapObject(AGG_TYPE.SEC));
-		thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
-	    }// end securities loop
-	    //get aggregated returns for securities
-	    RepSnap thisInvRepSnap = getSnapAggReturns(thisInvSnap); 
-	    snapData = addElement(snapData,
-		    thisInvRepSnap.getRepSnapObject(AGG_TYPE.ACCT_SEC));
+	    if (currentInfo.invSec.get(invAcct) != null) {
+		/* loop through securities */
+		for (Iterator it1 = currentInfo.invSec.get(invAcct).iterator(); it1
+			.hasNext();) {
+		    Account secAcct = (Account) it1.next();
+		    SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
+			    .get(secAcct);
+		    RepSnap thisSecSnap = transSet == null ? 
+			    new RepSnap(secAcct, snapDateInt) : 
+				new RepSnap(currentInfo, transSet, snapDateInt);
+		    thisSecSnap.setAggType(AGG_TYPE.SEC);
+		    snapData.add(thisSecSnap);
+		    thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
+		}// end securities loop
+	    }
+	    // get aggregated returns for securities
+	    RepSnap thisInvRepSnap = getSnapAggReturns(thisInvSnap);
+	    thisInvRepSnap.setAggType(AGG_TYPE.ACCT_SEC);
+	    snapData.add(thisInvRepSnap);
 	    // add to aggregated securities
-	    allInvSnap = addSnap(thisInvSnap, allInvSnap); 
-
+	    allInvSnap = addSnap(thisInvSnap, allInvSnap);
+	    // get investment account transactions (bank txns)
 	    SortedSet<TransValuesCum> parentSet = currentInfo.transValuesCumMap
 		    .get(invAcct);
-	    RepSnap thisCashSnap = new RepSnap(currentInfo, parentSet,
+	    RepSnap thisCashSnap = parentSet == null ? new RepSnap(invAcct,
+		    snapDateInt) : new RepSnap(currentInfo, parentSet,
 		    snapDateInt);
-	    // add to cash accounts
-	    allCashSnap = addSnap(thisCashSnap, allCashSnap); 
+	    // add to investment account cash to all cash
+	    allCashSnap = addSnap(thisCashSnap, allCashSnap);
 	    // get returns for cash account
-	    RepSnap cashReport = getSnapCashReturns(thisCashSnap, thisInvSnap); 
-	    snapData = addElement(snapData,
-		    cashReport.getRepSnapObject(AGG_TYPE.ACCT_CASH));
-	    
-	    //get aggregated returns w/ cash accounted for
+	    RepSnap cashReport = getSnapCashReturns(thisCashSnap, thisInvSnap);
+	    cashReport.setAggType(AGG_TYPE.ACCT_CASH);
+	    snapData.add(cashReport);
+	    // get aggregated returns w/ cash accounted for
 	    RepSnap thisAggRetSnap = getSnapAggRetWCash(thisCashSnap,
-		    thisInvSnap); 
-	    snapData = addElement(snapData,
-		    thisAggRetSnap
-			    .getRepSnapObject(AGG_TYPE.ACCT_SEC_PLUS_CASH));
+		    thisInvSnap);
+	    thisAggRetSnap.setAggType(AGG_TYPE.ACCT_SEC_PLUS_CASH);
+	    snapData.add(thisAggRetSnap);
+
 	}// end investment account loop
 
 	// get returns for aggregated investment accounts
 	allInvSnap = getSnapAggReturns(allInvSnap); // get aggregated returns
 	// get aggregated returns for all securities
-	snapData = addElement(snapData,
-		allInvSnap.getRepSnapObject(AGG_TYPE.ALL_SEC));
+	allInvSnap.setAggType(AGG_TYPE.ALL_SEC);
+	snapData.add(allInvSnap);
 	// get cash returns for all accounts
-	RepSnap allCashReport = getSnapCashReturns(allCashSnap, allInvSnap); 
-	snapData = addElement(snapData,
-		allCashReport.getRepSnapObject(AGG_TYPE.ALL_CASH));
+	RepSnap allCashReport = getSnapCashReturns(allCashSnap, allInvSnap);
+	allCashReport.setAggType(AGG_TYPE.ALL_CASH);
+	snapData.add(allCashReport);
 	// get aggregate returns (w/ cash) for all accounts
-	RepSnap allAggRetSnap = getSnapAggRetWCash(allCashSnap, allInvSnap); 
-	snapData = addElement(snapData,
-		allAggRetSnap.getRepSnapObject(AGG_TYPE.ALL_SEC_PLUS_CASH));
-
+	RepSnap allAggRetSnap = getSnapAggRetWCash(allCashSnap, allInvSnap);
+	allAggRetSnap.setAggType(AGG_TYPE.ALL_SEC_PLUS_CASH);
+	snapData.add(allAggRetSnap);
 	return snapData;
 
+    }
+
+    /**
+     * produces Object Array of Snap Reports
+     * @param currentInfo current transaction info
+     * @param snapDateInt report date
+     * @return Object Array representation of SnapReport ArrayList
+     */
+    public static Object[][] getSnapReportObj(BulkSecInfo currentInfo,
+	    int snapDateInt) {
+	Object[][] snapData = null;
+	ArrayList<RepSnap> SnapReports = getSnapReports(currentInfo, snapDateInt);
+	for (Iterator iterator = SnapReports.iterator(); iterator.hasNext();) {
+	    RepSnap repSnap = (RepSnap) iterator.next();
+	    snapData = addElement(snapData, 
+		    repSnap.getRepSnapObject(repSnap.getAggType()));
+	}
+	return snapData;
+	
+	
     }
 
     public static void outputSnapObjToTable(int snapDateInt, Object[][] SnapData) {

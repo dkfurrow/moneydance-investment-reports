@@ -91,7 +91,7 @@ public class BulkSecInfo {
         this.secCur = getAccountCurrencyMap(root, secAccts);
         this.curSec = getCurrencyAccountMap(secCur);
         this.allCurrTypes = getAllCurTypes();
-        this.invSec = getMapInvSec(assocSecTnsMap);
+        this.invSec = getMapInvSec(secAccts);
         this.transValuesMap = getTransValuesMap(assocSecTnsMap);
         this.transValuesCumMap = getTransValuesCumMap(transValuesMap);
 
@@ -319,25 +319,30 @@ public class BulkSecInfo {
     
     /**
      * generates map of investment accounts and associated security accounts
-     * 
+     * if investment account has no securities, account is added to Map with
+     * associated Null
      * @param assocSecTnsMap
      * @return map of investment accounts to security sub accounts
      */
     private HashMap<Account, HashSet<Account>> getMapInvSec(
-	    HashMap<Account, HashSet<AbstractTxn>> assocSecTnsMap) {
-	HashMap<Account, HashSet<Account>> thisInvSec = 
-		new HashMap<Account, HashSet<Account>>();
-	for (Iterator<Account> it = assocSecTnsMap.keySet().iterator(); it
-		.hasNext();) {
+	    HashSet<Account> theseAccts) {
+	HashMap<Account, HashSet<Account>> thisInvSec = new HashMap<Account, HashSet<Account>>();
+	for (Iterator<Account> it = theseAccts.iterator(); it.hasNext();) {
 	    Account account = it.next();
-	    HashSet<Account> secs = new HashSet<Account>();
+
 	    if (account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
 		if (thisInvSec.get(account.getParentAccount()) == null) {
+		    HashSet<Account> secs = new HashSet<Account>();
 		    secs.add(account);
 		    thisInvSec.put(account.getParentAccount(), secs);
-		} else {
+		} else {// parent account is already in Map
 		    thisInvSec.get(account.getParentAccount()).add(account);
 		}
+	    } else { // Account is of type Investment
+		     // if account is leaf node (i.e. no sub accounts, put into
+		     // map with null entry for Security Account hash set
+		if (account.isLeafNode())
+		    thisInvSec.put(account, null);
 	    }
 	}
 	return thisInvSec;

@@ -278,7 +278,7 @@ public class ReportProdTest {
     @Test
     public void testGetFromToReport() {
 	boolean errorFound = false;
-	Object[][] ftObj = ReportProd.getFromToReport(currentInfo, fromDateInt,
+	Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, fromDateInt,
 		toDateInt);
 	ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	ArrayList<ReportLine> ftBase = readCSVIntoRptLine(ftBaseFile);
@@ -297,7 +297,7 @@ public class ReportProdTest {
     @Test
     public void testGetSnapReport() {
 	boolean errorFound = false;
-	Object[][] snapObj = ReportProd.getSnapReport(currentInfo, toDateInt);
+	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 	ArrayList<ReportLine> snapBase = readCSVIntoRptLine(snapBaseFile);
 	errorFound = compareRpts("Snapshot Report", snapTest, snapBase,
@@ -319,7 +319,7 @@ public class ReportProdTest {
 
 	boolean errorFound = false;
 	LinkedHashMap<String, Integer> retDateMap = getRetDateMap(currentInfo);
-	Object[][] snapObj = ReportProd.getSnapReport(currentInfo, toDateInt);
+	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 
 	// print out Return Dates for the various return categories for reference
@@ -339,7 +339,7 @@ public class ReportProdTest {
 		.hasNext();) {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);
-	    Object[][] ftObj = ReportProd.getFromToReport(currentInfo, dateInt,
+	    Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, dateInt,
 		    toDateInt);
 	    ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	    if (retCat.equals("PREV")) {
