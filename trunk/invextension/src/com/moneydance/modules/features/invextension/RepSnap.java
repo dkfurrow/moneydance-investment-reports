@@ -98,44 +98,99 @@ public class RepSnap {
      */
 
     public RepSnap(Account account, int snapDateInt) {
-        this.snapDateInt = snapDateInt;
-        this.account = account;
-        this.ticker = "~Null";
-        this.aggType = null;
-        this.lastPrice = 0.0;
-        this.endPos = 0.0;
-        this.endValue = 0.0;
-        this.endCash = 0.0;
-        this.initBalance = 0.0;
-        this.avgCostBasis = 0.0;
-        this.absPriceChange = 0.0;
-        this.pctPriceChange = 0.0;
-        this.absValueChange = 0.0;
-        this.income = 0.0;
-        this.totalGain = 0.0;
-        this.totRetAll = 0.0;
-        this.annRetAll = 0.0;
-        this.totRet1Day = 0.0;
-        this.totRetWk = 0.0;
-        this.totRet4Wk = 0.0;
-        this.totRet3Mnth = 0.0;
-        this.totRetYTD = 0.0;
-        this.totRetYear = 0.0;
-        this.totRet3year = 0.0;
-        this.retDateMap = new LinkedHashMap<String, Integer>();
-        this.startValues = new LinkedHashMap<String, Double>();
-        this.startPoses = new LinkedHashMap<String, Double>();
-        this.startPrices = new LinkedHashMap<String, Double>();
-        this.incomes = new LinkedHashMap<String, Double>();
-        this.expenses = new LinkedHashMap<String, Double>();
-        this.mdReturns = new LinkedHashMap<String, Double>();
-        this.startCashs = new LinkedHashMap<String, Double>();
+	this.snapDateInt = snapDateInt;
+	this.account = account;
+	this.ticker = "~Null";
+	if (account != null
+		&& account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
+	    CurrencyType thisCur = account.getCurrencyType();
+	    this.ticker = thisCur.getTickerSymbol().isEmpty() ? "NoTicker"
+		    : thisCur.getTickerSymbol();
+	}
+	this.aggType = null;
+	this.lastPrice = 0.0;
+	this.endPos = 0.0;
+	this.endValue = 0.0;
+	this.endCash = 0.0;
+	if (account == null
+		|| account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
+	    this.initBalance = 0.0;
+	} else {
+	    this.initBalance = ReportProd.longToDouble(account
+		    .getStartBalance()) / 100.0;
+	}
+	this.avgCostBasis = 0.0;
+	this.absPriceChange = 0.0;
+	this.pctPriceChange = 0.0;
+	this.absValueChange = 0.0;
+	this.income = 0.0;
+	this.totalGain = 0.0;
+	this.totRetAll = 0.0;
+	this.annRetAll = 0.0;
+	this.totRet1Day = 0.0;
+	this.totRetWk = 0.0;
+	this.totRet4Wk = 0.0;
+	this.totRet3Mnth = 0.0;
+	this.totRetYTD = 0.0;
+	this.totRetYear = 0.0;
+	this.totRet3year = 0.0;
+	this.retDateMap = new LinkedHashMap<String, Integer>();
+	this.startValues = new LinkedHashMap<String, Double>();
+	this.startPoses = new LinkedHashMap<String, Double>();
+	this.startPrices = new LinkedHashMap<String, Double>();
+	this.incomes = new LinkedHashMap<String, Double>();
+	this.expenses = new LinkedHashMap<String, Double>();
+	this.mdReturns = new LinkedHashMap<String, Double>();
+	this.startCashs = new LinkedHashMap<String, Double>();
 
-        this.mdMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        this.arMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        this.transMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
-        
+	this.mdMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
+	this.arMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
+	this.transMap = new LinkedHashMap<String, TreeMap<Integer, Double>>();
 
+	// Calculate return dates (use snapDate for "ALL" as it is latest
+	// possible
+	int fromDateInt = snapDateInt;
+	int prevFromDateInt = DateUtils.getPrevBusinessDay(snapDateInt);
+	int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addDaysInt(snapDateInt, -7));
+	int mnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -1));
+	int threeMnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -3));
+	int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -12));
+	int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
+		.addMonthsInt(snapDateInt, -36));
+	int ytdFromDateInt = DateUtils.getStartYear(snapDateInt);
+
+	// put dates in return map
+	this.retDateMap = new LinkedHashMap<String, Integer>();
+
+	this.retDateMap.put("All", fromDateInt);
+	this.retDateMap.put("PREV", prevFromDateInt);
+	this.retDateMap.put("1Wk", wkFromDateInt);
+	this.retDateMap.put("4Wk", mnthFromDateInt);
+	this.retDateMap.put("3Mnth", threeMnthFromDateInt);
+	this.retDateMap.put("1Yr", oneYearFromDateInt);
+	this.retDateMap.put("3Yr", threeYearFromDateInt);
+	this.retDateMap.put("YTD", ytdFromDateInt);
+
+	// initialize ArrayLists values to zero
+
+	for (Iterator<String> it1 = this.retDateMap.keySet().iterator(); it1
+		.hasNext();) {
+	    String retCat = it1.next();
+	    startPoses.put(retCat, 0.0);
+	    this.startValues.put(retCat, 0.0);
+	    this.incomes.put(retCat, 0.0);
+	    this.expenses.put(retCat, 0.0);
+	    this.startCashs.put(retCat, 0.0);
+	    this.mdReturns.put(retCat, 0.0);
+
+	    this.arMap.put(retCat, new TreeMap<Integer, Double>());
+	    this.mdMap.put(retCat, new TreeMap<Integer, Double>());
+	    this.transMap.put(retCat, new TreeMap<Integer, Double>());
+	}
 
     }
 
@@ -169,14 +224,9 @@ public class RepSnap {
 	}
 
 	// create dates for returns calculations
-
+	//ensures all dates for appropriate variables
 	int fromDateInt = DateUtils
-		.getPrevBusinessDay(transSet.first().transValues.dateint); // ensures
-									   // all
-									   // dates
-									   // for
-									   // appropriate
-									   // variables
+		.getPrevBusinessDay(transSet.first().transValues.dateint); 
 	int prevFromDateInt = DateUtils.getPrevBusinessDay(snapDateInt);
 	int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
 		.addDaysInt(snapDateInt, -7));

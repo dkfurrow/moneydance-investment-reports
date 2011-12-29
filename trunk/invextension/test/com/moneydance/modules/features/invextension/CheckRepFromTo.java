@@ -28,7 +28,7 @@ public class CheckRepFromTo {
 
     public static void main(String[] args) throws Exception {
 	BulkSecInfo currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
-	ArrayList<RepFromTo> ftReports = getFromToReports(currentInfo,
+	ArrayList<RepFromTo> ftReports = ReportProd.getFromToReports(currentInfo,
 		fromDateInt, toDateInt);
 	for (Iterator<RepFromTo> iterator = ftReports.iterator(); iterator
 		.hasNext();) {
@@ -38,77 +38,7 @@ public class CheckRepFromTo {
 
     }
 
-    public static ArrayList<RepFromTo> getFromToReports(
-	    BulkSecInfo currentInfo, int fromDateInt, int toDateInt) {
-	ArrayList<RepFromTo> ftData = new ArrayList<RepFromTo>();
-	RepFromTo allInvFromTo = new RepFromTo(null, fromDateInt, toDateInt);
-	RepFromTo allCashFromTo = new RepFromTo(null, fromDateInt, toDateInt);
-
-	/* loop through investment accounts */
-	for (Iterator<Account> it = currentInfo.invSec.keySet().iterator(); it
-		.hasNext();) {
-	    Account invAcct = (Account) it.next();
-	    RepFromTo thisInvFromTo = new RepFromTo(invAcct, fromDateInt,
-		    toDateInt);
-
-	    /* loop through securities */
-	    for (Iterator<Account> it1 = currentInfo.invSec.get(invAcct)
-		    .iterator(); it1.hasNext();) {
-		Account secAcct = (Account) it1.next();
-		SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
-			.get(secAcct);
-		RepFromTo thisSecFromTo = new RepFromTo(currentInfo, transSet,
-			fromDateInt, toDateInt);
-		ftData.add(thisSecFromTo);
-		thisInvFromTo = ReportProd.addFT(thisSecFromTo, thisInvFromTo);
-	    } // end securities loop
-	    // gets aggregated returns for securities in account
-	    thisInvFromTo = ReportProd.getFTAggReturns(thisInvFromTo); 
-	    thisInvFromTo.setAggType(AGG_TYPE.ACCT_SEC);
-	    ftData.add(thisInvFromTo);
-	    // add to aggregate securities
-	    allInvFromTo = ReportProd.addFT(thisInvFromTo, allInvFromTo); 
-
-	    SortedSet<TransValuesCum> parentSet = currentInfo.transValuesCumMap
-		    .get(invAcct); // gets investment account transactions (bank
-				   // txns)
-	    RepFromTo thisCashFromTo = new RepFromTo(currentInfo, parentSet,
-		    fromDateInt, toDateInt); // get report for investment
-					     // account
-	    thisCashFromTo.setAggType(AGG_TYPE.ACCT_CASH);
-	    // add to investment accounts (bank txns)
-	    allCashFromTo = ReportProd.addFT(thisCashFromTo, allCashFromTo); 
-	    RepFromTo cashReport = ReportProd.getFTCashReturns(thisCashFromTo,
-		    thisInvFromTo); // get returns for cash account
-	    allCashFromTo.setAggType(AGG_TYPE.ALL_CASH);
-	    cashReport.setAggType(AGG_TYPE.ACCT_CASH);
-	    ftData.add(cashReport);
-
-	    RepFromTo thisAggRetFromTo = ReportProd.getFTAggRetWCash(
-		    thisCashFromTo, thisInvFromTo); // get aggregated returns
-						    // with cash accounted for
-	    thisAggRetFromTo.setAggType(AGG_TYPE.ACCT_SEC_PLUS_CASH);
-	    ftData.add(thisAggRetFromTo);
-	} // end investment account loop
-	  // get returns for aggregated investment accounts
-	allInvFromTo = ReportProd.getFTAggReturns(allInvFromTo); 
-	// get aggregated returns from all securities
-	allInvFromTo.setAggType(AGG_TYPE.ALL_SEC);
-	ftData.add(allInvFromTo);
-
-	RepFromTo allCashReport = ReportProd.getFTCashReturns(allCashFromTo,
-		allInvFromTo); // get cash returns for all accounts
-	allCashReport.setAggType(AGG_TYPE.ALL_CASH);
-	ftData.add(allCashReport);
-
-	RepFromTo allAggRetFromTo = ReportProd.getFTAggRetWCash(allCashFromTo,
-		allInvFromTo); // get agg returns w/ cash for all accounts
-	allAggRetFromTo.setAggType(AGG_TYPE.ALL_SEC_PLUS_CASH);
-	ftData.add(allAggRetFromTo);
-
-	return ftData;
-
-    }
+    
 
     public static void printFromTo(RepFromTo inFT) {
 	String tab = "\u0009";

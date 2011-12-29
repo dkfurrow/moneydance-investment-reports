@@ -87,6 +87,11 @@ public class RepFromTo {
 	this.toDateInt = toDateInt;
 	this.account = account;
 	this.ticker = "~Null";
+	if (account != null && account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
+	    CurrencyType thisCur = account.getCurrencyType();
+	    this.ticker = thisCur.getTickerSymbol().isEmpty() ? 
+		    "NoTicker" : thisCur.getTickerSymbol();
+	}
 	this.startPos = 0.0;
 	this.endPos = 0.0;
 	this.startPrice = 0.0;
@@ -95,7 +100,14 @@ public class RepFromTo {
 	this.endValue = 0.0;
 	this.startCash = 0;
 	this.endCash = 0;
-	this.initBalance = 0.0;
+	if (account == null
+		|| account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
+	    this.initBalance = 0.0;
+	} else {
+	    this.initBalance = ReportProd.longToDouble(account
+		    .getStartBalance()) / 100.0;
+	}
+	
 	this.buy = 0.0;
 	this.sell = 0.0;
 	this.shortSell = 0.0;

@@ -251,12 +251,12 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
 	try {
 	    if (snapReportCheckbox.isSelected()) {
-		Object[][] snapData = ReportProd.getSnapReport(currentInfo,
+		Object[][] snapData = ReportProd.getSnapReportObj(currentInfo,
 			snapDateInt);
 		ReportProd.outputSnapObjToTable(snapDateInt, snapData);
 	    }
 	    if (fromToReportCheckbox.isSelected()) {
-		Object[][] ftData = ReportProd.getFromToReport(currentInfo,
+		Object[][] ftData = ReportProd.getFromToReportObjs(currentInfo,
 			fromDateInt, toDateInt);
 		ReportProd.outputFTObjToTable(fromDateInt, toDateInt, ftData);
 	    }
