@@ -19,7 +19,9 @@ public class GenericTestMethods {
 	HashMap<Account, SortedSet<TransValuesCum>> transValuesCumMap = currentInfo.transValuesCumMap;
 	for (Iterator iterator = invSec.keySet().iterator(); iterator.hasNext();) {
 	    Account parentAccount = (Account) iterator.next();
-	    System.out.println("\n" + "[" + getAcctInfo(parentAccount) + "]"
+	    int creationDateInt = parentAccount.getCreationDateInt();
+	    System.out.println("\n" + "[" + getAcctInfo(parentAccount) + 
+		    "Creation Date: " +  creationDateInt +  "]"
 		    + " Child Accounts:");
 	    HashSet<Account> accts = invSec.get(parentAccount);
 	    if (accts == null) {
@@ -42,7 +44,7 @@ public class GenericTestMethods {
     public static String getAcctInfo(Account acct) {
 	
 	return ("Account Name: " + acct.getAccountName() + " AcctNum: " + acct
-		.getAccountNum());
+		.getAccountNum() ) ;
     }
 
 }

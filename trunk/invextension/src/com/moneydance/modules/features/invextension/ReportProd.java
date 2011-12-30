@@ -213,20 +213,21 @@ public final class ReportProd {
 		    Account secAcct = (Account) it1.next();
 		    SortedSet<TransValuesCum> transSet = currentInfo.transValuesCumMap
 			    .get(secAcct);
-		    RepSnap thisSecSnap = transSet == null ? 
-			    new RepSnap(secAcct, snapDateInt) : 
-				new RepSnap(currentInfo, transSet, snapDateInt);
+		    RepSnap thisSecSnap = transSet == null ? new RepSnap(
+			    secAcct, snapDateInt) : new RepSnap(currentInfo,
+			    transSet, snapDateInt);
 		    thisSecSnap.setAggType(AGG_TYPE.SEC);
 		    snapData.add(thisSecSnap);
 		    thisInvSnap = addSnap(thisSecSnap, thisInvSnap);
 		}// end securities loop
+		 // get aggregated returns for securities
+		RepSnap thisInvRepSnap = getSnapAggReturns(thisInvSnap);
+		thisInvRepSnap.setAggType(AGG_TYPE.ACCT_SEC);
+		snapData.add(thisInvRepSnap);
+		// add to aggregated securities
+		allInvSnap = addSnap(thisInvSnap, allInvSnap);
 	    }
-	    // get aggregated returns for securities
-	    RepSnap thisInvRepSnap = getSnapAggReturns(thisInvSnap);
-	    thisInvRepSnap.setAggType(AGG_TYPE.ACCT_SEC);
-	    snapData.add(thisInvRepSnap);
-	    // add to aggregated securities
-	    allInvSnap = addSnap(thisInvSnap, allInvSnap);
+	    
 	    // get investment account transactions (bank txns)
 	    SortedSet<TransValuesCum> parentSet = currentInfo.transValuesCumMap
 		    .get(invAcct);
@@ -906,10 +907,8 @@ public final class ReportProd {
      * gets RepFromTo for Investment Account with Associated Cash accounted for
      * as a Security.
      * 
-     * @param thisCashFromTo
-     *            RepFromTo associated with Account "bank" transactions
-     * @param thisInvFromTo
-     *            RepFromTo associated with Securities
+     * @param thisCashFromTo RepFromTo associated with Account "bank" transactions
+     * @param thisInvFromTo  RepFromTo associated with Securities
      * @return RepFrontTo representing income/returns for Investment Account,
      *         Cash and Securities included
      */
