@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="6 seconds">
+<build time="7 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.6 in: C:\Program Files (x86)\Java\jdk1.6.0_24\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -71,6 +71,7 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\CheckRepFromTo.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\CheckRepSnap.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\DateUtils.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GenericTestMethods.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GoalSeek.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GoalSeekData.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GoalSeekFunction.class]]></message>
@@ -263,14 +264,14 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="6 seconds">
+	<target name="invextension" time="7 seconds">
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:40: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist because it already exists.]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:41: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="1 second">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="0 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo.java added as com\moneydance\modules\features\invextension\BulkSecInfo.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils.java added as com\moneydance\modules\features\invextension\DateUtils.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeek.java added as com\moneydance\modules\features\invextension\GoalSeek.class doesn't exist.]]></message>
@@ -336,46 +337,46 @@ not part of the command.]]></message>
 			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:310: warning: [cast] redundant cast to com.moneydance.apps.md.model.Account]]></message>
 			<message priority="warn"><![CDATA[            Account thisAccount = (Account) it.next();]]></message>
 			<message priority="warn"><![CDATA[                                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:358: warning: [cast] redundant cast to com.moneydance.apps.md.model.Account]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:363: warning: [cast] redundant cast to com.moneydance.apps.md.model.Account]]></message>
 			<message priority="warn"><![CDATA[            Account thisAccount = (Account) it.next();]]></message>
 			<message priority="warn"><![CDATA[                                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:363: warning: [cast] redundant cast to com.moneydance.modules.features.invextension.TransValuesCum]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:368: warning: [cast] redundant cast to com.moneydance.modules.features.invextension.TransValuesCum]]></message>
 			<message priority="warn"><![CDATA[                TransValuesCum cpv = (TransValuesCum) it1.next();]]></message>
 			<message priority="warn"><![CDATA[                                     ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:406: warning: [cast] redundant cast to com.moneydance.apps.md.model.CurrencyType]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:411: warning: [cast] redundant cast to com.moneydance.apps.md.model.CurrencyType]]></message>
 			<message priority="warn"><![CDATA[	    CurrencyType cur = (CurrencyType) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:361: warning: [cast] redundant cast to java.lang.Integer]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:373: warning: [cast] redundant cast to java.lang.Integer]]></message>
 			<message priority="warn"><![CDATA[		Integer dateInt = (Integer) it.next();]]></message>
 			<message priority="warn"><![CDATA[		                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:417: warning: [cast] redundant cast to java.lang.Integer]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:429: warning: [cast] redundant cast to java.lang.Integer]]></message>
 			<message priority="warn"><![CDATA[		Integer thisDateInt = (Integer) it.next();]]></message>
 			<message priority="warn"><![CDATA[		                      ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:283: warning: [cast] redundant cast to java.lang.Integer]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:333: warning: [cast] redundant cast to java.lang.Integer]]></message>
 			<message priority="warn"><![CDATA[		Integer dateint2 = (Integer) it.next();]]></message>
 			<message priority="warn"><![CDATA[		                   ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:319: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:369: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[		String retCat2 = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[		                 ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:351: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:401: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[		String retCat2 = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[		                 ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:372: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:422: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String cat2 = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:751: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:801: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:783: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:833: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:803: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:853: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:984: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:1032: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:1011: warning: [cast] redundant cast to java.lang.String]]></message>
+			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:1059: warning: [cast] redundant cast to java.lang.String]]></message>
 			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
 			<message priority="warn"><![CDATA[	                    ^]]></message>
 			<message priority="warn"><![CDATA[16 warnings]]></message>
@@ -458,7 +459,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:50: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:61: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:61: " name="java" time="5 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
