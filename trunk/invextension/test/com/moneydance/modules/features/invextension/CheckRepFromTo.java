@@ -94,7 +94,7 @@ public class CheckRepFromTo {
 		+ "ShortBasis: " + tab + inFT.getShortBasis());
 	System.out.println("RealizedGain: " + tab + inFT.getRealizedGain()
 		+ tab + "UnrealizedGain: " + tab + inFT.getUnrealizedGain()
-		+ "TotalGain:" + tab + inFT.getTotalGain());
+		+ tab + "TotalGain:" + tab + inFT.getTotalGain());
 	printPerfMaps(inFT.getArMap(), inFT.getMdMap(), inFT.getTransMap(),
 		"Maps");
 	System.out.println("\n" + "mdReturn: " + tab + inFT.getMdReturn() + tab
