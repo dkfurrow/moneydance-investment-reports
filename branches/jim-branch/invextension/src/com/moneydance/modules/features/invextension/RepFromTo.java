@@ -373,7 +373,7 @@ public class RepFromTo {
 		&& retMap.values().size() > 0) {
 	    int i = 0;
 	    for (Iterator<Integer> it = retMap.keySet().iterator(); it.hasNext();) {
-		Integer dateInt = (Integer) it.next();
+		Integer dateInt = it.next();
 		Double value = retMap.get(dateInt);
 		dateIntsArray[i] = dateInt;
 		annRetValuesArray[i] = value;
@@ -429,7 +429,7 @@ public class RepFromTo {
 	    Double cdD = cd.doubleValue();
 
 	    for (Iterator<Integer> it = mdMap.keySet().iterator(); it.hasNext();) {
-		Integer thisDateInt = (Integer) it.next();
+		Integer thisDateInt = it.next();
 		Double cf = mdMap.get(thisDateInt);
 		Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(),
 			thisDateInt);

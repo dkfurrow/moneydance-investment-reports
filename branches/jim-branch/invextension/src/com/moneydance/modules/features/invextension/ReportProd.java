@@ -333,7 +333,7 @@ public final class ReportProd {
 
 	if (map2 != null) {
 	    for (Iterator<Integer> it = map2.keySet().iterator(); it.hasNext();) {
-		Integer dateint2 = (Integer) it.next();
+		Integer dateint2 = it.next();
 		Double value2 = map2.get(dateint2);
 
 		if (outMap.get(dateint2) == null) {
@@ -369,7 +369,7 @@ public final class ReportProd {
 		map1);
 	if (map2 != null) {
 	    for (Iterator<String> it = map2.keySet().iterator(); it.hasNext();) {
-		String retCat2 = (String) it.next();
+		String retCat2 = it.next();
 		Double value2 = map2.get(retCat2);
 		if (map1.get(retCat2) == null) {
 		    outMap.put(retCat2, value2);
@@ -401,7 +401,7 @@ public final class ReportProd {
 		new LinkedHashMap<String, TreeMap<Integer, Double>>(map1);
 	if (map2 != null) {
 	    for (Iterator<String> it = map2.keySet().iterator(); it.hasNext();) {
-		String retCat2 = (String) it.next();
+		String retCat2 = it.next();
 		TreeMap<Integer, Double> treeMap2 = map2.get(retCat2);
 		if (map1.get(retCat2) == null) {
 		    outMap.put(retCat2, treeMap2);
@@ -422,7 +422,7 @@ public final class ReportProd {
 	LinkedHashMap<String, Integer> outMap = new LinkedHashMap<String, Integer>(
 		map1);
 	for (Iterator<String> it = map2.keySet().iterator(); it.hasNext();) {
-	    String cat2 = (String) it.next();
+	    String cat2 = it.next();
 	    Integer date2 = map2.get(cat2);
 	    if (map1.get(cat2) == null) {
 		outMap.put(cat2, date2);
@@ -801,7 +801,7 @@ public final class ReportProd {
 	// account transactions
 	for (Iterator<String> it = thisInvSnap.retDateMap.keySet().iterator(); it
 		.hasNext();) {
-	    String retCat = (String) it.next();
+	    String retCat = it.next();
 	    cashValue.startValues.put(retCat,
 		    cleanedValue(thisInvSnap.startCashs.get(retCat)
 			    + thisCashSnap.startCashs.get(retCat) + initBal));
@@ -833,7 +833,7 @@ public final class ReportProd {
 		thisInvSnap.arMap);
 	for (Iterator<String> it = thisInvSnap.retDateMap.keySet().iterator(); it
 		.hasNext();) {
-	    String retCat = (String) it.next();
+	    String retCat = it.next();
 	    Integer thisFromDateInt = adjRetDateMap.get(retCat);
 	    // add dummy values to date maps (if start and end values exist)
 	    if (Math.abs(cashValue.startValues.get(retCat)) > 0.0001)
@@ -853,7 +853,7 @@ public final class ReportProd {
 	/* calculate period returns and annual return for all dates */
 	for (Iterator<String> it = thisInvSnap.retDateMap.keySet().iterator(); it
 		.hasNext();) {
-	    String retCat = (String) it.next();
+	    String retCat = it.next();
 	    double thisPercentReturn = RepFromTo
 		    .getMDCalc(cashValue.startValues.get(retCat),
 			    cashValue.endValue, cashValue.incomes.get(retCat),
@@ -1032,7 +1032,7 @@ public final class ReportProd {
 	// get correct start and end balances w/ cash accounted for
 	for (Iterator<String> it = thisInvSnap.retDateMap.keySet().iterator(); it
 		.hasNext();) {
-	    String retCat = (String) it.next();
+	    String retCat = it.next();
 	    outObj.startCashs.put(retCat, thisInvSnap.startCashs.get(retCat)
 		    + thisCashSnap.startCashs.get(retCat));
 	    outObj.startValues.put(retCat,
@@ -1059,7 +1059,7 @@ public final class ReportProd {
 	// get returns
 	for (Iterator<String> it = thisInvSnap.retDateMap.keySet().iterator(); it
 		.hasNext();) {
-	    String retCat = (String) it.next();
+	    String retCat = it.next();
 	    Integer thisFromDateInt = adjRetDateMap.get(retCat);
 	    TreeMap<Integer, Double> mdMap = outObj.transMap.get(retCat);
 	    // add dummy values to Mod-Dietz date maps

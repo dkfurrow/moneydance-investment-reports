@@ -177,7 +177,7 @@ public class BulkSecInfo {
 	HashSet<AbstractTxn> txns = new HashSet<AbstractTxn>();
 
 	while (txnEnum.hasMoreElements()) {
-	    AbstractTxn txnBase = (AbstractTxn) txnEnum.nextElement();
+	    AbstractTxn txnBase = txnEnum.nextElement();
 	    if (Accts.contains(txnBase.getAccount())) {
 		txns.add(txnBase);
 	    }
@@ -345,7 +345,7 @@ public class BulkSecInfo {
                 new HashMap<Account, SortedSet<TransValuesCum>>();
         for (Iterator<Account> it = 
         	transValuesMap.keySet().iterator(); it.hasNext();) {
-            Account thisAccount = (Account) it.next();
+            Account thisAccount = it.next();
             SortedSet<TransValues> transValues = 
         	    new TreeSet<TransValues>(transValuesMap.get(thisAccount));
             SortedSet<TransValuesCum> transValuesCum 
@@ -398,12 +398,12 @@ public class BulkSecInfo {
 
         for (Iterator<Account> it = 
         	transValuesCumMap.keySet().iterator(); it.hasNext();) {
-            Account thisAccount = (Account) it.next();
+            Account thisAccount = it.next();
             TreeSet<TransValuesCum> cpvs = 
         	    new TreeSet<TransValuesCum>
             (transValuesCumMap.get(thisAccount));
             for (Iterator<TransValuesCum> it1 = cpvs.iterator(); it1.hasNext();) {
-                TransValuesCum cpv = (TransValuesCum) it1.next();
+                TransValuesCum cpv = it1.next();
                 txnInfo.add(TransValuesCum.loadArrayTransValuesCum(cpv));
             }
         }
@@ -446,7 +446,7 @@ public class BulkSecInfo {
 	ArrayList<String[]> currInfo = new ArrayList<String[]>();
 
 	for (Iterator<CurrencyType> it = allCurTypes.iterator(); it.hasNext();) {
-	    CurrencyType cur = (CurrencyType) it.next();
+	    CurrencyType cur = it.next();
 	    for (int i = 0; i < cur.getSnapshotCount(); i++) {
 
 		currInfo.add(loadCurrencySnapshotArray(cur, i));
