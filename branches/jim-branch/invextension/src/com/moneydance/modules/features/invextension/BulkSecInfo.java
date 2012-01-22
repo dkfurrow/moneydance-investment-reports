@@ -114,7 +114,7 @@ public class BulkSecInfo {
 	for (Iterator iterator = thisInvSec.keySet().iterator(); iterator
 		.hasNext();) {
 	    Account acct = (Account) iterator.next();
-	    Double initBal = ReportProd.longToDouble(acct.getStartBalance()) / 100.0;
+	    Double initBal = new Long(acct.getStartBalance()).doubleValue() / 100.0;
 	    initBals.put(acct, initBal);
 	}
 	return initBals;

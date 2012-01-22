@@ -114,6 +114,8 @@ public class ReportTable extends JScrollPane {
     public boolean closedPosHidden = true;
     public int closedPosColumn;
 
+    private Color lightLightGray = new Color(230, 230, 230);
+
     public ReportTable(TableModel model, int numFrozenColumns,
 	    int indClosedPosColumn, ColType[] colTypes, ColSizeOption sizeOption) {
 	super();
@@ -601,7 +603,8 @@ public class ReportTable extends JScrollPane {
 			closedPosColumn);
 
 		if (!accType.startsWith("~") && aggType.startsWith("~")) {
-		    c.setBackground(Color.lightGray);
+		    //c.setBackground(Color.lightGray);
+		    c.setBackground(lightLightGray);
 		}
 		if (accType.startsWith("~") && aggType.startsWith("~")) {
 		    c.setBackground(Color.YELLOW);

@@ -123,8 +123,6 @@ public class Main
     if(reportWindow!=null) {
       reportWindow.goAway(); //method which sets visible to false and disposes
       reportWindow = null;
-      System.gc(); //run garbage collector
-
     }
   }
 }

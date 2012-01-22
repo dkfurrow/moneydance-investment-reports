@@ -49,8 +49,9 @@ public class SecReportFrame
     panel.setOpaque(true);
     this.setContentPane(panel);
     this.pack();
+    // Change default behavior (hide a JFrame on close) to act like a Frame (actually close).
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-    this.enableEvents(WindowEvent.WINDOW_CLOSING);
+    this.enableEvents(WindowEvent.WINDOW_CLOSING | WindowEvent.WINDOW_OPENED);
 
     AwtUtil.centerWindow(this);
   }
