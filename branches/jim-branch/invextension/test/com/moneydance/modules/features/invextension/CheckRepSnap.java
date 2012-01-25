@@ -24,17 +24,7 @@ package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
-
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.modules.features.invextension.BulkSecInfo;
-import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
-import com.moneydance.modules.features.invextension.DateUtils;
-import com.moneydance.modules.features.invextension.RepSnap;
-import com.moneydance.modules.features.invextension.ReportProd;
-import com.moneydance.modules.features.invextension.TransValuesCum;
 
 /**
  * Generates dump of  intermediate values in 
@@ -50,62 +40,63 @@ public class CheckRepSnap {
 
     public static void main(String[] args) throws Exception {
 	BulkSecInfo currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
-	ArrayList<RepSnap> snapReports = ReportProd.getSnapReports(currentInfo,
-		toDateInt);
-	for (Iterator<RepSnap> iterator = snapReports.iterator(); iterator.hasNext();) {
-	    RepSnap repSnap = (RepSnap) iterator.next();
-	    printSnap(repSnap);
+	FullSecurityReport snapReport
+        = new FullSnapshotReport(currentInfo, toDateInt);
+	ArrayList<SecurityReport> snapReports = snapReport.getReports();
+	for (Iterator<SecurityReport> iterator = snapReports.iterator(); iterator.hasNext();) {
+	    SecuritySnapshotReport snapLine = (SecuritySnapshotReport) iterator.next();
+	    printSnap(snapLine);
 	}
 
     }
 
    
 
-    public static void printSnap(RepSnap inSnap) {
+    public static void printSnap(SecuritySnapshotReport snapLine) {
 	String tab = "\u0009";
 	System.out.println("\n" + "Report: Snap" + "\n");
-	String acctName = inSnap.getAccount() != null ? inSnap.getAccount()
+	String acctName = snapLine.getAccount() != null ? snapLine.getAccount()
 		.getAccountName() : "ALL";
-	String acctTicker = inSnap.getAccount() != null ? inSnap.getTicker()
+	String acctTicker = snapLine.getAccount() != null ? snapLine.getTicker()
 		: "NoTicker";
-	String acctAgg = inSnap.getAggType() != null ? inSnap.getAggType()
+	String acctAgg = snapLine.getAggType() != null ? snapLine.getAggType()
 		.toString() : "NoAgg";
 
 	System.out.println("Account: " + tab + acctName + tab + "Ticker:" + tab
 		+ acctTicker + tab + "AggType: " + tab + acctAgg);
-	System.out.println("Snapshot Date: " + tab + inSnap.getSnapDateInt());
-	printRetDateMap(inSnap.getRetDateMap(), "Return Dates");
-	printInputMap(inSnap.getStartPoses(), "Start Positions");
-	printInputMap(inSnap.getStartPrices(), "Start Prices");
-	printInputMap(inSnap.getStartValues(), "Start Values");
+	System.out.println("Snapshot Date: " + tab + snapLine.getSnapDateInt());
+	printRetDateMap(snapLine.getReturnsStartDate(), "Return Dates");
+	printInputMap(snapLine.getStartPoses(), "Start Positions");
+	printInputMap(snapLine.getStartPrices(), "Start Prices");
+	printInputMap(snapLine.getStartValues(), "Start Values");
 
-	System.out.println("EndPos: " + tab + inSnap.getEndPos() + tab
-		+ "EndPrice: " + tab + inSnap.getLastPrice() + tab
-		+ "EndValue:" + tab + inSnap.getEndValue());
+	System.out.println("EndPos: " + tab + snapLine.getEndPos() + tab
+		+ "EndPrice: " + tab + snapLine.getLastPrice() + tab
+		+ "EndValue:" + tab + snapLine.getEndValue());
 
-	printInputMap(inSnap.getStartCashs(), "Starting Cash Positions");
-	System.out.println("EndCash: " + tab + inSnap.getEndCash());
+	printInputMap(snapLine.getStartCashs(), "Starting Cash Positions");
+	System.out.println("EndCash: " + tab + snapLine.getEndCash());
 
-	printInputMap(inSnap.getIncomes(), "Income Amounts");
-	printInputMap(inSnap.getExpenses(), "Expense Amounts");
+	printInputMap(snapLine.getIncomes(), "Income Amounts");
+	printInputMap(snapLine.getExpenses(), "Expense Amounts");
 
 	System.out.println("All Maps Follow: \n");
-	printAllPerfMaps(inSnap.getMdMap(), inSnap.getArMap(),
-		inSnap.getTransMap());
+	printAllPerfMaps(snapLine.getMdMap(), snapLine.getArMap(),
+		snapLine.getTransMap());
 
 	System.out.println("Returns: \n");
-	System.out.println("1-Day Ret: " + tab + inSnap.getTotRet1Day() + tab
-		+ "1-Wk Ret: " + tab + inSnap.getTotRetWk() + tab
-		+ "4-Wk Ret: " + tab + inSnap.getTotRet4Wk() + tab
-		+ "3-Mnth Ret: " + tab + inSnap.getTotRet3Mnth() + tab
-		+ "1-Yr Ret: " + tab + inSnap.getTotRetYear() + tab
-		+ "3-Yr Ret: " + tab + inSnap.getTotRet3year() + tab
-		+ "YTD Ret: " + tab + inSnap.getTotRetYTD() + tab + "All Ret: "
-		+ tab + inSnap.getTotRetAll() + tab + "All AnnRet: " + tab
-		+ inSnap.getAnnRetAll() + tab);
+	System.out.println("1-Day Ret: " + tab + snapLine.getTotRet1Day() + tab
+		+ "1-Wk Ret: " + tab + snapLine.getTotRetWk() + tab
+		+ "4-Wk Ret: " + tab + snapLine.getTotRet4Wk() + tab
+		+ "3-Mnth Ret: " + tab + snapLine.getTotRet3Mnth() + tab
+		+ "1-Yr Ret: " + tab + snapLine.getTotRetYear() + tab
+		+ "3-Yr Ret: " + tab + snapLine.getTotRet3year() + tab
+		+ "YTD Ret: " + tab + snapLine.getTotRetYTD() + tab + "All Ret: "
+		+ tab + snapLine.getTotRetAll() + tab + "All AnnRet: " + tab
+		+ snapLine.getAnnRetAll() + tab);
     }
 
-    public static void printRetDateMap(LinkedHashMap<String, Integer> inMap,
+    public static void printRetDateMap(CategoryMap<Integer> categoryMap,
 	    String msg) {
 	StringBuilder outStr = new StringBuilder();
 	String tab = "\u0009";
@@ -113,7 +104,7 @@ public class CheckRepSnap {
 	String[] retCats = { "PREV", "1Wk", "4Wk", "3Mnth", "1Yr", "3Yr",
 		"YTD", "All" };
 	for (String retCat : retCats) {
-	    Integer value = inMap.get(retCat) == null ? 0 : inMap.get(retCat);
+	    Integer value = categoryMap.get(retCat) == null ? 0 : categoryMap.get(retCat);
 	    String dateStr = value == 0 ? "N/A" : DateUtils
 		    .convertToShort(value);
 	    outStr.append(retCat).append(tab).append(dateStr).append(tab);
@@ -121,7 +112,7 @@ public class CheckRepSnap {
 	System.out.println(outStr.toString());
     }
 
-    public static void printInputMap(LinkedHashMap<String, Double> inMap,
+    public static void printInputMap(CategoryMap<Double> categoryMap,
 	    String msg) {
 	StringBuilder outStr = new StringBuilder();
 	String tab = "\u0009";
@@ -129,7 +120,7 @@ public class CheckRepSnap {
 		"YTD", "All" };
 	outStr.append(msg + "\n");
 	for (String retCat : retCats) {
-	    Double value = inMap.get(retCat) == null ? Double.NaN : inMap
+	    Double value = categoryMap.get(retCat) == null ? Double.NaN : categoryMap
 		    .get(retCat);
 	    outStr.append(retCat).append(tab).append(value.toString())
 		    .append(tab);
@@ -138,18 +129,18 @@ public class CheckRepSnap {
     }
 
     public static void printAllPerfMaps(
-	    LinkedHashMap<String, TreeMap<Integer, Double>> mdMaps,
-	    LinkedHashMap<String, TreeMap<Integer, Double>> arMaps,
-	    LinkedHashMap<String, TreeMap<Integer, Double>> transMaps) {
+	    CategoryMap<DateMap> categoryMap,
+	    CategoryMap<DateMap> categoryMap2,
+	    CategoryMap<DateMap> categoryMap3) {
 	String[] retCats = { "PREV", "1Wk", "4Wk", "3Mnth", "1Yr", "3Yr",
 		"YTD", "All" };
 	for (String retCat : retCats) {
-	    TreeMap<Integer, Double> mdMap = (mdMaps.get(retCat) == null ? 
-		    new TreeMap<Integer, Double>() : mdMaps.get(retCat));
-	    TreeMap<Integer, Double> arMap = (arMaps.get(retCat) == null ? 
-		    new TreeMap<Integer, Double>() : arMaps.get(retCat));
-	    TreeMap<Integer, Double> transMap = (transMaps.get(retCat) == null ?
-		    new TreeMap<Integer, Double>() : transMaps.get(retCat));
+	    DateMap mdMap = (DateMap) (categoryMap.get(retCat) == null ? 
+		    new TreeMap<Integer, Double>() : categoryMap.get(retCat));
+	    DateMap arMap = (DateMap) (categoryMap2.get(retCat) == null ? 
+		    new TreeMap<Integer, Double>() : categoryMap2.get(retCat));
+	    DateMap transMap = (DateMap) (categoryMap3.get(retCat) == null ?
+		    new TreeMap<Integer, Double>() : categoryMap3.get(retCat));
 	    CheckRepFromTo.printPerfMaps(arMap, mdMap, transMap, "\n"
 		    + "Maps: " + retCat);
 	}

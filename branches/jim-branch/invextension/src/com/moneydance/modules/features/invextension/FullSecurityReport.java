@@ -47,6 +47,16 @@ public abstract class FullSecurityReport {
     private ArrayList<SecurityReport> reports;
     private DateRange reportDate;
 
+    public ArrayList<SecurityReport> getReports() {
+        return reports;
+    }
+
+
+    public DateRange getReportDate() {
+        return reportDate;
+    }
+
+
     public FullSecurityReport(BulkSecInfo currentInfo, DateRange date) {
         reports = new ArrayList<SecurityReport>();
         reportDate = date;
@@ -137,7 +147,7 @@ public abstract class FullSecurityReport {
             return new Object[0][0];
         } else {
             Object[] firstRow = reports.get(0).toTableRow();
-            Object[][] table = new Object[2 * reports.size()][firstRow.length];
+            Object[][] table = new Object[reports.size()][firstRow.length];
 
             for (int i = 0; i < reports.size(); i++) {
                 Object[] row = reports.get(i).toTableRow();

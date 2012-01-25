@@ -49,6 +49,11 @@ public class DateMap {
     }
 
 
+    public TreeMap<Integer, Double> getMap() {
+        return map;
+    }
+
+
     public Double get(Integer dateInt) {
         return map.get(dateInt);
     }

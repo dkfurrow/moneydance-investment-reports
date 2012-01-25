@@ -949,4 +949,184 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         return outMap;
     }
+
+
+    public int getSnapDateInt() {
+        return snapDateInt;
+    }
+
+
+    public Account getAccount() {
+        return account;
+    }
+
+
+    public CurrencyType getCur() {
+        return cur;
+    }
+
+
+    public String getTicker() {
+        return ticker;
+    }
+
+
+    public AGG_TYPE getAggType() {
+        return aggType;
+    }
+
+
+    public double getLastPrice() {
+        return lastPrice;
+    }
+
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+
+    public double getEndCash() {
+        return endCash;
+    }
+
+
+    public double getInitBalance() {
+        return initBalance;
+    }
+
+
+    public double getAvgCostBasis() {
+        return avgCostBasis;
+    }
+
+
+    public double getAbsPriceChange() {
+        return absPriceChange;
+    }
+
+
+    public double getPctPriceChange() {
+        return pctPriceChange;
+    }
+
+
+    public double getAbsValueChange() {
+        return absValueChange;
+    }
+
+
+    public double getIncome() {
+        return income;
+    }
+
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+
+    public double getTotRetAll() {
+        return totRetAll;
+    }
+
+
+    public double getAnnRetAll() {
+        return annRetAll;
+    }
+
+
+    public double getTotRet1Day() {
+        return totRet1Day;
+    }
+
+
+    public double getTotRetWk() {
+        return totRetWk;
+    }
+
+
+    public double getTotRet4Wk() {
+        return totRet4Wk;
+    }
+
+
+    public double getTotRet3Mnth() {
+        return totRet3Mnth;
+    }
+
+
+    public double getTotRetYTD() {
+        return totRetYTD;
+    }
+
+
+    public double getTotRetYear() {
+        return totRetYear;
+    }
+
+
+    public double getTotRet3year() {
+        return totRet3year;
+    }
+
+
+    public CategoryMap<Integer> getReturnsStartDate() {
+        return returnsStartDate;
+    }
+
+
+    public CategoryMap<Double> getStartValues() {
+        return startValues;
+    }
+
+
+    public CategoryMap<Double> getStartPoses() {
+        return startPoses;
+    }
+
+
+    public CategoryMap<Double> getStartPrices() {
+        return startPrices;
+    }
+
+
+    public CategoryMap<Double> getIncomes() {
+        return incomes;
+    }
+
+
+    public CategoryMap<Double> getExpenses() {
+        return expenses;
+    }
+
+
+    public CategoryMap<Double> getMdReturns() {
+        return mdReturns;
+    }
+
+
+    public CategoryMap<Double> getStartCashs() {
+        return startCashs;
+    }
+
+
+    public CategoryMap<DateMap> getMdMap() {
+        return mdMap;
+    }
+
+
+    public CategoryMap<DateMap> getArMap() {
+        return arMap;
+    }
+
+
+    public CategoryMap<DateMap> getTransMap() {
+        return transMap;
+    }
 }

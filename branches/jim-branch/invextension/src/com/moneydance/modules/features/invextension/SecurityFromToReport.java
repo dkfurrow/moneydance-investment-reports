@@ -655,4 +655,154 @@ public class SecurityFromToReport extends SecurityReport {
 
         return invValue;
     }
+
+
+    public int getFromDateInt() {
+        return fromDateInt;
+    }
+
+
+    public int getToDateInt() {
+        return toDateInt;
+    }
+
+
+    public Account getAccount() {
+        return account;
+    }
+
+
+    public String getTicker() {
+        return ticker;
+    }
+
+
+    public double getStartPos() {
+        return startPos;
+    }
+
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+
+
+    public double getEndPrice() {
+        return endPrice;
+    }
+
+
+    public double getStartValue() {
+        return startValue;
+    }
+
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+
+    public double getStartCash() {
+        return startCash;
+    }
+
+
+    public double getEndCash() {
+        return endCash;
+    }
+
+
+    public double getInitBalance() {
+        return initBalance;
+    }
+
+
+    public double getBuy() {
+        return buy;
+    }
+
+
+    public double getSell() {
+        return sell;
+    }
+
+
+    public double getShortSell() {
+        return shortSell;
+    }
+
+
+    public double getCoverShort() {
+        return coverShort;
+    }
+
+
+    public double getIncome() {
+        return income;
+    }
+
+
+    public double getExpense() {
+        return expense;
+    }
+
+
+    public double getLongBasis() {
+        return longBasis;
+    }
+
+
+    public double getShortBasis() {
+        return shortBasis;
+    }
+
+
+    public double getRealizedGain() {
+        return realizedGain;
+    }
+
+
+    public double getUnrealizedGain() {
+        return unrealizedGain;
+    }
+
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+
+    public double getMdReturn() {
+        return mdReturn;
+    }
+
+
+    public double getAnnualPercentReturn() {
+        return annualPercentReturn;
+    }
+
+
+    public AGG_TYPE getAggType() {
+        return aggType;
+    }
+
+
+    public DateMap getArMap() {
+        return arMap;
+    }
+
+
+    public DateMap getMdMap() {
+        return mdMap;
+    }
+
+
+    public DateMap getTransMap() {
+        return transMap;
+    }
 }

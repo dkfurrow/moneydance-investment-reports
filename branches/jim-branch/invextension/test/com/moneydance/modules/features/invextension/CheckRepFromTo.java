@@ -25,16 +25,6 @@ package com.moneydance.modules.features.invextension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeMap;
-
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.modules.features.invextension.BulkSecInfo;
-import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
-import com.moneydance.modules.features.invextension.DateUtils;
-import com.moneydance.modules.features.invextension.RepFromTo;
-import com.moneydance.modules.features.invextension.ReportProd;
-import com.moneydance.modules.features.invextension.TransValuesCum;
 
 /**
  * Generates dump of  intermediate values in 
@@ -50,67 +40,67 @@ public class CheckRepFromTo {
 
     public static void main(String[] args) throws Exception {
 	BulkSecInfo currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
-	ArrayList<RepFromTo> ftReports = ReportProd.getFromToReports(currentInfo,
-		fromDateInt, toDateInt);
-	for (Iterator<RepFromTo> iterator = ftReports.iterator(); iterator
+	FullSecurityReport fromToReport
+        = new FullFromToReport(currentInfo,fromDateInt, toDateInt);
+	ArrayList<SecurityReport> ftReports = fromToReport.getReports();
+	for (Iterator<SecurityReport> iterator = ftReports.iterator(); iterator
 		.hasNext();) {
-	    RepFromTo repFromTo = (RepFromTo) iterator.next();
-	    printFromTo(repFromTo);
+	    SecurityFromToReport fromToLine = (SecurityFromToReport) iterator.next();
+	    printFromTo(fromToLine);
 	}
 
     }
 
     
 
-    public static void printFromTo(RepFromTo inFT) {
+    public static void printFromTo(SecurityFromToReport reportLine) {
 	String tab = "\u0009";
 	System.out.println("Report: From/To" + "\n");
-	String acctName = inFT.getAccount() != null ? inFT.getAccount()
+	String acctName = reportLine.getAccount() != null ? reportLine.getAccount()
 		.getAccountName() : "ALL";
-	String acctTicker = inFT.getAccount() != null ? inFT.getTicker()
+	String acctTicker = reportLine.getAccount() != null ? reportLine.getTicker()
 		: "NoTicker";
-	String acctAgg = inFT.getAggType() != null ? inFT.getAggType()
+	String acctAgg = reportLine.getAggType() != null ? reportLine.getAggType()
 		.toString() : "NoAgg";
 
 	System.out.println("Account: " + tab + acctName + tab + "Ticker:" + tab
 		+ acctTicker + tab + "AggType: " + tab + acctAgg);
-	System.out.println("From: " + tab + inFT.getFromDateInt() + tab
-		+ "To: " + tab + inFT.getToDateInt());
-	System.out.println("StartPos: " + tab + inFT.getStartPos() + tab
-		+ "StartPrice: " + tab + inFT.getStartPrice() + tab
-		+ "StartValue:" + tab + inFT.getStartValue());
-	System.out.println("EndPos: " + tab + inFT.getEndPos() + tab
-		+ "EndPrice: " + tab + inFT.getEndPrice() + tab + "EndValue:"
-		+ tab + inFT.getEndValue());
-	System.out.println("StartCash: " + tab + inFT.getStartCash() + tab
-		+ "EndCash: " + tab + inFT.getEndCash() + tab + "InitBal:"
-		+ tab + inFT.getInitBalance());
-	System.out.println("Buy: " + tab + inFT.getBuy() + tab + "Sell: " + tab
-		+ inFT.getSell() + tab + "Short:" + tab + inFT.getShortSell()
-		+ tab + "CoverShort:" + tab + inFT.getCoverShort());
-	System.out.println("Income: " + tab + inFT.getIncome() + tab
-		+ "Expense: " + tab + inFT.getExpense());
-	System.out.println("LongBasis: " + tab + inFT.getLongBasis() + tab
-		+ "ShortBasis: " + tab + inFT.getShortBasis());
-	System.out.println("RealizedGain: " + tab + inFT.getRealizedGain()
-		+ tab + "UnrealizedGain: " + tab + inFT.getUnrealizedGain()
-		+ tab + "TotalGain:" + tab + inFT.getTotalGain());
-	printPerfMaps(inFT.getArMap(), inFT.getMdMap(), inFT.getTransMap(),
+	System.out.println("From: " + tab + reportLine.getFromDateInt() + tab
+		+ "To: " + tab + reportLine.getToDateInt());
+	System.out.println("StartPos: " + tab + reportLine.getStartPos() + tab
+		+ "StartPrice: " + tab + reportLine.getStartPrice() + tab
+		+ "StartValue:" + tab + reportLine.getStartValue());
+	System.out.println("EndPos: " + tab + reportLine.getEndPos() + tab
+		+ "EndPrice: " + tab + reportLine.getEndPrice() + tab + "EndValue:"
+		+ tab + reportLine.getEndValue());
+	System.out.println("StartCash: " + tab + reportLine.getStartCash() + tab
+		+ "EndCash: " + tab + reportLine.getEndCash() + tab + "InitBal:"
+		+ tab + reportLine.getInitBalance());
+	System.out.println("Buy: " + tab + reportLine.getBuy() + tab + "Sell: " + tab
+		+ reportLine.getSell() + tab + "Short:" + tab + reportLine.getShortSell()
+		+ tab + "CoverShort:" + tab + reportLine.getCoverShort());
+	System.out.println("Income: " + tab + reportLine.getIncome() + tab
+		+ "Expense: " + tab + reportLine.getExpense());
+	System.out.println("LongBasis: " + tab + reportLine.getLongBasis() + tab
+		+ "ShortBasis: " + tab + reportLine.getShortBasis());
+	System.out.println("RealizedGain: " + tab + reportLine.getRealizedGain()
+		+ tab + "UnrealizedGain: " + tab + reportLine.getUnrealizedGain()
+		+ tab + "TotalGain:" + tab + reportLine.getTotalGain());
+	printPerfMaps(reportLine.getArMap(), reportLine.getMdMap(), reportLine.getTransMap(),
 		"Maps");
-	System.out.println("\n" + "mdReturn: " + tab + inFT.getMdReturn() + tab
-		+ "AnnualReturn: " + tab + inFT.getAnnualPercentReturn());
+	System.out.println("\n" + "mdReturn: " + tab + reportLine.getMdReturn() + tab
+		+ "AnnualReturn: " + tab + reportLine.getAnnualPercentReturn());
 	System.out.println("\n");
 
     }
 
-    public static void printPerfMaps(TreeMap<Integer, Double> arMap,
-	    TreeMap<Integer, Double> mdMap, TreeMap<Integer, Double> transMap,
-	    String msg) {
+    public static void printPerfMaps(DateMap arMap,
+	    DateMap mdMap, DateMap transMap, String msg) {
 	String tab = "\u0009";
 	String space = "";
-	int maxSize = Math.max(arMap == null ? 0 : arMap.size(), Math.max(
-		mdMap == null ? 0 : mdMap.size(), transMap == null ? 0
-			: transMap.size()));
+	int maxSize = Math.max(arMap == null ? 0 : arMap.getMap().size(), Math.max(
+		mdMap == null ? 0 : mdMap.getMap().size(), transMap == null ? 0
+			: transMap.getMap().size()));
 	System.out.println(msg + "\n");
 	System.out.println("arMap" + tab + tab + "mdMap" + tab + tab
 		+ "transMap");
@@ -118,11 +108,11 @@ public class CheckRepFromTo {
 		+ "Value" + tab + "Date" + tab + "Value" + tab);
 
 	Integer[] arMapDates = arMap == null ? new Integer[0]
-		: returnKeySetArray(arMap);
+		: returnKeySetArray(arMap.getMap());
 	Integer[] mdMapDates = mdMap == null ? new Integer[0]
-		: returnKeySetArray(mdMap);
+		: returnKeySetArray(mdMap.getMap());
 	Integer[] transMapDates = transMap == null ? new Integer[0]
-		: returnKeySetArray(transMap);
+		: returnKeySetArray(transMap.getMap());
 
 	for (int i = 0; i < maxSize; i++) {
 	    StringBuilder outLine = new StringBuilder();

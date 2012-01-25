@@ -300,8 +300,9 @@ public class ReportProdTest {
     @Test
     public void testGetFromToReport() {
 	boolean errorFound = false;
-	Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, fromDateInt,
-		toDateInt);
+	FullSecurityReport fromToReport
+        = new FullFromToReport(currentInfo,fromDateInt, toDateInt);
+	Object[][] ftObj = fromToReport.getReportTable();
 	ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	ArrayList<ReportLine> ftBase = readCSVIntoRptLine(ftBaseFile);
 	errorFound = compareRpts("From/To Report", ftTest, ftBase,
@@ -319,7 +320,9 @@ public class ReportProdTest {
     @Test
     public void testGetSnapReport() {
 	boolean errorFound = false;
-	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
+	FullSecurityReport snapReport
+        = new FullSnapshotReport(currentInfo, toDateInt);
+	Object[][] snapObj = snapReport.getReportTable();
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 	ArrayList<ReportLine> snapBase = readCSVIntoRptLine(snapBaseFile);
 	errorFound = compareRpts("Snapshot Report", snapTest, snapBase,
@@ -341,7 +344,9 @@ public class ReportProdTest {
 
 	boolean errorFound = false;
 	LinkedHashMap<String, Integer> retDateMap = getRetDateMap(currentInfo);
-	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
+	FullSecurityReport snapReport
+        = new FullSnapshotReport(currentInfo, toDateInt);
+	Object[][] snapObj = snapReport.getReportTable();
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 
 	// print out Return Dates for the various return categories for reference
@@ -361,8 +366,9 @@ public class ReportProdTest {
 		.hasNext();) {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);
-	    Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, dateInt,
-		    toDateInt);
+	    FullSecurityReport fromToReport
+	        = new FullFromToReport(currentInfo,fromDateInt, toDateInt);
+		Object[][] ftObj = fromToReport.getReportTable();
 	    ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	    if (retCat.equals("PREV")) {
 		if (testRepSnapCol(snapTest, ftTest, 3, 6))
