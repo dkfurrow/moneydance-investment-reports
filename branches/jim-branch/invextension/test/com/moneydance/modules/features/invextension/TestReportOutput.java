@@ -27,7 +27,7 @@ public class TestReportOutput {
 	RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
 	BulkSecInfo currentInfo = new BulkSecInfo(root);
 	FullSecurityReport report
-        = new FullSnapshotReport(currentInfo, toDateInt);
+        = new FullFromToReport(currentInfo, fromDateInt, toDateInt);
 	System.out.println("report size" + report.getReports().size());
 	System.out.println("Object Length" + report.getReportTable().length);
 	ReportTableModel model

@@ -550,9 +550,9 @@ public class SecuritySnapshotReport extends SecurityReport {
         this.mdReturns = this.mdReturns;
         this.startCashs = addDoubleMap(this.startCashs, operand.startCashs);
 
-        combineDateMapMap(this.mdMap, operand.mdMap, "add");
-        combineDateMapMap(this.arMap, operand.arMap, "add");
-        combineDateMapMap(this.transMap, operand.transMap, "add");
+        this.mdMap = combineDateMapMap(this.mdMap, operand.mdMap, "add");
+        this.arMap = combineDateMapMap(this.arMap, operand.arMap, "add");
+        this.transMap = combineDateMapMap(this.transMap, operand.transMap, "add");
 
         return this;
     }

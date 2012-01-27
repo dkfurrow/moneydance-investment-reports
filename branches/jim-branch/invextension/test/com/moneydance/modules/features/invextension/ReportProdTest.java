@@ -367,7 +367,7 @@ public class ReportProdTest {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);
 	    FullSecurityReport fromToReport
-	        = new FullFromToReport(currentInfo,fromDateInt, toDateInt);
+	        = new FullFromToReport(currentInfo,dateInt, toDateInt);
 		Object[][] ftObj = fromToReport.getReportTable();
 	    ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	    if (retCat.equals("PREV")) {

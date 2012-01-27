@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="6 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.6 in: C:\Program Files (x86)\Java\jdk1.6.0_24\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -60,15 +60,23 @@
 	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist with patternSet{ includes: [**/*] excludes: [] }]]></message>
 	<target name="init" time="0 seconds">
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:31: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\BUILD_ANT_LOCAL.bat]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\build.xml]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\AllTests.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfo$1.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfo$AGG_TYPE.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfo.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfoTest$TransLine.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\BulkSecInfoTest.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\CategoryMap.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\CheckRepFromTo.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\CheckRepSnap.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\DateMap.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\DateRange.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\DateUtils.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\FullFromToReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\FullSecurityReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\FullSnapshotReport.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GenericTestMethods.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GoalSeek.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\GoalSeekData.class]]></message>
@@ -79,13 +87,6 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\JDateFieldAlt$KeyFocus.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\JDateFieldAlt.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\Main.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\RepFromTo$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\RepFromTo.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\RepSnap$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\RepSnap.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportProd$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportProd$RptTableModel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportProd.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportProdTest$ReportLine.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportProdTest.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$1.class]]></message>
@@ -93,7 +94,6 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$3.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$4.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$5.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$6.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$ArrowHeader$Arrow.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$ArrowHeader.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\ReportTable$ColSizeOption.class]]></message>
@@ -124,14 +124,25 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecReportFrame.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecReportPanel$1.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecReportPanel$2.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecReportPanel$ReportTableModel.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecReportPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\TransValues$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecurityFromToReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecurityReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\TestReportOutput.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\TransValues$SplitValues.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\TransValues.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\TransValuesCum.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\XIRR.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\XIRRData.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\XIRRNPV.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\icon.gif]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension\meta_info.dict]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\genkeys.xml]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\log.xml]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\priv_key]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\pub_key]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\s-invextension.mxt]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features\invextension]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules\features]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes\com\moneydance\modules]]></message>
@@ -259,16 +270,22 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="6 seconds">
+	<target name="invextension" time="7 seconds">
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:40: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist because it already exists.]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:41: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="0 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:45: " name="javac" time="1 second">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo.java added as com\moneydance\modules\features\invextension\BulkSecInfo.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\CategoryMap.java added as com\moneydance\modules\features\invextension\CategoryMap.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateMap.java added as com\moneydance\modules\features\invextension\DateMap.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRange.java added as com\moneydance\modules\features\invextension\DateRange.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils.java added as com\moneydance\modules\features\invextension\DateUtils.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\FullFromToReport.java added as com\moneydance\modules\features\invextension\FullFromToReport.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\FullSecurityReport.java added as com\moneydance\modules\features\invextension\FullSecurityReport.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\FullSnapshotReport.java added as com\moneydance\modules\features\invextension\FullSnapshotReport.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeek.java added as com\moneydance\modules\features\invextension\GoalSeek.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeekData.java added as com\moneydance\modules\features\invextension\GoalSeekData.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeekFunction.java added as com\moneydance\modules\features\invextension\GoalSeekFunction.class doesn't exist.]]></message>
@@ -276,12 +293,12 @@
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\IOUtils.java added as com\moneydance\modules\features\invextension\IOUtils.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\JDateFieldAlt.java added as com\moneydance\modules\features\invextension\JDateFieldAlt.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Main.java added as com\moneydance\modules\features\invextension\Main.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\RepFromTo.java added as com\moneydance\modules\features\invextension\RepFromTo.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\RepSnap.java added as com\moneydance\modules\features\invextension\RepSnap.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportProd.java added as com\moneydance\modules\features\invextension\ReportProd.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportTable.java added as com\moneydance\modules\features\invextension\ReportTable.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecReportFrame.java added as com\moneydance\modules\features\invextension\SecReportFrame.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecReportPanel.java added as com\moneydance\modules\features\invextension\SecReportPanel.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityFromToReport.java added as com\moneydance\modules\features\invextension\SecurityFromToReport.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityReport.java added as com\moneydance\modules\features\invextension\SecurityReport.class doesn't exist.]]></message>
+			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecuritySnapshotReport.java added as com\moneydance\modules\features\invextension\SecuritySnapshotReport.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransValues.java added as com\moneydance\modules\features\invextension\TransValues.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransValuesCum.java added as com\moneydance\modules\features\invextension\TransValuesCum.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRR.java added as com\moneydance\modules\features\invextension\XIRR.class doesn't exist.]]></message>
@@ -289,7 +306,7 @@
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRNPV.java added as com\moneydance\modules\features\invextension\XIRRNPV.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\icon.gif skipped - don't know how to handle it]]></message>
 			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\meta_info.dict skipped - don't know how to handle it]]></message>
-			<message priority="info"><![CDATA[Compiling 20 source files to E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes]]></message>
+			<message priority="info"><![CDATA[Compiling 26 source files to E:\DKF\COMPUTER\EclipseWorkspace\invextension\classes]]></message>
 			<message priority="debug"><![CDATA[Using modern compiler]]></message>
 			<message priority="debug"><![CDATA[Compilation arguments:
 '-d'
@@ -307,7 +324,13 @@ The ' characters around the executable and arguments are
 not part of the command.]]></message>
 			<message priority="debug"><![CDATA[Files to be compiled:
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\CategoryMap.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\DateMap.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\DateRange.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\DateUtils.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\FullFromToReport.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\FullSecurityReport.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\FullSnapshotReport.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeek.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeekData.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\GoalSeekFunction.java
@@ -315,66 +338,17 @@ not part of the command.]]></message>
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\IOUtils.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\JDateFieldAlt.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\Main.java
-    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java
-    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepSnap.java
-    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportTable.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecReportFrame.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecReportPanel.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecurityFromToReport.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecurityReport.java
+    E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\TransValues.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\TransValuesCum.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRR.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRRData.java
     E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:180: warning: [cast] redundant cast to com.moneydance.apps.md.model.AbstractTxn]]></message>
-			<message priority="warn"><![CDATA[	    AbstractTxn txnBase = (AbstractTxn) txnEnum.nextElement();]]></message>
-			<message priority="warn"><![CDATA[	                          ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:348: warning: [cast] redundant cast to com.moneydance.apps.md.model.Account]]></message>
-			<message priority="warn"><![CDATA[            Account thisAccount = (Account) it.next();]]></message>
-			<message priority="warn"><![CDATA[                                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:401: warning: [cast] redundant cast to com.moneydance.apps.md.model.Account]]></message>
-			<message priority="warn"><![CDATA[            Account thisAccount = (Account) it.next();]]></message>
-			<message priority="warn"><![CDATA[                                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:406: warning: [cast] redundant cast to com.moneydance.modules.features.invextension.TransValuesCum]]></message>
-			<message priority="warn"><![CDATA[                TransValuesCum cpv = (TransValuesCum) it1.next();]]></message>
-			<message priority="warn"><![CDATA[                                     ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:449: warning: [cast] redundant cast to com.moneydance.apps.md.model.CurrencyType]]></message>
-			<message priority="warn"><![CDATA[	    CurrencyType cur = (CurrencyType) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:376: warning: [cast] redundant cast to java.lang.Integer]]></message>
-			<message priority="warn"><![CDATA[		Integer dateInt = (Integer) it.next();]]></message>
-			<message priority="warn"><![CDATA[		                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\RepFromTo.java:432: warning: [cast] redundant cast to java.lang.Integer]]></message>
-			<message priority="warn"><![CDATA[		Integer thisDateInt = (Integer) it.next();]]></message>
-			<message priority="warn"><![CDATA[		                      ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:336: warning: [cast] redundant cast to java.lang.Integer]]></message>
-			<message priority="warn"><![CDATA[		Integer dateint2 = (Integer) it.next();]]></message>
-			<message priority="warn"><![CDATA[		                   ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:372: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[		String retCat2 = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[		                 ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:404: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[		String retCat2 = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[		                 ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:425: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String cat2 = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                  ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:804: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:836: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:856: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:1035: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\com\moneydance\modules\features\invextension\ReportProd.java:1062: warning: [cast] redundant cast to java.lang.String]]></message>
-			<message priority="warn"><![CDATA[	    String retCat = (String) it.next();]]></message>
-			<message priority="warn"><![CDATA[	                    ^]]></message>
-			<message priority="warn"><![CDATA[16 warnings]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:50: " name="jar" time="0 seconds">
 			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\EclipseWorkspace\invextension\dist\invextension.mxt]]></message>
@@ -390,7 +364,13 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo$AGG_TYPE.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/CategoryMap.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateMap.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRange.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateUtils.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/FullFromToReport.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/FullSecurityReport.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/FullSnapshotReport.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeek.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeekData.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeekFunction.class]]></message>
@@ -400,13 +380,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/JDateFieldAlt$KeyFocus.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/JDateFieldAlt.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/Main.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/RepFromTo$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/RepFromTo.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/RepSnap$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/RepSnap.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportProd$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportProd$RptTableModel.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportProd.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportTable$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportTable$2.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportTable$3.class]]></message>
@@ -443,7 +416,13 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecReportFrame.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecReportPanel$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecReportPanel$2.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecReportPanel$ReportTableModel.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecReportPanel.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecurityFromToReport$1.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecurityFromToReport.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecurityReport.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecuritySnapshotReport$1.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecuritySnapshotReport.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransValues$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransValues$SplitValues.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransValues.class]]></message>
@@ -454,7 +433,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:50: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:61: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\EclipseWorkspace\invextension\src\build.xml:61: " name="java" time="5 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -481,7 +460,13 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo$AGG_TYPE.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/CategoryMap.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateMap.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRange.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateUtils.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/FullFromToReport.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/FullSecurityReport.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/FullSnapshotReport.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeek.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeekData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeekFunction.class]]></message>
@@ -491,13 +476,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/JDateFieldAlt$KeyFocus.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/JDateFieldAlt.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/Main.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/RepFromTo$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/RepFromTo.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/RepSnap$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/RepSnap.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportProd$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportProd$RptTableModel.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportProd.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportTable$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportTable$2.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportTable$3.class]]></message>
@@ -534,7 +512,13 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecReportFrame.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecReportPanel$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecReportPanel$2.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecReportPanel$ReportTableModel.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecReportPanel.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecurityFromToReport$1.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecurityFromToReport.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecurityReport.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecuritySnapshotReport$1.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecuritySnapshotReport.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransValues$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransValues$SplitValues.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransValues.class]]></message>
@@ -542,7 +526,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 9221 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 9865 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />

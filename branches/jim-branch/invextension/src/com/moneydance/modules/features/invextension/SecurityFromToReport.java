@@ -265,8 +265,8 @@ public class SecurityFromToReport extends SecurityReport {
                         ? 0.0
                         : -transValuesCum.transValues.coverShort - transValuesCum.transValues.commision;
                     this.income += transValuesCum.transValues.income;
-                    this.expense = transValuesCum.transValues.expense;
-                    this.realizedGain = transValuesCum.perRealizedGain;
+                    this.expense += transValuesCum.transValues.expense;
+                    this.realizedGain += transValuesCum.perRealizedGain;
 
                     // retrieves ending balance sheet variables
                     this.endCash += transValuesCum.transValues.cashEffect;

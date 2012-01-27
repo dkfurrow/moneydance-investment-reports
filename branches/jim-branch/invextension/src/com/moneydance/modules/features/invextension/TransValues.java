@@ -243,9 +243,9 @@ public class TransValues implements Comparable<TransValues> {
 	    int parentAcctType = thisSplit.getParentTxn().getAccount()
 		    .getAccountType();
 	    Long amountLong = thisSplit.getAmount();
-	    double amountDouble = (Double.valueOf(amountLong.toString())) / 100;
+	    double amountDouble = (Long.valueOf(amountLong).doubleValue()) / 100.0;
 	    Long valueLong = thisSplit.getValue();
-	    double valueDouble = (Double.valueOf(valueLong.toString())) / 10000;
+	    double valueDouble = (Long.valueOf(valueLong).doubleValue()) / 10000.0;
 
 	    this.buy = 0;
 	    this.sell = 0;
