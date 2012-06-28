@@ -1,6 +1,6 @@
 {
   "vendor" = "Dale Furrow"
-  "module_build" = "61"
+  "module_build" = "64"
   "vendor.url" = "http://code.google.com/p/moneydance-investment-reports/"
   "module_name" = "Investment Reports v 2.3"
   "module_desc" = "<html><body><title>Investment Reports</title><p>Useful reports on security/investment performance</p></body></html>"
