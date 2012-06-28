@@ -39,24 +39,27 @@ public class SecReportFrame
 {
     private static final long serialVersionUID = 334888425056725292L;
     private Main extension;
+    private SecReportPanel panel;
 
     public SecReportFrame(Main extension) {
     super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
     this.extension = extension;
     RootAccount root = extension.getUnprotectedContext().getRootAccount();
-    SecReportPanel panel = new SecReportPanel(root);
+    panel = new SecReportPanel(root);
 
     panel.setOpaque(true);
     this.setContentPane(panel);
     this.pack();
+    // Change default behavior (hide a JFrame on close) to act like a Frame (actually close).
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-    this.enableEvents(WindowEvent.WINDOW_CLOSING);
+    this.enableEvents(WindowEvent.WINDOW_CLOSING | WindowEvent.WINDOW_OPENED);
 
     AwtUtil.centerWindow(this);
   }
 
 
-  public final void processEvent(AWTEvent evt) { 
+  @Override
+public final void processEvent(AWTEvent evt) { 
     if(evt.getID()==WindowEvent.WINDOW_CLOSING) {
       extension.closeConsole();
       return;
@@ -66,8 +69,9 @@ public class SecReportFrame
     super.processEvent(evt);
   }
 
-  void goAway() { //invoked from Main by closeConsole
-    setVisible(false);
-    dispose();
-  }
+    void goAway() { // invoked from Main by closeConsole
+	panel.savePreferences();
+	setVisible(false);
+	dispose();
+    }
 }

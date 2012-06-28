@@ -20,133 +20,186 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
 
 package com.moneydance.modules.features.invextension;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.moneydance.apps.md.model.AbstractTxn;
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.CurrencyTable;
 import com.moneydance.apps.md.model.CurrencyType;
+import com.moneydance.apps.md.model.InvestTxnType;
+import com.moneydance.apps.md.model.InvestmentAccount;
 import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.apps.md.model.SecurityAccount;
 import com.moneydance.apps.md.model.SplitTxn;
 import com.moneydance.apps.md.model.TransactionSet;
-
+import com.moneydance.apps.md.model.TxnSet;
+import com.moneydance.apps.md.model.TxnUtil;
 
 /**
- * Retrieves maps which show relationships among accounts, +
- * between accounts and transactions
- * Generates basic transaction data and balance sheet data for further analysis
+ * Retrieves maps which show relationships among accounts, + between accounts
+ * and transactions Generates basic transaction data and balance sheet data for
+ * further analysis
+ * 
  * @author Dale Furrow
  * @version 1.0
  * @since 1.0
  */
 public class BulkSecInfo {
-    /*conveys account data here for processing */
-    public Main extension; 
-    /*root account */
+    
+    /* conveys account data here for processing */
+    public Main extension;
+    /* root account */
     public RootAccount root;
-    /*list of relevant accounts (Investment and Security) */
+    /* GainsCalc Type */
+    public GainsCalc gainsCalc;
+    /* list of relevant accounts (Investment and Security) */
     public HashSet<Account> secAccts;
-    /*list of security and investment transaction (Parent and Split)*/
-    public HashSet<AbstractTxn> SecTns;
-    /*Map of account to parentTxn transactions */
-    public HashMap<Account, HashSet<AbstractTxn>> assocSecTnsMap;
-    /*Map of securities to currencies (one-to-one) */
-    public HashMap<Account, CurrencyType> secCur;
-    /*Map of currencies to securities (one-to-many) */
-    public HashMap<CurrencyType, HashSet<Account>> curSec;
-    /* Hash set of currencies */
-    public HashSet<CurrencyType> allCurrTypes;
-    /*Map of Investment Accounts to Security Accounts */
-    public HashMap<Account, HashSet<Account>> invSec;
-    /*Map of Investment Accounts to Creation Dates */
-    public HashMap<Account, Integer> invCreateDate;
-    /*Map of Investment Accounts to Creation Dates */
-    public HashMap<Account, Double> invInitBal;
-    /*Map of Accounts to basic transaction data */
-    public HashMap<Account, SortedSet<TransValues>> transValuesMap;
-    /*Map of Accounts to cumulative transaction data */
-    public HashMap<Account, SortedSet<TransValuesCum>> transValuesCumMap;
-   
-
-    public enum AGG_TYPE{
-        SEC, //Individual Security
-        ACCT_SEC, //Securities Aggregated at Account Level
-        ACCT_SEC_PLUS_CASH, //Previous plus Account Cash
-        ACCT_CASH, //Account Cash Only
-        ALL_SEC, //Securities in All Accounts
-        ALL_CASH, //All Cash in Accounts
-        ALL_SEC_PLUS_CASH //All Cash, All Securities
+    /* Cash Currency Type for uninvested cash */
+    public static CurrencyType cashCurType;
+    /* static reference to nextAcctNum (to number account implementations of
+     * cash currency */
+    public static int nextAcctNum;
+    /*static reference to nextTxnNum (to uniquely identify initial balance
+     *  cash transactions)*/
+    public static long nextTxnNum;
+    /* first transaction date (to price cash currency)*/
+    public static int firstDateInt;
+    /* HashSet of CurrencyWrappers */
+    public static HashMap<Integer, CurrencyWrapper> curs;
+    /* all transactions in root */
+    public static TransactionSet transSet;
+    /*TreeMap of Transvalues for leaf-level security Accounts */
+    public TreeMap<Double, TransValues> securityTransValues;
+    /* HashSet of InvestmentAccount Wrappers */
+    public HashSet<InvestmentAccountWrapper> invs;
+    
+    
+    
+    
+    public BulkSecInfo(RootAccount root, GainsCalc gainsCalc) throws Exception {
+	this.root = root;
+	this.gainsCalc = gainsCalc;
+	nextAcctNum = this.root.getHighestAccountNum() + 1;
+	transSet = this.root.getTransactionSet();
+	securityTransValues = new TreeMap<Double, TransValues>();
+	BulkSecInfo.firstDateInt = transSet.getDateBounds().getStartDateInt();
+	BulkSecInfo.nextTxnNum = transSet.getAllTxns().getLastTxn().getTxnId() + 1L;
+	cashCurType = defineCashCurrency();
+	curs = getCurWrappers();
+	invs = getInvestmentAccountInfo(getSelectedSubAccounts(root,
+		Account.ACCOUNT_TYPE_INVESTMENT));
     }
-
-    public BulkSecInfo(RootAccount root) {
-        this.root = root;
-        this.secAccts = getSelectedSubAccounts(root, 
-        	Account.ACCOUNT_TYPE_INVESTMENT, Account.ACCOUNT_TYPE_SECURITY);
-        this.SecTns = getTransactionsFromAccounts(root, secAccts);
-        this.assocSecTnsMap = getMapAssocSecTns(SecTns);
-        this.secCur = getAccountCurrencyMap(root, secAccts);
-        this.curSec = getCurrencyAccountMap(secCur);
-        this.allCurrTypes = getAllCurTypes();
-        this.invSec = getMapInvSec(secAccts);
-        this.invCreateDate = getMapCreateDates(invSec);
-        this.invInitBal = getMapInitBal(invSec);
-        this.transValuesMap = getTransValuesMap(assocSecTnsMap);
-        this.transValuesCumMap = getTransValuesCumMap(transValuesMap);
-
+    
+    public enum AGG_TYPE {
+	SEC, // Individual Security
+	ACCT_SEC, // Securities Aggregated at Account Level
+	ACCT_SEC_PLUS_CASH, // Previous plus Account Cash
+	ACCT_CASH, // Account Cash Only
+	ALL_SEC, // Securities in All Accounts
+	ALL_CASH, // All Cash in Accounts
+	ALL_SEC_PLUS_CASH // All Cash, All Securities
     }
-
-   
-
-    private HashMap<Account, Double> getMapInitBal(
-	    HashMap<Account, HashSet<Account>> thisInvSec) {
-	HashMap<Account, Double> initBals = new HashMap<Account, Double>();
-	for (Iterator iterator = thisInvSec.keySet().iterator(); iterator
-		.hasNext();) {
-	    Account acct = (Account) iterator.next();
-	    Double initBal = ReportProd.longToDouble(acct.getStartBalance()) / 100.0;
-	    initBals.put(acct, initBal);
+    
+    /**Comparator lists by parent account, then account for report purposes*/
+    public static final Comparator<String[]> PrntAcct_Order = 
+	    new Comparator<String[]>() {
+	@Override
+	public int compare(String[] o1, String[] o2) {
+	    int parentCmp = o1[0].compareTo(o2[0]);
+	    return (parentCmp == 0 ? o1[1].compareTo(o2[1]) : parentCmp);
 	}
-	return initBals;
+    };
 
-    }
+    /**Comparator to generate ordering of accounts based on type,
+     * name and number
+     */
+    static Comparator<Account> acctComp = new Comparator<Account>() {
+	@Override
+	public int compare(Account a1, Account a2) {
+	    Integer t1 = a1.getAccountType();
+	    Integer t2 = a2.getAccountType();
+	    String name1 = a1.getAccountName();
+	    String name2 = a1.getAccountName();
+	    Integer num1 = a1.getAccountNum();
+	    Integer num2 = a2.getAccountNum();
 
-    private HashMap<Account, Integer> getMapCreateDates(
-	    HashMap<Account, HashSet<Account>> thisInvSec) {
-	HashMap<Account, Integer> createDates = new HashMap<Account, Integer>();
-	for (Iterator iterator = thisInvSec.keySet().iterator(); iterator
-		.hasNext();) {
-	    Account acct = (Account) iterator.next();
-	    Integer createDate = acct.getCreationDateInt();
-	    createDates.put(acct, createDate);
+	    if (t1.compareTo(t2) != 0) {// different Account Types
+		// Investment: 3000, Security 4000
+		return t1.compareTo(t2);// sort by Account Type
+	    } else { // same account type
+		if (name1.compareTo(name2) != 0) {// different names
+		    return name1.compareTo(name2);
+		} else {// same names and account types
+		    return num1.compareTo(num2);
+		}
+	    }
 	}
-	return createDates;
-    }
+    };
 
+    /**Comparator sorts transaction by date, account number, a custom
+     * ordering based on transaction type, finally by transaction ID
+     */
+    static Comparator<ParentTxn> txnComp = new Comparator<ParentTxn>() {
+	@Override
+	public int compare(ParentTxn t1, ParentTxn t2) {
 
+	    Integer d1 = t1.getDateInt();
+	    Integer d2 = t2.getDateInt();
+	    Long id1 = t1.getTxnId();
+	    Long id2 = t2.getTxnId();
+	    Integer assocAcctNum1 = getAssociatedAccount(t1).getAccountNum();
+	    Integer assocAcctNum2 = getAssociatedAccount(t2).getAccountNum();
+	    Integer transTypeSort1 = getTxnSortOrder(t1);
+	    Integer transTypeSort2 = getTxnSortOrder(t2);
 
+	    if (d1.compareTo(d2) != 0) {// different dates
+		return d1.compareTo(d2); // return date order
+	    } else { // same date
+		     // if Associated Accounts are different, sort Acct Nums
+		if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
+		    return assocAcctNum1.compareTo(assocAcctNum2);
+		} else {
+		    // if transaction types are different, sort on custom order
+		    if (transTypeSort1.compareTo(transTypeSort2) != 0) {
+			return transTypeSort1.compareTo(transTypeSort2);
+		    } else { // sort on transIDs
+			return id1.compareTo(id2);
+		    } // end transIDs order
+		}// end custom order
+	    } // end date order
+	} // end compare method
+    }; // end inner class
+
+    
+
+   
     /**
      * loads selected accounts into HashSet
-     * @param parentAcct parentTxn account for query (i.e. "retreive all below")
-     * @param acctTypes integer designation of account types (varArg)
+     * @param parentAcct
+     *            parentTxn account for query (i.e. "retrieve all below")
+     * @param acctTypes
+     *            integer designation of account types (varArg)
      * @return HashSet of Accounts
      */
 
-    public static HashSet<Account> getSelectedSubAccounts(Account parentAcct,
+    public static TreeSet<Account> getSelectedSubAccounts(Account parentAcct,
 	    int... acctTypes) {
 	int sz = parentAcct.getSubAccountCount();
 	ArrayList<Integer> acctTypesList = new ArrayList<Integer>();
-	HashSet<Account> SubAccts = new HashSet<Account>();
+	TreeSet<Account> SubAccts = new TreeSet<Account>(acctComp);
 	if (acctTypes.length > 0) {
 	    for (int i = 0; i < acctTypes.length; i++) {
 		acctTypesList.add(acctTypes[i]);
@@ -157,303 +210,90 @@ public class BulkSecInfo {
 	    if (acctTypesList.contains(acct.getAccountType())
 		    || acctTypes.length == 0) {
 		SubAccts.add(acct);
-	    } //recursively add accounts
-	    SubAccts.addAll(getSelectedSubAccounts(acct, acctTypes)); 
+	    } // recursively add accounts
+	    SubAccts.addAll(getSelectedSubAccounts(acct, acctTypes));
 	}
 	return SubAccts; // note: includes accounts with no transactions!
-    }
+    }   
 
-    /**
-     * loads transactions from a set of accounts into hash set
-     * @param root root account
-     * @param Accts hash set of accounts
-     * @return Hash set of transactions (Parent and Split)
+    /**returns integer for customer sort order based on transaction type
+     * (ensures buys come before sells on day trades, for example)
+     * @param parentTxn Parent Transaction
+     * @return Integer which represents sort order
      */
-    public static HashSet<AbstractTxn> getTransactionsFromAccounts(
-	    RootAccount root, HashSet<Account> Accts) {
-
-	TransactionSet txnSet = root.getTransactionSet();
-	Enumeration<AbstractTxn> txnEnum = txnSet.getAllTransactions();
-	HashSet<AbstractTxn> txns = new HashSet<AbstractTxn>();
-
-	while (txnEnum.hasMoreElements()) {
-	    AbstractTxn txnBase = (AbstractTxn) txnEnum.nextElement();
-	    if (Accts.contains(txnBase.getAccount())) {
-		txns.add(txnBase);
-	    }
+    public static Integer getTxnSortOrder(ParentTxn parentTxn) {
+	InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
+	Integer txnOrder = 0;
+	switch (transType) {
+	case BUY:
+	    txnOrder = 0;
+	    break;
+	case BUY_XFER:
+	    txnOrder = 1;
+	    break;
+	case DIVIDEND_REINVEST:
+	    txnOrder = 2;
+	    break;
+	case SELL:
+	    txnOrder = 3;
+	    break;
+	case SELL_XFER:
+	    txnOrder = 4;
+	    break;
+	case SHORT:
+	    txnOrder = 5;
+	    break;
+	case COVER:
+	    txnOrder = 6;
+	    break;
+	case MISCINC:
+	    txnOrder = 7;
+	    break;
+	case MISCEXP:
+	    txnOrder = 8;
+	    break;
+	case DIVIDEND:
+	    txnOrder = 9;
+	    break;
+	case DIVIDENDXFR:
+	    txnOrder = 10;
+	    break;
+	case BANK:
+	    txnOrder = 11;
+	    break;
 	}
-	return txns;
-    }
-
-    /**
-     * creates map of account to associated hash set of <b>Parent</b>
-     * transactions under the rule that, if a security account is part of the
-     * parentTxn transaction, the security account is <b>associated</b> with the
-     * parentTxn transaction. Investment accounts are, then, only associated with
-     * transactions which have no security accounts in the Parent or Split
-     * 
-     * @param txns
-     *            list of transactions
-     * @return HashMap of Accounts with their associated transactions
-     */
-    public static HashMap<Account, HashSet<AbstractTxn>> getMapAssocSecTns(
-	    HashSet<AbstractTxn> txns) {
-	HashMap<Account, HashSet<AbstractTxn>> acctMap = 
-		new HashMap<Account, HashSet<AbstractTxn>>();
-
-	for (Iterator<AbstractTxn> it = txns.iterator(); it.hasNext();) {
-	    AbstractTxn thisTxn = it.next();
-	    HashSet<AbstractTxn> assocTrans = new HashSet<AbstractTxn>();
-	    Account assocAcct = thisTxn.getAccount();
-
-	    if (thisTxn instanceof ParentTxn) {
-		assocTrans.add(thisTxn);
-		ParentTxn parent = (ParentTxn) thisTxn;
-		/* tests for presence of Security Accounts in transaction */
-		for (int i = 0; i < parent.getSplitCount(); i++) {
-		    if (parent.getSplit(i).getAccount().getAccountType() 
-			    == Account.ACCOUNT_TYPE_SECURITY) {
-			assocAcct = parent.getSplit(i).getAccount();
-		    }
-		}
-	    } else { /* transaction is split */
-		SplitTxn split = (SplitTxn) thisTxn;
-		ParentTxn assocParent = split.getParentTxn();
-		assocTrans.add(assocParent);
-		for (int i = 0; i < assocParent.getSplitCount(); i++) {
-		    /* tests for presence of Security Accounts in transaction */
-		    if (assocParent.getSplit(i).getAccount().getAccountType() 
-			    == Account.ACCOUNT_TYPE_SECURITY) {
-			assocAcct = assocParent.getSplit(i).getAccount();
-		    }
-		}
-	    }
-	    // add relationship to map
-	    if (acctMap.get(assocAcct) == null) { // first time this account has
-						  // been seen
-		acctMap.put(assocAcct, assocTrans);
-	    } else { // this account has been seen before
-		acctMap.get(assocAcct).addAll(assocTrans);
-	    }
-	}
-	return acctMap;
-    }
-
-    /**
-     * generates map of Securities with associated Currencies note that
-     * Securities might have no associated transactions
-     * 
-     * @param root
-     *            root account
-     * @param SubAccts
-     *            account list
-     * @return map of security-currency relationships
-     */
-    public static HashMap<Account, CurrencyType> getAccountCurrencyMap(
-	    RootAccount root, HashSet<Account> SubAccts) {
-	HashMap<Account, CurrencyType> AcctCur = 
-		new HashMap<Account, CurrencyType>();
-	for (Iterator<Account> it = SubAccts.iterator(); it.hasNext();) {
-	    Account account = it.next();
-	    if (account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY)
-		AcctCur.put(account, account.getCurrencyType());
-	}
-	return AcctCur;
-    }
-
-    /**
-      * generates map of Currencies with associated Securities
-      * note that Securities might have no associated transactions
-     * @param AcctCur map of Security Accounts to associated Currencies
-     * @return map of currency-security relationships
-      */
-    public static HashMap<CurrencyType, HashSet<Account>> 
-    getCurrencyAccountMap(HashMap<Account, CurrencyType> AcctCur) {
-        HashMap<CurrencyType, HashSet<Account>> CurrAcct =
-                new HashMap<CurrencyType, HashSet<Account>>();
-        for (Iterator<Account> it = AcctCur.keySet().iterator(); it.hasNext();) {
-            Account account = it.next();
-            CurrencyType thisCur = AcctCur.get(account);
-            HashSet<Account> acctSet = new HashSet<Account>();
-            // add relationship to map
-            if (CurrAcct.get(thisCur) == null) { //first time this currency has been seen
-                acctSet.add(account);
-                CurrAcct.put(thisCur, acctSet);
-            } else { //this account has been seen before
-                CurrAcct.get(thisCur).add(account);
-            }
-        }
-        return CurrAcct;
-    }
-
-    /*
-     * generates HashSet of all Currencies (including those without associated
-     * accounts or transactions)
-     * 
-     * @return "no-duplicates" list of currencies
-     */
-    private HashSet<CurrencyType> getAllCurTypes() {
-	CurrencyType[] currencies = root.getCurrencyTable().getAllCurrencies();
-	HashSet<CurrencyType> currencyHashSet = new HashSet<CurrencyType>();
-	for (CurrencyType currency : currencies) {
-	    if (currency.getCurrencyType() == CurrencyType.CURRTYPE_SECURITY)
-		currencyHashSet.add(currency);
-	}
-	return currencyHashSet;
-    }
-
-    /**
-     * retrieves basic transaction values from list of parentTxn transactions
-     * 
-     * @param assocSecTnsMap
-     *            map of accounts to associated parentTxn transactions
-     * @return HashMap of Accounts and associated basic transaction data
-     */
-    private HashMap<Account, SortedSet<TransValues>> getTransValuesMap(
-	    HashMap<Account, HashSet<AbstractTxn>> assocSecTnsMap) {
-
-	HashMap<Account, SortedSet<TransValues>> ParentInfoMap = 
-		new HashMap<Account, SortedSet<TransValues>>();
-	// add ParentTxns to map
-	for (Iterator<Account> it = assocSecTnsMap.keySet().iterator(); it
-		.hasNext();) {
-	    Account account = it.next();
-	    HashSet<AbstractTxn> tns = new HashSet<AbstractTxn>(
-		    assocSecTnsMap.get(account));
-	    SortedSet<TransValues> transValues = new TreeSet<TransValues>();
-	    for (Iterator<AbstractTxn> it1 = tns.iterator(); it1.hasNext();) {
-		AbstractTxn abstractTxn = it1.next();
-
-		if (abstractTxn instanceof ParentTxn) {
-		    ParentTxn pTxn = (ParentTxn) abstractTxn;
-		    transValues.add(new TransValues(pTxn, account));
-		}
-	    }
-	    ParentInfoMap.put(account, transValues);
-	}
-	return ParentInfoMap;
-    }
-
-     /**
-     * retrieves cumulative transaction values from list of parentTxn transactions
-     * @param assocSecTnsMap map of accounts to associated parentTxn transactions
-     * @return HashMap of Accounts and associated cumulative transaction data
-     */
-    private HashMap<Account, SortedSet<TransValuesCum>> getTransValuesCumMap
-            (HashMap<Account,SortedSet<TransValues>> transValuesMap) {
-        HashMap<Account, SortedSet<TransValuesCum>> thisTransValuesCumMap =
-                new HashMap<Account, SortedSet<TransValuesCum>>();
-        for (Iterator<Account> it = 
-        	transValuesMap.keySet().iterator(); it.hasNext();) {
-            Account thisAccount = (Account) it.next();
-            SortedSet<TransValues> transValues = 
-        	    new TreeSet<TransValues>(transValuesMap.get(thisAccount));
-            SortedSet<TransValuesCum> transValuesCum 
-            = TransValuesCum.getTransValuesCum(transValues, this);
-            thisTransValuesCumMap.put(thisAccount, transValuesCum);
-        }
-        return thisTransValuesCumMap;
+	return txnOrder;
     }
     
-    /**
-     * generates map of investment accounts and associated security accounts
-     * if investment account has no securities, account is added to Map with
-     * associated Null
-     * @param assocSecTnsMap
-     * @return map of investment accounts to security sub accounts
-     */
-    private HashMap<Account, HashSet<Account>> getMapInvSec(
-	    HashSet<Account> theseAccts) {
-	HashMap<Account, HashSet<Account>> thisInvSec = new HashMap<Account, HashSet<Account>>();
-	for (Iterator<Account> it = theseAccts.iterator(); it.hasNext();) {
-	    Account account = it.next();
-
-	    if (account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
-		if (thisInvSec.get(account.getParentAccount()) == null) {
-		    HashSet<Account> secs = new HashSet<Account>();
-		    secs.add(account);
-		    thisInvSec.put(account.getParentAccount(), secs);
-		} else {// parent account is already in Map
-		    thisInvSec.get(account.getParentAccount()).add(account);
-		}
-	    } else { // Account is of type Investment
-		     // if account is leaf node (i.e. no sub accounts, put into
-		     // map with null entry for Security Account hash set
-		if (account.isLeafNode())
-		    thisInvSec.put(account, null);
-	    }
-	}
-	return thisInvSec;
-    }
-    
-     /**
-      * generates array list of string arrays for cumulative transaction info
-      * to facilitate output to file
-      * @param transValuesCumMap HashSet of Accounts to cumulative transaction info
-      * @return ArrayList of String Arrays for output
-      */
-     public ArrayList<String[]> listTransValuesCumMap(
-	     HashMap<Account, SortedSet<TransValuesCum>> transValuesCumMap) {
-        ArrayList<String[]> txnInfo = new ArrayList<String[]>();
-
-        for (Iterator<Account> it = 
-        	transValuesCumMap.keySet().iterator(); it.hasNext();) {
-            Account thisAccount = (Account) it.next();
-            TreeSet<TransValuesCum> cpvs = 
-        	    new TreeSet<TransValuesCum>
-            (transValuesCumMap.get(thisAccount));
-            for (Iterator<TransValuesCum> it1 = cpvs.iterator(); it1.hasNext();) {
-                TransValuesCum cpv = (TransValuesCum) it1.next();
-                txnInfo.add(TransValuesCum.loadArrayTransValuesCum(cpv));
-            }
-        }
-        Collections.sort(txnInfo, PrntAcct_Order);
-        return txnInfo;
-    }
-
-//     /*
-//      * Generates total number of line items for report
-//      * Assuming one line per security, 3 lines for each Account
-//      * + 3 lines for Total
-//      */
-//
-//     public int getNumReportRows(){
-//         int AcctRows = this.invSec.keySet().size() * 3 + 3; //3 rows per account + 3 for Total
-//         int SecRows = 0;
-//         for (Iterator<Account> it = this.invSec.keySet().iterator(); it.hasNext();) {
-//             Account invAcct = it.next();
-//             SecRows = SecRows + this.invSec.get(invAcct).size();
-//         }
-//         return SecRows + AcctRows;
-//     }
-
-    public static final Comparator<String[]> PrntAcct_Order =
-                                 new Comparator<String[]>() {
-        public int compare(String[] o1, String[] o2) {
-            int parentCmp = o1[0].compareTo(o2[0]);
-            return (parentCmp == 0 ? o1[1].compareTo(o2[1]) : parentCmp );
-        }
-
-    };
-
     /**
      * loads currency data into ArrayList of String Arrays
      * @param allCurTypes HashSet of currencies
      * @return ArrayList of String Arrays
      */
     public static ArrayList<String[]> ListAllCurrenciesInfo(
-	    HashSet<CurrencyType> allCurTypes) {
+	    HashMap<Integer, CurrencyWrapper> theseCurs) {
 	ArrayList<String[]> currInfo = new ArrayList<String[]>();
 
-	for (Iterator<CurrencyType> it = allCurTypes.iterator(); it.hasNext();) {
-	    CurrencyType cur = (CurrencyType) it.next();
-	    for (int i = 0; i < cur.getSnapshotCount(); i++) {
-
-		currInfo.add(loadCurrencySnapshotArray(cur, i));
+	for (Iterator<CurrencyWrapper> it = theseCurs.values().iterator(); it
+		.hasNext();) {
+	    CurrencyWrapper curWrapper = (CurrencyWrapper) it.next();
+	    for (int i = 0; i < curWrapper.curType.getSnapshotCount(); i++) {
+		currInfo.add(loadCurrencySnapshotArray(curWrapper.curType, i));
 	    }
 	}
 	return currInfo;
     }
+
+    public static StringBuffer listCurrencySnapshotHeader() {
+	StringBuffer currInfo = new StringBuffer();
+	currInfo.append("id " + ",");
+	currInfo.append("Name " + ",");
+	currInfo.append("Ticker " + ",");
+	currInfo.append("Date " + ",");
+	currInfo.append("PricebyDate " + ",");
+	currInfo.append("PriceByDate(Adjust)");
+	return currInfo;
+    }    
 
     /**
      * loads data from individual currency snapshot
@@ -480,251 +320,176 @@ public class BulkSecInfo {
 	return currInfo.toArray(new String[currInfo.size()]);
     }
 
-    public static StringBuffer listCurrencySnapshotHeader() {
-        StringBuffer currInfo = new StringBuffer();
-        currInfo.append("id " + ",");
-        currInfo.append("Name " + ",");
-        currInfo.append("Ticker " + ",");
-        currInfo.append("Date " + ",");
-        currInfo.append("PricebyDate " + ",");
-        currInfo.append("PriceByDate(Adjust)");
-        return currInfo;
+    /**
+     * Generates account associated with transaction (i.e. if a security is in
+     * the transaction hierarchy, return that account, otherwise, return the
+     * transaction account
+     * 
+     * @param thisTxn
+     * @return
+     */
+    private static Account getAssociatedAccount(AbstractTxn thisTxn) {
+	Account assocAcct = thisTxn.getAccount();
+	ParentTxn parent = null;
+	if (thisTxn instanceof ParentTxn) {
+	    parent = (ParentTxn) thisTxn;
+
+	} else { // this is a split transaction
+	    SplitTxn split = (SplitTxn) thisTxn;
+	    parent = split.getParentTxn();
+	}
+	for (int i = 0; i < parent.getSplitCount(); i++) {
+	    if (parent.getSplit(i).getAccount().getAccountType() 
+		    == Account.ACCOUNT_TYPE_SECURITY)
+		assocAcct = parent.getSplit(i).getAccount();
+	}
+	return assocAcct;
     }
-
-}
-
-//Unused Methods Follow:
-
-    /*
+    
    
 
+    /**lists all TransValues in InvestmentAccountWrappers
+     * @param invAcctWrappers
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<String[]> listTransValuesSet(
+	    HashSet<InvestmentAccountWrapper> invAcctWrappers) throws Exception {
+	ArrayList<String[]> txnInfo = new ArrayList<String[]>();
 
-
-    public StringBuffer listTxnInfo(AbstractTxn abstractTxn) { //unused
-
-        StringBuffer txnInfo = new StringBuffer();
-        if (abstractTxn instanceof ParentTxn) {
-            ParentTxn parentTxn = (ParentTxn) abstractTxn;
-            txnInfo.append("TxType; ParentTxn" + ",");
-            txnInfo.append(" Txn " + "id; " + parentTxn.getTxnId() + ",");
-            txnInfo.append(" AcctNum; " + parentTxn.getAccount().getAccountNum() + ",");
-            txnInfo.append(" AcctName; " + parentTxn.getAccount().getAccountName() + ",");
-            txnInfo.append(" TransType; " + parentTxn.getTransferType() + ",");
-            txnInfo.append("InvstTxnType; " + TxnUtil.getInvstTxnType(parentTxn) + ",");
-            txnInfo.append(" Date; " + parentTxn.getDateInt() + ",");
-            txnInfo.append(" Value; " + parentTxn.getValue() + ",");
-            txnInfo.append("ParentID;" + parentTxn.getParentTxn().getTxnId() + ",");
-            txnInfo.append("ParentTxAcctName;" + parentTxn.getParentTxn().getAccount().getAccountName() + ",");
-            txnInfo.append("Amount; NoAmt" + ",");
-            txnInfo.append("Rate; NoRate" + ",");
-
-        }
-        if (abstractTxn instanceof SplitTxn) {
-            SplitTxn split = (SplitTxn) abstractTxn;
-            txnInfo.append("TxType; SplitTxn" + ",");
-            txnInfo.append(" Txn " + "id; " + split.getTxnId() + ",");
-            txnInfo.append(" AcctNum; " + split.getAccount().getAccountNum() + ",");
-            txnInfo.append(" AcctName; " + split.getAccount().getAccountName() + ",");
-            txnInfo.append(" TransType; " + split.getTransferType() + ",");
-            txnInfo.append("InvstTxnType; " + TxnUtil.getInvstTxnType(split.getParentTxn()) + ",");
-            txnInfo.append(" Date; " + split.getDateInt() + ",");
-            txnInfo.append(" Value; " + split.getValue() + ",");
-            txnInfo.append("ParentID;" + split.getParentTxn().getTxnId() + ",");
-            txnInfo.append("ParentTxAcctName;" + split.getParentTxn().getAccount().getAccountName() + ",");
-            txnInfo.append(" Amount; " + split.getAmount() + ",");
-            txnInfo.append(" Rate; " + split.getRate() + ",");
-
-        }
-        return txnInfo;
+	for (Iterator<InvestmentAccountWrapper> it = invAcctWrappers.iterator(); it
+		.hasNext();) {
+	    InvestmentAccountWrapper thisInvAccount = (InvestmentAccountWrapper) it
+		    .next();
+	    TreeSet<TransValues> accountLines = new TreeSet<TransValues>(
+		    thisInvAccount.getTransValues());
+	    for (Iterator<TransValues> it1 = accountLines.iterator(); it1
+		    .hasNext();) {
+		TransValues reportLine = (TransValues) it1.next();
+		txnInfo.add(TransValues.loadArrayTransValues(reportLine));
+	    }
+	}
+	Collections.sort(txnInfo, PrntAcct_Order);
+	return txnInfo;
     }
 
-    public StringBuffer listSubAccounts(HashSet<Account> SubAccts) { // unused
-        StringBuffer secList = new StringBuffer();
-
-        for (Iterator<Account> it = SubAccts.iterator(); it.hasNext();) {
-            Account account = it.next();
-            secList.append("Name; " + account.getAccountName() + ", ");
-            secList.append("Number; " + account.getAccountNum() + ", ");
-            secList.append("AcctType; " + account.getAccountType() + ", ");
-            secList.append("ParentAcctName; " + account.getParentAccount().getAccountName() + ", ");
-            secList.append("ParentAcctNum; " + account.getParentAccount().getAccountNum() + ", ");
-            secList.append("FullName; " + account.getFullAccountName() + ", ");
-            secList.append("RecBalance; " + account.getRecursiveBalance() + ", ");
-            if (account.getCurrencyType() != null) {
-                secList.append("CurrID; " + account.getCurrencyType().getID() + ", ");
-            } else {
-                secList.append("CurrID; " + "No Currency" + ", ");
-            }
-            if (account.getCurrencyType().getTickerSymbol() != null) {
-                secList.append("Ticker; " + account.getCurrencyType().getTickerSymbol() + ", ");
-            } else {
-                secList.append("Ticker; " + "No Ticker" + ", ");
-            }
-            secList.append("\n");
-        }
-        return secList;
+    private CurrencyType defineCashCurrency() {
+	CurrencyTable curTable = root.getCurrencyTable();
+	int nextId = curTable.getNextID();
+	int dateInt = DateUtils.convertToDateInt(new Date());
+	CurrencyType cashCurrency = new CurrencyType
+		(nextId, "", "^CASH", 1.0, 1, "", "", "^CASH",
+		dateInt, CurrencyType.CURRTYPE_SECURITY, curTable);
+	cashCurrency.addSnapshotInt(BulkSecInfo.firstDateInt, 1.0);
+	return cashCurrency;
     }
 
-    public StringBuffer listAcctMapInfo(HashMap<Account, HashSet<AbstractTxn>> acctMap) {// unused
-        StringBuffer mapInfo = new StringBuffer();
+    /** creates map of currency ids and associated currency wrappers
+     * @return
+     */
+    private HashMap<Integer, CurrencyWrapper> getCurWrappers() {
+	CurrencyType[] currencies = root.getCurrencyTable().getAllCurrencies();
+	HashMap<Integer, CurrencyWrapper> wrapperHashMap = 
+		new HashMap<Integer, CurrencyWrapper>();
 
+	for (CurrencyType currency : currencies) {
+	    if (currency.getCurrencyType() == CurrencyType.CURRTYPE_SECURITY) {
+		Integer thisID = currency.getID();
+		wrapperHashMap.put(thisID, new CurrencyWrapper(currency));
+	    }
+	}
+	// make sure new Currency is added!
+	wrapperHashMap.put(BulkSecInfo.cashCurType.getID(),
+		new CurrencyWrapper(BulkSecInfo.cashCurType));
 
-        for (Iterator it = acctMap.keySet().iterator(); it.hasNext();) {
-            Account secAcct = (Account) it.next();
-            HashSet<AbstractTxn> absTxns = acctMap.get(secAcct);
-            mapInfo.append(listTxnsInfo(absTxns, secAcct));
-        }
-        return mapInfo;
+	return wrapperHashMap;
     }
 
-    public StringBuffer listTxnsInfo(HashSet<AbstractTxn> inAbsTxns, Account thisAccount) { // unused
-        StringBuffer txnInfo = new StringBuffer();
+    /**
+     * @param selectedSubAccounts Investment Accounts in file
+     * @return Completed InvestmentAccountWrappers with interpreted transaction
+     * information
+     * @throws Exception
+     */
+    private HashSet<InvestmentAccountWrapper> getInvestmentAccountInfo(
+	    TreeSet<Account> selectedSubAccounts) throws Exception {
+	HashSet<InvestmentAccountWrapper> invAcctWrappers = 
+		new HashSet<InvestmentAccountWrapper>();
+//	this.secAccountWrappers = new HashSet<SecurityAccountWrapper>();
 
-        for (Iterator<AbstractTxn> it = inAbsTxns.iterator(); it.hasNext();) {
-            AbstractTxn abstractTxn = it.next();
-            txnInfo.append("LinkedAccount; " + thisAccount.getAccountName()
-                    + "(Num " + thisAccount.getAccountNum() + "),");
-            txnInfo.append(listTxnInfo(abstractTxn));
-            txnInfo.append("\n");
-        }
-        return txnInfo;
+	for (Iterator<Account> iterator = selectedSubAccounts.iterator(); iterator
+		.hasNext();) {
+	    InvestmentAccount invAcct = (InvestmentAccount) iterator.next();
+	    //Load investment account into Wrapper Class
+	    InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(
+		    invAcct, this);
+	    //get Security Sub Accounts
+	    TreeSet<Account> subSecAccts = getSelectedSubAccounts(invAcct,
+		    Account.ACCOUNT_TYPE_SECURITY);
+	    //Loop through Security Sub Accounts
+	    for (Iterator<Account> iterator2 = subSecAccts.iterator(); iterator2
+		    .hasNext();) {
+		SecurityAccount secAcct = (SecurityAccount) iterator2.next();
+		//Load Security Account into Wrapper Class
+		SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(
+			secAcct, invAcctWrapper);
+		
+		CurrencyWrapper thisCurWrapper = curs.get(secAcct
+			.getCurrencyType().getID());
+		// add account to list of accounts in currWrapper
+		thisCurWrapper.secAccts
+			.add((SecurityAccountWrapper) secAcctWrapper);
+		// set CurrencyWrapper associated with this SecurityWrapper
+		secAcctWrapper.setCurrWrapper(thisCurWrapper);
+		// add Security Account to Investment Account
+		invAcctWrapper.secAccts.add(secAcctWrapper);
+		// add security transvalues to security account
+		secAcctWrapper.addTransValuesSet(getTransValuesForSingleAcct(
+			secAcct));
+	    }//end Security Sub Accounts Loop
+	    // add cash transactions to synthetic cash account under this 
+	    //Investment Account
+	    invAcctWrapper.createCashTransactions(this, gainsCalc);
+	    // add invAcctWrapper to all accounts, AccountWrappers to 
+	    //Security Account Wrappers	    
+	    invAcctWrappers.add(invAcctWrapper);
+	} // end Investment Accounts Loop
+	return invAcctWrappers;
     }
-
-    public StringBuffer listTxnsInfo(HashSet<AbstractTxn> inAbsTxns) { //unused
-        StringBuffer txnInfo = new StringBuffer();
-
-        for (Iterator<AbstractTxn> it = inAbsTxns.iterator(); it.hasNext();) {
-            AbstractTxn abstractTxn = it.next();
-            txnInfo.append("LinkedAccount; " + abstractTxn.getAccount().getAccountName()
-                    + "(Num " + abstractTxn.getAccount().getAccountNum() + "),");
-            txnInfo.append(listTxnInfo(abstractTxn));
-            txnInfo.append("\n");
-        }
-        return txnInfo;
-    }
-
-    public static StringBuffer listParentInfoMap(HashMap<Account, SortedSet<TransValues>> ParentInfoMap) { //unused
-        StringBuffer txnInfo = new StringBuffer();
-        for (Iterator it = ParentInfoMap.keySet().iterator(); it.hasNext();) {
-            Account thisAccount = (Account) it.next();
-            TreeSet<TransValues> pvs = new TreeSet<TransValues>(ParentInfoMap.get(thisAccount));
-            for (Iterator it1 = pvs.iterator(); it1.hasNext();) {
-                TransValues pv = (TransValues) it1.next();
-                txnInfo.append("LinkedAccount; " + thisAccount.getAccountName()
-                        + "(Num " + thisAccount.getAccountNum() + "),");
-                txnInfo.append(TransValues.listTransValues(pv));
-                txnInfo.append("\n");
-            }
-        }
-        return txnInfo;
-    }
-
-     public static StringBuffer writeCurrencyArrayList(ArrayList<String[]> inpArrayList) {
-        StringBuffer addInfo = new StringBuffer();
-        for (Iterator<String[]> it = inpArrayList.iterator(); it.hasNext();) {
-            String[] strings = it.next();
-            addInfo.append("Symbol; " + strings[0] + "," + "Date; " + strings[1]
-                    + "Price; " + strings[2] + "\n");
-        }
-        return addInfo;
-    }
-
-    public static StringBuffer readFileIntoCurrSnap(BulkSecInfo currentInfo, File dataFile) {
-        //expects to see--CurrID, dateint, price from csv file -- adjust to show currency id
-        StringBuffer addInfo = new StringBuffer();
-        ArrayList<String[]> inputCurData = new ArrayList<String[]>();
-        inputCurData = IOMethods.readCSVIntoArrayList(dataFile);
-        addInfo.append("Read File of Size; " + inputCurData.size() + "\n");
-
-        //build hash map of ticker to CurrencyType
-        HashMap<String, CurrencyType> symbolMap = new HashMap<String, CurrencyType>();
-        for (Iterator<CurrencyType> it = currentInfo.allCurrTypes.iterator(); it.hasNext();) {
-            CurrencyType thisCur = it.next();
-            String id = Integer.toString(thisCur.getID());
-            symbolMap.put(id, thisCur); //was getTickerSymbol
-        }
-        //get current currency info (Hash map of CurrencyType to price map)
-        HashMap<CurrencyType, HashMap<Integer, Double>> allRates =
-                new HashMap<CurrencyType, HashMap<Integer, Double>>();
-        allRates = getCurrInfo(currentInfo.allCurrTypes);
-
-        //removes all current snapshots
-        for (Iterator<CurrencyType> it = allRates.keySet().iterator(); it.hasNext();) {
-            CurrencyType thisCurrency = (CurrencyType) it.next();
-            for (int i = 0; i < thisCurrency.getSnapshotCount(); i++) {
-                int tempID = thisCurrency.getID();
-                int tempDateInt = thisCurrency.getSnapshot(i).getDateInt();
-                addInfo.append("Removed ID; " + tempID + ",");
-                addInfo.append("Removed Date; " + tempDateInt + "\n");
-                thisCurrency.removeSnapshot(i);
-            }
-        }
-
-        for (Iterator<String[]> it = inputCurData.iterator(); it.hasNext();) {
-            String[] strings = it.next();
-            String symbol = new String();
-            int dateInt = 0;
-            double inputPrice = 0;
-            symbol = strings[0];
-            dateInt = Integer.valueOf(strings[1]);
-            inputPrice = Double.valueOf(strings[2]);
-            double inputUserRate = 1 / inputPrice;
-
-            if (symbolMap.containsKey(symbol)) { //CurrencyType is part of current info
-                CurrencyType thisCur = symbolMap.get(symbol);
-                if (!allRates.get(thisCur).containsKey(dateInt)) {//i.e. if snapshot already exists
-                    symbolMap.get(symbol).addSnapshotInt(dateInt, inputUserRate);
-                    addInfo.append("Symbol; " + symbol + "," + "Date; " + dateInt + ","
-                            + "UserRate; " + inputUserRate + "," + "String Length; "
-                            + strings.length + "\n");
-                } else {
-                    addInfo.append("symbol; " + symbol
-                            + ", Already has price for date;" + dateInt + "\n");
-                }
-            } else {
-                addInfo.append("No Match for symbol; " + symbol + "\n");
-            }
-        }
-        return addInfo;
-    }
-
-    public static HashMap<CurrencyType, HashMap<Integer, Double>> getCurrInfo(HashSet<CurrencyType> allCurTypes) {
-
-        HashMap<CurrencyType, HashMap<Integer, Double>> allCurrRate = new HashMap<CurrencyType, HashMap<Integer, Double>>();
-
-
-        for (Iterator<CurrencyType> it = allCurTypes.iterator(); it.hasNext();) {
-            CurrencyType currencyType = it.next();
-            HashMap<Integer, Double> thisCurrRate = new HashMap<Integer, Double>();
-            for (int i = 0; i < currencyType.getSnapshotCount(); i++) {
-                thisCurrRate.put(currencyType.getSnapshot(i).getDateInt(), currencyType.getSnapshot(i).getUserRate());
-            }
-            allCurrRate.put(currencyType, thisCurrRate);
-        }
-        return allCurrRate;
-    }
-
-    public StringBuffer listUserRates(HashMap<CurrencyType, HashMap<Integer, Double>> currRates) {
-        StringBuffer outRates = new StringBuffer();
-        for (Iterator<CurrencyType> it = currRates.keySet().iterator(); it.hasNext();) {
-            CurrencyType thisCurrencyType = it.next();
-            HashMap<Integer, Double> thisCurrRates = new HashMap<Integer, Double>();
-            thisCurrRates = currRates.get(thisCurrencyType);
-            for (Iterator<Integer> it1 = thisCurrRates.keySet().iterator(); it1.hasNext();) {
-                Integer thisDate = it1.next();
-                outRates.append("id; " + thisCurrencyType.getID() + ",");
-                outRates.append("Name; " + thisCurrencyType.getName() + ",");
-                if (!(thisCurrencyType.getTickerSymbol().isEmpty())) {
-                    outRates.append("Ticker; " + thisCurrencyType.getTickerSymbol() + ",");
-                } else {
-                    outRates.append("Ticker; " + "NoTicker" + ",");
-                }
-                outRates.append("Date; " + thisDate + ",");
-                outRates.append("UserRate; " + thisCurrRates.get(thisDate) + "\n");
-            }
-        }
-        return outRates;
-    }
-
-    */
     
+    /**gets TransValues for either single security account or single investment
+     * account (i.e. investment-account-level transvalues
+     * @param thisAccount
+     * @param gainsCalc
+     * @return
+     */
+    public SortedSet<TransValues> getTransValuesForSingleAcct(Account thisAccount) {
+	SortedSet<TransValues> transValuesSet = new TreeSet<TransValues>();
+	TreeSet<ParentTxn> assocTrans = new TreeSet<ParentTxn>(txnComp);
+	TxnSet txnSet = BulkSecInfo.transSet
+		.getTransactionsForAccount(thisAccount);
+	for (Iterator<AbstractTxn> iterator = txnSet.iterator(); iterator
+		.hasNext();) {
+	    AbstractTxn abstractTxn = (AbstractTxn) iterator.next();
+	    if (getAssociatedAccount(abstractTxn) == thisAccount) {
+		assocTrans.add(abstractTxn instanceof ParentTxn ? 
+			(ParentTxn) abstractTxn	: abstractTxn.getParentTxn());
+	    }
+
+	}
+	for (Iterator<ParentTxn> iterator = assocTrans.iterator(); iterator
+		.hasNext();) {
+	    ParentTxn parentTxn = (ParentTxn) iterator.next();
+	    TransValues transValuesToAdd = new TransValues(parentTxn,
+		    thisAccount, transValuesSet, this);
+	    transValuesSet.add(transValuesToAdd);
+	    if (thisAccount instanceof SecurityAccount)
+		securityTransValues.put(transValuesToAdd.txnID,
+			transValuesToAdd);
+
+	}
+
+	return transValuesSet;
+    }
+}
+

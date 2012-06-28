@@ -27,14 +27,18 @@ import static org.junit.Assert.assertFalse;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.TransactionSet;
+import com.moneydance.apps.md.model.TxnSet;
+import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
 /**
  * Generates 3 tests:
@@ -49,8 +53,26 @@ import com.moneydance.apps.md.model.Account;
  *
  */
 public class ReportProdTest {
-    /**
-     * Class with only one element, String array of transaction report
+    private static BulkSecInfo currentInfo;
+    // Report Dates for comparison
+    private static final int fromDateInt = 20090601;
+    private static final int toDateInt = 20100601;
+    public static final Class<InvestmentAccountWrapper> invAggClass = InvestmentAccountWrapper.class;
+    public static final Class<Tradeable> tradeableAggClass = Tradeable.class;
+    public static final Class<CurrencyWrapper> currencyAggClass = CurrencyWrapper.class;
+    public static final Class<AllAggregate> allAggClass = AllAggregate.class;
+    public static final Class<SecurityTypeWrapper> secTypeAggClass = SecurityTypeWrapper.class;
+    public static final Class<SecuritySubTypeWrapper> secSubTypeAggClass = SecuritySubTypeWrapper.class;
+    public static final boolean catHierarchy = false;
+    public static final boolean rptOutputSingle = false;
+    //Stored CSV Files
+    public static final File ftBaseFile = new File("./resources/ft20100601.csv");
+    public static final File snapBaseFile = new File(
+	    "./resources/snap20100601.csv");
+    
+    
+    /**    
+ * Class with only one element, String array of transaction report
      * elements.  Implements comparable based on investment account and security 
      * so that generated report and stored report can be sorted and compared.
      *
@@ -133,36 +155,28 @@ public class ReportProdTest {
 	}
     }
 
-    private static BulkSecInfo currentInfo;
-    // Report Dates for comparison
-    private static final int fromDateInt = 20090601;
-    private static final int toDateInt = 20100601;
-    //Stored CSV Files
-    public static final File ftBaseFile = new File("./resources/ft20100601.csv");
-    public static final File snapBaseFile = new File(
-	    "./resources/snap20100601.csv");
     
 
-    /**returns minimum transaction date for all transactions in md file
-     * @param currentInfo
-     * @return
-     */
-    public static int getMinTransDate(BulkSecInfo currentInfo) {
-	int minDateInt = Integer.MAX_VALUE;
-
-	for (Iterator<Account> it = currentInfo.transValuesCumMap.keySet()
-		.iterator(); it.hasNext();) {
-	    Account account = (Account) it.next();
-	    
-	    SortedSet<TransValuesCum> tvcSet = currentInfo.transValuesCumMap
-		    .get(account);
-	    // TransValuesCum sorts by Date, so first element is earliest
-	    minDateInt = Math.min(tvcSet.first().getTransValues().getDateint(),
-		    minDateInt);
-	}
-
-	return minDateInt;
-    }
+//    /**returns minimum transaction date for all transactions in md file
+//     * @param currentInfo
+//     * @return
+//     */
+//    public static int getMinTransDate(BulkSecInfo currentInfo) {
+//	int minDateInt = Integer.MAX_VALUE;
+//
+//	for (Iterator<Account> it = currentInfo.transValuesMap.keySet()
+//		.iterator(); it.hasNext();) {
+//	    Account account = (Account) it.next();
+//	    
+//	    SortedSet<TransValues> tvSet = currentInfo.transValuesMap
+//		    .get(account);
+//	    // TransValuesCum sorts by Date, so first element is earliest
+//	    minDateInt = tvSet.isEmpty() ? minDateInt :
+//		Math.min(tvSet.first().getDateint(), minDateInt);
+//	}
+//
+//	return minDateInt;
+//    }
 
     /**Reads object array into reportLine object
      * @param inObj
@@ -211,7 +225,7 @@ public class ReportProdTest {
 	    BulkSecInfo currentInfo) {
 
 	LinkedHashMap<String, Integer> retDateMap = new LinkedHashMap<String, Integer>();
-	int firstDateInt = getMinTransDate(currentInfo);
+	int firstDateInt = currentInfo.firstDateInt;
 	int fromDateInt = DateUtils.getPrevBusinessDay(firstDateInt);
 	int prevFromDateInt = DateUtils.getPrevBusinessDay(toDateInt);
 	int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
@@ -291,17 +305,22 @@ public class ReportProdTest {
 
     @Before
     public void setUp() throws Exception {
-	currentInfo = BulkSecInfoTest.getBaseSecurityInfo();
+	currentInfo = BulkSecInfoTest.getBaseSecurityInfoAvgCost();
     }
 
     /**Tests "From/To" Report generated from MD File 
      * against saved version in CSV File
+     * @throws Exception 
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
-    public void testGetFromToReport() {
+    public void testGetFromToReport() throws Exception {
 	boolean errorFound = false;
-	Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, fromDateInt,
+	TotalFromToReport fromToReport
+        = new TotalFromToReport(currentInfo, invAggClass,
+		tradeableAggClass, catHierarchy, rptOutputSingle, fromDateInt,
 		toDateInt);
+	Object[][] ftObj = fromToReport.getReportTable();
 	ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	ArrayList<ReportLine> ftBase = readCSVIntoRptLine(ftBaseFile);
 	errorFound = compareRpts("From/To Report", ftTest, ftBase,
@@ -315,11 +334,16 @@ public class ReportProdTest {
 
     /**Tests "Snap" Report generated from MD File 
      * against saved version in CSV File
+     * @throws Exception 
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
-    public void testGetSnapReport() {
+    public void testGetSnapReport() throws Exception {
 	boolean errorFound = false;
-	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
+	TotalSnapshotReport snapshotReport = new TotalSnapshotReport(
+		currentInfo, invAggClass, tradeableAggClass, catHierarchy,
+		rptOutputSingle, toDateInt);
+	Object[][] snapObj = snapshotReport.getReportTable();
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 	ArrayList<ReportLine> snapBase = readCSVIntoRptLine(snapBaseFile);
 	errorFound = compareRpts("Snapshot Report", snapTest, snapBase,
@@ -335,13 +359,18 @@ public class ReportProdTest {
 
     /**Tests "Snap" Report generated from MD File against iterations of 
      * "From/To" Reports, to ensure that reports are consistent     * 
+     * @throws Exception 
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
-    public void testRepSnapAgainstFT() {
+    public void testRepSnapAgainstFT() throws Exception {
 
 	boolean errorFound = false;
 	LinkedHashMap<String, Integer> retDateMap = getRetDateMap(currentInfo);
-	Object[][] snapObj = ReportProd.getSnapReportObj(currentInfo, toDateInt);
+	TotalSnapshotReport snapshotReport = new TotalSnapshotReport(
+		currentInfo, invAggClass, tradeableAggClass, catHierarchy,
+		rptOutputSingle, toDateInt);
+	Object[][] snapObj = snapshotReport.getReportTable();
 	ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
 
 	// print out Return Dates for the various return categories for reference
@@ -361,51 +390,54 @@ public class ReportProdTest {
 		.hasNext();) {
 	    String retCat = (String) iterator.next();
 	    int dateInt = retDateMap.get(retCat);
-	    Object[][] ftObj = ReportProd.getFromToReportObjs(currentInfo, dateInt,
-		    toDateInt);
+	    TotalFromToReport fromToReport
+	        = new TotalFromToReport(currentInfo, invAggClass,
+			tradeableAggClass, catHierarchy, rptOutputSingle, dateInt,
+			toDateInt);
+		Object[][] ftObj = fromToReport.getReportTable();
 	    ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
 	    if (retCat.equals("PREV")) {
-		if (testRepSnapCol(snapTest, ftTest, 3, 6))
-		    errorFound = true; // Last Price
-		if (testRepSnapCol(snapTest, ftTest, 4, 4))
-		    errorFound = true; // End Pos
 		if (testRepSnapCol(snapTest, ftTest, 5, 8))
+		    errorFound = true; // Last Price
+		if (testRepSnapCol(snapTest, ftTest, 6, 6))
+		    errorFound = true; // End Pos
+		if (testRepSnapCol(snapTest, ftTest, 7, 10))
 		    ; // End value
-		if (testRepSnapCol(snapTest, ftTest, 9, 20))
+		if (testRepSnapCol(snapTest, ftTest, 11, 22))
 		    ; // MD returns
 
 	    } else if (retCat.equals("1Wk")) {
-		if (testRepSnapCol(snapTest, ftTest, 10, 20))
+		if (testRepSnapCol(snapTest, ftTest, 12, 22))
 		    ; // MD returns
 
 	    } else if (retCat.equals("4Wk")) {
-		if (testRepSnapCol(snapTest, ftTest, 11, 20))
+		if (testRepSnapCol(snapTest, ftTest, 13, 22))
 		    errorFound = true; // MD returns
 
 	    } else if (retCat.equals("3Mnth")) {
-		if (testRepSnapCol(snapTest, ftTest, 12, 20))
+		if (testRepSnapCol(snapTest, ftTest, 14, 22))
 		    errorFound = true; // MD returns
 
 	    } else if (retCat.equals("1Yr")) {
-		if (testRepSnapCol(snapTest, ftTest, 14, 20))
+		if (testRepSnapCol(snapTest, ftTest, 16, 22))
 		    errorFound = true; // MD returns
 
 	    } else if (retCat.equals("3Yr")) {
-		if (testRepSnapCol(snapTest, ftTest, 15, 20))
+		if (testRepSnapCol(snapTest, ftTest, 17, 22))
 		    errorFound = true; // MD returns
 
 	    } else if (retCat.equals("YTD")) {
-		if (testRepSnapCol(snapTest, ftTest, 13, 20))
+		if (testRepSnapCol(snapTest, ftTest, 15, 22))
 		    errorFound = true; // MD returns
 
 	    } else if (retCat.equals("All")) {
-		if (testRepSnapCol(snapTest, ftTest, 16, 20))
+		if (testRepSnapCol(snapTest, ftTest, 18, 22))
 		    errorFound = true; // MD returns
-		if (testRepSnapCol(snapTest, ftTest, 17, 21))
+		if (testRepSnapCol(snapTest, ftTest, 19, 23))
 		    errorFound = true; // Ann returns
-		if (testRepSnapCol(snapTest, ftTest, 19, 13))
+		if (testRepSnapCol(snapTest, ftTest, 21, 15))
 		    errorFound = true; // Income
-		if (testRepSnapCol(snapTest, ftTest, 20, 19))
+		if (testRepSnapCol(snapTest, ftTest, 22, 21))
 		    errorFound = true; // Total Gain
 
 	    }
@@ -417,6 +449,200 @@ public class ReportProdTest {
 		+ msg);
 
 	assertFalse(errorFound);
+
+    } 
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    public void testAggregateByCurrencyReport()
+	    throws Exception {
+	boolean errorFound = false;
+	System.out
+	.println("Starting Test of Aggregated Currency From/To Report");
+	TotalFromToReport report = new TotalFromToReport(currentInfo,
+		currencyAggClass, allAggClass, false, true, fromDateInt,
+		toDateInt);
+
+	HashSet<SecurityFromToReport> securityFromToReports = 
+		new HashSet<SecurityFromToReport>();
+	DateMap testDateMap = new DateMap();
+	double testIncome = 0.0;
+	double testExpense = 0.0;
+	double testStartValue = 0.0;
+	double testEndValue = 0.0;
+
+	int reportLeafCount = 0;
+	int testLeafCount = 0;
+
+	for (Iterator iterator = report.securityReports.iterator(); iterator
+		.hasNext();) {
+	    SecurityReport securityReport = (SecurityReport) iterator.next();
+	    SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
+	    securityFromToReports.add(securityFromToReport);
+	    testDateMap = testDateMap
+		    .combine(securityFromToReport.mdMap, "add");
+	    testIncome += securityFromToReport.income;
+	    testExpense += securityFromToReport.expense;
+	    testStartValue += securityFromToReport.startValue;
+	    testEndValue += securityFromToReport.endValue;
+	}
+
+	double testMDReturn = securityFromToReports
+		.iterator()
+		.next()
+		.computeMDReturn(testStartValue, testEndValue, testIncome,
+			testExpense, testDateMap);
+	double reportMDReturn = 0.0;
+
+	
+
+	for (Iterator iterator = report.compositeReports.iterator(); iterator
+		.hasNext();) {
+	    CompositeReport compositeReport = (CompositeReport) iterator.next();
+	    SecurityFromToReport aggregateReport = (SecurityFromToReport)
+		    compositeReport.aggregateReport;
+	    if (compositeReport.firstAggregateVal == null
+		    && compositeReport.secondAggregateVal == null) {
+		reportMDReturn = aggregateReport.mdReturn;
+		reportLeafCount = compositeReport.securityReports.size();
+	    } else {
+		testLeafCount += compositeReport.securityReports.size();
+	    }
+	}
+	
+	if(testMDReturn == reportMDReturn){
+	    System.out.println("Test Return: " + testMDReturn);
+	    System.out.println("Report Return: " + reportMDReturn);
+	    System.out.println("Manually Computed MD Return " +
+		    		"for Aggregated Currency Report Matches Total");
+	    
+	} else{
+	    errorFound = true;
+	    System.out.println("Test Return: " + testMDReturn);
+	    System.out.println("Report Return: " + reportMDReturn);
+	    System.out.println("Manually Computed MD Return +" +
+	    		"does not match total for Aggregted Currency Report");
+	    
+	}
+	
+	if(testLeafCount == reportLeafCount){
+	    System.out.println("Test Leafs: " + testLeafCount);
+	    System.out.println("Report Leafs: " + reportLeafCount);
+	    System.out.println("Leaf Security Report Count+" +
+		    		" Matches Sum of Currency Composites");
+	    
+	} else {
+	    errorFound = true;
+	    System.out.println("Test Leafs: " + testLeafCount);
+	    System.out.println("Report Leafs: " + reportLeafCount);
+	    System.out.println("Leaf Security Report Count+" +
+		    		" Does Not Match Sum of Currency Composites!");
+	    
+	}	
+	assertFalse(errorFound);
+	System.out
+		.println("Finished with Test of Aggregated Currency From/To Report");
+    }
+    
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    public void testAggregateBySecurityTypeReport()
+	    throws Exception {
+	boolean errorFound = false;
+	System.out
+	.println("Starting Test of Aggregated SecurityType From/To Report");
+	TotalFromToReport report = new TotalFromToReport(currentInfo,
+		secTypeAggClass, secSubTypeAggClass, true, false, fromDateInt,
+		toDateInt);
+
+	
+	DateMap testDateMap = new DateMap();
+	double testIncome = 0.0;
+	double testExpense = 0.0;
+	double testStartValue = 0.0;
+	double testEndValue = 0.0;
+
+	int reportLeafCount = 0;
+	int testLeafCount = 0;
+	double reportMDReturn = 0.0;
+	double testMDReturn = 0.0;
+
+	for (Iterator iterator = report.compositeReports.iterator(); iterator
+		.hasNext();) {
+	    CompositeReport compositeReport = (CompositeReport) iterator.next();
+	    SecurityFromToReport aggregateReport = (SecurityFromToReport) 
+		    compositeReport.aggregateReport;
+	    if (compositeReport.firstAggregateVal == null
+		    && compositeReport.secondAggregateVal == null) {
+		reportMDReturn = aggregateReport.mdReturn;
+		reportLeafCount = compositeReport.securityReports.size();
+	    } else if (compositeReport.compType == COMPOSITE_TYPE.FIRST) {
+		testLeafCount += compositeReport.securityReports.size();
+		testDateMap = testDateMap.combine(aggregateReport.mdMap, "add");
+		testIncome += aggregateReport.income;
+		testExpense += aggregateReport.expense;
+		testStartValue += aggregateReport.startValue;
+		testEndValue += aggregateReport.endValue;
+
+	    }
+	}
+	
+	SecurityFromToReport arbitraryFromToReport = 
+		(SecurityFromToReport) report.securityReports.iterator().next();
+	testMDReturn = arbitraryFromToReport.computeMDReturn(testStartValue, 
+		testEndValue, testIncome, testExpense, testDateMap);
+	
+	if(Math.abs(testMDReturn - reportMDReturn) < Math.pow(1, -BulkSecInfoTest.precCompare)){
+	    System.out.println("Test Return: " + testMDReturn);
+	    System.out.println("Report Return: " + reportMDReturn);
+	    System.out.println("Manually Computed MD Return " +
+		    		"for Aggregated Security Report Matches Total");
+	    
+	} else{
+	    errorFound = true;
+	    System.out.println("Test Return: " + testMDReturn);
+	    System.out.println("Report Return: " + reportMDReturn);
+	    System.out.println("Manually Computed MD Return " +
+	    		"does not match total for Aggregated Security Report");
+	    
+	}
+	
+	if(testLeafCount == reportLeafCount){
+	    System.out.println("Test Leafs: " + testLeafCount);
+	    System.out.println("Report Leafs: " + reportLeafCount);
+	    System.out.println("Leaf Security Report Count" +
+		    		" Matches Sum of Currency Composites");
+	    
+	} else {
+	    errorFound = true;
+	    System.out.println("Test Leafs: " + testLeafCount);
+	    System.out.println("Report Leafs: " + reportLeafCount);
+	    System.out.println("Leaf Security Report Count" +
+		    		" Does Not Match Sum of Currency Composites!");
+	    
+	}	
+	assertFalse(errorFound);
+	System.out
+		.println("Finished with Aggregated SecurityType From/To Report");
+    }
+    
+
+    public static void listTransactionCounts(BulkSecInfo currentInfo) {
+	TreeSet<Account> allAccts = BulkSecInfo.getSelectedSubAccounts(
+		currentInfo.root, Account.ACCOUNT_TYPE_INVESTMENT,
+		Account.ACCOUNT_TYPE_SECURITY);
+	TransactionSet transSet = currentInfo.root.getTransactionSet();
+	for (Iterator<Account> iterator = allAccts.iterator(); iterator
+		.hasNext();) {
+	    Account account = (Account) iterator.next();
+	    TxnSet txnSet = transSet.getTransactionsForAccount(account);
+	    System.out.println("Parent Acct: "
+		    + account.getParentAccount().getAccountName()
+		    + " Account: " + account.getAccountName() + " Size: "
+		    + txnSet.getSize());
+
+	}
 
     }
 
