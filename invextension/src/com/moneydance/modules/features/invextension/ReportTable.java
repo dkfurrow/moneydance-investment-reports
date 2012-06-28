@@ -54,6 +54,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -109,18 +110,23 @@ public class ReportTable extends JScrollPane {
     public int thirdSort = 0;
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
-    public SortOrder thirdOrder = SortOrder.UNSORTED;
+    public SortOrder thirdOrder = SortOrder.ASCENDING;
     public TableModel model;
     public boolean closedPosHidden = true;
     public int closedPosColumn;
 
-    public ReportTable(TableModel model, int numFrozenColumns,
-	    int indClosedPosColumn, ColType[] colTypes, ColSizeOption sizeOption) {
+    private Color lightLightGray = new Color(230, 230, 230);
+
+    public ReportTable(TableModel model, ColType[] colTypes, int numFrozenColumns,
+	    int indClosedPosColumn, int firstSort, int secondSort, 
+	    ColSizeOption sizeOption) {
 	super();
 	adjuster = new JScrollPaneAdjuster(this);
 	this.model = model;
 	frozenColumns = numFrozenColumns;
 	closedPosColumn = indClosedPosColumn;
+	this.firstSort = firstSort;
+	this.secondSort = secondSort;
 	// create the two tables
 	lockedTable = new FormattedTable(model, colTypes, sizeOption);
 	scrollTable = new FormattedTable(model, colTypes, sizeOption);
@@ -315,6 +321,7 @@ public class ReportTable extends JScrollPane {
 	    super();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == lockedTable) {
 		lockedTable.transferFocus();
@@ -332,6 +339,7 @@ public class ReportTable extends JScrollPane {
 	    super();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == scrollTable) {
 		scrollTable.transferFocusBackward();
@@ -353,6 +361,7 @@ public class ReportTable extends JScrollPane {
 	    this.lockedTableNextColumnCellAction = lockedTableNextColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (lockedTable.getSelectedColumn() == lockedTable.getColumnCount() - 1) {
 		lockedTable.transferFocus();
@@ -376,6 +385,7 @@ public class ReportTable extends JScrollPane {
 	    this.scrollTableNextColumnCellAction = scrollTableNextColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (scrollTable.getSelectedColumn() == scrollTable.getColumnCount() - 1) {
 		scrollTable.transferFocusBackward();
@@ -399,6 +409,7 @@ public class ReportTable extends JScrollPane {
 	    this.scrollTablePrevColumnCellAction = scrollTablePrevColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (scrollTable.getSelectedColumn() == 0) {
 		scrollTable.transferFocusBackward();
@@ -423,6 +434,7 @@ public class ReportTable extends JScrollPane {
 	    this.lockedTablePrevColumnCellAction = lockedTablePrevColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (lockedTable.getSelectedColumn() == 0) {
 		lockedTable.transferFocus();
@@ -458,6 +470,7 @@ public class ReportTable extends JScrollPane {
 	    pane = null;
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 	    String name = e.getPropertyName();
 	    if (name.equals("viewport")) {
@@ -508,6 +521,7 @@ public class ReportTable extends JScrollPane {
 		}
 	    }
 
+	    @Override
 	    public void stateChanged(ChangeEvent e) {
 		if (viewport == null || header == null) {
 		    return;
@@ -525,6 +539,7 @@ public class ReportTable extends JScrollPane {
 		}
 	    }
 
+	    @Override
 	    public void run() {
 		if (viewport == null || header == null) {
 		    return;
@@ -595,16 +610,21 @@ public class ReportTable extends JScrollPane {
 	    if (!isRowSelected(row)) {
 		c.setBackground(getBackground());
 		int modelRow = convertRowIndexToModel(row);
-		String accType = (String) getModel().getValueAt(modelRow, 0);
-		String aggType = (String) getModel().getValueAt(modelRow, 1);
+		String accType = (String) getModel().getValueAt(modelRow,
+			firstSort);
+		String aggType = (String) getModel().getValueAt(modelRow,
+			secondSort);
 		Double endPos = (Double) getModel().getValueAt(modelRow,
 			closedPosColumn);
 
-		if (!accType.startsWith("~") && aggType.startsWith("~")) {
-		    c.setBackground(Color.lightGray);
+		if (accType.startsWith("*") || aggType.startsWith("*")) {
+		    c.setBackground(lightLightGray);
+		}
+		if (accType.startsWith("~") || aggType.startsWith("~")) {
+		    c.setBackground(Color.YELLOW);
 		}
 		if (accType.startsWith("~") && aggType.startsWith("~")) {
-		    c.setBackground(Color.YELLOW);
+		    c.setBackground(Color.GREEN);
 		}
 		if (endPos == 0.0) {
 		    c.setForeground(new Color(100, 100, 100));
@@ -815,11 +835,13 @@ public class ReportTable extends JScrollPane {
 	    rowSorter.setRowFilter(rf);
 	}
 
-	// apply custom comparator for 1st 3 rows (Strings)
+	// apply custom comparator for 1st 5 rows (Strings)
 	// IMPORTANT! Must implement comparator before Sortkeys!
 	rowSorter.setComparator(0, stringComp);
 	rowSorter.setComparator(1, stringComp);
 	rowSorter.setComparator(2, stringComp);
+	rowSorter.setComparator(3, stringComp);
+	rowSorter.setComparator(4, stringComp);
 
 	// Apply sortKeys
 	List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
@@ -851,19 +873,33 @@ public class ReportTable extends JScrollPane {
 
     Comparator<String> stringComp = new Comparator<String>() {
 
+	@Override
 	public int compare(String o1, String o2) {
-	    if (o1.startsWith("~") && o2.startsWith("~")) {
-		return o1.compareToIgnoreCase(o2);
-	    } else if (o1.startsWith("~") && !o2.startsWith("~")) {
-		return 1;
-	    } else if (!o1.startsWith("~") && o2.startsWith("~")) {
-		return -1;
-	    } else {
-		return o1.compareToIgnoreCase(o2);
+	    LinkedList<Character> startChars = new LinkedList<Character>();
+	    startChars.add("^".charAt(0));
+	    startChars.add("*".charAt(0));
+	    startChars.add("~".charAt(0));
+	    char o11 = o1.charAt(0);
+	    char o21 = o2.charAt(0);
+	    if (startChars.contains(o11) && startChars.contains(o21)) {
+		int indDiff = startChars.indexOf(o11) - startChars.indexOf(o21);
+		if (indDiff == 0) {
+		    // either they start with the same char, in which case
+		    // compare
+		    return o1.compareTo(o2);
+		} else { // return difference in indices
+		    return indDiff;
+		}
+	    } else if (startChars.contains(o11) && !startChars.contains(o21)) {
+		return 1; // first String has special character
+	    } else if (!startChars.contains(o11) && startChars.contains(o21)) {
+		return -1; // second string has special character
+	    } else {// neither first letter is special character
+		return o1.compareTo(o2);
 	    }
 	}
     };
-
+    
     private class RowSortGui extends JPanel {
 	private static final long serialVersionUID = -8349629256510555172L;
 
@@ -890,6 +926,7 @@ public class ReportTable extends JScrollPane {
 	    JButton sortButton = new JButton("Sort Table");
 	    sortButton.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    tablePane.sortRows();
 		}
@@ -897,6 +934,7 @@ public class ReportTable extends JScrollPane {
 	    // set sorts
 	    firstSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstSort = cb.getSelectedIndex();
@@ -904,6 +942,7 @@ public class ReportTable extends JScrollPane {
 	    });
 	    secondSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondSort = cb.getSelectedIndex();
@@ -911,6 +950,7 @@ public class ReportTable extends JScrollPane {
 	    });
 	    thirdSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdSort = cb.getSelectedIndex();
@@ -919,6 +959,7 @@ public class ReportTable extends JScrollPane {
 	    // set orders within sorts
 	    firstOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstOrder = (SortOrder) cb.getSelectedItem();
@@ -926,6 +967,7 @@ public class ReportTable extends JScrollPane {
 	    });
 	    secondOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondOrder = (SortOrder) cb.getSelectedItem();
@@ -933,6 +975,7 @@ public class ReportTable extends JScrollPane {
 	    });
 	    thirdOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdOrder = (SortOrder) cb.getSelectedItem();
@@ -1099,6 +1142,7 @@ public class ReportTable extends JScrollPane {
 		this.priority = priority;
 	    }
 
+	    @Override
 	    public void paintIcon(Component c, Graphics g, int x, int y) {
 
 		// Override base size with a value calculated from the
@@ -1125,10 +1169,12 @@ public class ReportTable extends JScrollPane {
 
 	    }
 
+	    @Override
 	    public int getIconWidth() {
 		return size;
 	    }
 
+	    @Override
 	    public int getIconHeight() {
 		return size;
 	    }
@@ -1155,6 +1201,7 @@ public class ReportTable extends JScrollPane {
 	    setHorizontalAlignment(JLabel.CENTER);
 	}
 
+	@Override
 	public void setHorizontalTextPosition(int textPosition) {
 	    horizontalTextPositionSet = true;
 	    super.setHorizontalTextPosition(textPosition);
@@ -1210,16 +1257,20 @@ public class ReportTable extends JScrollPane {
 	    frameLoc = this.getLocation();
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e) {
 	    frameLoc = this.getLocation();
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
     }
@@ -1272,10 +1323,10 @@ public class ReportTable extends JScrollPane {
     }
 
     public static void CreateAndShowTable(TableModel thisModel,
-	    ColType[] colTypes, int indClosedPosColumn,
-	    ColSizeOption sizeOption, int numFreezeCols, String frameText) {
-	final ReportTable thisTable = new ReportTable(thisModel, numFreezeCols,
-		indClosedPosColumn, colTypes, sizeOption);
+	    ColType[] colTypes, int indClosedPosColumn, int numFreezeCols, int firstSort, int secondSort,
+	    ColSizeOption sizeOption, String frameText) {
+	final ReportTable thisTable = new ReportTable(thisModel,colTypes, numFreezeCols,
+		indClosedPosColumn, firstSort, secondSort,  sizeOption);
 
 	final JFrame outerFrame = new JFrame(frameText);
 
@@ -1301,6 +1352,7 @@ public class ReportTable extends JScrollPane {
 
 	freezeColsBox.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		JComboBox cb = (JComboBox) e.getSource();
 		thisTable.setFrozenColumns(cb.getSelectedIndex());
@@ -1308,6 +1360,7 @@ public class ReportTable extends JScrollPane {
 	});
 	buttonSort.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		thisTable.sortRows(new Point(outerFrame.getLocationOnScreen()));
 	    }
@@ -1315,6 +1368,7 @@ public class ReportTable extends JScrollPane {
 
 	hideClosedBox.addItemListener(new ItemListener() {
 
+	    @Override
 	    public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == e.SELECTED) {
 		    thisTable.closedPosHidden = true;
@@ -1328,6 +1382,7 @@ public class ReportTable extends JScrollPane {
 
 	copyCB.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		thisTable.copyTableToClipboard();
 	    }

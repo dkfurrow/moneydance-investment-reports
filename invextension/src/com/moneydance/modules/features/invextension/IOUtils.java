@@ -114,9 +114,9 @@ public static String readIniFile(File readFile) {
  * write ini file
  * @param pathString String representation of report path
  */
-public static void writeIniFile(String pathString) {
+    public static void writeIniFile(String iniFilePath, String pathString) {
         PrintWriter outputStream = null;
-        File iniFile = new File(new File(".").getAbsolutePath() + "invextension.ini");
+        File iniFile = new File(iniFilePath);
         try {
             outputStream = new PrintWriter(new FileWriter(iniFile));
             outputStream.println(pathString);
@@ -190,6 +190,23 @@ public static void writeIniFile(String pathString) {
             outputString = null;
         }
     }
+    
+    public static StringBuffer writeObjectToStringBuffer(Object[][] object) {
+   	StringBuffer outBuffer = new StringBuffer();
+   	for (int i = 0; i < object.length; i++) {
+   	    Object[] objects = object[i];
+   	    for (int j = 0; j < objects.length; j++) {
+   		Object element = objects[j] == null ? "*NULL*": objects[j];
+   		if (j == objects.length - 1) {
+   		    outBuffer.append(element.toString()).append("\r\n");
+   		} else {
+   		    outBuffer.append(element.toString()).append(",");
+   		}
+   	    }
+   	}
+   	return outBuffer;
+
+       }
 
     /**
      * writes single csv line from array of strings

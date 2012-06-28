@@ -46,6 +46,21 @@ import com.moneydance.apps.md.model.RootAccount;
  * 
  */
 public class BulkSecInfoTest {
+  //Stored Test Database
+    public static final File mdTestFile = new File("./resources/testMD02.md");
+    //stored csv file of transaction activity report (average cost)
+    public static final File transBaseFileAvgCost = new File(
+	    "./resources/transActivityReportAvgCost.csv");
+  //stored csv file of transaction activity report (lot matching)
+    public static final File transBaseFileLotMatch = new File(
+	    "./resources/transActivityReportLotMatch.csv");
+    // the following two elements determine precision of testing
+    // decimal places for comparison
+    public static final int precCompare = 10;
+    // limits precision to minimum digits of file or report output
+    // to generate a failed test, set to false--generated report and stored
+    // report have different decimal place precisions
+    public static final boolean limitPrecision = true; 
     /**
      * Class with only one element, String array of transaction report
      * elements.  Implements comparable based on transaction id 
@@ -103,9 +118,9 @@ public class BulkSecInfoTest {
 
 	@Override
 	public int compareTo(TransLine t) {
-	    Integer cIntComp = Integer.parseInt(t.getRow()[2]);
-	    Integer cIntThis = Integer.parseInt(this.getRow()[2]);
-	    return cIntThis.compareTo(cIntComp);
+	    Double cDoubleComp = Double.parseDouble(t.getRow()[2]);
+	    Double cDoubleThis = Double.parseDouble(this.getRow()[2]);
+	    return cDoubleThis.compareTo(cDoubleComp);
 
 	}
 
@@ -114,30 +129,27 @@ public class BulkSecInfoTest {
 	}
 
     }
-    //Stored Test Database
-    public static final File mdTestFile = new File("./resources/testMD01.md");
-    //stored csv file of transaction activity report
-    public static final File transBaseFile = new File(
-	    "./resources/transActivityReport.csv");
-    // the following two elements determine precision of testing
-    // decimal places for comparison
-    public static final int precCompare = 10;
-    // limits precision to minimum digits of file or report output
-    // to generate a failed test, set to false--generated report and stored
-    // report have different decimal place precisions
-    public static final boolean limitPrecision = true; 
-    
 
     /**
-     * gets BulkSecInfo from stored moneydance data file
+     * gets BulkSecInfo from stored moneydance data file (avg cost basis)
      * @return
      * @throws Exception
      */
-    public static BulkSecInfo getBaseSecurityInfo() throws Exception {
+    public static BulkSecInfo getBaseSecurityInfoAvgCost() throws Exception {
 	RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-	BulkSecInfo currentInfo = new BulkSecInfo(root);
+	BulkSecInfo currentInfo = new BulkSecInfo(root, new GainsAverageCalc());
 	return currentInfo;
     }
+    
+    /** gets BulkSecInfo from stored moneydance data file (Lot Matching basis)
+    * @return
+    * @throws Exception
+    */
+   public static BulkSecInfo getBaseSecurityInfoLotMatch() throws Exception {
+	RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+	BulkSecInfo currentInfo = new BulkSecInfo(root, new GainsLotMatchCalc());
+	return currentInfo;
+   }
 
     /** returns number of digits in double, either in basic or exponential
      * format
@@ -250,11 +262,12 @@ public class BulkSecInfoTest {
      * sorted array of TransLine objects
      * @param currentInfo
      * @return
+     * @throws Exception 
      */
     private static ArrayList<TransLine> readStringArrayIntoTransLine(
-	    BulkSecInfo currentInfo) {
+	    BulkSecInfo currentInfo) throws Exception {
 	ArrayList<String[]> transActivityReport = currentInfo
-		.listTransValuesCumMap(currentInfo.transValuesCumMap);
+		.listTransValuesSet(currentInfo.invs);
 	ArrayList<TransLine> outputTransAL = new ArrayList<TransLine>();
 	for (Iterator<String[]> iterator = transActivityReport.iterator(); iterator
 		.hasNext();) {
@@ -269,20 +282,51 @@ public class BulkSecInfoTest {
 
     /**
      * Test Method which compares TransValuesCum generated from test database
-     * with stored report.
+     * with stored report. (Average Cost)
      * @throws Exception
      */
     @Test
-    public void testListTransValuesCumMap() throws Exception {
+    public void testListTransValuesCumMapAvgCost()  {
 	boolean errorFound = false;
-	BulkSecInfo currentInfo = getBaseSecurityInfo();
-	ArrayList<TransLine> transBase = readCSVIntoTransLine(transBaseFile);
-	ArrayList<TransLine> transTest = readStringArrayIntoTransLine(currentInfo);
+	ArrayList<TransLine> transBase = null;
+	ArrayList<TransLine> transTest = null;
+	try {
+	    BulkSecInfo currentInfo = getBaseSecurityInfoAvgCost();
+	    transBase = readCSVIntoTransLine(transBaseFileAvgCost);
+	    transTest = readStringArrayIntoTransLine(currentInfo);
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	if (compareTransactions(transTest, transBase, precCompare))
 	    errorFound = true;
 	String msg = errorFound ? " -- Errors Found!" : " -- No Errors Found";
-	System.out.println("Finished TransValuesCumMap Test " + msg);
+	System.out.println("Finished TransValuesCumMap Test for Average Cost " + msg);
 	assertFalse(errorFound);
     }
+    
+    /* Test Method which compares TransValuesCum generated from test database
+    * with stored report. (Lot Matching)
+    * @throws Exception
+    */
+   @Test
+   public void testListTransValuesCumMapLotMatch()  {
+	boolean errorFound = false;
+	ArrayList<TransLine> transBase = null;
+	ArrayList<TransLine> transTest = null;
+	try {
+	    BulkSecInfo currentInfo = getBaseSecurityInfoLotMatch();
+	    transBase = readCSVIntoTransLine(transBaseFileLotMatch);
+	    transTest = readStringArrayIntoTransLine(currentInfo);
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (compareTransactions(transTest, transBase, precCompare))
+	    errorFound = true;
+	String msg = errorFound ? " -- Errors Found!" : " -- No Errors Found";
+	System.out.println("Finished TransValuesCumMap Test for Lot Match " + msg);
+	assertFalse(errorFound);
+   }
 
 }

@@ -23,7 +23,13 @@
 package com.moneydance.modules.features.invextension;
 
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.SortedSet;
+
+import com.moneydance.apps.md.model.AbstractTxn;
 import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.apps.md.model.InvestTxnType;
 import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.SplitTxn;
@@ -35,13 +41,13 @@ import com.moneydance.apps.md.model.TxnUtil;
  * @since 1.0
 */
 public class TransValues implements Comparable<TransValues> {
-
+    
     public ParentTxn parentTxn;       //parentTxn account
     // reference account (to determine correct sign for transfers)
-    public Account accountRef;     
-    public Account secAccount;     //security account
+    public Account accountRef;
     public Integer dateint;        //transaction date
-    public Long txnID;             //transaction ID
+    public double txnID;             //transaction ID
+    public String desc;		   //transaction description	
     public double buy;             //buy amount
     public double sell;            //sell amount
     public double shortSell;       //short sell amount
@@ -50,70 +56,143 @@ public class TransValues implements Comparable<TransValues> {
     public double income;          //income amount
     public double expense;         //expense amount
     public double transfer;        //transfer amount
-    public double cashEffect;      //net cash effect on Investment Account
-    public double secQuantity;     //security quantitiy
+    public double secQuantity;     //security quantity
+    // net position after completion of transaction
+    public double position;
+    // market price on close of transaction day
+    public double mktPrice;
+    // net average cost long basis after completion of transaction
+    public double longBasis;
+    // net average cost short basis after completion of transaction
+    public double shortBasis;
+    // net open value after completion of transaction
+    public double openValue;
+    // net cumulative unrealized gains after completion of transaction
+    public double cumUnrealizedGain;
+    // period unrealized gain (one transaction to next) after completion of
+    // transaction
+    public double perUnrealizedGain;
+    // period realized gain (one transaction to next) after completion of
+    // transaction
+    public double perRealizedGain;
+    // period income and expense gain (one transaction to next) after completion
+    // of transaction
+    public double perIncomeExpense;
+    // period total gain (one transaction to next) after completion of
+    // transaction
+    public double perTotalGain;
+    
 
-    //getters and setters (supports use of compiled JAR)
-    public ParentTxn getParent() {
-        return parentTxn;
-    }
-    public Account getAccountRef() {
-        return accountRef;
-    }
-    public Account getSecAccount() {
-        return secAccount;
-    }
-    public Integer getDateint() {
-        return dateint;
-    }
-    public Long getTxnID() {
-        return txnID;
-    }
-    public double getBuy() {
-        return buy;
-    }
-    public double getSell() {
-        return sell;
-    }
-    public double getShortSell() {
-        return shortSell;
-    }
-    public double getCoverShort() {
-        return coverShort;
-    }
-    public double getCommision() {
-        return commision;
-    }
-    public double getIncome() {
-        return income;
-    }
-    public double getExpense() {
-        return expense;
-    }
-    public double getTransfer() {
-        return transfer;
-    }
-    public double getCashEffect() {
-        return cashEffect;
-    }
-    public double getSecQuantity() {
-        return secQuantity;
-    }
+    // cumulative total gain after completion of transaction
+    public double cumTotalGain;
+    static Comparator<TransValues> transComp = new Comparator<TransValues>() {
+	@Override
+	public int compare(TransValues t1, TransValues t2) {
+	    Integer d1 = t1.dateint;
+	    Integer d2 = t2.dateint;
+	    Double id1 = t1.txnID;
+	    Double id2 = t2.txnID;
+	    Integer assocAcctNum1 = t1.accountRef.getAccountNum();
+	    Integer assocAcctNum2 = t1.accountRef.getAccountNum();
+	    Integer transTypeSort1 = t1.getTxnSortOrder();
+	    Integer transTypeSort2 = t2.getTxnSortOrder();
 
+	    if (d1.compareTo(d2) != 0) {// different dates
+		return d1.compareTo(d2); // return date order
+	    } else { // same date
+		     // if Associated Accounts are different, sort Acct Nums
+		if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
+		    return assocAcctNum1.compareTo(assocAcctNum2);
+		} else {
+		    // if transaction types are different, sort on custom order
+		    if (transTypeSort1.compareTo(transTypeSort2) != 0) {
+			return transTypeSort1.compareTo(transTypeSort2);
+		    } else { // sort on transIDs
+			return id1.compareTo(id2);
+		    } // end transIDs order
+		}// end custom order
+	    } // end date order
+	}
+    }; // end inner class
+   
+    /**Constructor to create a cash transaction from the Investment Account 
+     * initial balance
+    * @param transValuesSet TransValues from Investment or Security Account
+    * @param prevTrans previous TransValues (to get position)
+    * @param invAcctWrapper Investment Account
+     * @throws Exception 
+    */
+    public TransValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
+	    throws Exception {
+	// copy base values from Security Transaction
+	String memo = "Inserted for Inital Balance: "
+		+ invAcctWrapper.invAcct.getAccountName();
+	this.parentTxn = new ParentTxn(firstDateInt, firstDateInt,
+		System.currentTimeMillis(), "",
+		invAcctWrapper.cashAcct.getSecurityAccountWrapper(), memo, memo,
+		BulkSecInfo.nextTxnNum, AbstractTxn.STATUS_UNRECONCILED);
+	this.txnID = BulkSecInfo.nextTxnNum;
+	BulkSecInfo.nextTxnNum += 1L;
 
-    /**
-     * generates values in appropriate categories for each Parent transaction
-     * constructed at Parent by adding relevant split values for each split
+	this.accountRef = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+	this.dateint = firstDateInt;
+
+	this.desc = this.parentTxn.getDescription();
+	this.mktPrice = 1.0;
+
+	this.transfer = 0.0;
+
+	Double initBal = Double.valueOf(invAcctWrapper.invAcct
+		.getStartBalance()) / 100.0;
+
+	this.buy = 0.0;
+	this.sell = 0.0;
+	this.shortSell = 0.0;
+	this.coverShort = 0.0;
+	this.commision = 0.0;
+	this.income = 0.0;
+	this.expense = 0.0;
+	this.secQuantity = 0.0;
+
+	if (initBal > 0.0) {
+	    this.buy = -initBal;
+	}
+	if (initBal < 0.0) {
+	    this.shortSell = -initBal;
+	}
+	this.secQuantity = -this.buy - this.coverShort - this.sell
+		- this.shortSell;
+
+	this.position = this.secQuantity;
+	this.longBasis = this.position >= 0.0 ? this.position : 0.0;
+	this.shortBasis = this.position < 0.0 ? this.position : 0.0;
+	// OpenValue
+	this.openValue = this.position * this.mktPrice;
+	// mkt price is always 1, so no realized/unrealized gains
+	this.cumUnrealizedGain = 0.0;
+	this.perUnrealizedGain = 0.0;
+	this.perRealizedGain = 0.0;
+	// other fields derive
+	this.perIncomeExpense = this.income + this.expense;
+	this.perTotalGain = this.perUnrealizedGain + this.perRealizedGain
+		+ this.perIncomeExpense;
+	this.cumTotalGain = 0.0;
+    }
+    /**Constructor which creates an appropriate TransValues object from a 
+     *  primary security-level or Investment Account-level transaction 
      * @param thisParentTxn Parent Transaction
      * @param accountRef Investment Account associated with Security or bank transaction
+     * @param bulkSecInfo 
+     * @param transValuesSet 
      */
-    public TransValues(ParentTxn thisParentTxn, Account accountRef) {
+    public TransValues(ParentTxn thisParentTxn, Account accountRef,
+	    SortedSet<TransValues> prevTransLines, BulkSecInfo currentInfo) {
         //intitalize values
         this.parentTxn = thisParentTxn;
         this.accountRef = accountRef;
-        this.secAccount = accountRef;
         this.dateint = Integer.valueOf(thisParentTxn.getDateInt());
-        this.txnID = Long.valueOf(thisParentTxn.getTxnId());
+        this.txnID = Long.valueOf(thisParentTxn.getTxnId()).doubleValue();
+        this.desc = thisParentTxn.getDescription();
         this.buy = 0;
         this.sell = 0;
         this.shortSell = 0;
@@ -122,7 +201,6 @@ public class TransValues implements Comparable<TransValues> {
         this.income = 0;
         this.expense = 0;
         this.transfer = 0;
-        this.cashEffect = 0;
         this.secQuantity = 0;
         //iterate through splits
         for (int i = 0; i < parentTxn.getSplitCount(); i++) {
@@ -133,47 +211,421 @@ public class TransValues implements Comparable<TransValues> {
                     accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT
                     ? accountRef : accountRef.getParentAccount());
 
-            this.buy = this.buy + thisSplit.buy;
-            this.sell = this.sell + thisSplit.sell;
-            this.shortSell = this.shortSell + thisSplit.shortSell;
-            this.coverShort = this.coverShort + thisSplit.coverShort;
-            this.commision = this.commision + thisSplit.commision;
-            this.income = this.income + thisSplit.income;
-            this.expense = this.expense + thisSplit.expense;
-            this.transfer = this.transfer + thisSplit.transfer;
-            this.cashEffect = this.cashEffect + thisSplit.cashEffect;
-            this.secQuantity = this.secQuantity + thisSplit.secQuantity;
+            this.buy = this.buy + thisSplit.splitBuy;
+            this.sell = this.sell + thisSplit.splitSell;
+            this.shortSell = this.shortSell + thisSplit.splitShortSell;
+            this.coverShort = this.coverShort + thisSplit.splitCoverShort;
+            this.commision = this.commision + thisSplit.splitCommision;
+            this.income = this.income + thisSplit.splitIncome;
+            this.expense = this.expense + thisSplit.splitExpense;
+            this.transfer = this.transfer + thisSplit.splitTransfer;
+            this.secQuantity = this.secQuantity + thisSplit.splitSecQuantity;
 
         }
+        
+        //fill in rest of transValues
+	TransValues prevTransLine = prevTransLines.isEmpty() ? null : prevTransLines
+		.last();
+	CurrencyType cur = this.accountRef.getCurrencyType();
+	int currentDateInt = this.parentTxn.getDateInt();
+	double currentRate = cur == null ? 1.0 : cur
+		.getUserRateByDateInt(currentDateInt);
+	int prevDateInt = prevTransLine == null ? Integer.MIN_VALUE
+		: prevTransLine.parentTxn.getDateInt();
+	double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
+		prevDateInt, currentRate, currentDateInt) / currentRate);
+	double adjPrevPos = prevTransLine == null ? 0.0
+		: prevTransLine.position * splitAdjust;
+	double adjPrevMktPrc = prevTransLine == null ? 0.0
+		: prevTransLine.mktPrice / splitAdjust;
+	// mktPrice (Set to 1 if cur is null: Implies (Cash) Investment Account
+	this.mktPrice = (cur == null ? 1.0 : 1 / cur
+		.getUserRateByDateInt(currentDateInt));
 
+	// position
+	if (prevTransLine == null) { // first transaction (buy || shortSell) 
+	    this.position = this.secQuantity;
+	} else { // subsequent transaction
+	    //round to zero if negligibly small  
+	    this.position = Math.abs(this.secQuantity + adjPrevPos) < 0.0005 ? 0.0
+		    : this.secQuantity + adjPrevPos;
+	}
+
+	
+	//get long and short basis
+	GainsCalc gainsCalc = currentInfo.gainsCalc;
+	gainsCalc.intializeGainsCalc(currentInfo, this, prevTransLines);
+	this.longBasis = gainsCalc.getLongBasis();
+	this.shortBasis = gainsCalc.getShortBasis();
+	
+	
+	// OpenValue
+	this.openValue = this.position * this.mktPrice;
+
+	// cumulative unrealized gains
+	if (this.position > 0.0) {
+	    this.cumUnrealizedGain = this.openValue - this.longBasis;
+	} else if (this.position < 0.0) {
+	    this.cumUnrealizedGain = this.openValue - this.shortBasis;
+	} else {
+	    this.cumUnrealizedGain = 0.0;
+	}
+
+	// period unrealized gains
+	if (this.position == 0.0) {
+	    this.perUnrealizedGain = 0.0;
+	} else {	    
+	    if (this.secQuantity == 0.0) {
+		// income/expense transaction, period gain is
+		// change in cum unreal gains
+		this.perUnrealizedGain = this.cumUnrealizedGain
+			- (prevTransLine == null ? 0.0
+				: prevTransLine.cumUnrealizedGain);
+	    } else {// buy, sell, short, or cover transaction
+		    // first case, add to long or add to short
+		    // change in cumulative gains accounts for trans quantity
+		if (this.secQuantity * this.position > 0.0) {
+		    this.perUnrealizedGain = this.cumUnrealizedGain
+			    - (prevTransLine == null ? 0.0
+				    : prevTransLine.cumUnrealizedGain);
+		} else { // reduce long or short
+			 // unrealized gains equal 0 on position-closing
+			 // transaction
+		    this.perUnrealizedGain = this.position
+			    * (this.mktPrice - adjPrevMktPrc);
+		}
+	    }
+	}
+	
+	// Period Realized gains
+	if (this.sell > 0) { // sale transaction
+	    this.perRealizedGain = (this.sell + this.commision)
+		    + (this.longBasis - prevTransLine.longBasis) ;
+	} else if (this.coverShort < 0) { // cover transaction
+	    this.perRealizedGain = (this.coverShort + this.commision)
+		    + (this.shortBasis - prevTransLine.shortBasis);
+	} else {
+	    // implies for closed pos, cumUnrealized-cumRealized =
+	    // commission (on last trade)
+	    this.perRealizedGain = 0;
+	}
+	
+
+	// period income/expense
+	this.perIncomeExpense = this.income + this.expense;
+	
+
+	// period total gain
+	this.perTotalGain = this.perUnrealizedGain + this.perRealizedGain;
+
+	// cumulative total gain
+	this.cumTotalGain = prevTransLine == null ? this.perTotalGain : 
+	    this.perTotalGain + prevTransLine.cumTotalGain;
+	
+
+    }
+    /**Generic Constructor for TransValues which are inserted into
+     * synthetically created cash account
+     * @param transValues TransValues from Investment or Security Account
+     * @param prevTransValues previous TransValues (to get position)
+     * @param invAcctWrapper Investment Account
+     * @throws Exception 
+     */
+    public TransValues(TransValues transValues, TransValues prevTransValues,
+    	    InvestmentAccountWrapper invAcctWrapper) throws Exception {
+    	// copy base values from Security Transaction
+    	this.parentTxn = transValues.parentTxn;
+    	this.accountRef = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+    	this.dateint = transValues.dateint;
+    	// adding 0.1 to related transValues id to ensure unique cash id
+    	this.txnID = TxnUtil.getInvestTxnType(transValues.parentTxn) == 
+    		InvestTxnType.BANK ? transValues.parentTxn.getTxnId() : 
+    		    transValues.parentTxn.getTxnId() + 0.1;
+    	this.desc = "INSERTED: " + parentTxn.getDescription();
+    	this.mktPrice = 1.0;
+    	
+    	double thisTransfer = transValues.transfer;
+    	double acctEntry = -transValues.buy - transValues.coverShort
+    		- transValues.sell - transValues.shortSell - transValues.income
+    		- transValues.expense - transValues.commision;
+    	double prevPos = prevTransValues.position;
+    	
+    	this.buy = 0.0;
+    	this.sell = 0.0;
+    	this.shortSell = 0.0;
+    	this.coverShort = 0.0;
+    	this.commision = 0.0;
+    	this.income = 0.0;
+    	this.expense = 0.0;
+    	this.secQuantity = 0.0;	
+    	InvestTxnType txnType = TxnUtil.getInvestTxnType(this.parentTxn);
+    	
+	switch (txnType) {
+	case BANK: // transfer in/out, account-level income or expense
+	    if (thisTransfer > 0.0) {// transfer in
+		if (prevPos < 0.0) {
+		    this.coverShort = Math.max(-thisTransfer, prevPos);
+		    this.buy = Math.min(-thisTransfer - prevPos, 0.0);
+		} else {
+		    this.buy = -thisTransfer;
+		}
+	    } else if (thisTransfer < 0.0) {// transfer out
+		if (prevPos > 0.0) {
+		    this.sell = Math.min(-thisTransfer, prevPos);
+		    this.shortSell = Math.max(-thisTransfer - prevPos, 0.0);
+		} else {
+		    this.shortSell = -thisTransfer;
+		}
+	    } else { // income or expense
+		if (acctEntry <= 0.0) {// Account level Income
+		    // like dividend/reinvest)
+		    if (prevPos < 0.0) {
+			this.coverShort = Math.max(acctEntry, prevPos);
+			this.buy = Math.min(acctEntry - prevPos, 0.0);
+		    } else {
+			this.buy = acctEntry;
+		    }
+		    this.income = -acctEntry;
+		} else {// Account level expense
+			// like capital call (debit expense credit security)
+		    if (prevPos > 0.0) {
+			this.sell = Math.min(acctEntry, prevPos);
+			this.shortSell = Math.max(acctEntry - prevPos, 0.0);
+		    } else {
+			this.shortSell = acctEntry;
+		    }
+		    this.expense = -acctEntry;
+
+		}
+	    }
+	    break;
+	case BUY:
+	case COVER:
+	case MISCEXP:
+	    if (prevPos > 0.0) {
+		this.sell = Math.min(acctEntry, prevPos);
+		this.shortSell = Math.max(acctEntry - prevPos, 0.0);
+	    } else {
+		this.shortSell = acctEntry;
+	    }
+	    break;
+	case SELL:
+	case SHORT:
+	case MISCINC:
+	case DIVIDEND:
+	    if (prevPos < 0.0) {
+		this.coverShort = Math.max(acctEntry, prevPos);
+		this.buy = Math.min(acctEntry - prevPos, 0.0);
+	    } else {
+		this.buy = acctEntry;
+	    }
+	    break;
+	case BUY_XFER:
+	case SELL_XFER:
+	case DIVIDENDXFR:
+	case DIVIDEND_REINVEST:
+	    // All cash quantities stay zero (combined transactions have no
+	    // net effect on cash
+	    break;
+	
+	}
+    	
+	this.secQuantity = -this.buy - this.coverShort - this.sell
+		- this.shortSell;
+
+	this.position = Math.abs(this.secQuantity + prevPos) < 0.0005 ? 0.0
+		: this.secQuantity + prevPos;
+    	this.longBasis = this.position >= 0.0 ? this.position : 0.0;
+    	this.shortBasis = this.position < 0.0 ? this.position : 0.0;
+    	// OpenValue
+    	this.openValue = this.position * this.mktPrice;
+    	//mkt price is always 1, so no realized/unrealized gains
+    	this.cumUnrealizedGain = 0.0;
+    	this.perUnrealizedGain = 0.0;
+    	this.perRealizedGain = 0.0;
+    	//other fields derive
+    	this.perIncomeExpense = this.income + this.expense;
+    	this.perTotalGain = this.perUnrealizedGain + this.perRealizedGain
+    		+ this.perIncomeExpense;
+    	this.cumTotalGain = prevTransValues == null ? this.perTotalGain : 
+    	    this.perTotalGain + prevTransValues.cumTotalGain;
+       }
+    /*
+     * lists header for transaction report
+     */
+    public static StringBuffer listTransValuesHeader() {
+        StringBuffer txnInfo = new StringBuffer();
+        txnInfo.append("ParentAcct " + ",");    
+        txnInfo.append("Security " + ",");
+        txnInfo.append("TxnNum " + ",");
+        txnInfo.append("Date" + ",");
+        txnInfo.append("TxnType"+ ",");
+        txnInfo.append("Desc"+ ",");
+        txnInfo.append("Buy"+ ",");
+        txnInfo.append("Sell"+ ",");
+        txnInfo.append("Short"+ ",");
+        txnInfo.append("Cover"+ ",");
+        txnInfo.append("Commison"+ ",");
+        txnInfo.append("Income"+ ",");
+        txnInfo.append("Expense"+ ",");
+        txnInfo.append("transfer"+ ",");
+        txnInfo.append("secQuantity"+ ",");
+        txnInfo.append("MktPrice"+ ",");
+        txnInfo.append("Position"+ ",");
+        txnInfo.append("LongBasis"+ ",");
+        txnInfo.append("ShortBasis"+ ",");
+        txnInfo.append("OpenValue"+ ",");
+        txnInfo.append("CumUnrealGain"+ ",");
+        txnInfo.append("PerUnrealGain"+ ",");
+        txnInfo.append("PerRealGain"+ ",");
+        txnInfo.append("PerInc_Exp"+ ",");
+        txnInfo.append("PerTotalGain"+ ",");
+        txnInfo.append("CumTotalGain");
+        return txnInfo;
+    }
+    /* loads TransValuesCum into String Array
+        * @param transValuesCum
+        * @return String Array
+        */
+       public static String[] loadArrayTransValues(TransValues transValues) {
+    	ArrayList<String> txnInfo = new ArrayList<String>();
+    	InvestTxnType transType = TxnUtil
+    		.getInvestTxnType(transValues.parentTxn);
+    
+    	txnInfo.add(transValues.accountRef.getParentAccount()
+    		.getAccountName());
+    	txnInfo.add(transValues.accountRef.getAccountName());
+    	txnInfo.add(Double.toString(transValues.txnID));
+    	txnInfo.add(DateUtils
+    		.convertToShort(transValues.dateint));
+    	txnInfo.add(transType.toString());
+    	txnInfo.add(transValues.desc);
+    	txnInfo.add(Double.toString(transValues.buy));
+    	txnInfo.add(Double.toString(transValues.sell));
+    	txnInfo.add(Double.toString(transValues.shortSell));
+    	txnInfo.add(Double.toString(transValues.coverShort));
+    	txnInfo.add(Double.toString(transValues.commision));
+    	txnInfo.add(Double.toString(transValues.income));
+    	txnInfo.add(Double.toString(transValues.expense));
+    	txnInfo.add(Double.toString(transValues.transfer));
+    	txnInfo.add(Double.toString(transValues.secQuantity));
+    	txnInfo.add(Double.toString(transValues.mktPrice));
+    	txnInfo.add(Double.toString(transValues.position));
+    	txnInfo.add(Double.toString(transValues.longBasis));
+    	txnInfo.add(Double.toString(transValues.shortBasis));
+    	txnInfo.add(Double.toString(transValues.openValue));
+    	txnInfo.add(Double.toString(transValues.cumUnrealizedGain));
+    	txnInfo.add(Double.toString(transValues.perUnrealizedGain));
+    	txnInfo.add(Double.toString(transValues.perRealizedGain));
+    	txnInfo.add(Double.toString(transValues.perIncomeExpense));
+    	txnInfo.add(Double.toString(transValues.perTotalGain));
+    	txnInfo.add(Double.toString(transValues.cumTotalGain));
+    	return txnInfo.toArray(new String[txnInfo.size()]);
+    
+       }
+    @Override
+    public int compareTo(TransValues transValues) {
+	return TransValues.transComp.compare(this, transValues);
+    }
+    public Account getAccountRef() {
+        return accountRef;
+    }
+    public double getBuy() {
+        return buy;
+    }
+    public double getCommision() {
+        return commision;
+    }
+    public double getCoverShort() {
+        return coverShort;
+    }
+    public double getCumTotalGain() {
+        return cumTotalGain;
+    }
+    
+    public double getCumUnrealizedGain() {
+        return cumUnrealizedGain;
+    }
+    
+    public Integer getDateint() {
+        return dateint;
+    }
+    public String getDesc(){
+	return desc;
+    }
+    public double getExpense() {
+        return expense;
+    }
+    public double getIncome() {
+        return income;
+    }
+    public double getLongBasis() {
+        return longBasis;
+    }
+    public double getMktPrice() {
+        return mktPrice;
+    }
+    public double getOpenValue() {
+        return openValue;
+    }
+    //getters and setters (supports use of compiled JAR)
+    public ParentTxn getParent() {
+        return parentTxn;
+    }
+    public ParentTxn getParentTxn() {
+        return parentTxn;
+    }
+    public double getPerIncomeExpense() {
+        return perIncomeExpense;
+    }
+    public double getPerRealizedGain() {
+        return perRealizedGain;
+    }
+    public double getPerTotalGain() {
+        return perTotalGain;
+    }
+    public double getPerUnrealizedGain() {
+        return perUnrealizedGain;
+    }    
+   
+   public double getPosition() {
+    return position;
+}
+
+public double getSecQuantity() {
+    return secQuantity;
+}
+    
+    
+    public double getSell() {
+    return sell;
+}
+    
+    
+    
+    public double getShortBasis() {
+        return shortBasis;
     }
 
     
-    public int compareTo(TransValues transValues) {
-	// sort by date, then by a custom order based on transtype
-	// then by TxnId if like transaction types to ensure that buys
-	// will precede sells, shorts before covers.
-	Integer dateCmp = this.dateint.compareTo(transValues.dateint);
-	Long cmpTxnID = transValues.parentTxn.getTxnId();
-	Integer cmpTransType = TxnUtil.getInvstTxnType(transValues.parentTxn);
-	if (dateCmp == 0) {// same date
-	    // if like trans types, use TxnID
-	    if (TxnUtil.getInvstTxnType(this.parentTxn) == cmpTransType) {
-		return Long.valueOf(this.parentTxn.getTxnId()).compareTo(cmpTxnID);
-	    } else {// use custom sort order
-		return this.getTxnSortOrder().compareTo(
-			transValues.getTxnSortOrder());
-	    }
-	} else { // sort by date
-	    return dateCmp;
-	}
+    public double getShortSell() {
+        return shortSell;
+    }
+    
+    public double getTransfer() {
+        return transfer;
+    }
+
+    public double getTxnID() {
+        return txnID;
     }
 
     /**Custom sort order to put buys before sells, shorts before covers
      * @return
      */
     public Integer getTxnSortOrder() {
-        InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
+        InvestTxnType transType = this.parentTxn != null ? 
+        	TxnUtil.getInvestTxnType(parentTxn) : InvestTxnType.BANK;
         Integer txnOrder = 0;
         switch (transType) {
             case BUY:
@@ -215,7 +667,7 @@ public class TransValues implements Comparable<TransValues> {
         }
         return txnOrder;
     }
-
+    
     /**
      * determines buy/sell/income, etc values for split based upon
      * parentTxn transaction type.  variable names are same as TransValues
@@ -223,16 +675,15 @@ public class TransValues implements Comparable<TransValues> {
     private class SplitValues {
 
 	SplitTxn split;
-	double buy;
-	double sell;
-	double shortSell;
-	double coverShort;
-	double commision;
-	double income;
-	double expense;
-	double transfer;
-	double cashEffect;
-	double secQuantity;
+	double splitBuy;
+	double splitSell;
+	double splitShortSell;
+	double splitCoverShort;
+	double splitCommision;
+	double splitIncome;
+	double splitExpense;
+	double splitTransfer;
+	double splitSecQuantity;
 
 	public SplitValues(SplitTxn thisSplit, Account accountRef) {
 	    this.split = thisSplit;
@@ -243,20 +694,19 @@ public class TransValues implements Comparable<TransValues> {
 	    int parentAcctType = thisSplit.getParentTxn().getAccount()
 		    .getAccountType();
 	    Long amountLong = thisSplit.getAmount();
-	    double amountDouble = (Double.valueOf(amountLong.toString())) / 100;
+	    double amountDouble = (Long.valueOf(amountLong).doubleValue()) / 100.0;
 	    Long valueLong = thisSplit.getValue();
-	    double valueDouble = (Double.valueOf(valueLong.toString())) / 10000;
+	    double valueDouble = (Long.valueOf(valueLong).doubleValue()) / 10000.0;
 
-	    this.buy = 0;
-	    this.sell = 0;
-	    this.shortSell = 0;
-	    this.coverShort = 0;
-	    this.commision = 0;
-	    this.income = 0;
-	    this.expense = 0;
-	    this.transfer = 0;
-	    this.cashEffect = 0;
-	    this.secQuantity = 0;
+	    this.splitBuy = 0;
+	    this.splitSell = 0;
+	    this.splitShortSell = 0;
+	    this.splitCoverShort = 0;
+	    this.splitCommision = 0;
+	    this.splitIncome = 0;
+	    this.splitExpense = 0;
+	    this.splitTransfer = 0;
+	    this.splitSecQuantity = 0;
 
 	    /*
 	     * goes through each transaction type, assigns values for each
@@ -267,59 +717,53 @@ public class TransValues implements Comparable<TransValues> {
 	    case BUY_XFER: // no net cash effect (transfer offsets buy)
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.buy = amountDouble;
-		    this.secQuantity = valueDouble;
+		    this.splitBuy = amountDouble;
+		    this.splitSecQuantity = valueDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.commision = amountDouble;
+		    this.splitCommision = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		default:
-		    this.transfer = split.getAccount() == accountRef 
+		    this.splitTransfer = split.getAccount() == accountRef 
 		    ? -amountDouble : amountDouble;
 		    break;
 		}
-		this.cashEffect = this.buy + this.commision + this.income
-			+ this.transfer;
 		break;
 	    case SELL:// consists of sell, commission, and (potentially)
 		      // transfer
 	    case SELL_XFER: // no net cash effect (transfer offsets sell)
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.sell = amountDouble;
-		    this.secQuantity = valueDouble;
+		    this.splitSell = amountDouble;
+		    this.splitSecQuantity = valueDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.commision = amountDouble;
+		    this.splitCommision = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		default:
-		    this.transfer = split.getAccount() == accountRef 
+		    this.splitTransfer = split.getAccount() == accountRef 
 		    ? -amountDouble : amountDouble;
 		    break;
 		}
-		this.cashEffect = this.sell + this.commision + this.income
-			+ this.transfer;
 		break;
 	    case BANK: // Account-level transfers, interest, and expenses
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_EXPENSE:// Only count if parentTxn is
 		     // investment
 		    if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
-			this.expense = amountDouble;
-			this.cashEffect = amountDouble;
+			this.splitExpense = amountDouble;
 		    }
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME: // Only count if parentTxn is
 		    // investment
 		    if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
-			this.income = amountDouble;
-			this.cashEffect = amountDouble;
+			this.splitIncome = amountDouble;
 		    }
 		    break;
 		// next cases cover transfer between Assets/Investments, Bank.
@@ -328,11 +772,9 @@ public class TransValues implements Comparable<TransValues> {
 		case Account.ACCOUNT_TYPE_ASSET:
 		case Account.ACCOUNT_TYPE_LIABILITY:
 		    if (split.getAccount() == accountRef) {
-			this.transfer = -amountDouble;
-			this.cashEffect = -amountDouble;
+			this.splitTransfer = -amountDouble;
 		    } else {
-			this.transfer = amountDouble;
-			this.cashEffect = amountDouble;
+			this.splitTransfer = amountDouble;
 		    }
 		    break;
 		}
@@ -341,133 +783,91 @@ public class TransValues implements Comparable<TransValues> {
 	    case DIVIDENDXFR: // income/expense transactions
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.expense = amountDouble;
+		    this.splitExpense = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		default:
-		    this.transfer = split.getAccount() == accountRef ?
+		    this.splitTransfer = split.getAccount() == accountRef ?
 			    -amountDouble : amountDouble;
 		    break;
 		}
-		this.cashEffect = this.expense + this.income + this.transfer;
 		break;
 	    case SHORT: // short sales + commission
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.shortSell = amountDouble;
-		    this.secQuantity = valueDouble;
+		    this.splitShortSell = amountDouble;
+		    this.splitSecQuantity = valueDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.commision = amountDouble;
+		    this.splitCommision = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		}
-		this.cashEffect = this.shortSell + this.commision + this.income;
 		break;
 	    case COVER:// short covers + commission
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.coverShort = amountDouble;
-		    this.secQuantity = valueDouble;
+		    this.splitCoverShort = amountDouble;
+		    this.splitSecQuantity = valueDouble; 
 		    break;
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.commision = amountDouble;
+		    this.splitCommision = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		}
-		this.cashEffect = this.coverShort + this.commision
-			+ this.income;
 		break;
 	    case MISCINC: // misc income and expense
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.expense = amountDouble;
+		    this.splitExpense = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.buy = amountDouble; // provides for return of capital
+		    this.splitBuy = amountDouble; // provides for return of capital
+		    this.splitSecQuantity = valueDouble; 
 		    break;
 		}
-		this.cashEffect = amountDouble;
 		break;
 	    case MISCEXP: // misc income and expense
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.expense = amountDouble;
+		    this.splitExpense = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.shortSell = amountDouble; // provides for adjustment of
-						   // short basis
+		    this.splitShortSell = amountDouble; // provides for reduction
+		    this.splitSecQuantity = valueDouble;//of capital 
+		    //possible treatment of dividend payment of short
 		    break;
 		}
-		this.cashEffect = amountDouble;
 		break;
 	    case DIVIDEND_REINVEST: // income and buy with no net cash effect
 		switch (acctType) {
 		case Account.ACCOUNT_TYPE_EXPENSE:
-		    this.commision = amountDouble;
+		    this.splitCommision = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_INCOME:
-		    this.income = amountDouble;
+		    this.splitIncome = amountDouble;
 		    break;
 		case Account.ACCOUNT_TYPE_SECURITY:
-		    this.buy = amountDouble;
-		    this.secQuantity = valueDouble;
+		    this.splitBuy = amountDouble;
+		    this.splitSecQuantity = valueDouble;
 		    break;
 		}
-		this.cashEffect = this.buy + this.commision + this.income;
 	    } // end txnType Switch Statement
-	} // end splitValues Contstructor
+	} // end splitValues Constructor
     } // end splitValues subClass
+    
 } // end TransValues Class
 
-//unused methods
-
-/*
-public static StringBuffer listTransValues(TransValues txnValues) {
-StringBuffer txnInfo = new StringBuffer();
-txnInfo.append("ParentValueAccountRef; " + txnValues.accountRef.getAccountName()
-+ "(Num " + txnValues.accountRef.getAccountNum() + "),");
-txnInfo.append("TxnNum; " + txnValues.parent.getTxnId() + ",");
-txnInfo.append("Date;");
-txnInfo.append(txnValues.dateint + ",");
-txnInfo.append("TxnType;");
-txnInfo.append(TxnUtil.getInvstTxnType(txnValues.parent) + ",");
-txnInfo.append("Desc;");
-txnInfo.append(txnValues.parent.getDescription() + ",");
-txnInfo.append("Buy;");
-txnInfo.append(txnValues.buy + ",");
-txnInfo.append("Sell;");
-txnInfo.append(txnValues.sell + ",");
-txnInfo.append("Short;");
-txnInfo.append(txnValues.shortSell + ",");
-txnInfo.append("Cover;");
-txnInfo.append(txnValues.coverShort + ",");
-txnInfo.append("Commison;");
-txnInfo.append(txnValues.commision + ",");
-txnInfo.append("Income;");
-txnInfo.append(txnValues.income + ",");
-txnInfo.append("Expense;");
-txnInfo.append(txnValues.expense + ",");
-txnInfo.append("transfer;");
-txnInfo.append(txnValues.transfer + ",");
-txnInfo.append("cashEffect;");
-txnInfo.append(txnValues.cashEffect + ", ");
-txnInfo.append("secQuantity;");
-txnInfo.append(txnValues.secQuantity + ", ");
-return txnInfo;
-}
-
- */// </editor-fold>
 
