@@ -37,48 +37,48 @@ import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TY
  */
 public class SecuritySnapshotReport extends SecurityReport {
     
-    public int snapDateInt;
+    private int snapDateInt;
     
     
-    public double lastPrice;           //ending price
-    public double endPos;              //ending position
-    public double endValue;            //ending value
+    private double lastPrice;           //ending price
+    private double endPos;              //ending position
+    private double endValue;            //ending value
     
-    public double avgCostBasis;                //final average cost balance
+    private double avgCostBasis;                //final average cost balance
 
     //one day values
-    public double absPriceChange;      //absolute price change (from previous day to snapDate)
-    public double pctPriceChange;      //percent price change (from previous day to snapDate)
-    public double absValueChange;      //absolute value change (from previous day to snapDate)
+    private double absPriceChange;      //absolute price change (from previous day to snapDate)
+    private double pctPriceChange;      //percent price change (from previous day to snapDate)
+    private double absValueChange;      //absolute value change (from previous day to snapDate)
 
     //total numbers
-    public double income;              //total income (all dates)
-    public double totalGain;           //total absolute gain (all dates)
-    public double totRetAll;           //total Mod-Dietz return (all dates)
-    public double annRetAll;           //annualized return (all dates)
+    private double income;              //total income (all dates)
+    private double totalGain;           //total absolute gain (all dates)
+    private double totRetAll;           //total Mod-Dietz return (all dates)
+    private double annRetAll;           //annualized return (all dates)
 
     //returns
-    public double totRet1Day;          //Mod-Dietz return (1 day)
-    public double totRetWk;            //Mod-Dietz return (1 week)
-    public double totRet4Wk;           //Mod-Dietz return (1 month)
-    public double totRet3Mnth;         //Mod-Dietz return (3 month)
-    public double totRetYTD;           //Mod-Dietz return (Year-to-Date)
-    public double totRetYear;          //Mod-Dietz return (1 Year)
-    public double totRet3year;         //Mod-Dietz return (1 Years)
+    private double totRet1Day;          //Mod-Dietz return (1 day)
+    private double totRetWk;            //Mod-Dietz return (1 week)
+    private double totRet4Wk;           //Mod-Dietz return (1 month)
+    private double totRet3Mnth;         //Mod-Dietz return (3 month)
+    private double totRetYTD;           //Mod-Dietz return (Year-to-Date)
+    private double totRetYear;          //Mod-Dietz return (1 Year)
+    private double totRet3year;         //Mod-Dietz return (1 Years)
 
     // intermediate values
-    public CategoryMap<Integer> returnsStartDate;      //maps return category to start dates
-    public CategoryMap<Double> startValues;            //maps return category to start values
-    public CategoryMap<Double> startPoses;             //maps return category to start positions
-    public CategoryMap<Double> startPrices;            //maps return category to start positions
-    public CategoryMap<Double> incomes;                //maps return category to income
-    public CategoryMap<Double> expenses;               //maps return category to expense
-    public CategoryMap<Double> mdReturns;              //maps return category to Mod-Dietz returns
+    private CategoryMap<Integer> returnsStartDate;      //maps return category to start dates
+    private CategoryMap<Double> startValues;            //maps return category to start values
+    private CategoryMap<Double> startPoses;             //maps return category to start positions
+    private CategoryMap<Double> startPrices;            //maps return category to start positions
+    private CategoryMap<Double> incomes;                //maps return category to income
+    private CategoryMap<Double> expenses;               //maps return category to expense
+    private CategoryMap<Double> mdReturns;              //maps return category to Mod-Dietz returns
     
 
-    public CategoryMap<DateMap> mdMap;                 //maps return category to Mod-Dietz date map
-    public CategoryMap<DateMap> arMap;                 //maps return category to Annualized Return Date Map
-    public CategoryMap<DateMap> transMap;              //maps return category to transfer date map
+    private CategoryMap<DateMap> mdMap;                 //maps return category to Mod-Dietz date map
+    private CategoryMap<DateMap> arMap;                 //maps return category to Annualized Return Date Map
+    private CategoryMap<DateMap> transMap;              //maps return category to transfer date map
 
     
     /*** Generic constructor, which produces either the SecurityReport associated
@@ -386,7 +386,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 	    Class<T> firstAggClass, Class<U> secondAggClass,
 	    COMPOSITE_TYPE compType) {
 	CompositeReport<T, U> thisComposite = new CompositeReport<T, U>(this,
-		this.dateRange, firstAggClass, secondAggClass, compType);
+		this.getDateRange(), firstAggClass, secondAggClass, compType);
 	return thisComposite;
     }
 
@@ -439,7 +439,7 @@ public class SecuritySnapshotReport extends SecurityReport {
     @Override
     public SecurityReport getAggregateSecurityReport() {
 	SecuritySnapshotReport thisAggregate = new SecuritySnapshotReport(null,
-		dateRange);
+		getDateRange());
 	// add report body values (except Returns)
 	thisAggregate.lastPrice = this.lastPrice;
 	thisAggregate.endPos = this.endPos;
@@ -470,12 +470,13 @@ public class SecuritySnapshotReport extends SecurityReport {
 	thisAggregate.transMap = this.transMap;
 
 	// make aggregating classes the same except secAccountWrapper
-	thisAggregate.invAccountWrapper = this.invAccountWrapper;
-	thisAggregate.secAccountWrapper = null;
-	thisAggregate.securityTypeWrapper = this.securityTypeWrapper;
-	thisAggregate.securitySubTypeWrapper = this.securitySubTypeWrapper;
-	thisAggregate.tradeable = this.tradeable;
-	thisAggregate.currencyWrapper = this.currencyWrapper;
+	thisAggregate.setInvAccountWrapper(this.getInvAccountWrapper());
+	thisAggregate.setSecAccountWrapper(null);
+	thisAggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
+	thisAggregate.setSecuritySubTypeWrapper(this
+		.getSecuritySubTypeWrapper());
+	thisAggregate.setTradeable(this.getTradeable());
+	thisAggregate.setCurrencyWrapper(this.getCurrencyWrapper());
 
 	return thisAggregate;
 
@@ -483,23 +484,23 @@ public class SecuritySnapshotReport extends SecurityReport {
 
     @Override
     public String getName() {
-	if (this.secAccountWrapper == null) {
+	if (this.getSecAccountWrapper() == null) {
 	    return "Null SecAccountWrapper";
 	} else {
-	    return this.invAccountWrapper.getName() + ": "
-		    + this.secAccountWrapper.getAccountName();
+	    return this.getInvAccountWrapper().getName() + ": "
+		    + this.getSecAccountWrapper().getAccountName();
 	}
     }
 
     @Override
     public void addTo(SecurityReport securityReport) {
 	SecuritySnapshotReport operand = (SecuritySnapshotReport) securityReport;
-	if (this.secAccountWrapper != null)
+	if (this.getSecAccountWrapper() != null)
 	    throw new UnsupportedOperationException(
 		    "Illegal call to addTo method for SecurityReport");
 
-	if (this.currencyWrapper != null && operand.currencyWrapper != null
-		&& this.currencyWrapper.equals(operand.currencyWrapper)) {
+	if (this.getCurrencyWrapper() != null && operand.getCurrencyWrapper() != null
+		&& this.getCurrencyWrapper().equals(operand.getCurrencyWrapper())) {
 
 	    this.endPos += operand.endPos;
 	    this.lastPrice = operand.lastPrice;
@@ -546,11 +547,11 @@ public class SecuritySnapshotReport extends SecurityReport {
 	    IllegalAccessException {
 	ArrayList<Object> snapValues = new ArrayList<Object>();
 
-	snapValues.add(this.invAccountWrapper.getName());
-	snapValues.add(this.secAccountWrapper.getName());
-	snapValues.add(this.securityTypeWrapper.getName());
-	snapValues.add(this.securitySubTypeWrapper.getName());
-	snapValues.add(this.currencyWrapper.ticker);
+	snapValues.add(this.getInvAccountWrapper().getName());
+	snapValues.add(this.getSecAccountWrapper().getName());
+	snapValues.add(this.getSecurityTypeWrapper().getName());
+	snapValues.add(this.getSecuritySubTypeWrapper().getName());
+	snapValues.add(this.getCurrencyWrapper().ticker);
 
 	addLineBody(snapValues);
 	
@@ -651,5 +652,121 @@ public class SecuritySnapshotReport extends SecurityReport {
 	}
 
 	return outMap;
+    }
+
+    public int getSnapDateInt() {
+        return snapDateInt;
+    }
+
+    public double getLastPrice() {
+        return lastPrice;
+    }
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+    public double getAvgCostBasis() {
+        return avgCostBasis;
+    }
+
+    public double getAbsPriceChange() {
+        return absPriceChange;
+    }
+
+    public double getPctPriceChange() {
+        return pctPriceChange;
+    }
+
+    public double getAbsValueChange() {
+        return absValueChange;
+    }
+
+    public double getIncome() {
+        return income;
+    }
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+    public double getTotRetAll() {
+        return totRetAll;
+    }
+
+    public double getAnnRetAll() {
+        return annRetAll;
+    }
+
+    public double getTotRet1Day() {
+        return totRet1Day;
+    }
+
+    public double getTotRetWk() {
+        return totRetWk;
+    }
+
+    public double getTotRet4Wk() {
+        return totRet4Wk;
+    }
+
+    public double getTotRet3Mnth() {
+        return totRet3Mnth;
+    }
+
+    public double getTotRetYTD() {
+        return totRetYTD;
+    }
+
+    public double getTotRetYear() {
+        return totRetYear;
+    }
+
+    public double getTotRet3year() {
+        return totRet3year;
+    }
+
+    public CategoryMap<Integer> getReturnsStartDate() {
+        return returnsStartDate;
+    }
+
+    public CategoryMap<Double> getStartValues() {
+        return startValues;
+    }
+
+    public CategoryMap<Double> getStartPoses() {
+        return startPoses;
+    }
+
+    public CategoryMap<Double> getStartPrices() {
+        return startPrices;
+    }
+
+    public CategoryMap<Double> getIncomes() {
+        return incomes;
+    }
+
+    public CategoryMap<Double> getExpenses() {
+        return expenses;
+    }
+
+    public CategoryMap<DateMap> getMdMap() {
+        return mdMap;
+    }
+
+    public CategoryMap<DateMap> getArMap() {
+        return arMap;
+    }
+
+    public CategoryMap<DateMap> getTransMap() {
+        return transMap;
+    }
+
+    public CategoryMap<Double> getMdReturns() {
+        return mdReturns;
     }
 }

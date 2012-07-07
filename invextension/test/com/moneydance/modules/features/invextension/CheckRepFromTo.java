@@ -79,32 +79,32 @@ public class CheckRepFromTo {
 	
 	
 	String acctName = compositeReport != null ? compositeReport.getName() : reportLine.getName();
-	String acctTicker = compositeReport != null ? "NoTicker" : reportLine.currencyWrapper.ticker;
+	String acctTicker = compositeReport != null ? "NoTicker" : reportLine.getCurrencyWrapper().ticker;
 
 	System.out.println("Account: " + tab + acctName + tab + "Ticker:" + tab
 		+ acctTicker);
-	System.out.println("From: " + tab + reportLine.fromDateInt + tab
-		+ "To: " + tab + reportLine.toDateInt);
-	System.out.println("StartPos: " + tab + reportLine.startPos + tab
-		+ "StartPrice: " + tab + reportLine.startPrice + tab
-		+ "StartValue:" + tab + reportLine.startValue);
-	System.out.println("EndPos: " + tab + reportLine.endPos + tab
-		+ "EndPrice: " + tab + reportLine.endPrice + tab + "EndValue:"
-		+ tab + reportLine.endValue);
-	System.out.println("Buy: " + tab + reportLine.buy + tab + "Sell: " + tab
-		+ reportLine.sell + tab + "Short:" + tab + reportLine.shortSell
-		+ tab + "CoverShort:" + tab + reportLine.coverShort);
+	System.out.println("From: " + tab + reportLine.getFromDateInt() + tab
+		+ "To: " + tab + reportLine.getToDateInt());
+	System.out.println("StartPos: " + tab + reportLine.getStartPos() + tab
+		+ "StartPrice: " + tab + reportLine.getStartPrice() + tab
+		+ "StartValue:" + tab + reportLine.getStartValue());
+	System.out.println("EndPos: " + tab + reportLine.getEndPos() + tab
+		+ "EndPrice: " + tab + reportLine.getEndPrice() + tab + "EndValue:"
+		+ tab + reportLine.getEndValue());
+	System.out.println("Buy: " + tab + reportLine.getBuy() + tab + "Sell: " + tab
+		+ reportLine.getSell() + tab + "Short:" + tab + reportLine.getShortSell()
+		+ tab + "CoverShort:" + tab + reportLine.getCoverShort());
 	System.out.println("Income: " + tab + reportLine.income + tab
-		+ "Expense: " + tab + reportLine.expense);
-	System.out.println("LongBasis: " + tab + reportLine.longBasis + tab
-		+ "ShortBasis: " + tab + reportLine.shortBasis);
-	System.out.println("RealizedGain: " + tab + reportLine.realizedGain
-		+ tab + "UnrealizedGain: " + tab + reportLine.unrealizedGain
-		+ tab + "TotalGain:" + tab + reportLine.totalGain);
-	printPerfMaps(reportLine.arMap, reportLine.mdMap, reportLine.transMap,
+		+ "Expense: " + tab + reportLine.getExpense());
+	System.out.println("LongBasis: " + tab + reportLine.getLongBasis() + tab
+		+ "ShortBasis: " + tab + reportLine.getShortBasis());
+	System.out.println("RealizedGain: " + tab + reportLine.getRealizedGain()
+		+ tab + "UnrealizedGain: " + tab + reportLine.getUnrealizedGain()
+		+ tab + "TotalGain:" + tab + reportLine.getTotalGain());
+	printPerfMaps(reportLine.getArMap(), reportLine.getMdMap(), reportLine.getTransMap(),
 		"Maps");
-	System.out.println("\n" + "mdReturn: " + tab + reportLine.mdReturn + tab
-		+ "AnnualReturn: " + tab + reportLine.annualPercentReturn);
+	System.out.println("\n" + "mdReturn: " + tab + reportLine.getMdReturn() + tab
+		+ "AnnualReturn: " + tab + reportLine.getAnnualPercentReturn());
 	System.out.println("\n");
 
     }

@@ -34,16 +34,18 @@ import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TY
  *
  */
 public abstract class SecurityReport extends ComponentReport {
-    public DateRange dateRange;
-    public SecurityAccountWrapper secAccountWrapper; 
-    public InvestmentAccountWrapper invAccountWrapper;
-    public Tradeable tradeable;
-    public CurrencyWrapper currencyWrapper;
-    public SecurityTypeWrapper securityTypeWrapper;
-    public SecuritySubTypeWrapper securitySubTypeWrapper;
+    private DateRange dateRange;
+    private SecurityAccountWrapper secAccountWrapper; 
+    private InvestmentAccountWrapper invAccountWrapper;
+    private Tradeable tradeable;
+    private CurrencyWrapper currencyWrapper;
+    private SecurityTypeWrapper securityTypeWrapper;
+    private SecuritySubTypeWrapper securitySubTypeWrapper;
     
     
     
+    
+
     /**Generic constructor populates all members based on secAccountWrapper
      * or sets all to null
      * @param secAccountWrapper
@@ -54,11 +56,13 @@ public abstract class SecurityReport extends ComponentReport {
 	this.dateRange = dateRange;
 	if (secAccountWrapper != null) {
 	    this.secAccountWrapper = secAccountWrapper;
-	    this.invAccountWrapper = secAccountWrapper.invAcctWrapper;
-	    this.tradeable = secAccountWrapper.tradeable;
-	    this.currencyWrapper = secAccountWrapper.currWrapper;
-	    this.securityTypeWrapper = secAccountWrapper.securityTypeWrapper;
-	    this.securitySubTypeWrapper = secAccountWrapper.securitySubTypeWrapper;
+	    this.invAccountWrapper = secAccountWrapper.getInvAcctWrapper();
+	    this.tradeable = secAccountWrapper.getTradeable();
+	    this.currencyWrapper = secAccountWrapper.getCurrencyWrapper();
+	    this.securityTypeWrapper = secAccountWrapper
+		    .getSecurityTypeWrapper();
+	    this.securitySubTypeWrapper = secAccountWrapper
+		    .getSecuritySubTypeWrapper();
 	    
 	} else {
 	    this.secAccountWrapper = null;
@@ -118,6 +122,59 @@ public abstract class SecurityReport extends ComponentReport {
      * @param rptValues
      */
     public abstract void addLineBody(ArrayList<Object> rptValues);
+    
+    public SecurityAccountWrapper getSecAccountWrapper() {
+        return secAccountWrapper;
+    }
+
+    public Tradeable getTradeable() {
+        return tradeable;
+    }
+
+    public CurrencyWrapper getCurrencyWrapper() {
+        return currencyWrapper;
+    }
+
+    public SecurityTypeWrapper getSecurityTypeWrapper() {
+        return securityTypeWrapper;
+    }
+
+    public SecuritySubTypeWrapper getSecuritySubTypeWrapper() {
+        return securitySubTypeWrapper;
+    }
+
+    public InvestmentAccountWrapper getInvAccountWrapper() {
+        return invAccountWrapper;
+    }
+    
+    public DateRange getDateRange(){
+	return dateRange;
+    }
+
+    public void setSecAccountWrapper(SecurityAccountWrapper secAccountWrapper) {
+        this.secAccountWrapper = secAccountWrapper;
+    }
+
+    public void setInvAccountWrapper(InvestmentAccountWrapper invAccountWrapper) {
+        this.invAccountWrapper = invAccountWrapper;
+    }
+
+    public void setTradeable(Tradeable tradeable) {
+        this.tradeable = tradeable;
+    }
+
+    public void setSecurityTypeWrapper(SecurityTypeWrapper securityTypeWrapper) {
+        this.securityTypeWrapper = securityTypeWrapper;
+    }
+
+    public void setSecuritySubTypeWrapper(
+    	SecuritySubTypeWrapper securitySubTypeWrapper) {
+        this.securitySubTypeWrapper = securitySubTypeWrapper;
+    }
+    
+    public void setCurrencyWrapper(CurrencyWrapper currencyWrapper){
+	this.currencyWrapper = currencyWrapper;
+    }
 
 }
 

@@ -41,15 +41,15 @@ import com.moneydance.apps.md.model.SecurityType;
  */
 public class InvestmentAccountWrapper extends Aggregator implements AccountWrapper   {
     //associated Investment Account
-    public InvestmentAccount invAcct;
+    private InvestmentAccount investmentAccount;
     // Account Number
-    public int acctNum;
+    private int acctNum;
     //associated Parent Account
-    public Account parentAccount;
+    private Account parentAccount;
     //associated CashAccount
-    public SecurityAccountWrapper cashAcct;
+    private SecurityAccountWrapper cashWrapper;
     //Security Account Wrappers
-    public HashSet<SecurityAccountWrapper> secAccts;
+    private HashSet<SecurityAccountWrapper> securityAccountWrappers;
     // default name
     static String defaultName = "~All-Accts";
     // default column to sort on
@@ -60,21 +60,21 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     
     public InvestmentAccountWrapper(InvestmentAccount invAcct,
 	    BulkSecInfo currentInfo) throws Exception {
-	this.invAcct = invAcct;
-	this.acctNum = this.invAcct.getAccountNum();
-	this.parentAccount = this.getAccountReference();
-	this.secAccts = new HashSet<SecurityAccountWrapper>();
-	this.cashAcct = getCashWrapper(currentInfo, this);
-	this.secAccts.add(cashAcct);
+	this.investmentAccount = invAcct;
+	this.acctNum = this.investmentAccount.getAccountNum();
+	this.parentAccount = this.getParentAccountReference();
+	this.securityAccountWrappers = new HashSet<SecurityAccountWrapper>();
+	this.cashWrapper = createCashWrapper(currentInfo, this);
+	this.securityAccountWrappers.add(cashWrapper);
     }
 
     /* (non-Javadoc)
      * @see com.moneydance.modules.features.invextension.AccountWrapper#getAccountRef()
      */
     @Override
-    public Account getAccountReference() {
+    public Account getParentAccountReference() {
 	// TODO Auto-generated method stub
-	return invAcct.getRootAccount();
+	return investmentAccount.getRootAccount();
     }
     
     @Override
@@ -105,7 +105,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     @Override
     public SortedSet<TransactionValues> getTransactionValues() throws Exception {
 	SortedSet<TransactionValues> theseTransValues = new TreeSet<TransactionValues>();
-	for (Iterator<SecurityAccountWrapper> iterator = secAccts.iterator(); iterator
+	for (Iterator<SecurityAccountWrapper> iterator = securityAccountWrappers.iterator(); iterator
 		.hasNext();) {
 	    AccountWrapper acctWrapper = (AccountWrapper) iterator.next();
 
@@ -118,7 +118,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 		    boolean success = theseTransValues.add(transactionValues);
 		    if (!success)
 			throw new Exception("Error: Failed on "
-				+ this.invAcct.getAccountName()
+				+ this.investmentAccount.getAccountName()
 				+ "getTransValues");
 		}
 
@@ -133,21 +133,21 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
      * @return
      * @throws Exception 
      */
-    public static SecurityAccountWrapper getCashWrapper(
+    public static SecurityAccountWrapper createCashWrapper(
 	    BulkSecInfo currentInfo, InvestmentAccountWrapper invAcctWrapper) throws Exception {
 	SecurityAccount cashAccount = new SecurityAccount("~Cash",
 		BulkSecInfo.getNextAcctNumber(), BulkSecInfo.getCashCurrencyWrapper(), null, null,
-		invAcctWrapper.invAcct);
+		invAcctWrapper.investmentAccount);
 	cashAccount.setComment("New Security to hold cash transactions");
 	cashAccount.setSecurityType(SecurityType.MUTUAL);
 	cashAccount.setSecuritySubType("Money Market");
 	SecurityAccountWrapper cashAcctWrapper = new SecurityAccountWrapper(
 		cashAccount, invAcctWrapper);
-	cashAcctWrapper.secAcct = cashAccount;
-	cashAcctWrapper.currWrapper = BulkSecInfo.getCurrencyWrappers()
-		.get(BulkSecInfo.getCashCurrencyWrapper().getID());
-	cashAcctWrapper.invAcctWrapper = invAcctWrapper;
-	cashAcctWrapper.transValuesSet = new TreeSet<TransactionValues>();
+	cashAcctWrapper.setSecurityAccount(cashAccount);
+	cashAcctWrapper.setCurrencyWrapper(BulkSecInfo.getCurrencyWrappers()
+		.get(BulkSecInfo.getCashCurrencyWrapper().getID()));
+	cashAcctWrapper.setInvAcctWrapper(invAcctWrapper);
+	cashAcctWrapper.setTransValuesSet(new TreeSet<TransactionValues>());
 	BulkSecInfo.setNextAcctNumber(BulkSecInfo.getNextAcctNumber() + 1);
 	CurrencyWrapper cashCurrWrapper = BulkSecInfo.getCurrencyWrappers()
 		.get(BulkSecInfo.getCashCurrencyWrapper().getID());
@@ -165,12 +165,12 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 	//add to tempTransValues all Security and Account-Level Cash transactions
 	//for this InvestmentAccountWrapper
 	tempTransValues.addAll(this.getTransactionValues());
-	tempTransValues.addAll(currentInfo.getTransValuesForSingleAcct(this.invAcct));
+	tempTransValues.addAll(currentInfo.getTransValuesForSingleAcct(this.investmentAccount));
 	SortedSet<TransactionValues> cashTransactions = new TreeSet<TransactionValues>();
 	//add initial balance as a transValues object (use day before first
 	// transaction date if available, creation date if not
 	int firstDateInt = tempTransValues.isEmpty() ? DateUtils
-		.getPrevBusinessDay(this.invAcct.getCreationDateInt())
+		.getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
 		: DateUtils.getPrevBusinessDay(tempTransValues.first().dateint);
 	cashTransactions.add(new TransactionValues(this, firstDateInt));
 	//now there is guaranteed to be one transaction, so prevTransValues
@@ -183,12 +183,12 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 	    cashTransactions.add(new TransactionValues(transactionValues, prevTransValues,
 		    this));
 	}
-	this.cashAcct.addTransactionValuesSet(cashTransactions);
+	this.cashWrapper.addTransactionValuesSet(cashTransactions);
     }
 
     @Override
-    public AccountWrapper getCashAccount() {
-	return this.cashAcct;
+    public AccountWrapper getCashAccountWrapper() {
+	return this.cashWrapper;
     }
 
     @Override
@@ -211,7 +211,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 
     @Override
     public String getName() {
-	return this.invAcct.getAccountName();
+	return this.investmentAccount.getAccountName();
     }
 
     @Override
@@ -222,7 +222,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 
     @Override
     public HashSet<SecurityAccountWrapper> getSecurityAccountWrappers() {
-	return this.secAccts;
+	return this.securityAccountWrappers;
     }
 
     @Override
@@ -247,22 +247,26 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     
     @Override
     String getFirstAggregateName() {
-   	return this.invAcct.getAccountName();
+   	return this.investmentAccount.getAccountName();
        }
 
        @Override
     String getSecondAggregateName() {
-	   return this.invAcct.getAccountName() + "~";
+	   return this.investmentAccount.getAccountName() + "~";
        }
 
        @Override
     String getAllAggregateName() {
-	   return this.invAcct.getAccountName() + "*";
+	   return this.investmentAccount.getAccountName() + "*";
        }
        
        @Override
     String getDefaultName(){
 	   return "~All-Accounts";
        }
+
+    public Account getInvestmentAccount() {
+	return this.investmentAccount;
+    }
 
 }

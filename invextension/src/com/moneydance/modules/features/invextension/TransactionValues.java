@@ -126,15 +126,15 @@ public class TransactionValues implements Comparable<TransactionValues> {
 	    throws Exception {
 	// copy base values from Security Transaction
 	String memo = "Inserted for Inital Balance: "
-		+ invAcctWrapper.invAcct.getAccountName();
+		+ invAcctWrapper.getInvestmentAccount().getAccountName();
 	this.parentTxn = new ParentTxn(firstDateInt, firstDateInt,
 		System.currentTimeMillis(), "",
-		invAcctWrapper.cashAcct.getSecurityAccountWrapper(), memo, memo,
+		invAcctWrapper.getCashAccountWrapper().getSecurityAccountWrapper(), memo, memo,
 		BulkSecInfo.getNextTxnNumber(), AbstractTxn.STATUS_UNRECONCILED);
 	this.txnID = BulkSecInfo.getNextTxnNumber();
 	BulkSecInfo.setNextTxnNumber(BulkSecInfo.getNextTxnNumber() + 1L);
 
-	this.referenceAccount = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+	this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccountWrapper();
 	this.dateint = firstDateInt;
 
 	this.desc = this.parentTxn.getDescription();
@@ -142,7 +142,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
 	this.transfer = 0.0;
 
-	Double initBal = Double.valueOf(invAcctWrapper.invAcct
+	Double initBal = Double.valueOf(invAcctWrapper.getInvestmentAccount()
 		.getStartBalance()) / 100.0;
 
 	this.buy = 0.0;
@@ -335,7 +335,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
     	    InvestmentAccountWrapper invAcctWrapper) throws Exception {
     	// copy base values from Security Transaction
     	this.parentTxn = transactionValues.parentTxn;
-    	this.referenceAccount = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+    	this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccountWrapper();
     	this.dateint = transactionValues.dateint;
     	// adding 0.1 to related transValues id to ensure unique cash id
     	this.txnID = TxnUtil.getInvestTxnType(transactionValues.parentTxn) == 

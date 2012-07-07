@@ -77,36 +77,36 @@ public class CheckRepSnap {
 	String acctName = compositeReport != null ? compositeReport.getName()
 		: snapLine.getName();
 	String acctTicker = compositeReport != null ? "NoTicker"
-		: snapLine.currencyWrapper.ticker;
+		: snapLine.getCurrencyWrapper().ticker;
 
 	System.out.println("Account: " + tab + acctName + tab + "Ticker:" + tab
 		+ acctTicker);
-	System.out.println("Snapshot Date: " + tab + snapLine.snapDateInt);
-	printRetDateMap(snapLine.returnsStartDate, "Return Dates");
-	printInputMap(snapLine.startPoses, "Start Positions");
-	printInputMap(snapLine.startPrices, "Start Prices");
-	printInputMap(snapLine.startValues, "Start Values");
+	System.out.println("Snapshot Date: " + tab + snapLine.getSnapDateInt());
+	printRetDateMap(snapLine.getReturnsStartDate(), "Return Dates");
+	printInputMap(snapLine.getStartPoses(), "Start Positions");
+	printInputMap(snapLine.getStartPrices(), "Start Prices");
+	printInputMap(snapLine.getStartValues(), "Start Values");
 
-	System.out.println("EndPos: " + tab + snapLine.endPos + tab
-		+ "EndPrice: " + tab + snapLine.lastPrice + tab + "EndValue:"
-		+ tab + snapLine.endValue);
+	System.out.println("EndPos: " + tab + snapLine.getEndPos() + tab
+		+ "EndPrice: " + tab + snapLine.getLastPrice() + tab + "EndValue:"
+		+ tab + snapLine.getEndValue());
 
-	printInputMap(snapLine.incomes, "Income Amounts");
-	printInputMap(snapLine.expenses, "Expense Amounts");
+	printInputMap(snapLine.getIncomes(), "Income Amounts");
+	printInputMap(snapLine.getExpenses(), "Expense Amounts");
 
 	System.out.println("All Maps Follow: \n");
-	printAllPerfMaps(snapLine.mdMap, snapLine.arMap, snapLine.transMap);
+	printAllPerfMaps(snapLine.getMdMap(), snapLine.getArMap(), snapLine.getTransMap());
 
 	System.out.println("Returns: \n");
-	System.out.println("1-Day Ret: " + tab + snapLine.totRet1Day + tab
-		+ "1-Wk Ret: " + tab + snapLine.totRetWk + tab + "4-Wk Ret: "
-		+ tab + snapLine.totRet4Wk + tab + "3-Mnth Ret: " + tab
-		+ snapLine.totRet3Mnth + tab + "1-Yr Ret: " + tab
-		+ snapLine.totRetYear + tab + "3-Yr Ret: " + tab
-		+ snapLine.totRet3year + tab + "YTD Ret: " + tab
-		+ snapLine.totRetYTD + tab + "All Ret: " + tab
-		+ snapLine.totRetAll + tab + "All AnnRet: " + tab
-		+ snapLine.annRetAll + tab);
+	System.out.println("1-Day Ret: " + tab + snapLine.getTotRet1Day() + tab
+		+ "1-Wk Ret: " + tab + snapLine.getTotRetWk() + tab + "4-Wk Ret: "
+		+ tab + snapLine.getTotRet4Wk() + tab + "3-Mnth Ret: " + tab
+		+ snapLine.getTotRet3Mnth() + tab + "1-Yr Ret: " + tab
+		+ snapLine.getTotRetYear() + tab + "3-Yr Ret: " + tab
+		+ snapLine.getTotRet3year() + tab + "YTD Ret: " + tab
+		+ snapLine.getTotRetYTD() + tab + "All Ret: " + tab
+		+ snapLine.getTotRetAll() + tab + "All AnnRet: " + tab
+		+ snapLine.getAnnRetAll() + tab);
     }
 
     public static void printRetDateMap(CategoryMap<Integer> categoryMap,

@@ -490,7 +490,7 @@ public class BulkSecInfo {
 		// set CurrencyWrapper associated with this SecurityWrapper
 		secAcctWrapper.setCurrencyWrapper(thisCurWrapper);
 		// add Security Account to Investment Account
-		invAcctWrapper.secAccts.add(secAcctWrapper);
+		invAcctWrapper.getSecurityAccountWrappers().add(secAcctWrapper);
 		// add security transvalues to security account
 		secAcctWrapper.addTransactionValuesSet(getTransValuesForSingleAcct(
 			secAcct));

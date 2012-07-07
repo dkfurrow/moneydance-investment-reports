@@ -100,11 +100,11 @@ public class GenericTestMethods {
 	    SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
 	    securityFromToReports.add(securityFromToReport);
 	    testDateMap = testDateMap
-		    .combine(securityFromToReport.mdMap, "add");
+		    .combine(securityFromToReport.getMdMap(), "add");
 	    testIncome += securityFromToReport.income;
-	    testExpense += securityFromToReport.expense;
-	    testStartValue += securityFromToReport.startValue;
-	    testEndValue += securityFromToReport.endValue;
+	    testExpense += securityFromToReport.getExpense();
+	    testStartValue += securityFromToReport.getStartValue();
+	    testEndValue += securityFromToReport.getEndValue();
 	}
 
 	double testMDReturn = securityFromToReports
@@ -123,7 +123,7 @@ public class GenericTestMethods {
 		    compositeReport.aggregateReport;
 	    if (compositeReport.firstAggregateVal == null
 		    && compositeReport.secondAggregateVal == null) {
-		reportMDReturn = aggregateReport.mdReturn;
+		reportMDReturn = aggregateReport.getMdReturn();
 		reportLeafCount = compositeReport.securityReports.size();
 	    } else {
 		testLeafCount += compositeReport.securityReports.size();
@@ -173,11 +173,13 @@ public class GenericTestMethods {
     private static void listCreateDatesANDInitBals(BulkSecInfo currentInfo) {
 	HashMap<Account, Double> initBals = new HashMap<Account, Double>();
 	HashMap<Account, Integer> createDates = new HashMap<Account, Integer>();
-	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo.getInvestmentWrappers();
+	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo
+		.getInvestmentWrappers();
 	for (Iterator iterator = theseInvs.iterator(); iterator.hasNext();) {
 	    InvestmentAccountWrapper investmentAccountWrapper = (InvestmentAccountWrapper) iterator
 		    .next();
-	    InvestmentAccount invAcct = investmentAccountWrapper.invAcct;
+	    InvestmentAccount invAcct = (InvestmentAccount) investmentAccountWrapper
+		    .getInvestmentAccount();
 	    initBals.put(invAcct, Long.valueOf(invAcct.getStartBalance())
 		    .doubleValue());
 	    createDates.put(invAcct, invAcct.getCreationDateInt());

@@ -480,11 +480,11 @@ public class ReportProdTest {
 	    SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
 	    securityFromToReports.add(securityFromToReport);
 	    testDateMap = testDateMap
-		    .combine(securityFromToReport.mdMap, "add");
+		    .combine(securityFromToReport.getMdMap(), "add");
 	    testIncome += securityFromToReport.income;
-	    testExpense += securityFromToReport.expense;
-	    testStartValue += securityFromToReport.startValue;
-	    testEndValue += securityFromToReport.endValue;
+	    testExpense += securityFromToReport.getExpense();
+	    testStartValue += securityFromToReport.getStartValue();
+	    testEndValue += securityFromToReport.getEndValue();
 	}
 
 	double testMDReturn = securityFromToReports
@@ -503,7 +503,7 @@ public class ReportProdTest {
 		    compositeReport.aggregateReport;
 	    if (compositeReport.firstAggregateVal == null
 		    && compositeReport.secondAggregateVal == null) {
-		reportMDReturn = aggregateReport.mdReturn;
+		reportMDReturn = aggregateReport.getMdReturn();
 		reportLeafCount = compositeReport.securityReports.size();
 	    } else {
 		testLeafCount += compositeReport.securityReports.size();
@@ -575,15 +575,15 @@ public class ReportProdTest {
 		    compositeReport.aggregateReport;
 	    if (compositeReport.firstAggregateVal == null
 		    && compositeReport.secondAggregateVal == null) {
-		reportMDReturn = aggregateReport.mdReturn;
+		reportMDReturn = aggregateReport.getMdReturn();
 		reportLeafCount = compositeReport.securityReports.size();
 	    } else if (compositeReport.compositeType == COMPOSITE_TYPE.FIRST) {
 		testLeafCount += compositeReport.securityReports.size();
-		testDateMap = testDateMap.combine(aggregateReport.mdMap, "add");
+		testDateMap = testDateMap.combine(aggregateReport.getMdMap(), "add");
 		testIncome += aggregateReport.income;
-		testExpense += aggregateReport.expense;
-		testStartValue += aggregateReport.startValue;
-		testEndValue += aggregateReport.endValue;
+		testExpense += aggregateReport.getExpense();
+		testStartValue += aggregateReport.getStartValue();
+		testEndValue += aggregateReport.getEndValue();
 
 	    }
 	}

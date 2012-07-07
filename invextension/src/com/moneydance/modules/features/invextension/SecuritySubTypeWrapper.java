@@ -42,8 +42,7 @@ public class SecuritySubTypeWrapper extends Aggregator {
     public SecuritySubTypeWrapper(AccountWrapper accountWrapper)
 	    throws Exception {
 	this.accountWrapper = accountWrapper;
-	String subtypeStr = accountWrapper.getSecurityAccountWrapper().secAcct
-		.getSecuritySubType();
+	String subtypeStr = accountWrapper.getSecurityAccountWrapper().getSecuritySubType();
 	if (subtypeStr == null || subtypeStr.length() == 0) {
 	    this.securitySubType = "None";
 	} else {
