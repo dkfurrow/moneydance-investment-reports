@@ -42,7 +42,7 @@ public class SecurityTypeWrapper extends Aggregator {
 
     public SecurityTypeWrapper(AccountWrapper accountWrapper) throws Exception {
 	this.accountWrapper = accountWrapper;
-	SecurityType type = this.accountWrapper.getSecurityAccountWrapper().secAcct
+	SecurityType type = this.accountWrapper.getSecurityAccountWrapper()
 		.getSecurityType();
 	if (type == null) {
 	    this.securityType = SecurityType.DEFAULT;

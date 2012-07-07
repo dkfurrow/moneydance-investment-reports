@@ -137,26 +137,26 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	if (this.isCompositeFor(securityReport)) {
 	    this.aggregateReport.addTo(securityReport);
 	    this.securityReports.add(securityReport);
-	    if (this.aggregateReport.invAccountWrapper != null
-		    && !this.aggregateReport.invAccountWrapper
-			    .equals(securityReport.invAccountWrapper))		
-		this.aggregateReport.invAccountWrapper = null;
-	    if (this.aggregateReport.securityTypeWrapper != null
-		    && !this.aggregateReport.securityTypeWrapper
-			    .equals(securityReport.securityTypeWrapper))		
-		this.aggregateReport.securityTypeWrapper = null;
-	    if (this.aggregateReport.securitySubTypeWrapper != null
-		    && !this.aggregateReport.securitySubTypeWrapper
-			    .equals(securityReport.securitySubTypeWrapper))		
-		this.aggregateReport.securitySubTypeWrapper = null;
-	    if (this.aggregateReport.tradeable != null
-		    && !this.aggregateReport.tradeable
-			    .equals(securityReport.tradeable))		
-		this.aggregateReport.tradeable = null;
-	    if (this.aggregateReport.currencyWrapper != null
-		    && !this.aggregateReport.currencyWrapper
-			    .equals(securityReport.currencyWrapper)){
-		this.aggregateReport.currencyWrapper = null;
+	    if (this.aggregateReport.getInvAccountWrapper() != null
+		    && !this.aggregateReport.getInvAccountWrapper()
+			    .equals(securityReport.getInvAccountWrapper()))		
+		this.aggregateReport.setInvAccountWrapper(null);
+	    if (this.aggregateReport.getSecurityTypeWrapper() != null
+		    && !this.aggregateReport.getSecurityTypeWrapper()
+			    .equals(securityReport.getSecurityTypeWrapper()))		
+		this.aggregateReport.setSecuritySubTypeWrapper(null);
+	    if (this.aggregateReport.getSecuritySubTypeWrapper() != null
+		    && !this.aggregateReport.getSecuritySubTypeWrapper()
+			    .equals(securityReport.getSecuritySubTypeWrapper()))		
+		this.aggregateReport.setSecuritySubTypeWrapper(null);
+	    if (this.aggregateReport.getTradeable() != null
+		    && !this.aggregateReport.getTradeable()
+			    .equals(securityReport.getTradeable()))		
+		this.aggregateReport.setTradeable(null);
+	    if (this.aggregateReport.getCurrencyWrapper() != null
+		    && !this.aggregateReport.getCurrencyWrapper()
+			    .equals(securityReport.getCurrencyWrapper())){
+		this.aggregateReport.setCurrencyWrapper(null);
 		
 	    }
 		
@@ -328,9 +328,9 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	    //currency (SecurityType is property of Security)
 	    Iterator<SecurityReport> iterator = securityReports.iterator();
 	    SecurityReport securityReport = iterator.next();
-	    securityTypeStr = securityReport.securityTypeWrapper.getName();
-	    securitySubTypeStr = securityReport.securitySubTypeWrapper.getName();
-	    securityAccountStr = securityReport.secAccountWrapper.getName();
+	    securityTypeStr = securityReport.getSecurityTypeWrapper().getName();
+	    securitySubTypeStr = securityReport.getSecuritySubTypeWrapper().getName();
+	    securityAccountStr = securityReport.getSecAccountWrapper().getName();
 	}
 	    
 

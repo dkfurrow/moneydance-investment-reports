@@ -37,36 +37,36 @@ import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TY
  * @author Dale Furrow
  */
 public class SecurityFromToReport extends SecurityReport {
-    public int fromDateInt;            // start of report period
-    public int toDateInt;              // end of report period
+    private int fromDateInt;            // start of report period
+    private int toDateInt;              // end of report period
 
-    public double startPos;            // starting position
-    public double endPos;              // ending position
-    public double startPrice;          // starting price
-    public double endPrice;            // ending price
-    public double startValue;          // starting value
-    public double endValue;            // ending value
+    private double startPos;            // starting position
+    private double endPos;              // ending position
+    private double startPrice;          // starting price
+    private double endPrice;            // ending price
+    private double startValue;          // starting value
+    private double endValue;            // ending value
     
-    public double buy;                 // cumulative cash effect of buys (including commission)
-    public double sell;                // cumulative cash effect of sells (including commission)
-    public double shortSell;           // cumulative cash effect of shorts (including commission)
-    public double coverShort;          // cumulative cash effect of covers (including commission)
+    private double buy;                 // cumulative cash effect of buys (including commission)
+    private double sell;                // cumulative cash effect of sells (including commission)
+    private double shortSell;           // cumulative cash effect of shorts (including commission)
+    private double coverShort;          // cumulative cash effect of covers (including commission)
 
     public double income;              // cumulative income
-    public double expense;             // cumulative expense
+    private double expense;             // cumulative expense
 
-    public double longBasis;           // ending average cost basis of long positions
-    public double shortBasis;          // ending average cost basis of short positions
-    public double realizedGain;        // cumulative realized gains (against avg cost)
-    public double unrealizedGain;      // cumulative unrealized gains
-    public double totalGain;           // sum of realized and unrealized gains
+    private double longBasis;           // ending average cost basis of long positions
+    private double shortBasis;          // ending average cost basis of short positions
+    private double realizedGain;        // cumulative realized gains (against avg cost)
+    private double unrealizedGain;      // cumulative unrealized gains
+    private double totalGain;           // sum of realized and unrealized gains
 
-    public double mdReturn;            // period total return (Mod-Dietz method)
-    public double annualPercentReturn; // period annualized return (Mod-Dietz method)
+    private double mdReturn;            // period total return (Mod-Dietz method)
+    private double annualPercentReturn; // period annualized return (Mod-Dietz method)
     
-    public DateMap arMap;              // date map of annual return data
-    public DateMap mdMap;              // date map of Mod-Dietz return data
-    public DateMap transMap;           // date map of transfer data
+    private DateMap arMap;              // date map of annual return data
+    private DateMap mdMap;              // date map of Mod-Dietz return data
+    private DateMap transMap;           // date map of transfer data
 
     
     /**
@@ -258,15 +258,15 @@ public class SecurityFromToReport extends SecurityReport {
     public void addTo(SecurityReport securityReport)  {
         SecurityFromToReport securityFromToReport = (SecurityFromToReport)securityReport;
         
-	if (this.secAccountWrapper != null)
+	if (this.getSecAccountWrapper() != null)
 	    throw new UnsupportedOperationException(
 		    "Illegal call to addTo method for SecurityReport");
         //if CurrencyWrappers are the same then prices and positions can be
 	//added--if not, set prices and positions to zero
-	if (this.currencyWrapper != null
-		&& securityFromToReport.currencyWrapper != null
-		&& this.currencyWrapper
-			.equals(securityFromToReport.currencyWrapper)) {
+	if (this.getCurrencyWrapper() != null
+		&& securityFromToReport.getCurrencyWrapper() != null
+		&& this.getCurrencyWrapper()
+			.equals(securityFromToReport.getCurrencyWrapper())) {
 	    this.startPos += securityFromToReport.startPos;
 	    this.endPos += securityFromToReport.endPos;
 	    this.startPrice = securityFromToReport.startPrice;
@@ -309,11 +309,11 @@ public class SecurityFromToReport extends SecurityReport {
 	
 	ArrayList<Object> snapValues = new ArrayList<Object>();
 
-	snapValues.add(this.invAccountWrapper.getName());
-	snapValues.add(this.secAccountWrapper.getName());
-	snapValues.add(this.securityTypeWrapper.getName());
-	snapValues.add(this.securitySubTypeWrapper.getName());
-	snapValues.add(this.currencyWrapper.ticker);
+	snapValues.add(this.getInvAccountWrapper().getName());
+	snapValues.add(this.getSecAccountWrapper().getName());
+	snapValues.add(this.getSecurityTypeWrapper().getName());
+	snapValues.add(this.getSecuritySubTypeWrapper().getName());
+	snapValues.add(this.getCurrencyWrapper().ticker);
 
 	addLineBody(snapValues);
 	
@@ -370,13 +370,13 @@ public class SecurityFromToReport extends SecurityReport {
 	    Class<T> firstAggClass, Class<U> secondAggClass,
 	    COMPOSITE_TYPE compType) {
 	CompositeReport<T, U> thisComposite = new CompositeReport<T, U>(this,
-		this.dateRange, firstAggClass, secondAggClass, compType);
+		this.getDateRange(), firstAggClass, secondAggClass, compType);
 	return thisComposite;
     }
 
     @Override
     public SecurityReport getAggregateSecurityReport() {
-	SecurityFromToReport thisAggregate = new SecurityFromToReport(null, dateRange);
+	SecurityFromToReport thisAggregate = new SecurityFromToReport(null, getDateRange());
 	//add report body values (except Returns)
 	thisAggregate.startPos = this.startPos;
 	thisAggregate.endPos = this.endPos;
@@ -401,24 +401,124 @@ public class SecurityFromToReport extends SecurityReport {
 	thisAggregate.transMap = this.transMap;
 	
 	//make aggregating classes the same except secAccountWrapper
-	thisAggregate.invAccountWrapper = this.invAccountWrapper;
-	thisAggregate.secAccountWrapper = null;
-	thisAggregate.securityTypeWrapper = this.securityTypeWrapper;
-	thisAggregate.securitySubTypeWrapper = this.securitySubTypeWrapper;
-	thisAggregate.tradeable = this.tradeable;
-	thisAggregate.currencyWrapper = this.currencyWrapper;
+	thisAggregate.setInvAccountWrapper(this.getInvAccountWrapper());
+	thisAggregate.setSecAccountWrapper(null);
+	thisAggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
+	thisAggregate.setSecuritySubTypeWrapper(this.getSecuritySubTypeWrapper());
+	thisAggregate.setTradeable(this.getTradeable());
+	thisAggregate.setCurrencyWrapper(this.getCurrencyWrapper());
 	
 	return thisAggregate;
     }
 
     @Override
     public String getName() {
-	if (this.secAccountWrapper == null) {
+	if (this.getSecAccountWrapper() == null) {
 	    return "Null SecAccountWrapper";
 	} else {
-	    return this.invAccountWrapper.getName() + ": "
-		    + this.secAccountWrapper.getAccountName();
+	    return this.getInvAccountWrapper().getName() + ": "
+		    + this.getSecAccountWrapper().getAccountName();
 	}
+    }
+
+    public int getFromDateInt() {
+        return fromDateInt;
+    }
+
+    public int getToDateInt() {
+        return toDateInt;
+    }
+
+    public double getStartPos() {
+        return startPos;
+    }
+
+    public double getEndPos() {
+        return endPos;
+    }
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+
+    public double getEndPrice() {
+        return endPrice;
+    }
+
+    public double getStartValue() {
+        return startValue;
+    }
+
+    public double getEndValue() {
+        return endValue;
+    }
+
+    public double getBuy() {
+        return buy;
+    }
+
+    public double getSell() {
+        return sell;
+    }
+
+    public double getShortSell() {
+        return shortSell;
+    }
+
+    public double getCoverShort() {
+        return coverShort;
+    }
+
+    public double getIncome() {
+        return income;
+    }
+
+    public double getExpense() {
+        return expense;
+    }
+
+    public double getLongBasis() {
+        return longBasis;
+    }
+
+    public double getShortBasis() {
+        return shortBasis;
+    }
+
+    public double getRealizedGain() {
+        return realizedGain;
+    }
+
+    public double getUnrealizedGain() {
+        return unrealizedGain;
+    }
+
+    public double getTotalGain() {
+        return totalGain;
+    }
+
+    public double getMdReturn() {
+        return mdReturn;
+    }
+
+    public double getAnnualPercentReturn() {
+        return annualPercentReturn;
+    }
+
+    public DateMap getArMap() {
+        return arMap;
+    }
+
+    public DateMap getMdMap() {
+        return mdMap;
+    }
+
+    public DateMap getTransMap() {
+        return transMap;
+    }
+
+    public void setTotalGain(double totalGain) {
+        this.totalGain = totalGain;
     }
 
 }

@@ -85,7 +85,7 @@ public abstract class TotalReport<T extends Aggregator, U extends Aggregator> {
 	
 	//produce all leaf-level Security Reports
 	for (InvestmentAccountWrapper invWrapper : currentInfo.getInvestmentWrappers()) {
-	    for (SecurityAccountWrapper secWrapper : invWrapper.secAccts) {
+	    for (SecurityAccountWrapper secWrapper : invWrapper.getSecurityAccountWrappers()) {
 		SecurityReport thisReport = getLeafSecurityReport(secWrapper,
 			dateRange);
 		securityReports.add(thisReport);

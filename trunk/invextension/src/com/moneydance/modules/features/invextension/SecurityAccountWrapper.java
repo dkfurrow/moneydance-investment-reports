@@ -37,23 +37,23 @@ import com.moneydance.apps.md.model.SecurityAccount;
  */
 public class SecurityAccountWrapper extends SecurityAccount implements
 	AccountWrapper, Comparable<SecurityAccountWrapper> {
-    public SecurityAccount secAcct;
-    public int acctNum;
-    public Account parentAccount;
-    public CurrencyWrapper currWrapper;
-    public Tradeable tradeable;
-    public SecurityTypeWrapper securityTypeWrapper;
-    public SecuritySubTypeWrapper securitySubTypeWrapper;
-    public InvestmentAccountWrapper invAcctWrapper;
-    public SortedSet<TransactionValues> transValuesSet;
+    private SecurityAccount securityAccount;
+    private int acctNum;
+    private Account parentAccount;
+    private CurrencyWrapper currWrapper;
+    private Tradeable tradeable;
+    private SecurityTypeWrapper securityTypeWrapper;
+    private SecuritySubTypeWrapper securitySubTypeWrapper;
+    private InvestmentAccountWrapper invAcctWrapper;
+    private SortedSet<TransactionValues> transValuesSet;
 
     public SecurityAccountWrapper(SecurityAccount secAcct,
 	    InvestmentAccountWrapper invAcct) throws Exception {
 	super(secAcct.getAccountName(), secAcct.getAccountNum(), secAcct
 		.getCurrencyType(), secAcct.cloneParameters(),
 		getSubAccount(secAcct), secAcct.getParentAccount());
-	this.secAcct = secAcct;
-	this.acctNum = this.secAcct.getAccountNum();
+	this.securityAccount = secAcct;
+	this.acctNum = this.securityAccount.getAccountNum();
 	this.parentAccount = secAcct.getParentAccount();
 	this.invAcctWrapper = invAcct;
 	this.transValuesSet = new TreeSet<TransactionValues>();
@@ -62,6 +62,18 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 	this.tradeable = new Tradeable(this.currWrapper);
 	this.securityTypeWrapper = new SecurityTypeWrapper(this);
 	this.securitySubTypeWrapper = new SecuritySubTypeWrapper(this);
+    }
+
+    public void setSecurityAccount(SecurityAccount securityAccount) {
+        this.securityAccount = securityAccount;
+    }
+
+    public void setCurrWrapper(CurrencyWrapper currWrapper) {
+        this.currWrapper = currWrapper;
+    }
+
+    public void setTransValuesSet(SortedSet<TransactionValues> transValuesSet) {
+        this.transValuesSet = transValuesSet;
     }
 
     private static Vector<Account> getSubAccount(SecurityAccount secAcct2) {
@@ -86,7 +98,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
      * ()
      */
     @Override
-    public Account getAccountReference() {
+    public Account getParentAccountReference() {
 	return this.parentAccount;
     }
 
@@ -96,8 +108,8 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     }
 
     @Override
-    public AccountWrapper getCashAccount() {
-	return this.invAcctWrapper.cashAcct;
+    public AccountWrapper getCashAccountWrapper() {
+	return this.invAcctWrapper.getCashAccountWrapper();
     }
 
     @Override
@@ -107,7 +119,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 
     @Override
     public int compareTo(SecurityAccountWrapper o) {
-	return BulkSecInfo.acctComp.compare(this.secAcct, o.secAcct);
+	return BulkSecInfo.acctComp.compare(this.securityAccount, o.securityAccount);
     }
     
     @Override
@@ -124,9 +136,9 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 	if (thisTransValuesSet != null && !thisTransValuesSet.isEmpty()) {
 	    boolean success = this.transValuesSet.addAll(thisTransValuesSet);
 	    if (!success) {
-		System.out.println("Name: " + invAcctWrapper.invAcct.getAccountName());
+		System.out.println("Name: " + invAcctWrapper.getInvestmentAccount().getAccountName());
 		throw new Exception("addTransValuesSet failed for Account: "
-			+ this.secAcct.getAccountName());
+			+ this.securityAccount.getAccountName());
 	    }
 	}
 
@@ -139,7 +151,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     
     public String getFullName() {
 	return this.getAccountName() + ": "
-		+ this.secAcct.getParentAccount().getAccountName();
+		+ this.securityAccount.getParentAccount().getAccountName();
     }
 
     @Override
@@ -161,12 +173,38 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 
     @Override
     public SecuritySubTypeWrapper getSecuritySubTypeWrapper() {
-	return this.getSecuritySubTypeWrapper();
+	return this.securitySubTypeWrapper;
     }
 
     @Override
     public Tradeable getTradeable() {
 	return this.tradeable;
+    }
+
+    public InvestmentAccountWrapper getInvAcctWrapper() {
+        return invAcctWrapper;
+    }
+
+    public void setInvAcctWrapper(InvestmentAccountWrapper invAcctWrapper) {
+        this.invAcctWrapper = invAcctWrapper;
+    }
+
+    public SecurityAccount getSecAcct() {
+        return securityAccount;
+    }
+
+    public int getAcctNum() {
+        return acctNum;
+    }
+
+    
+
+    public CurrencyWrapper getCurrWrapper() {
+        return currWrapper;
+    }
+
+    public SortedSet<TransactionValues> getTransValuesSet() {
+        return transValuesSet;
     }
 
 }

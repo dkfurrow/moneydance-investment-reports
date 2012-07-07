@@ -38,7 +38,7 @@ public interface AccountWrapper {
 
     public HashSet<SecurityAccountWrapper> getSecurityAccountWrappers();
 
-    public AccountWrapper getCashAccount();
+    public AccountWrapper getCashAccountWrapper();
 
     public CurrencyWrapper getCurrencyWrapper() throws Exception;
     
@@ -53,7 +53,7 @@ public interface AccountWrapper {
     /**
      * @return parent for accountwrapper
      */
-    public Account getAccountReference();
+    public Account getParentAccountReference();
     
     public SecurityAccountWrapper getSecurityAccountWrapper() throws Exception;
 
