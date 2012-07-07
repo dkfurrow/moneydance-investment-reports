@@ -36,7 +36,7 @@ import java.util.Iterator;
  * @param <T>
  * @param <U>
  */
-public class CompositeReport<T extends AggregatingType, U extends AggregatingType>
+public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	extends ComponentReport {
     //COMPOSITE_TYPE controls type of Aggregation (i.e. first aggregator only,
     // second aggregator only, or both (i.e. A, B, A && B)
@@ -46,7 +46,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
     public Class<U> secondAggregateClass; //Class of second Aggregator
     public T firstAggregateVal; //aggregator value of first Aggregate Type
     public U secondAggregateVal;//aggregator value of first Aggregate Type
-    public COMPOSITE_TYPE compType; //composite type
+    public COMPOSITE_TYPE compositeType; //composite type
     // security report which contains aggregated values
     public SecurityReport aggregateReport;
     // Hash set which contains references to SecurityReports aggregated by 
@@ -61,7 +61,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
      */
     public CompositeReport(DateRange dateRange, Class<T> firstAggClass,
 	    Class<U> secondAggClass) {
-	this.compType = COMPOSITE_TYPE.ALL;
+	this.compositeType = COMPOSITE_TYPE.ALL;
 	this.firstAggregateClass = firstAggClass;
 	this.secondAggregateClass = secondAggClass;
 	this.firstAggregateVal = null;
@@ -77,17 +77,17 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
      * @param dateRange
      * @param firstAggClass
      * @param secondAggClass
-     * @param compType
+     * @param compositeType
      */
     public CompositeReport(SecurityReport securityReport, DateRange dateRange,
 	    Class<T> firstAggClass, Class<U> secondAggClass,
-	    COMPOSITE_TYPE compType) {
+	    COMPOSITE_TYPE compositeType) {
 
 	this.firstAggregateClass = firstAggClass;
 	this.secondAggregateClass = secondAggClass;
-	this.compType = compType;
+	this.compositeType = compositeType;
 
-	switch (compType) {
+	switch (compositeType) {
 	case FIRST: //aggregate first value only
 	    this.firstAggregateVal = securityReport
 		    .getAggregate(this.firstAggregateClass);
@@ -113,7 +113,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
     }
 
     
-    /** gets Default name for AggregatingType (e.g. "All Securities + Cash"
+    /** gets Default name for Aggregator (e.g. "All Securities + Cash"
      * for InvestmentAccount, "All Currencies" for CurrencyType)
      * @param aggClass
      * @return
@@ -123,7 +123,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
      * @throws IllegalAccessException
      */
     public static String getDefaultName(
-	    Class<? extends AggregatingType> aggClass)
+	    Class<? extends Aggregator> aggClass)
 	    throws SecurityException, NoSuchFieldException,
 	    IllegalArgumentException, IllegalAccessException {
 	Field defaultNameField = aggClass.getDeclaredField("defaultName");
@@ -174,7 +174,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	if (getClass() != obj.getClass())
 	    return false;
 	CompositeReport<?, ?> other = (CompositeReport<?, ?>) obj;
-	if (compType != other.compType)
+	if (compositeType != other.compositeType)
 	    return false;
 	if (firstAggregateVal == null) {
 	    if (other.firstAggregateVal != null)
@@ -199,7 +199,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	String firstValName = " ";
 	String secondValName = " ";
 
-	switch (compType) {
+	switch (compositeType) {
 	case FIRST:
 	    firstValName = this.firstAggregateVal.getAllAggregateName();
 	    secondValName = CompositeReport
@@ -219,7 +219,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	    secondValName = "ALL-AGGREGATE";
 	}
 	name.append(firstValName).append(": ").append(secondValName)
-		.append(": ").append(this.compType);
+		.append(": ").append(this.compositeType);
 	return name.toString();
     }
     
@@ -228,7 +228,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	final int prime = 31;
 	int result = 1;
 	result = prime * result
-		+ ((compType == null) ? 0 : compType.hashCode());
+		+ ((compositeType == null) ? 0 : compositeType.hashCode());
 	result = prime
 		* result
 		+ ((firstAggregateVal == null) ? 0 : firstAggregateVal
@@ -247,15 +247,15 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
      */
     public boolean isCompositeFor(SecurityReport securityReport) {
 	boolean compositeFor = false;
-	if (this.compType == COMPOSITE_TYPE.ALL) {
+	if (this.compositeType == COMPOSITE_TYPE.ALL) {
 	    compositeFor = true;
-	} else if (this.compType == COMPOSITE_TYPE.SECOND) {
+	} else if (this.compositeType == COMPOSITE_TYPE.SECOND) {
 	    if (this.secondAggregateVal.equals(securityReport
 		    .getAggregate(this.secondAggregateClass)))
 		compositeFor = true;
 	}
 
-	else if (this.compType == COMPOSITE_TYPE.FIRST) {
+	else if (this.compositeType == COMPOSITE_TYPE.FIRST) {
 	    if (this.firstAggregateVal.equals(securityReport
 		    .getAggregate(this.firstAggregateClass)))
 		compositeFor = true;
@@ -295,16 +295,16 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	String firstAggStrName = "~Null";
 	String secondAggStrName = "~Null";
 
-	if (this.compType == COMPOSITE_TYPE.ALL) {
+	if (this.compositeType == COMPOSITE_TYPE.ALL) {
 	    firstAggStrName = CompositeReport
 		    .getDefaultName(this.firstAggregateClass);
 	    secondAggStrName = CompositeReport
 		    .getDefaultName(this.secondAggregateClass);
-	} else if (this.compType == COMPOSITE_TYPE.FIRST) {
+	} else if (this.compositeType == COMPOSITE_TYPE.FIRST) {
 	    firstAggStrName = this.firstAggregateVal.getAllAggregateName();
 	    secondAggStrName = CompositeReport
 		    .getDefaultName(this.secondAggregateClass);
-	} else if (this.compType == COMPOSITE_TYPE.SECOND) {
+	} else if (this.compositeType == COMPOSITE_TYPE.SECOND) {
 	    firstAggStrName = CompositeReport
 		    .getDefaultName(this.firstAggregateClass);
 	    secondAggStrName = this.secondAggregateVal.getAllAggregateName();
@@ -321,7 +321,7 @@ public class CompositeReport<T extends AggregatingType, U extends AggregatingTyp
 	    securitySubTypeStr = firstAggStrName;
 	if (this.firstAggregateClass == Tradeable.class)
 	    securityAccountStr = firstAggStrName;
-	if (this.firstAggregateClass == CurrencyWrapper.class && this.compType !=COMPOSITE_TYPE.ALL){
+	if (this.firstAggregateClass == CurrencyWrapper.class && this.compositeType !=COMPOSITE_TYPE.ALL){
 	    tickerStr = firstAggStrName;
 	    //take remaining information from abitrary member of security reports
 	    //covers case where SecurityType, etc, different for same

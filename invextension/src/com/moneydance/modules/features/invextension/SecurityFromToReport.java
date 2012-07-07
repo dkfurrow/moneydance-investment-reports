@@ -116,7 +116,7 @@ public class SecurityFromToReport extends SecurityReport {
         if (secAccountWrapper != null) {
             
             // Currency will never be null if accountWrapper is cash or security
-            CurrencyType currency = secAccountWrapper.getCurrWrapper().curType; 
+            CurrencyType currency = secAccountWrapper.getCurrencyWrapper().curType; 
             
             this.startPrice = 1.0 / currency.getUserRateByDateInt(fromDateInt);
             this.endPrice = 1.0 / currency.getUserRateByDateInt(toDateInt);            
@@ -130,82 +130,82 @@ public class SecurityFromToReport extends SecurityReport {
             double fromDateRate = currency == null ? 1.0
                 : currency.getUserRateByDateInt(fromDateInt);
             
-            SortedSet<TransValues> transSet = secAccountWrapper.getTransValues();
+            SortedSet<TransactionValues> transSet = secAccountWrapper.getTransactionValues();
 
             // iterates through full transaction set
-            for (Iterator<TransValues> it = transSet.iterator(); it.hasNext();) {
-                TransValues transValues = it.next();
+            for (Iterator<TransactionValues> it = transSet.iterator(); it.hasNext();) {
+                TransactionValues transactionValues = it.next();
                 
-                double totalFlows = transValues.buy + transValues.sell
-                	+ transValues.shortSell + transValues.coverShort +
-                	transValues.commision + transValues.income +
-                	transValues.expense;
+                double totalFlows = transactionValues.buy + transactionValues.sell
+                	+ transactionValues.shortSell + transactionValues.coverShort +
+                	transactionValues.commision + transactionValues.income +
+                	transactionValues.expense;
 
                 // Where transactions are before report dates
-                if (transValues.dateint <= fromDateInt) {
+                if (transactionValues.dateint <= fromDateInt) {
                     double splitAdjust = currency == null
                         ? 1.0
-                        : currency.adjustRateForSplitsInt(transValues.dateint,
+                        : currency.adjustRateForSplitsInt(transactionValues.dateint,
                                                           fromDateRate,
                                                           fromDateInt) / fromDateRate;
                     // split adjusts last position from TransValuesCum
-                    this.startPos = transValues.position * splitAdjust;
+                    this.startPos = transactionValues.position * splitAdjust;
                     this.startValue = this.startPrice * this.startPos;
-                    startLongBasis = transValues.longBasis;
-                    startShortBasis = transValues.shortBasis;
+                    startLongBasis = transactionValues.longBasis;
+                    startShortBasis = transactionValues.shortBasis;
 
                     // Initializes ending balance sheet values to start values (in
                     // case there are no transactions within report period).
                     this.endPos = this.startPos;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transValues.longBasis;
-                    this.shortBasis = transValues.shortBasis;
+                    this.longBasis = transactionValues.longBasis;
+                    this.shortBasis = transactionValues.shortBasis;
                 }
                 // Where transaction period intersects report period
-                if (transValues.dateint > fromDateInt
-                    && transValues.dateint <= toDateInt) {
+                if (transactionValues.dateint > fromDateInt
+                    && transactionValues.dateint <= toDateInt) {
                     // cf is net cash effect of buy/sell/short/cover, incl
                     // commission
-                    double cf = -(transValues.buy
-                                  + transValues.sell
-                                  + transValues.shortSell
-                                  + transValues.coverShort +
-                                  transValues.commision);
+                    double cf = -(transactionValues.buy
+                                  + transactionValues.sell
+                                  + transactionValues.shortSell
+                                  + transactionValues.coverShort +
+                                  transactionValues.commision);
 
                     // add values to date maps
-                    this.arMap.add(transValues.dateint,
+                    this.arMap.add(transactionValues.dateint,
                                    totalFlows);
-                    this.mdMap.add(transValues.dateint, cf);
-                    this.transMap.add(transValues.dateint, transValues.transfer);
+                    this.mdMap.add(transactionValues.dateint, cf);
+                    this.transMap.add(transactionValues.dateint, transactionValues.transfer);
 
                     // Add the cumulative Values (note buys are defined by change in
                     // long basis, same with sells--commission is included).
-                    this.buy += transValues.buy == 0.0
+                    this.buy += transactionValues.buy == 0.0
                         ? 0.0
-                        : -transValues.buy - transValues.commision;
-                    this.sell += transValues.sell == 0.0
+                        : -transactionValues.buy - transactionValues.commision;
+                    this.sell += transactionValues.sell == 0.0
                         ? 0.0
-                        : -transValues.sell - transValues.commision;
-                    this.shortSell += transValues.shortSell == 0.0
+                        : -transactionValues.sell - transactionValues.commision;
+                    this.shortSell += transactionValues.shortSell == 0.0
                         ? 0.0
-                        : -transValues.shortSell - transValues.commision;
-                    this.coverShort += transValues.coverShort == 0.0
+                        : -transactionValues.shortSell - transactionValues.commision;
+                    this.coverShort += transactionValues.coverShort == 0.0
                         ? 0.0
-                        : -transValues.coverShort - transValues.commision;
-                    this.income += transValues.income;
-                    this.expense += transValues.expense;
-                    this.realizedGain += transValues.perRealizedGain;
+                        : -transactionValues.coverShort - transactionValues.commision;
+                    this.income += transactionValues.income;
+                    this.expense += transactionValues.expense;
+                    this.realizedGain += transactionValues.perRealizedGain;
 
                     // retrieves ending balance sheet variables
                     double splitAdjust = currency == null
                         ? 1.0 : currency.adjustRateForSplitsInt
-                        	(transValues.dateint, toDateRate,
+                        	(transactionValues.dateint, toDateRate,
                         		toDateInt) / toDateRate;
                     
-                    this.endPos = transValues.position * splitAdjust;
+                    this.endPos = transactionValues.position * splitAdjust;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transValues.longBasis;
-                    this.shortBasis = transValues.shortBasis;
+                    this.longBasis = transactionValues.longBasis;
+                    this.shortBasis = transactionValues.shortBasis;
 
                 } // end--where transaction period intersects report period
             } // end of input transaction set loop
@@ -366,7 +366,7 @@ public class SecurityFromToReport extends SecurityReport {
     }
 
     @Override
-    public <T extends AggregatingType, U extends AggregatingType> CompositeReport<T, U> getCompositeReport(
+    public <T extends Aggregator, U extends Aggregator> CompositeReport<T, U> getCompositeReport(
 	    Class<T> firstAggClass, Class<U> secondAggClass,
 	    COMPOSITE_TYPE compType) {
 	CompositeReport<T, U> thisComposite = new CompositeReport<T, U>(this,

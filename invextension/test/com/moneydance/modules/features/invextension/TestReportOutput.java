@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
-import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
-import com.moneydance.modules.features.invextension.SecReportPanel.ReportTableModel;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
+import com.moneydance.modules.features.invextension.ReportControlPanel.ReportTableModel;
 
 
 public class TestReportOutput extends JFrame{
@@ -28,7 +28,7 @@ public class TestReportOutput extends JFrame{
     public static void main(String[] args) throws Exception {
 	RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
 	JFrame frame = new TestReportOutput();
-	SecReportPanel panel = new SecReportPanel(root);
+	ReportControlPanel panel = new ReportControlPanel(root);
 	panel.setDates(fromDateInt, toDateInt, toDateInt);
 	panel.setOpaque(true);
 	frame.setContentPane(panel);

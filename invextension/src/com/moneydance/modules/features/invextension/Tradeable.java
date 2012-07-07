@@ -25,12 +25,12 @@ package com.moneydance.modules.features.invextension;
 /**
  * Tradeable class is a derivative of Currency.
  * Represents Securities of all currencies Except the currency representing
- * uninvested cash (BulkSecInfo.cashCurType)
+ * uninvested cash (BulkSecInfo.cashCurrencyWrapper)
  * Version 1.0 
  * @author Dale Furrow
  *
  */
-public class Tradeable extends AggregatingType {
+public class Tradeable extends Aggregator {
     CurrencyWrapper currencyWrapper;
     Boolean isTradeable;
     static String defaultName = "~AllSec+Cash";
@@ -41,7 +41,7 @@ public class Tradeable extends AggregatingType {
     
     public Tradeable(CurrencyWrapper currencyWrapper){
 	this.currencyWrapper = currencyWrapper;
-	if(this.currencyWrapper.curType == BulkSecInfo.cashCurType){
+	if(this.currencyWrapper.curType == BulkSecInfo.getCashCurrencyWrapper()){
 	    this.isTradeable = false;
 	} else {
 	    this.isTradeable = true;

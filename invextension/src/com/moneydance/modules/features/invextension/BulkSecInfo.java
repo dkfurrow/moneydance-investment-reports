@@ -62,29 +62,29 @@ public class BulkSecInfo {
     /* conveys account data here for processing */
     public Main extension;
     /* root account */
-    public RootAccount root;
+    private RootAccount root;
     /* GainsCalc Type */
-    public GainsCalc gainsCalc;
+    private GainsCalc gainsCalc;
     /* list of relevant accounts (Investment and Security) */
-    public HashSet<Account> secAccts;
+    private HashSet<Account> secAccts;
     /* Cash Currency Type for uninvested cash */
-    public static CurrencyType cashCurType;
-    /* static reference to nextAcctNum (to number account implementations of
+    private static CurrencyType cashCurrencyWrapper;
+    /* static reference to nextAcctNumber (to number account implementations of
      * cash currency */
-    public static int nextAcctNum;
-    /*static reference to nextTxnNum (to uniquely identify initial balance
+    private static int nextAcctNumber;
+    /*static reference to nextTxnNumber (to uniquely identify initial balance
      *  cash transactions)*/
-    public static long nextTxnNum;
+    private static long nextTxnNumber;
     /* first transaction date (to price cash currency)*/
-    public static int firstDateInt;
+    private static int firstDateInt;
     /* HashSet of CurrencyWrappers */
-    public static HashMap<Integer, CurrencyWrapper> curs;
+    private static HashMap<Integer, CurrencyWrapper> currencyWrappers;
     /* all transactions in root */
-    public static TransactionSet transSet;
+    private static TransactionSet transactionSet;
     /*TreeMap of Transvalues for leaf-level security Accounts */
-    public TreeMap<Double, TransValues> securityTransValues;
+    private TreeMap<Double, TransactionValues> securityTransactionValues;
     /* HashSet of InvestmentAccount Wrappers */
-    public HashSet<InvestmentAccountWrapper> invs;
+    private HashSet<InvestmentAccountWrapper> investmentWrappers;
     
     
     
@@ -92,14 +92,14 @@ public class BulkSecInfo {
     public BulkSecInfo(RootAccount root, GainsCalc gainsCalc) throws Exception {
 	this.root = root;
 	this.gainsCalc = gainsCalc;
-	nextAcctNum = this.root.getHighestAccountNum() + 1;
-	transSet = this.root.getTransactionSet();
-	securityTransValues = new TreeMap<Double, TransValues>();
-	BulkSecInfo.firstDateInt = transSet.getDateBounds().getStartDateInt();
-	BulkSecInfo.nextTxnNum = transSet.getAllTxns().getLastTxn().getTxnId() + 1L;
-	cashCurType = defineCashCurrency();
-	curs = getCurWrappers();
-	invs = getInvestmentAccountInfo(getSelectedSubAccounts(root,
+	nextAcctNumber = this.root.getHighestAccountNum() + 1;
+	transactionSet = this.root.getTransactionSet();
+	securityTransactionValues = new TreeMap<Double, TransactionValues>();
+	BulkSecInfo.firstDateInt = transactionSet.getDateBounds().getStartDateInt();
+	BulkSecInfo.nextTxnNumber = transactionSet.getAllTxns().getLastTxn().getTxnId() + 1L;
+	cashCurrencyWrapper = defineCashCurrency();
+	currencyWrappers = getCurrencyWrappersFromRoot();
+	investmentWrappers = getInvestmentAccountInfo(getSelectedSubAccounts(root,
 		Account.ACCOUNT_TYPE_INVESTMENT));
     }
     
@@ -183,9 +183,58 @@ public class BulkSecInfo {
 	} // end compare method
     }; // end inner class
 
+    public static int getNextAcctNumber() {
+        return nextAcctNumber;
+    }
+
+    public static void setNextAcctNumber(int nextAcctNumber) {
+        BulkSecInfo.nextAcctNumber = nextAcctNumber;
+    }
+
+    public static long getNextTxnNumber() {
+        return nextTxnNumber;
+    }
+
+    public static void setNextTxnNumber(long nextTxnNumber) {
+        BulkSecInfo.nextTxnNumber = nextTxnNumber;
+    }
+
+    public RootAccount getRoot() {
+        return root;
+    }
+
+    public GainsCalc getGainsCalc() {
+        return gainsCalc;
+    }
+
+    public HashSet<InvestmentAccountWrapper> getInvestmentWrappers() {
+        return investmentWrappers;
+    }   
+    public static TransactionSet getTransactionSet() {
+        return transactionSet;
+    }
+
+    public TreeMap<Double, TransactionValues> getSecurityTransactionValues() {
+        return securityTransactionValues;
+    }
     
 
-   
+    public static CurrencyType getCashCurrencyWrapper() {
+        return cashCurrencyWrapper;
+    }
+
+    public HashSet<Account> getSecAccts() {
+        return secAccts;
+    }
+    public static HashMap<Integer, CurrencyWrapper> getCurrencyWrappers() {
+        return currencyWrappers;
+    }
+    
+    public static int getFirstDateInt(){
+	return firstDateInt;
+    }
+    
+
     /**
      * loads selected accounts into HashSet
      * @param parentAcct
@@ -276,7 +325,7 @@ public class BulkSecInfo {
 
 	for (Iterator<CurrencyWrapper> it = theseCurs.values().iterator(); it
 		.hasNext();) {
-	    CurrencyWrapper curWrapper = (CurrencyWrapper) it.next();
+	    CurrencyWrapper curWrapper =  it.next();
 	    for (int i = 0; i < curWrapper.curType.getSnapshotCount(); i++) {
 		currInfo.add(loadCurrencySnapshotArray(curWrapper.curType, i));
 	    }
@@ -348,7 +397,7 @@ public class BulkSecInfo {
     
    
 
-    /**lists all TransValues in InvestmentAccountWrappers
+    /**lists all TransactionValues in InvestmentAccountWrappers
      * @param invAcctWrappers
      * @return
      * @throws Exception
@@ -359,14 +408,13 @@ public class BulkSecInfo {
 
 	for (Iterator<InvestmentAccountWrapper> it = invAcctWrappers.iterator(); it
 		.hasNext();) {
-	    InvestmentAccountWrapper thisInvAccount = (InvestmentAccountWrapper) it
-		    .next();
-	    TreeSet<TransValues> accountLines = new TreeSet<TransValues>(
-		    thisInvAccount.getTransValues());
-	    for (Iterator<TransValues> it1 = accountLines.iterator(); it1
+	    InvestmentAccountWrapper thisInvAccount =  it.next();
+	    TreeSet<TransactionValues> accountLines = new TreeSet<TransactionValues>(
+		    thisInvAccount.getTransactionValues());
+	    for (Iterator<TransactionValues> it1 = accountLines.iterator(); it1
 		    .hasNext();) {
-		TransValues reportLine = (TransValues) it1.next();
-		txnInfo.add(TransValues.loadArrayTransValues(reportLine));
+		TransactionValues reportLine = it1.next();
+		txnInfo.add(TransactionValues.loadArrayTransValues(reportLine));
 	    }
 	}
 	Collections.sort(txnInfo, PrntAcct_Order);
@@ -387,7 +435,7 @@ public class BulkSecInfo {
     /** creates map of currency ids and associated currency wrappers
      * @return
      */
-    private HashMap<Integer, CurrencyWrapper> getCurWrappers() {
+    private HashMap<Integer, CurrencyWrapper> getCurrencyWrappersFromRoot() {
 	CurrencyType[] currencies = root.getCurrencyTable().getAllCurrencies();
 	HashMap<Integer, CurrencyWrapper> wrapperHashMap = 
 		new HashMap<Integer, CurrencyWrapper>();
@@ -399,8 +447,8 @@ public class BulkSecInfo {
 	    }
 	}
 	// make sure new Currency is added!
-	wrapperHashMap.put(BulkSecInfo.cashCurType.getID(),
-		new CurrencyWrapper(BulkSecInfo.cashCurType));
+	wrapperHashMap.put(BulkSecInfo.cashCurrencyWrapper.getID(),
+		new CurrencyWrapper(BulkSecInfo.cashCurrencyWrapper));
 
 	return wrapperHashMap;
     }
@@ -434,17 +482,17 @@ public class BulkSecInfo {
 		SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(
 			secAcct, invAcctWrapper);
 		
-		CurrencyWrapper thisCurWrapper = curs.get(secAcct
+		CurrencyWrapper thisCurWrapper = currencyWrappers.get(secAcct
 			.getCurrencyType().getID());
 		// add account to list of accounts in currWrapper
 		thisCurWrapper.secAccts
-			.add((SecurityAccountWrapper) secAcctWrapper);
+			.add(secAcctWrapper);
 		// set CurrencyWrapper associated with this SecurityWrapper
-		secAcctWrapper.setCurrWrapper(thisCurWrapper);
+		secAcctWrapper.setCurrencyWrapper(thisCurWrapper);
 		// add Security Account to Investment Account
 		invAcctWrapper.secAccts.add(secAcctWrapper);
 		// add security transvalues to security account
-		secAcctWrapper.addTransValuesSet(getTransValuesForSingleAcct(
+		secAcctWrapper.addTransactionValuesSet(getTransValuesForSingleAcct(
 			secAcct));
 	    }//end Security Sub Accounts Loop
 	    // add cash transactions to synthetic cash account under this 
@@ -457,20 +505,20 @@ public class BulkSecInfo {
 	return invAcctWrappers;
     }
     
-    /**gets TransValues for either single security account or single investment
+    /**gets TransactionValues for either single security account or single investment
      * account (i.e. investment-account-level transvalues
      * @param thisAccount
      * @param gainsCalc
      * @return
      */
-    public SortedSet<TransValues> getTransValuesForSingleAcct(Account thisAccount) {
-	SortedSet<TransValues> transValuesSet = new TreeSet<TransValues>();
+    public SortedSet<TransactionValues> getTransValuesForSingleAcct(Account thisAccount) {
+	SortedSet<TransactionValues> transValuesSet = new TreeSet<TransactionValues>();
 	TreeSet<ParentTxn> assocTrans = new TreeSet<ParentTxn>(txnComp);
-	TxnSet txnSet = BulkSecInfo.transSet
+	TxnSet txnSet = BulkSecInfo.transactionSet
 		.getTransactionsForAccount(thisAccount);
 	for (Iterator<AbstractTxn> iterator = txnSet.iterator(); iterator
 		.hasNext();) {
-	    AbstractTxn abstractTxn = (AbstractTxn) iterator.next();
+	    AbstractTxn abstractTxn =  iterator.next();
 	    if (getAssociatedAccount(abstractTxn) == thisAccount) {
 		assocTrans.add(abstractTxn instanceof ParentTxn ? 
 			(ParentTxn) abstractTxn	: abstractTxn.getParentTxn());
@@ -479,12 +527,12 @@ public class BulkSecInfo {
 	}
 	for (Iterator<ParentTxn> iterator = assocTrans.iterator(); iterator
 		.hasNext();) {
-	    ParentTxn parentTxn = (ParentTxn) iterator.next();
-	    TransValues transValuesToAdd = new TransValues(parentTxn,
+	    ParentTxn parentTxn = iterator.next();
+	    TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
 		    thisAccount, transValuesSet, this);
 	    transValuesSet.add(transValuesToAdd);
 	    if (thisAccount instanceof SecurityAccount)
-		securityTransValues.put(transValuesToAdd.txnID,
+		securityTransactionValues.put(transValuesToAdd.txnID,
 			transValuesToAdd);
 
 	}

@@ -1,4 +1,4 @@
-/* TransValues.java
+/* TransactionValues.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -40,11 +40,11 @@ import com.moneydance.apps.md.model.TxnUtil;
  * @version 1.0
  * @since 1.0
 */
-public class TransValues implements Comparable<TransValues> {
+public class TransactionValues implements Comparable<TransactionValues> {
     
     public ParentTxn parentTxn;       //parentTxn account
     // reference account (to determine correct sign for transfers)
-    public Account accountRef;
+    public Account referenceAccount;
     public Integer dateint;        //transaction date
     public double txnID;             //transaction ID
     public String desc;		   //transaction description	
@@ -81,19 +81,19 @@ public class TransValues implements Comparable<TransValues> {
     // period total gain (one transaction to next) after completion of
     // transaction
     public double perTotalGain;
-    
+    private static final double positionThreshold = 0.0005;
 
     // cumulative total gain after completion of transaction
     public double cumTotalGain;
-    static Comparator<TransValues> transComp = new Comparator<TransValues>() {
+    static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
 	@Override
-	public int compare(TransValues t1, TransValues t2) {
+	public int compare(TransactionValues t1, TransactionValues t2) {
 	    Integer d1 = t1.dateint;
 	    Integer d2 = t2.dateint;
 	    Double id1 = t1.txnID;
 	    Double id2 = t2.txnID;
-	    Integer assocAcctNum1 = t1.accountRef.getAccountNum();
-	    Integer assocAcctNum2 = t1.accountRef.getAccountNum();
+	    Integer assocAcctNum1 = t1.referenceAccount.getAccountNum();
+	    Integer assocAcctNum2 = t1.referenceAccount.getAccountNum();
 	    Integer transTypeSort1 = t1.getTxnSortOrder();
 	    Integer transTypeSort2 = t2.getTxnSortOrder();
 
@@ -117,12 +117,12 @@ public class TransValues implements Comparable<TransValues> {
    
     /**Constructor to create a cash transaction from the Investment Account 
      * initial balance
-    * @param transValuesSet TransValues from Investment or Security Account
-    * @param prevTrans previous TransValues (to get position)
+    * @param transValuesSet TransactionValues from Investment or Security Account
+    * @param prevTrans previous TransactionValues (to get position)
     * @param invAcctWrapper Investment Account
      * @throws Exception 
     */
-    public TransValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
+    public TransactionValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
 	    throws Exception {
 	// copy base values from Security Transaction
 	String memo = "Inserted for Inital Balance: "
@@ -130,11 +130,11 @@ public class TransValues implements Comparable<TransValues> {
 	this.parentTxn = new ParentTxn(firstDateInt, firstDateInt,
 		System.currentTimeMillis(), "",
 		invAcctWrapper.cashAcct.getSecurityAccountWrapper(), memo, memo,
-		BulkSecInfo.nextTxnNum, AbstractTxn.STATUS_UNRECONCILED);
-	this.txnID = BulkSecInfo.nextTxnNum;
-	BulkSecInfo.nextTxnNum += 1L;
+		BulkSecInfo.getNextTxnNumber(), AbstractTxn.STATUS_UNRECONCILED);
+	this.txnID = BulkSecInfo.getNextTxnNumber();
+	BulkSecInfo.setNextTxnNumber(BulkSecInfo.getNextTxnNumber() + 1L);
 
-	this.accountRef = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+	this.referenceAccount = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
 	this.dateint = firstDateInt;
 
 	this.desc = this.parentTxn.getDescription();
@@ -178,18 +178,18 @@ public class TransValues implements Comparable<TransValues> {
 		+ this.perIncomeExpense;
 	this.cumTotalGain = 0.0;
     }
-    /**Constructor which creates an appropriate TransValues object from a 
+    /**Constructor which creates an appropriate TransactionValues object from a 
      *  primary security-level or Investment Account-level transaction 
      * @param thisParentTxn Parent Transaction
-     * @param accountRef Investment Account associated with Security or bank transaction
+     * @param referenceAccount Investment Account associated with Security or bank transaction
      * @param bulkSecInfo 
      * @param transValuesSet 
      */
-    public TransValues(ParentTxn thisParentTxn, Account accountRef,
-	    SortedSet<TransValues> prevTransLines, BulkSecInfo currentInfo) {
+    public TransactionValues(ParentTxn thisParentTxn, Account referenceAccount,
+	    SortedSet<TransactionValues> prevTransLines, BulkSecInfo currentInfo) {
         //intitalize values
         this.parentTxn = thisParentTxn;
-        this.accountRef = accountRef;
+        this.referenceAccount = referenceAccount;
         this.dateint = Integer.valueOf(thisParentTxn.getDateInt());
         this.txnID = Long.valueOf(thisParentTxn.getTxnId()).doubleValue();
         this.desc = thisParentTxn.getDescription();
@@ -208,8 +208,8 @@ public class TransValues implements Comparable<TransValues> {
             //account in the case of a security, investment account
             //(i.e. itself) in the case of an investment account.
             SplitValues thisSplit = new SplitValues(parentTxn.getSplit(i),
-                    accountRef.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT
-                    ? accountRef : accountRef.getParentAccount());
+                    referenceAccount.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT
+                    ? referenceAccount : referenceAccount.getParentAccount());
 
             this.buy = this.buy + thisSplit.splitBuy;
             this.sell = this.sell + thisSplit.splitSell;
@@ -224,9 +224,9 @@ public class TransValues implements Comparable<TransValues> {
         }
         
         //fill in rest of transValues
-	TransValues prevTransLine = prevTransLines.isEmpty() ? null : prevTransLines
+	TransactionValues prevTransLine = prevTransLines.isEmpty() ? null : prevTransLines
 		.last();
-	CurrencyType cur = this.accountRef.getCurrencyType();
+	CurrencyType cur = this.referenceAccount.getCurrencyType();
 	int currentDateInt = this.parentTxn.getDateInt();
 	double currentRate = cur == null ? 1.0 : cur
 		.getUserRateByDateInt(currentDateInt);
@@ -247,13 +247,13 @@ public class TransValues implements Comparable<TransValues> {
 	    this.position = this.secQuantity;
 	} else { // subsequent transaction
 	    //round to zero if negligibly small  
-	    this.position = Math.abs(this.secQuantity + adjPrevPos) < 0.0005 ? 0.0
+	    this.position = Math.abs(this.secQuantity + adjPrevPos) < positionThreshold ? 0.0
 		    : this.secQuantity + adjPrevPos;
 	}
 
 	
 	//get long and short basis
-	GainsCalc gainsCalc = currentInfo.gainsCalc;
+	GainsCalc gainsCalc = currentInfo.getGainsCalc();
 	gainsCalc.intializeGainsCalc(currentInfo, this, prevTransLines);
 	this.longBasis = gainsCalc.getLongBasis();
 	this.shortBasis = gainsCalc.getShortBasis();
@@ -324,30 +324,30 @@ public class TransValues implements Comparable<TransValues> {
 	
 
     }
-    /**Generic Constructor for TransValues which are inserted into
+    /**Generic Constructor for TransactionValues which are inserted into
      * synthetically created cash account
-     * @param transValues TransValues from Investment or Security Account
-     * @param prevTransValues previous TransValues (to get position)
+     * @param transactionValues TransactionValues from Investment or Security Account
+     * @param prevTransValues previous TransactionValues (to get position)
      * @param invAcctWrapper Investment Account
      * @throws Exception 
      */
-    public TransValues(TransValues transValues, TransValues prevTransValues,
+    public TransactionValues(TransactionValues transactionValues, TransactionValues prevTransValues,
     	    InvestmentAccountWrapper invAcctWrapper) throws Exception {
     	// copy base values from Security Transaction
-    	this.parentTxn = transValues.parentTxn;
-    	this.accountRef = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
-    	this.dateint = transValues.dateint;
+    	this.parentTxn = transactionValues.parentTxn;
+    	this.referenceAccount = invAcctWrapper.cashAcct.getSecurityAccountWrapper();
+    	this.dateint = transactionValues.dateint;
     	// adding 0.1 to related transValues id to ensure unique cash id
-    	this.txnID = TxnUtil.getInvestTxnType(transValues.parentTxn) == 
-    		InvestTxnType.BANK ? transValues.parentTxn.getTxnId() : 
-    		    transValues.parentTxn.getTxnId() + 0.1;
+    	this.txnID = TxnUtil.getInvestTxnType(transactionValues.parentTxn) == 
+    		InvestTxnType.BANK ? transactionValues.parentTxn.getTxnId() : 
+    		    transactionValues.parentTxn.getTxnId() + 0.1;
     	this.desc = "INSERTED: " + parentTxn.getDescription();
     	this.mktPrice = 1.0;
     	
-    	double thisTransfer = transValues.transfer;
-    	double acctEntry = -transValues.buy - transValues.coverShort
-    		- transValues.sell - transValues.shortSell - transValues.income
-    		- transValues.expense - transValues.commision;
+    	double thisTransfer = transactionValues.transfer;
+    	double acctEntry = -transactionValues.buy - transactionValues.coverShort
+    		- transactionValues.sell - transactionValues.shortSell - transactionValues.income
+    		- transactionValues.expense - transactionValues.commision;
     	double prevPos = prevTransValues.position;
     	
     	this.buy = 0.0;
@@ -433,7 +433,7 @@ public class TransValues implements Comparable<TransValues> {
 	this.secQuantity = -this.buy - this.coverShort - this.sell
 		- this.shortSell;
 
-	this.position = Math.abs(this.secQuantity + prevPos) < 0.0005 ? 0.0
+	this.position = Math.abs(this.secQuantity + prevPos) < positionThreshold ? 0.0
 		: this.secQuantity + prevPos;
     	this.longBasis = this.position >= 0.0 ? this.position : 0.0;
     	this.shortBasis = this.position < 0.0 ? this.position : 0.0;
@@ -487,48 +487,48 @@ public class TransValues implements Comparable<TransValues> {
         * @param transValuesCum
         * @return String Array
         */
-       public static String[] loadArrayTransValues(TransValues transValues) {
+       public static String[] loadArrayTransValues(TransactionValues transactionValues) {
     	ArrayList<String> txnInfo = new ArrayList<String>();
     	InvestTxnType transType = TxnUtil
-    		.getInvestTxnType(transValues.parentTxn);
+    		.getInvestTxnType(transactionValues.parentTxn);
     
-    	txnInfo.add(transValues.accountRef.getParentAccount()
+    	txnInfo.add(transactionValues.referenceAccount.getParentAccount()
     		.getAccountName());
-    	txnInfo.add(transValues.accountRef.getAccountName());
-    	txnInfo.add(Double.toString(transValues.txnID));
+    	txnInfo.add(transactionValues.referenceAccount.getAccountName());
+    	txnInfo.add(Double.toString(transactionValues.txnID));
     	txnInfo.add(DateUtils
-    		.convertToShort(transValues.dateint));
+    		.convertToShort(transactionValues.dateint));
     	txnInfo.add(transType.toString());
-    	txnInfo.add(transValues.desc);
-    	txnInfo.add(Double.toString(transValues.buy));
-    	txnInfo.add(Double.toString(transValues.sell));
-    	txnInfo.add(Double.toString(transValues.shortSell));
-    	txnInfo.add(Double.toString(transValues.coverShort));
-    	txnInfo.add(Double.toString(transValues.commision));
-    	txnInfo.add(Double.toString(transValues.income));
-    	txnInfo.add(Double.toString(transValues.expense));
-    	txnInfo.add(Double.toString(transValues.transfer));
-    	txnInfo.add(Double.toString(transValues.secQuantity));
-    	txnInfo.add(Double.toString(transValues.mktPrice));
-    	txnInfo.add(Double.toString(transValues.position));
-    	txnInfo.add(Double.toString(transValues.longBasis));
-    	txnInfo.add(Double.toString(transValues.shortBasis));
-    	txnInfo.add(Double.toString(transValues.openValue));
-    	txnInfo.add(Double.toString(transValues.cumUnrealizedGain));
-    	txnInfo.add(Double.toString(transValues.perUnrealizedGain));
-    	txnInfo.add(Double.toString(transValues.perRealizedGain));
-    	txnInfo.add(Double.toString(transValues.perIncomeExpense));
-    	txnInfo.add(Double.toString(transValues.perTotalGain));
-    	txnInfo.add(Double.toString(transValues.cumTotalGain));
+    	txnInfo.add(transactionValues.desc);
+    	txnInfo.add(Double.toString(transactionValues.buy));
+    	txnInfo.add(Double.toString(transactionValues.sell));
+    	txnInfo.add(Double.toString(transactionValues.shortSell));
+    	txnInfo.add(Double.toString(transactionValues.coverShort));
+    	txnInfo.add(Double.toString(transactionValues.commision));
+    	txnInfo.add(Double.toString(transactionValues.income));
+    	txnInfo.add(Double.toString(transactionValues.expense));
+    	txnInfo.add(Double.toString(transactionValues.transfer));
+    	txnInfo.add(Double.toString(transactionValues.secQuantity));
+    	txnInfo.add(Double.toString(transactionValues.mktPrice));
+    	txnInfo.add(Double.toString(transactionValues.position));
+    	txnInfo.add(Double.toString(transactionValues.longBasis));
+    	txnInfo.add(Double.toString(transactionValues.shortBasis));
+    	txnInfo.add(Double.toString(transactionValues.openValue));
+    	txnInfo.add(Double.toString(transactionValues.cumUnrealizedGain));
+    	txnInfo.add(Double.toString(transactionValues.perUnrealizedGain));
+    	txnInfo.add(Double.toString(transactionValues.perRealizedGain));
+    	txnInfo.add(Double.toString(transactionValues.perIncomeExpense));
+    	txnInfo.add(Double.toString(transactionValues.perTotalGain));
+    	txnInfo.add(Double.toString(transactionValues.cumTotalGain));
     	return txnInfo.toArray(new String[txnInfo.size()]);
     
        }
     @Override
-    public int compareTo(TransValues transValues) {
-	return TransValues.transComp.compare(this, transValues);
+    public int compareTo(TransactionValues transactionValues) {
+	return TransactionValues.transComp.compare(this, transactionValues);
     }
     public Account getAccountRef() {
-        return accountRef;
+        return referenceAccount;
     }
     public double getBuy() {
         return buy;
@@ -670,7 +670,7 @@ public double getSecQuantity() {
     
     /**
      * determines buy/sell/income, etc values for split based upon
-     * parentTxn transaction type.  variable names are same as TransValues
+     * parentTxn transaction type.  variable names are same as TransactionValues
      */
     private class SplitValues {
 
@@ -868,6 +868,6 @@ public double getSecQuantity() {
 	} // end splitValues Constructor
     } // end splitValues subClass
     
-} // end TransValues Class
+} // end TransactionValues Class
 
 

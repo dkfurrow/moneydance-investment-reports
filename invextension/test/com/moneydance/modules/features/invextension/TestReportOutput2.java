@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
-import com.moneydance.modules.features.invextension.SecReportPanel.ReportTableModel;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
+import com.moneydance.modules.features.invextension.ReportControlPanel.ReportTableModel;
 
 
 public class TestReportOutput2 {
@@ -32,7 +32,7 @@ public class TestReportOutput2 {
 //		.listTransValuesSet(currentInfo.invs);
 //	File transActivityReportFile = new File("E:\\Temp"
 //		+ "\\transActivityReport.csv");
-//	IOUtils.writeArrayListToCSV(TransValues.listTransValuesHeader(),
+//	IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
 //		transActivityReport, transActivityReportFile);
 //	
 //	TotalReport report = null;
@@ -64,7 +64,7 @@ public class TestReportOutput2 {
 //	IOUtils.writeResultsToFile(outBuffer, testFile);
 //	System.out.println("Finished!");
 //
-//	ReportTable.CreateAndShowTable(model, report.getColumnTypes(),
+//	ReportOutputTable.CreateAndShowTable(model, report.getColumnTypes(),
 //		report.getClosedPosColumn(), report.getFrozenColumn(),
 //		firstSort, secondSort, ColSizeOption.MAXCONTCOLRESIZE,
 //		report.getReportTitle());

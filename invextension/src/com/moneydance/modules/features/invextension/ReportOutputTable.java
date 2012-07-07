@@ -1,4 +1,4 @@
-/* ReportTable.java
+/* ReportOutputTable.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -98,7 +98,7 @@ import javax.swing.table.TableRowSorter;
  * 
  * @author Dale Furrow
  */
-public class ReportTable extends JScrollPane {
+public class ReportOutputTable extends JScrollPane {
     private static final long serialVersionUID = 1654873977162641532L;
 
     private final FormattedTable lockedTable;
@@ -117,7 +117,7 @@ public class ReportTable extends JScrollPane {
 
     private Color lightLightGray = new Color(230, 230, 230);
 
-    public ReportTable(TableModel model, ColType[] colTypes, int numFrozenColumns,
+    public ReportOutputTable(TableModel model, ColType[] colTypes, int numFrozenColumns,
 	    int indClosedPosColumn, int firstSort, int secondSort, 
 	    ColSizeOption sizeOption) {
 	super();
@@ -903,9 +903,9 @@ public class ReportTable extends JScrollPane {
     private class RowSortGui extends JPanel {
 	private static final long serialVersionUID = -8349629256510555172L;
 
-	public ReportTable tablePane;
+	public ReportOutputTable tablePane;
 
-	public RowSortGui(ReportTable thisTable) {
+	public RowSortGui(ReportOutputTable thisTable) {
 	    tablePane = thisTable;
 	    String[] colNames = tablePane.getAllColumnNames();
 	    JPanel boxPanel = new JPanel();
@@ -1067,9 +1067,9 @@ public class ReportTable extends JScrollPane {
 	    } //
 	}
 
-	ReportTable.adjustColumnPreferredWidths(lockedTable,
+	ReportOutputTable.adjustColumnPreferredWidths(lockedTable,
 		ColSizeOption.MAXCONTCOLRESIZE);
-	ReportTable.adjustColumnPreferredWidths(scrollTable,
+	ReportOutputTable.adjustColumnPreferredWidths(scrollTable,
 		ColSizeOption.MAXCONTCOLRESIZE);
 	this.scrollTable.getTableHeader().repaint();
 	this.lockedTable.getTableHeader().repaint();
@@ -1325,7 +1325,7 @@ public class ReportTable extends JScrollPane {
     public static void CreateAndShowTable(TableModel thisModel,
 	    ColType[] colTypes, int indClosedPosColumn, int numFreezeCols, int firstSort, int secondSort,
 	    ColSizeOption sizeOption, String frameText) {
-	final ReportTable thisTable = new ReportTable(thisModel,colTypes, numFreezeCols,
+	final ReportOutputTable thisTable = new ReportOutputTable(thisModel,colTypes, numFreezeCols,
 		indClosedPosColumn, firstSort, secondSort,  sizeOption);
 
 	final JFrame outerFrame = new JFrame(frameText);

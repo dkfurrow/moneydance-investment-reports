@@ -1,4 +1,4 @@
-/* SecReportPanel.java
+/* ReportControlPanel.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -54,7 +54,7 @@ import javax.swing.table.AbstractTableModel;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
 import com.moneydance.awt.JDateField;
-import com.moneydance.modules.features.invextension.ReportTable.ColSizeOption;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
 import com.moneydance.util.CustomDateFormat;
 
 
@@ -63,7 +63,7 @@ import com.moneydance.util.CustomDateFormat;
  * @version 1.0
  * @since 1.0
 */
-public class SecReportPanel extends javax.swing.JPanel { //implements ActionListener
+public class ReportControlPanel extends javax.swing.JPanel { //implements ActionListener
     private static final long serialVersionUID = 1020488211446251526L;
     private Preferences prefs = Prefs.reportPrefs;
     private String iniFilePath
@@ -114,7 +114,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
 
     /** Creates new form NewJPanel */
-    public SecReportPanel(RootAccount root) {
+    public ReportControlPanel(RootAccount root) {
         initComponents();
         this.root = root;
        
@@ -411,17 +411,17 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
             if (transActivityCheckbox.isSelected()) {
                 ArrayList<String[]> transActivityReport
-                    = currentInfo.listTransValuesSet(currentInfo.invs);
+                    = currentInfo.listTransValuesSet(currentInfo.getInvestmentWrappers());
                 File transActivityReportFile
                     = new File(directoryOutputField.getText() + "\\transActivityReport.csv");
-                IOUtils.writeArrayListToCSV(TransValues.listTransValuesHeader(),
+                IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
                                             transActivityReport, transActivityReportFile);
 
             }
 
             if (secPricesCheckbox.isSelected()) {
                 ArrayList<String[]> secPricesReport
-                    = BulkSecInfo.ListAllCurrenciesInfo(BulkSecInfo.curs);
+                    = BulkSecInfo.ListAllCurrenciesInfo(BulkSecInfo.getCurrencyWrappers());
                 File secPricesReportFile
                     = new File(directoryOutputField.getText() + "\\secPricesReport.csv");
                 IOUtils.writeArrayListToCSV(BulkSecInfo.listCurrencySnapshotHeader(),
@@ -433,8 +433,6 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
             StringBuffer erLOG = getStackTrace(e);
             IOUtils.writeResultsToFile(erLOG, errorFile);
         }
-
-        IOUtils.writeIniFile(iniFilePath, directoryOutputField.getText());
         reportStatusField.setText("Reports have been run!");
     }
 
@@ -445,7 +443,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 	ReportTableModel model = new ReportTableModel(report.getReportTable(),
 		report.getReportHeader());
 
-	ReportTable.CreateAndShowTable(model, report.getColumnTypes(),
+	ReportOutputTable.CreateAndShowTable(model, report.getColumnTypes(),
 		report.getClosedPosColumn(), report.getFrozenColumn(),
 		report.firstSortColumn, report.secondSortColumn,
 		ColSizeOption.MAXCONTCOLRESIZE, report.getReportTitle());
@@ -453,7 +451,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
 
 
     public static void main(String[] args) {
-	SecReportPanel testPanel = new SecReportPanel(null);
+	ReportControlPanel testPanel = new ReportControlPanel(null);
 	@SuppressWarnings("unused")
 	TestFrame frame = new TestFrame(testPanel);
     }
@@ -461,7 +459,7 @@ public class SecReportPanel extends javax.swing.JPanel { //implements ActionList
     
     public static class TestFrame extends JFrame {
 	private static final long serialVersionUID = 2202318227772787528L;
-	public TestFrame(final SecReportPanel testPanel) {
+	public TestFrame(final ReportControlPanel testPanel) {
 	    this.setTitle("Test Investment Reports Panel");
 	    testPanel.setOpaque(true);
 	    this.setContentPane(testPanel);

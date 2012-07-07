@@ -34,9 +34,10 @@ import com.moneydance.apps.md.model.CurrencyType;
  *
  */
 public class GainsAverageCalc implements GainsCalc {
-    TransValues currentTrans;
-    TransValues prevTransValues;
+    TransactionValues currentTrans;
+    TransactionValues prevTransValues;
     double adjPrevPos;
+    private static final double positionTheshold = 0.00001;
     
     
     
@@ -50,7 +51,7 @@ public class GainsAverageCalc implements GainsCalc {
     public double getLongBasis() {
 	
 
-	if (currentTrans.position <= 0.00001) {// position short or closed
+	if (currentTrans.position <= positionTheshold) {// position short or closed
 	    return 0.0;
 	} else if (currentTrans.position >= (prevTransValues == null ? 0
 		: adjPrevPos)) {
@@ -73,7 +74,7 @@ public class GainsAverageCalc implements GainsCalc {
      */
     @Override
     public double getShortBasis() {
-	if (currentTrans.position >= -0.00001) { // position long or closed
+	if (currentTrans.position >= -positionTheshold) { // position long or closed
 	    return 0.0;
 	} else if (currentTrans.position <= (prevTransValues == null ? 0.0
 		: adjPrevPos)) {
@@ -93,12 +94,12 @@ public class GainsAverageCalc implements GainsCalc {
 
     @Override
     public void intializeGainsCalc(BulkSecInfo currentInfo,
-	    TransValues thisTrans, SortedSet<TransValues> prevTranses) {
+	    TransactionValues thisTrans, SortedSet<TransactionValues> prevTranses) {
 	this.currentTrans = thisTrans;
 	this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.last();
 
 	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.accountRef.getCurrencyType();
+	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
 	double currentRate = cur == null ? 1.0
 		: cur.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE

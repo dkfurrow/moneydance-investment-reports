@@ -140,9 +140,9 @@ public class GenericTestMethods {
 
     public static void listTransactionCounts(BulkSecInfo currentInfo) {
 	TreeSet<Account> allAccts = BulkSecInfo.getSelectedSubAccounts(
-		currentInfo.root, Account.ACCOUNT_TYPE_INVESTMENT,
+		currentInfo.getRoot(), Account.ACCOUNT_TYPE_INVESTMENT,
 		Account.ACCOUNT_TYPE_SECURITY);
-	TransactionSet transSet = currentInfo.root.getTransactionSet();
+	TransactionSet transSet = currentInfo.getRoot().getTransactionSet();
 	for (Iterator<Account> iterator = allAccts.iterator(); iterator
 		.hasNext();) {
 	    Account account = (Account) iterator.next();
@@ -157,9 +157,9 @@ public class GenericTestMethods {
     }
 
     private static void listBaseCurrency(BulkSecInfo currentInfo) {
-	CurrencyType baseCur = currentInfo.root.getCurrencyType();
+	CurrencyType baseCur = currentInfo.getRoot().getCurrencyType();
 	System.out.println("Root Account Currency Name: " + baseCur.getName());
-	HashSet<Account> accts = currentInfo.secAccts;
+	HashSet<Account> accts = currentInfo.getSecAccts();
 	for (Iterator iterator = accts.iterator(); iterator.hasNext();) {
 	    Account account = (Account) iterator.next();
 	    if (account.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT)
@@ -173,7 +173,7 @@ public class GenericTestMethods {
     private static void listCreateDatesANDInitBals(BulkSecInfo currentInfo) {
 	HashMap<Account, Double> initBals = new HashMap<Account, Double>();
 	HashMap<Account, Integer> createDates = new HashMap<Account, Integer>();
-	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo.invs;
+	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo.getInvestmentWrappers();
 	for (Iterator iterator = theseInvs.iterator(); iterator.hasNext();) {
 	    InvestmentAccountWrapper investmentAccountWrapper = (InvestmentAccountWrapper) iterator
 		    .next();
@@ -197,7 +197,7 @@ public class GenericTestMethods {
     
     public static void writeCurrenciesToFile(BulkSecInfo currentInfo) {
 	ArrayList<String[]> secPricesReport = BulkSecInfo
-		.ListAllCurrenciesInfo(BulkSecInfo.curs);
+		.ListAllCurrenciesInfo(BulkSecInfo.getCurrencyWrappers());
 	File secPricesReportFile = new File("E:\\Temp\\secPricesReport.csv");
 	IOUtils.writeArrayListToCSV(BulkSecInfo.listCurrencySnapshotHeader(),
 		secPricesReport, secPricesReportFile);
@@ -206,7 +206,7 @@ public class GenericTestMethods {
 
 //    private static void listInvSecmap(BulkSecInfo currentInfo) throws Exception {
 //	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo.invs;
-//	TreeMap<Account, SortedSet<TransValues>> transValuesMap = currentInfo.transValuesMap;
+//	TreeMap<Account, SortedSet<TransactionValues>> transValuesMap = currentInfo.transValuesMap;
 //	for (Iterator iterator = theseInvs.iterator(); iterator.hasNext();) {
 //	    InvestmentAccountWrapper parentAccountWrapper = (InvestmentAccountWrapper) iterator
 //		    .next();
@@ -243,35 +243,35 @@ public class GenericTestMethods {
     
     public static void listTransInfo(BulkSecInfo currentInfo) throws Exception {
 	ArrayList<String[]> transActivityReport
-        = currentInfo.listTransValuesSet(currentInfo.invs);
+        = currentInfo.listTransValuesSet(currentInfo.getInvestmentWrappers());
 	File transActivityReportFile = new File("E:\\Temp"
 		+ "\\transActivityReport1.csv");
-	IOUtils.writeArrayListToCSV(TransValues.listTransValuesHeader(),
+	IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
 		transActivityReport, transActivityReportFile);
 	System.out.println("Done Writing TransValuesMap");
     }
     
     public static void listTransWithTransUtil(BulkSecInfo currentInfo)
 	    throws Exception {
-	TreeSet<TransValues> allTransValues = new TreeSet<TransValues>();
+	TreeSet<TransactionValues> allTransValues = new TreeSet<TransactionValues>();
 	ArrayList<String[]> transValuesData = new ArrayList<String[]>();
-	for (Iterator iterator = currentInfo.invs.iterator(); iterator
+	for (Iterator iterator = currentInfo.getInvestmentWrappers().iterator(); iterator
 		.hasNext();) {
 	    InvestmentAccountWrapper inv = (InvestmentAccountWrapper) iterator
 		    .next();
-	    allTransValues.addAll(inv.getTransValues());
+	    allTransValues.addAll(inv.getTransactionValues());
 	}
 
 	for (Iterator iterator = allTransValues.iterator(); iterator.hasNext();) {
-	    TransValues transValues = (TransValues) iterator.next();
+	    TransactionValues transactionValues = (TransactionValues) iterator.next();
 	    ArrayList<String> dataStrArray = new ArrayList<String>();
-	    SplitTxn secSplit = TxnUtil.getSecurityPart(transValues.parentTxn);
+	    SplitTxn secSplit = TxnUtil.getSecurityPart(transactionValues.parentTxn);
 	    SplitTxn commisSplit = TxnUtil
-		    .getCommissionPart(transValues.parentTxn);
+		    .getCommissionPart(transactionValues.parentTxn);
 	    SplitTxn expenseSplit = TxnUtil
-		    .getExpensePart(transValues.parentTxn);
+		    .getExpensePart(transactionValues.parentTxn);
 	    SplitTxn xferSplit = TxnUtil
-		    .getXfrPart(transValues.parentTxn);
+		    .getXfrPart(transactionValues.parentTxn);
 	    
 	    Double secDouble = secSplit == null ? Double.NaN : (Long
 		    .valueOf(secSplit.getAmount()).doubleValue()) / 100.0;
@@ -281,8 +281,8 @@ public class GenericTestMethods {
 		    .valueOf(expenseSplit.getAmount()).doubleValue()) / 100.0;
 	    Double xferDouble = xferSplit == null ? Double.NaN : (Long
 		    .valueOf(xferSplit.getAmount()).doubleValue()) / 100.0;
-	    String[] oldLineArray = TransValues
-		    .loadArrayTransValues(transValues);
+	    String[] oldLineArray = TransactionValues
+		    .loadArrayTransValues(transactionValues);
 	    for (String string : oldLineArray) {
 		dataStrArray.add(string);
 	    }
@@ -294,7 +294,7 @@ public class GenericTestMethods {
 		    .size()]));
 	}
 
-	StringBuffer newHeader = TransValues.listTransValuesHeader();
+	StringBuffer newHeader = TransactionValues.listTransValuesHeader();
 	newHeader.append(",");
 	newHeader.append("SecurityPart,");
 	newHeader.append("CommisPart,");

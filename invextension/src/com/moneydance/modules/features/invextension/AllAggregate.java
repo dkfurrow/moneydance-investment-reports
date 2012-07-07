@@ -29,7 +29,7 @@ package com.moneydance.modules.features.invextension;
  * @author Dale Furrow
  *
  */
-public class AllAggregate extends AggregatingType {
+public class AllAggregate extends Aggregator {
     private static AllAggregate uniqueInstance;
     static String defaultName = "~All";
     // default column to sort on

@@ -24,7 +24,7 @@ package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
 
-import com.moneydance.modules.features.invextension.ReportTable.ColType;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColType;
 
 
 /**
@@ -34,7 +34,7 @@ import com.moneydance.modules.features.invextension.ReportTable.ColType;
  * @param <T>
  * @param <U>
  */
-public class TotalFromToReport<T extends AggregatingType, U extends AggregatingType>
+public class TotalFromToReport<T extends Aggregator, U extends Aggregator>
 	extends TotalReport<T, U> {
     private int reportFromDateInt;
     private int reportToDateInt;

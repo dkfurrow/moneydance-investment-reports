@@ -24,7 +24,7 @@ package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
 
-import com.moneydance.modules.features.invextension.ReportTable.ColType;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColType;
 
 /**
  * Generates total output for "Snapshot" Report
@@ -33,7 +33,7 @@ import com.moneydance.modules.features.invextension.ReportTable.ColType;
  * @since 1.0
  */
 
-public class TotalSnapshotReport<T extends AggregatingType, U extends AggregatingType>
+public class TotalSnapshotReport<T extends Aggregator, U extends Aggregator>
 	extends TotalReport<T, U> {
     private int reportDateInt;
 
