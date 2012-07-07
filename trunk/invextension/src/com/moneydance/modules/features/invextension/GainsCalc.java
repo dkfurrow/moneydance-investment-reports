@@ -34,7 +34,7 @@ import java.util.SortedSet;
 public interface GainsCalc {
 
     public void intializeGainsCalc(BulkSecInfo currentInfo,
-	    TransValues thisTrans, SortedSet<TransValues> prevTranses);
+	    TransactionValues thisTrans, SortedSet<TransactionValues> prevTranses);
 
     public double getLongBasis();
 

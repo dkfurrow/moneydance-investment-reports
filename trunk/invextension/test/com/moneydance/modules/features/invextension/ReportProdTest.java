@@ -168,7 +168,7 @@ public class ReportProdTest {
 //		.iterator(); it.hasNext();) {
 //	    Account account = (Account) it.next();
 //	    
-//	    SortedSet<TransValues> tvSet = currentInfo.transValuesMap
+//	    SortedSet<TransactionValues> tvSet = currentInfo.transValuesMap
 //		    .get(account);
 //	    // TransValuesCum sorts by Date, so first element is earliest
 //	    minDateInt = tvSet.isEmpty() ? minDateInt :
@@ -225,7 +225,7 @@ public class ReportProdTest {
 	    BulkSecInfo currentInfo) {
 
 	LinkedHashMap<String, Integer> retDateMap = new LinkedHashMap<String, Integer>();
-	int firstDateInt = currentInfo.firstDateInt;
+	int firstDateInt = BulkSecInfo.getFirstDateInt();
 	int fromDateInt = DateUtils.getPrevBusinessDay(firstDateInt);
 	int prevFromDateInt = DateUtils.getPrevBusinessDay(toDateInt);
 	int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
@@ -577,7 +577,7 @@ public class ReportProdTest {
 		    && compositeReport.secondAggregateVal == null) {
 		reportMDReturn = aggregateReport.mdReturn;
 		reportLeafCount = compositeReport.securityReports.size();
-	    } else if (compositeReport.compType == COMPOSITE_TYPE.FIRST) {
+	    } else if (compositeReport.compositeType == COMPOSITE_TYPE.FIRST) {
 		testLeafCount += compositeReport.securityReports.size();
 		testDateMap = testDateMap.combine(aggregateReport.mdMap, "add");
 		testIncome += aggregateReport.income;
@@ -630,9 +630,9 @@ public class ReportProdTest {
 
     public static void listTransactionCounts(BulkSecInfo currentInfo) {
 	TreeSet<Account> allAccts = BulkSecInfo.getSelectedSubAccounts(
-		currentInfo.root, Account.ACCOUNT_TYPE_INVESTMENT,
+		currentInfo.getRoot(), Account.ACCOUNT_TYPE_INVESTMENT,
 		Account.ACCOUNT_TYPE_SECURITY);
-	TransactionSet transSet = currentInfo.root.getTransactionSet();
+	TransactionSet transSet = currentInfo.getRoot().getTransactionSet();
 	for (Iterator<Account> iterator = allAccts.iterator(); iterator
 		.hasNext();) {
 	    Account account = (Account) iterator.next();

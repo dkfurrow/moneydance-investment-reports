@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
-import com.moneydance.modules.features.invextension.ReportTable.ColType;
+import com.moneydance.modules.features.invextension.ReportOutputTable.ColType;
 
 
 /**
@@ -39,7 +39,7 @@ import com.moneydance.modules.features.invextension.ReportTable.ColType;
  * @since 1.0
 */
 
-public abstract class TotalReport<T extends AggregatingType, U extends AggregatingType> {
+public abstract class TotalReport<T extends Aggregator, U extends Aggregator> {
     public HashSet<SecurityReport> securityReports;
     public HashSet<CompositeReport<T,U>> compositeReports;
     public DateRange dateRange;
@@ -84,7 +84,7 @@ public abstract class TotalReport<T extends AggregatingType, U extends Aggregati
 	this.secondSortColumn = getDefaultColumn(secondAggClass);
 	
 	//produce all leaf-level Security Reports
-	for (InvestmentAccountWrapper invWrapper : currentInfo.invs) {
+	for (InvestmentAccountWrapper invWrapper : currentInfo.getInvestmentWrappers()) {
 	    for (SecurityAccountWrapper secWrapper : invWrapper.secAccts) {
 		SecurityReport thisReport = getLeafSecurityReport(secWrapper,
 			dateRange);
@@ -153,8 +153,7 @@ public abstract class TotalReport<T extends AggregatingType, U extends Aggregati
 	    Object[][] table = null;
 	    for (Iterator<ComponentReport> iterator = allReports.iterator(); iterator
 		    .hasNext();) {
-		ComponentReport componentReport = (ComponentReport) iterator
-			.next();
+		ComponentReport componentReport = iterator.next();
 		if (i == 0) {
 		    cols = componentReport.toTableRow().length;
 		    table = new Object[allReports.size()][cols];
@@ -178,7 +177,7 @@ public abstract class TotalReport<T extends AggregatingType, U extends Aggregati
      * @throws IllegalAccessException
      */
     public static Integer getDefaultColumn(
-	    Class<? extends AggregatingType> aggClass)
+	    Class<? extends Aggregator> aggClass)
 	    throws SecurityException, NoSuchFieldException,
 	    IllegalArgumentException, IllegalAccessException {
 	Field defaultNameField = aggClass.getDeclaredField("defaultColumn");
@@ -194,7 +193,7 @@ public abstract class TotalReport<T extends AggregatingType, U extends Aggregati
      * @throws IllegalAccessException
      */
     public static String getOutputName(
-	    Class<? extends AggregatingType> aggClass)
+	    Class<? extends Aggregator> aggClass)
 	    throws SecurityException, NoSuchFieldException,
 	    IllegalArgumentException, IllegalAccessException {
 	Field defaultNameField = aggClass.getDeclaredField("outputName");

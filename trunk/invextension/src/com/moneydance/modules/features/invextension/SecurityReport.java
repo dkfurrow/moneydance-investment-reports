@@ -73,12 +73,12 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     /**returns Aggregate value for Security based on an input of any Class
-     * which subclasses AggregatingType
+     * which subclasses Aggregator
      * @param aggregateClass
      * @return
      */
     @SuppressWarnings("unchecked")
-    public <T> T getAggregate(Class<? extends AggregatingType> aggregateClass) {
+    public <T> T getAggregate(Class<? extends Aggregator> aggregateClass) {
 	if (aggregateClass == InvestmentAccountWrapper.class) {
 	    return (T) this.invAccountWrapper;
 	} else if (aggregateClass == SecurityTypeWrapper.class) {
@@ -99,10 +99,10 @@ public abstract class SecurityReport extends ComponentReport {
     /**Generates composite report consistent with this SecurityReport
      * @param firstAggClass
      * @param secondAggClass
-     * @param compType
+     * @param compositeType
      * @return
      */
-    public abstract <T extends AggregatingType, U extends AggregatingType> 
+    public abstract <T extends Aggregator, U extends Aggregator> 
     CompositeReport<T, U> getCompositeReport(Class<T> firstAggClass, 
 	    Class<U> secondAggClass, COMPOSITE_TYPE compType);    
     

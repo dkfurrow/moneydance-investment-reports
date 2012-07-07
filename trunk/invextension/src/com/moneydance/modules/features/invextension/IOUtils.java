@@ -110,23 +110,6 @@ public static String readIniFile(File readFile) {
         }
     }
 
-/**
- * write ini file
- * @param pathString String representation of report path
- */
-    public static void writeIniFile(String iniFilePath, String pathString) {
-        PrintWriter outputStream = null;
-        File iniFile = new File(iniFilePath);
-        try {
-            outputStream = new PrintWriter(new FileWriter(iniFile));
-            outputStream.println(pathString);
-        } catch (IOException ex) {
-            Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            outputStream.close();
-        }
-    }
-
     public static String[] parseCSVLine(String s) {
         //return  s.split(",\\s*"); //old code replace with next line
         return  s.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);

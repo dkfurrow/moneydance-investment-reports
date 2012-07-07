@@ -1,4 +1,4 @@
-/* AggregatingType.java
+/* Aggregator.java
  * Copyright 2012 Dale Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -28,23 +28,33 @@ package com.moneydance.modules.features.invextension;
  * @author Dale Furrow
  *
  */
-public abstract class AggregatingType {
+public abstract class Aggregator {
     
 
-    /**Output name of first aggregate
+    /**Output name of first aggregate used in report output--e.g. for an 
+     * investment account, returns the investment Account name.
      * @return
      */
     String getFirstAggregateName() {
 	return "~Null";
     }
     
-    /**Output name of second aggregate
+    /**Output name of second aggregate used in report output, e.g. for 
+     * SecuritySubType, the output is a "*" followed by the SecuritySubType
+     * name, so that the report line will sort to the bottom of SecuritySubTypes
      * @return
      */
     String getSecondAggregateName() {
 	return "~Null";
     }
-
+    
+    /**Output name of aggregate used in report output in the case of one aggregator,
+     *  e.g. if we're aggregating only by Currency, then the output  the output
+     *   is the currency name followed by a "*" so that the report line will 
+     *   sort to the bottom of all report lines for that currency.
+     * name
+     * @return
+     */
     String getAllAggregateName() {
 	return "~Null";
     }

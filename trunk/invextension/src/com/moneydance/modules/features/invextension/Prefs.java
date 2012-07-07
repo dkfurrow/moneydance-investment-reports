@@ -35,7 +35,7 @@ import java.util.prefs.Preferences;
 public class Prefs {
     static Prefs uniqueInstance;
     static final Preferences reportPrefs = Preferences.userRoot().node(
-	    "/com/moneydance/modules/features/invextension/SecReportPanel");
+	    "/com/moneydance/modules/features/invextension/ReportControlPanel");
     static final String fromReportDate = "FROM_REPORT_DATE";
     static final String runSnapshot = "RUN_SNAPSHOT_REPORT";
     static final String runFromTo = "RUN_FROMTO_REPORT";

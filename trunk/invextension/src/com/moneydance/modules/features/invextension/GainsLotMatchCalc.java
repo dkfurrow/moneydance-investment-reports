@@ -40,10 +40,11 @@ import com.moneydance.apps.md.model.TxnUtil;
  */
 public class GainsLotMatchCalc implements GainsCalc {
     BulkSecInfo currentInfo;
-    TransValues currentTrans;
-    TransValues prevTransValues;
+    TransactionValues currentTrans;
+    TransactionValues prevTransValues;
     double adjPrevPos;
     Hashtable<Long, Double> matchTable;
+    private static final double positionThreshold = 0.00001;
     
     
     
@@ -57,7 +58,7 @@ public class GainsLotMatchCalc implements GainsCalc {
     public double getLongBasis() {
 	
 
-	if (currentTrans.position <= 0.00001) {// position short or closed
+	if (currentTrans.position <= positionThreshold) {// position short or closed
 	    return 0.0;
 	} else if (currentTrans.position >= (prevTransValues == null ? 0
 		: adjPrevPos)) {
@@ -92,15 +93,15 @@ public class GainsLotMatchCalc implements GainsCalc {
 	for (Iterator<Long> iterator = thisMatchTable.keySet().iterator(); iterator
 		.hasNext();) {
 	    //split transaction number
-	    Long allocationSplitTransNum = (Long) iterator.next();
+	    Long allocationSplitTransNum = iterator.next();
 	    //parent transaction of associated split
-	    ParentTxn allocationParentTrans = (ParentTxn) BulkSecInfo.transSet
+	    ParentTxn allocationParentTrans =  BulkSecInfo.getTransactionSet()
 		    .getTxnByID(allocationSplitTransNum).getParentTxn();
 	    //parent transaction number
 	    Double allocationParentTransNum = (Long
 		    .valueOf(allocationParentTrans.getTxnId()).doubleValue());
 	    //Transvalue associated with parent transaction number
-	    TransValues allocationTransValues = currentInfo.securityTransValues
+	    TransactionValues allocationTransValues = currentInfo.getSecurityTransactionValues()
 		    .get(allocationParentTransNum);
 	    //Split-adjustment for shares (adjusts previous shares to current)
 	    Double splitAdjust = getSplitAdjust(currentTrans,
@@ -129,7 +130,7 @@ public class GainsLotMatchCalc implements GainsCalc {
     //short basis is same as average calc--no provision in MD for short positions
     @Override
     public double getShortBasis() {
-	if (currentTrans.position >= -0.00001) { // position long or closed
+	if (currentTrans.position >= -positionThreshold) { // position long or closed
 	    return 0.0;
 	} else if (currentTrans.position <= (prevTransValues == null ? 0.0
 		: adjPrevPos)) {
@@ -149,13 +150,13 @@ public class GainsLotMatchCalc implements GainsCalc {
 
     @Override
     public void intializeGainsCalc(BulkSecInfo thisCurrentInfo,
-	    TransValues thisTrans, SortedSet<TransValues> prevTranses) {
+	    TransactionValues thisTrans, SortedSet<TransactionValues> prevTranses) {
 	this.currentInfo = thisCurrentInfo;
 	this.currentTrans = thisTrans;
 	this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.last();
 
 	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.accountRef.getCurrencyType();
+	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
 	double currentRate = cur == null ? 1.0
 		: cur.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
@@ -175,8 +176,8 @@ public class GainsLotMatchCalc implements GainsCalc {
      */
     public Hashtable<Long, Double> getLotMatchTable() {
 	Hashtable<Long, Double> lotMatchTable = new Hashtable<Long, Double>();
-	SplitTxn securitySplit = currentTrans.accountRef.getCurrencyType()
-		.equals(BulkSecInfo.cashCurType) ? null : TxnUtil
+	SplitTxn securitySplit = currentTrans.referenceAccount.getCurrencyType()
+		.equals(BulkSecInfo.getCashCurrencyWrapper()) ? null : TxnUtil
 		.getSecurityPart(currentTrans.parentTxn);
 	Hashtable<String, String> splitTable = null;
 	if (securitySplit != null)
@@ -201,10 +202,10 @@ public class GainsLotMatchCalc implements GainsCalc {
      * @param priorTrans
      * @return
      */
-    public static Double getSplitAdjust(TransValues thisTrans,
-	    TransValues priorTrans) {
+    public static Double getSplitAdjust(TransactionValues thisTrans,
+	    TransactionValues priorTrans) {
 	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.accountRef.getCurrencyType();
+	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
 	double currentRate = cur == null ? 1.0 : cur
 		.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = priorTrans == null ? Integer.MIN_VALUE

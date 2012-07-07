@@ -31,7 +31,7 @@ import com.moneydance.apps.md.model.SecurityType;
  * @author Dale Furrow
  *
  */
-public class SecurityTypeWrapper extends AggregatingType {
+public class SecurityTypeWrapper extends Aggregator {
     AccountWrapper accountWrapper;
     SecurityType securityType;
     static String defaultName = "~All-SecType";

@@ -30,7 +30,7 @@ package com.moneydance.modules.features.invextension;
  * @author Dale Furrow
  *
  */
-public class SecuritySubTypeWrapper extends AggregatingType {
+public class SecuritySubTypeWrapper extends Aggregator {
     AccountWrapper accountWrapper;
     String securitySubType;
     static String defaultName = "~All-SubType";

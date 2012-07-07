@@ -33,7 +33,7 @@ import com.moneydance.apps.md.model.CurrencyType;
  * @author Dale Furrow
  *
  */
-public class CurrencyWrapper extends AggregatingType {
+public class CurrencyWrapper extends Aggregator {
     CurrencyType curType;
     int curID;
     String ticker;

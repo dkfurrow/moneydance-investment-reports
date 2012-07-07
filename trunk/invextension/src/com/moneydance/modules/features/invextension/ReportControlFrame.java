@@ -1,4 +1,4 @@
-/* SecReportFrame.java
+/* ReportControlFrame.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -33,19 +33,19 @@ import javax.swing.*;
   ------------------------------------------------------------------------
 */
 
-public class SecReportFrame
+public class ReportControlFrame
   extends JFrame
 
 {
     private static final long serialVersionUID = 334888425056725292L;
     private Main extension;
-    private SecReportPanel panel;
+    private ReportControlPanel panel;
 
-    public SecReportFrame(Main extension) {
+    public ReportControlFrame(Main extension) {
     super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
     this.extension = extension;
     RootAccount root = extension.getUnprotectedContext().getRootAccount();
-    panel = new SecReportPanel(root);
+    panel = new ReportControlPanel(root);
 
     panel.setOpaque(true);
     this.setContentPane(panel);

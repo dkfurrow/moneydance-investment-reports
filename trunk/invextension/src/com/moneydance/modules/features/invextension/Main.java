@@ -38,7 +38,7 @@ import java.awt.*;
 public class Main
   extends FeatureModule
 {
-  private SecReportFrame reportWindow = null;
+  private ReportControlFrame reportWindow = null;
 
   @Override
 public void init() {
@@ -109,7 +109,7 @@ public String getName() {
 
   private synchronized void showReportWindow() {
     if(reportWindow==null) {
-      reportWindow = new SecReportFrame(this);
+      reportWindow = new ReportControlFrame(this);
       reportWindow.setVisible(true);
     }
     else {
@@ -123,7 +123,7 @@ public String getName() {
     return getContext();
   }
 
-  synchronized void closeConsole() { //called from SecReportFrame on Close Button
+  synchronized void closeConsole() { //called from ReportControlFrame on Close Button
     if(reportWindow!=null) {
       reportWindow.goAway(); //method which sets visible to false and disposes
       reportWindow = null;

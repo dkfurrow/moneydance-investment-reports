@@ -39,7 +39,7 @@ import com.moneydance.apps.md.model.SecurityType;
  * @author Dale Furrow
  *
  */
-public class InvestmentAccountWrapper extends AggregatingType implements AccountWrapper   {
+public class InvestmentAccountWrapper extends Aggregator implements AccountWrapper   {
     //associated Investment Account
     public InvestmentAccount invAcct;
     // Account Number
@@ -62,7 +62,7 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
 	    BulkSecInfo currentInfo) throws Exception {
 	this.invAcct = invAcct;
 	this.acctNum = this.invAcct.getAccountNum();
-	this.parentAccount = this.getParentAccountRef();
+	this.parentAccount = this.getAccountReference();
 	this.secAccts = new HashSet<SecurityAccountWrapper>();
 	this.cashAcct = getCashWrapper(currentInfo, this);
 	this.secAccts.add(cashAcct);
@@ -72,7 +72,7 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
      * @see com.moneydance.modules.features.invextension.AccountWrapper#getAccountRef()
      */
     @Override
-    public Account getParentAccountRef() {
+    public Account getAccountReference() {
 	// TODO Auto-generated method stub
 	return invAcct.getRootAccount();
     }
@@ -99,23 +99,23 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
 	return true;
     }
 
-    /* Returns all TransValues for AccountWrapper
+    /* Returns all TransactionValues for AccountWrapper
      * @see com.moneydance.modules.features.invextension.AccountWrapper#getTransValues()
      */
     @Override
-    public SortedSet<TransValues> getTransValues() throws Exception {
-	SortedSet<TransValues> theseTransValues = new TreeSet<TransValues>();
+    public SortedSet<TransactionValues> getTransactionValues() throws Exception {
+	SortedSet<TransactionValues> theseTransValues = new TreeSet<TransactionValues>();
 	for (Iterator<SecurityAccountWrapper> iterator = secAccts.iterator(); iterator
 		.hasNext();) {
 	    AccountWrapper acctWrapper = (AccountWrapper) iterator.next();
 
-	    SortedSet<TransValues> accountTransValues = acctWrapper
-		    .getTransValues();
+	    SortedSet<TransactionValues> accountTransValues = acctWrapper
+		    .getTransactionValues();
 	    if (accountTransValues != null) {
-		for (Iterator<TransValues> iterator2 = accountTransValues
+		for (Iterator<TransactionValues> iterator2 = accountTransValues
 			.iterator(); iterator2.hasNext();) {
-		    TransValues transValues = (TransValues) iterator2.next();
-		    boolean success = theseTransValues.add(transValues);
+		    TransactionValues transactionValues =  iterator2.next();
+		    boolean success = theseTransValues.add(transactionValues);
 		    if (!success)
 			throw new Exception("Error: Failed on "
 				+ this.invAcct.getAccountName()
@@ -136,7 +136,7 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
     public static SecurityAccountWrapper getCashWrapper(
 	    BulkSecInfo currentInfo, InvestmentAccountWrapper invAcctWrapper) throws Exception {
 	SecurityAccount cashAccount = new SecurityAccount("~Cash",
-		BulkSecInfo.nextAcctNum, BulkSecInfo.cashCurType, null, null,
+		BulkSecInfo.getNextAcctNumber(), BulkSecInfo.getCashCurrencyWrapper(), null, null,
 		invAcctWrapper.invAcct);
 	cashAccount.setComment("New Security to hold cash transactions");
 	cashAccount.setSecurityType(SecurityType.MUTUAL);
@@ -144,13 +144,13 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
 	SecurityAccountWrapper cashAcctWrapper = new SecurityAccountWrapper(
 		cashAccount, invAcctWrapper);
 	cashAcctWrapper.secAcct = cashAccount;
-	cashAcctWrapper.currWrapper = BulkSecInfo.curs
-		.get(BulkSecInfo.cashCurType.getID());
+	cashAcctWrapper.currWrapper = BulkSecInfo.getCurrencyWrappers()
+		.get(BulkSecInfo.getCashCurrencyWrapper().getID());
 	cashAcctWrapper.invAcctWrapper = invAcctWrapper;
-	cashAcctWrapper.transValuesSet = new TreeSet<TransValues>();
-	BulkSecInfo.nextAcctNum++;
-	CurrencyWrapper cashCurrWrapper = BulkSecInfo.curs
-		.get(BulkSecInfo.cashCurType.getID());
+	cashAcctWrapper.transValuesSet = new TreeSet<TransactionValues>();
+	BulkSecInfo.setNextAcctNumber(BulkSecInfo.getNextAcctNumber() + 1);
+	CurrencyWrapper cashCurrWrapper = BulkSecInfo.getCurrencyWrappers()
+		.get(BulkSecInfo.getCashCurrencyWrapper().getID());
 	cashCurrWrapper.secAccts.add(cashAcctWrapper);
 	return cashAcctWrapper;
     }
@@ -161,29 +161,29 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
      */
     public void createCashTransactions(BulkSecInfo currentInfo, GainsCalc gainsCalc)
 	    throws Exception {
-	SortedSet<TransValues> tempTransValues = new TreeSet<TransValues>();
+	SortedSet<TransactionValues> tempTransValues = new TreeSet<TransactionValues>();
 	//add to tempTransValues all Security and Account-Level Cash transactions
 	//for this InvestmentAccountWrapper
-	tempTransValues.addAll(this.getTransValues());
+	tempTransValues.addAll(this.getTransactionValues());
 	tempTransValues.addAll(currentInfo.getTransValuesForSingleAcct(this.invAcct));
-	SortedSet<TransValues> cashTransactions = new TreeSet<TransValues>();
+	SortedSet<TransactionValues> cashTransactions = new TreeSet<TransactionValues>();
 	//add initial balance as a transValues object (use day before first
 	// transaction date if available, creation date if not
 	int firstDateInt = tempTransValues.isEmpty() ? DateUtils
 		.getPrevBusinessDay(this.invAcct.getCreationDateInt())
 		: DateUtils.getPrevBusinessDay(tempTransValues.first().dateint);
-	cashTransactions.add(new TransValues(this, firstDateInt));
+	cashTransactions.add(new TransactionValues(this, firstDateInt));
 	//now there is guaranteed to be one transaction, so prevTransValues
 	//always exists
-	for (Iterator<TransValues> iterator = tempTransValues.iterator(); iterator
+	for (Iterator<TransactionValues> iterator = tempTransValues.iterator(); iterator
 		.hasNext();) {
-	    TransValues transValues = (TransValues) iterator.next();
-	    TransValues prevTransValues = cashTransactions.last();
+	    TransactionValues transactionValues = iterator.next();
+	    TransactionValues prevTransValues = cashTransactions.last();
 	    //add synthetic cash transaction to overall cashTransactions set
-	    cashTransactions.add(new TransValues(transValues, prevTransValues,
+	    cashTransactions.add(new TransactionValues(transactionValues, prevTransValues,
 		    this));
 	}
-	this.cashAcct.addTransValuesSet(cashTransactions);
+	this.cashAcct.addTransactionValuesSet(cashTransactions);
     }
 
     @Override
@@ -198,12 +198,12 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
     }
 
     @Override
-    public void setCurrWrapper(CurrencyWrapper currWrapper) throws Exception {
+    public void setCurrencyWrapper(CurrencyWrapper currWrapper) throws Exception {
 	throw new Exception("Illegal call to setCurrWrapper");
     }
 
     @Override
-    public void setAllTransValues(SortedSet<TransValues> transValuesSet)
+    public void setAllTransactionValues(SortedSet<TransactionValues> transValuesSet)
 	    throws Exception {
 	throw new Exception("Illegal call to setAllTransValues");
 
@@ -215,7 +215,7 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
     }
 
     @Override
-    public void addTransValuesSet(SortedSet<TransValues> thisTransValuesSet)
+    public void addTransactionValuesSet(SortedSet<TransactionValues> thisTransValuesSet)
 	    throws Exception {
 	throw new Exception("Illegal call to addTransValuesSet");
     }
@@ -226,7 +226,7 @@ public class InvestmentAccountWrapper extends AggregatingType implements Account
     }
 
     @Override
-    public CurrencyWrapper getCurrWrapper() throws Exception {
+    public CurrencyWrapper getCurrencyWrapper() throws Exception {
 	return null;
     }
 

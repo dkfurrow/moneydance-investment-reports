@@ -45,7 +45,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     public SecurityTypeWrapper securityTypeWrapper;
     public SecuritySubTypeWrapper securitySubTypeWrapper;
     public InvestmentAccountWrapper invAcctWrapper;
-    public SortedSet<TransValues> transValuesSet;
+    public SortedSet<TransactionValues> transValuesSet;
 
     public SecurityAccountWrapper(SecurityAccount secAcct,
 	    InvestmentAccountWrapper invAcct) throws Exception {
@@ -56,8 +56,8 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 	this.acctNum = this.secAcct.getAccountNum();
 	this.parentAccount = secAcct.getParentAccount();
 	this.invAcctWrapper = invAcct;
-	this.transValuesSet = new TreeSet<TransValues>();
-	this.currWrapper = BulkSecInfo.curs.get(secAcct.getCurrencyType()
+	this.transValuesSet = new TreeSet<TransactionValues>();
+	this.currWrapper = BulkSecInfo.getCurrencyWrappers().get(secAcct.getCurrencyType()
 		.getID());
 	this.tradeable = new Tradeable(this.currWrapper);
 	this.securityTypeWrapper = new SecurityTypeWrapper(this);
@@ -73,6 +73,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
 
     }
 
+    @Override
     public void setCurrencyWrapper(CurrencyWrapper currWrapper) {
 	this.currWrapper = currWrapper;
     }
@@ -85,12 +86,12 @@ public class SecurityAccountWrapper extends SecurityAccount implements
      * ()
      */
     @Override
-    public Account getParentAccountRef() {
+    public Account getAccountReference() {
 	return this.parentAccount;
     }
 
     @Override
-    public SortedSet<TransValues> getTransValues() {
+    public SortedSet<TransactionValues> getTransactionValues() {
 	return this.transValuesSet;
     }
 
@@ -108,14 +109,9 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     public int compareTo(SecurityAccountWrapper o) {
 	return BulkSecInfo.acctComp.compare(this.secAcct, o.secAcct);
     }
-
+    
     @Override
-    public void setCurrWrapper(CurrencyWrapper currWrapper) {
-	this.currWrapper = currWrapper;
-    }
-
-    @Override
-    public void setAllTransValues(SortedSet<TransValues> transValuesSet) {
+    public void setAllTransactionValues(SortedSet<TransactionValues> transValuesSet) {
 	if (transValuesSet != null) {
 	    this.transValuesSet = transValuesSet;
 	}
@@ -123,7 +119,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     }
 
     @Override
-    public void addTransValuesSet(SortedSet<TransValues> thisTransValuesSet)
+    public void addTransactionValuesSet(SortedSet<TransactionValues> thisTransValuesSet)
 	    throws Exception {
 	if (thisTransValuesSet != null && !thisTransValuesSet.isEmpty()) {
 	    boolean success = this.transValuesSet.addAll(thisTransValuesSet);
@@ -154,7 +150,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     }
 
     @Override
-    public CurrencyWrapper getCurrWrapper()  {
+    public CurrencyWrapper getCurrencyWrapper()  {
 	return this.currWrapper;
     }
     

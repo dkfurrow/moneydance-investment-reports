@@ -28,7 +28,7 @@ import java.util.SortedSet;
 import com.moneydance.apps.md.model.Account;
 
 /**
- * Interface to return parent of InvestAccountAdaptor and SecurityAccountWrapper
+ * Interface to return parent of  SecurityAccountWrapper
  *
  * Version 1.0 
  * @author Dale Furrow
@@ -40,7 +40,7 @@ public interface AccountWrapper {
 
     public AccountWrapper getCashAccount();
 
-    public CurrencyWrapper getCurrWrapper() throws Exception;
+    public CurrencyWrapper getCurrencyWrapper() throws Exception;
     
     public SecurityTypeWrapper getSecurityTypeWrapper() throws Exception;
     
@@ -53,17 +53,17 @@ public interface AccountWrapper {
     /**
      * @return parent for accountwrapper
      */
-    public Account getParentAccountRef();
+    public Account getAccountReference();
     
     public SecurityAccountWrapper getSecurityAccountWrapper() throws Exception;
 
-    public SortedSet<TransValues> getTransValues() throws Exception;
+    public SortedSet<TransactionValues> getTransactionValues() throws Exception;
 
-    public void setAllTransValues(SortedSet<TransValues> transValuesSet) throws Exception;
+    public void setAllTransactionValues(SortedSet<TransactionValues> transactionValuesSet) throws Exception;
     
-    public void setCurrWrapper(CurrencyWrapper currWrapper) throws Exception;
+    public void setCurrencyWrapper(CurrencyWrapper currencyWrapper) throws Exception;
     
-    void addTransValuesSet(SortedSet<TransValues> thisTransValuesSet)
+    void addTransactionValuesSet(SortedSet<TransactionValues> thisTransactionValuesSet)
 	    throws Exception;
 
 }
