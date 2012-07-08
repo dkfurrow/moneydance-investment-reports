@@ -94,7 +94,7 @@ public class GenericTestMethods {
 	int reportLeafCount = 0;
 	int testLeafCount = 0;
 
-	for (Iterator iterator = report.securityReports.iterator(); iterator
+	for (Iterator iterator = report.getSecurityReports().iterator(); iterator
 		.hasNext();) {
 	    SecurityReport securityReport = (SecurityReport) iterator.next();
 	    SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
@@ -116,7 +116,7 @@ public class GenericTestMethods {
 
 	System.out.println("Test Return: " + testMDReturn);
 
-	for (Iterator iterator = report.compositeReports.iterator(); iterator
+	for (Iterator iterator = report.getCompositeReports().iterator(); iterator
 		.hasNext();) {
 	    CompositeReport compositeReport = (CompositeReport) iterator.next();
 	    SecurityFromToReport aggregateReport = (SecurityFromToReport)
@@ -267,13 +267,13 @@ public class GenericTestMethods {
 	for (Iterator iterator = allTransValues.iterator(); iterator.hasNext();) {
 	    TransactionValues transactionValues = (TransactionValues) iterator.next();
 	    ArrayList<String> dataStrArray = new ArrayList<String>();
-	    SplitTxn secSplit = TxnUtil.getSecurityPart(transactionValues.parentTxn);
+	    SplitTxn secSplit = TxnUtil.getSecurityPart(transactionValues.getParentTxn());
 	    SplitTxn commisSplit = TxnUtil
-		    .getCommissionPart(transactionValues.parentTxn);
+		    .getCommissionPart(transactionValues.getParentTxn());
 	    SplitTxn expenseSplit = TxnUtil
-		    .getExpensePart(transactionValues.parentTxn);
+		    .getExpensePart(transactionValues.getParentTxn());
 	    SplitTxn xferSplit = TxnUtil
-		    .getXfrPart(transactionValues.parentTxn);
+		    .getXfrPart(transactionValues.getParentTxn());
 	    
 	    Double secDouble = secSplit == null ? Double.NaN : (Long
 		    .valueOf(secSplit.getAmount()).doubleValue()) / 100.0;

@@ -41,46 +41,46 @@ import com.moneydance.apps.md.model.TxnUtil;
  * @since 1.0
 */
 public class TransactionValues implements Comparable<TransactionValues> {
-    
-    public ParentTxn parentTxn;       //parentTxn account
+
+    private ParentTxn parentTxn; // parentTxn account
     // reference account (to determine correct sign for transfers)
-    public Account referenceAccount;
-    public Integer dateint;        //transaction date
-    public double txnID;             //transaction ID
-    public String desc;		   //transaction description	
-    public double buy;             //buy amount
-    public double sell;            //sell amount
-    public double shortSell;       //short sell amount
-    public double coverShort;      //cover short amount
-    public double commision;       //commission amount
-    public double income;          //income amount
-    public double expense;         //expense amount
-    public double transfer;        //transfer amount
-    public double secQuantity;     //security quantity
+    private Account referenceAccount;
+    private Integer dateint; // transaction date
+    private double txnID; // transaction ID
+    private String desc; // transaction description
+    private double buy; // buy amount
+    private double sell; // sell amount
+    private double shortSell; // short sell amount
+    private double coverShort; // cover short amount
+    private double commision; // commission amount
+    private double income; // income amount
+    private double expense; // expense amount
+    private double transfer; // transfer amount
+    private double secQuantity; // security quantity
     // net position after completion of transaction
-    public double position;
+    private double position;
     // market price on close of transaction day
-    public double mktPrice;
+    private double mktPrice;
     // net average cost long basis after completion of transaction
-    public double longBasis;
+    private double longBasis;
     // net average cost short basis after completion of transaction
-    public double shortBasis;
+    private double shortBasis;
     // net open value after completion of transaction
-    public double openValue;
+    private double openValue;
     // net cumulative unrealized gains after completion of transaction
-    public double cumUnrealizedGain;
+    private double cumUnrealizedGain;
     // period unrealized gain (one transaction to next) after completion of
     // transaction
-    public double perUnrealizedGain;
+    private double perUnrealizedGain;
     // period realized gain (one transaction to next) after completion of
     // transaction
-    public double perRealizedGain;
+    private double perRealizedGain;
     // period income and expense gain (one transaction to next) after completion
     // of transaction
-    public double perIncomeExpense;
+    private double perIncomeExpense;
     // period total gain (one transaction to next) after completion of
     // transaction
-    public double perTotalGain;
+    private double perTotalGain;
     private static final double positionThreshold = 0.0005;
 
     // cumulative total gain after completion of transaction
@@ -620,6 +620,9 @@ public double getSecQuantity() {
         return txnID;
     }
 
+    public Account getReferenceAccount() {
+        return referenceAccount;
+    }
     /**Custom sort order to put buys before sells, shorts before covers
      * @return
      */

@@ -184,7 +184,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 		    .getTransactionValues();
 
 	    fromDateInt = transSet.isEmpty() ? snapDateInt : DateUtils
-		    .getPrevBusinessDay(transSet.first().dateint);
+		    .getPrevBusinessDay(transSet.first().getDateint());
 
 	    // put dates in return map
 	    this.returnsStartDate.put("All", fromDateInt);
@@ -213,10 +213,10 @@ public class SecuritySnapshotReport extends SecurityReport {
 	    // iterate through transaction values list
 	    for (Iterator<TransactionValues> it = transSet.iterator(); it.hasNext();) {
 		TransactionValues transactionValues = it.next();
-		double totalFlows = transactionValues.buy + transactionValues.sell
-			+ transactionValues.shortSell + transactionValues.coverShort
-			+ transactionValues.commision + transactionValues.income
-			+ transactionValues.expense;
+		double totalFlows = transactionValues.getBuy() + transactionValues.getSell()
+			+ transactionValues.getShortSell() + transactionValues.getCoverShort()
+			+ transactionValues.getCommision() + transactionValues.getIncome()
+			+ transactionValues.getExpense();
 
 		// iterate through return dates
 		for (Iterator<String> it1 = this.returnsStartDate.keySet()
@@ -225,14 +225,14 @@ public class SecuritySnapshotReport extends SecurityReport {
 		    int thisFromDateInt = this.returnsStartDate.get(retCat);
 
 		    // where transactions are before report dates
-		    if (transactionValues.dateint <= thisFromDateInt) {
+		    if (transactionValues.getDateint() <= thisFromDateInt) {
 			double currentRate = currency == null ? 1.0 : currency
 				.getUserRateByDateInt(thisFromDateInt);
 			double splitAdjust = currency == null ? 1.0 : currency
-				.adjustRateForSplitsInt(transactionValues.dateint,
+				.adjustRateForSplitsInt(transactionValues.getDateint(),
 					currentRate, thisFromDateInt)
 				/ currentRate;
-			startPoses.put(retCat, transactionValues.position
+			startPoses.put(retCat, transactionValues.getPosition()
 				* splitAdjust); // split adjusts last position
 						// from
 						// TransValuesCum
@@ -242,46 +242,46 @@ public class SecuritySnapshotReport extends SecurityReport {
 		    }
 
 		    // where transaction period intersects report period
-		    if (transactionValues.dateint > thisFromDateInt
-			    && transactionValues.dateint <= snapDateInt) {
+		    if (transactionValues.getDateint() > thisFromDateInt
+			    && transactionValues.getDateint() <= snapDateInt) {
 
 			// MDCalc variable--net effect of calculation is to
 			// return buys and sells, including commission
-			double cf = -(transactionValues.buy + transactionValues.sell
-				+ transactionValues.shortSell
-				+ transactionValues.coverShort + transactionValues.commision);
+			double cf = -(transactionValues.getBuy() + transactionValues.getSell()
+				+ transactionValues.getShortSell()
+				+ transactionValues.getCoverShort() + transactionValues.getCommision());
 
 			// add variables to arrays needed for returns
 			// calculation
 
-			this.arMap.get(retCat).add(transactionValues.dateint,
+			this.arMap.get(retCat).add(transactionValues.getDateint(),
 				totalFlows);
-			this.mdMap.get(retCat).add(transactionValues.dateint, cf);
-			this.transMap.get(retCat).add(transactionValues.dateint,
-				transactionValues.transfer);
+			this.mdMap.get(retCat).add(transactionValues.getDateint(), cf);
+			this.transMap.get(retCat).add(transactionValues.getDateint(),
+				transactionValues.getTransfer());
 
 			this.incomes.put(retCat, this.incomes.get(retCat)
-				+ transactionValues.income);
+				+ transactionValues.getIncome());
 			this.expenses.put(retCat, this.expenses.get(retCat)
-				+ transactionValues.expense);
+				+ transactionValues.getExpense());
 
 			if ("All".equals(retCat)) {// end cash increment--only
 						   // needs to be done once
-			    realizedGain = transactionValues.perRealizedGain
+			    realizedGain = transactionValues.getPerRealizedGain()
 				    + realizedGain;
 			}
 
 			double currentRate = currency == null ? 1.0 : currency
 				.getUserRateByDateInt(snapDateInt);
 			double splitAdjust = currency == null ? 1.0 : currency
-				.adjustRateForSplitsInt(transactionValues.dateint,
+				.adjustRateForSplitsInt(transactionValues.getDateint(),
 					currentRate, snapDateInt)
 				/ currentRate;
 
-			this.endPos = transactionValues.position * splitAdjust;
+			this.endPos = transactionValues.getPosition() * splitAdjust;
 			this.endValue = this.endPos * this.lastPrice;
-			longBasis = transactionValues.longBasis;
-			shortBasis = transactionValues.shortBasis;
+			longBasis = transactionValues.getLongBasis();
+			shortBasis = transactionValues.getShortBasis();
 			this.avgCostBasis = longBasis + shortBasis;
 		    } // end--where transaction period intersects report period
 		} // end of start date iterative loop

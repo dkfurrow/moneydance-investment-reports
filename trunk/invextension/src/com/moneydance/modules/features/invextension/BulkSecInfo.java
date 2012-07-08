@@ -532,7 +532,7 @@ public class BulkSecInfo {
 		    thisAccount, transValuesSet, this);
 	    transValuesSet.add(transValuesToAdd);
 	    if (thisAccount instanceof SecurityAccount)
-		securityTransactionValues.put(transValuesToAdd.txnID,
+		securityTransactionValues.put(transValuesToAdd.getTxnID(),
 			transValuesToAdd);
 
 	}

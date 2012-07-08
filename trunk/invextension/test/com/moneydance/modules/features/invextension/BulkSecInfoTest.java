@@ -25,9 +25,13 @@ package com.moneydance.modules.features.invextension;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +39,7 @@ import org.junit.Test;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
+import com.moneydance.modules.features.invextension.ReportControlPanel;
 
 /**
  * Class which compares transaction report lines (i.e. allows for sorting of
@@ -84,17 +89,26 @@ public class BulkSecInfoTest {
 	 * @param decPlaces
 	 * @param limitPrecision
 	 * @return
+	 * @throws ParseException 
 	 */
 	private static boolean compareTransLines(TransLine compRpt,
-		TransLine baseRpt, int decPlaces, boolean limitPrecision) {
+		TransLine baseRpt, int decPlaces, boolean limitPrecision)
+		throws ParseException {
 	    boolean errorFound = false;
 	    for (int i = 0; i < compRpt.row.length; i++) {
 		String compStr = compRpt.getRow()[i];
 		String baseStr = baseRpt.getRow()[i];
-		if (!similarElements(compStr, baseStr, decPlaces,
-			limitPrecision)) {
-		    printErrorMessage(compRpt, baseRpt, i);
-		    errorFound = true;
+		if (i == 3) {
+		    if (!sameDateStrings(compStr, baseStr)) {
+			printErrorMessage(compRpt, baseRpt, i);
+			errorFound = true;
+		    }
+		} else {
+		    if (!similarElements(compStr, baseStr, decPlaces,
+			    limitPrecision)) {
+			printErrorMessage(compRpt, baseRpt, i);
+			errorFound = true;
+		    }
 		}
 	    }
 	    if (!errorFound) {
@@ -217,15 +231,38 @@ public class BulkSecInfoTest {
 	    return s1.equals(s2);
 	}
     }
+    
+    /**Compares two dates--must know beforehand that element is a date.
+     * Assumes file in resources directory is saved per baseFormat below
+     * @param compDateStr
+     * @param baseDateStr
+     * @param decPlaces
+     * @param limitPrecision
+     * @return
+     * @throws ParseException 
+     */
+    public static boolean sameDateStrings(String compDateStr, String baseDateStr)
+	    throws ParseException {
+	SimpleDateFormat baseFormat = new SimpleDateFormat("M/d/yyyy");
+	Date baseDate = baseFormat.parse(baseDateStr);
+	SimpleDateFormat localFormat = new SimpleDateFormat(
+		ReportControlPanel.getDateFormat(), Locale.getDefault());
+	Date compDate = localFormat.parse(compDateStr);
+	return baseDate.equals(compDate);
+
+    }
+    
+    
 
     /**Compares ArrayLists of transaction lines, returns true if error is found
      * @param compRpt
      * @param baseRpt
      * @param decPlaces
      * @return true if error found
+     * @throws ParseException 
      */
     private static boolean compareTransactions(ArrayList<TransLine> compRpt,
-	    ArrayList<TransLine> baseRpt, int decPlaces) {
+	    ArrayList<TransLine> baseRpt, int decPlaces) throws ParseException {
 	boolean errorFound = false;
 	System.out.println("Comparing Transactions-- ");
 	for (int i = 0; i < compRpt.size(); i++) {
@@ -283,6 +320,7 @@ public class BulkSecInfoTest {
     /**
      * Test Method which compares TransValuesCum generated from test database
      * with stored report. (Average Cost)
+     * @throws ParseException 
      * @throws Exception
      */
     @Test
@@ -294,12 +332,12 @@ public class BulkSecInfoTest {
 	    BulkSecInfo currentInfo = getBaseSecurityInfoAvgCost();
 	    transBase = readCSVIntoTransLine(transBaseFileAvgCost);
 	    transTest = readStringArrayIntoTransLine(currentInfo);
+	    if (compareTransactions(transTest, transBase, precCompare))
+		    errorFound = true;
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	if (compareTransactions(transTest, transBase, precCompare))
-	    errorFound = true;
 	String msg = errorFound ? " -- Errors Found!" : " -- No Errors Found";
 	System.out.println("Finished TransValuesCumMap Test for Average Cost " + msg);
 	assertFalse(errorFound);
@@ -310,7 +348,7 @@ public class BulkSecInfoTest {
     * @throws Exception
     */
    @Test
-   public void testListTransValuesCumMapLotMatch()  {
+   public void testListTransValuesCumMapLotMatch()   {
 	boolean errorFound = false;
 	ArrayList<TransLine> transBase = null;
 	ArrayList<TransLine> transTest = null;
@@ -318,12 +356,12 @@ public class BulkSecInfoTest {
 	    BulkSecInfo currentInfo = getBaseSecurityInfoLotMatch();
 	    transBase = readCSVIntoTransLine(transBaseFileLotMatch);
 	    transTest = readStringArrayIntoTransLine(currentInfo);
+	    if (compareTransactions(transTest, transBase, precCompare))
+		    errorFound = true;
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	if (compareTransactions(transTest, transBase, precCompare))
-	    errorFound = true;
 	String msg = errorFound ? " -- Errors Found!" : " -- No Errors Found";
 	System.out.println("Finished TransValuesCumMap Test for Lot Match " + msg);
 	assertFalse(errorFound);

@@ -58,28 +58,28 @@ public class GainsLotMatchCalc implements GainsCalc {
     public double getLongBasis() {
 	
 
-	if (currentTrans.position <= positionThreshold) {// position short or closed
+	if (currentTrans.getPosition() <= positionThreshold) {// position short or closed
 	    return 0.0;
-	} else if (currentTrans.position >= (prevTransValues == null ? 0
+	} else if (currentTrans.getPosition() >= (prevTransValues == null ? 0
 		: adjPrevPos)) {
 	    // first trans or subsequent larger position
 	    // add current buy to previous long basis
-	    return -currentTrans.buy
-		    - currentTrans.commision
+	    return -currentTrans.getBuy()
+		    - currentTrans.getCommision()
 		    + (prevTransValues == null ? 0.0
-			    : prevTransValues.longBasis);
+			    : prevTransValues.getLongBasis());
 	} else { // subsequent pos smaller than previous
 		 // implies prev long basis must exist
 	    double wtAvgUnitCost;
 	    if(matchTable == null){//use average cost
-		wtAvgUnitCost = prevTransValues.longBasis / adjPrevPos;
+		wtAvgUnitCost = prevTransValues.getLongBasis() / adjPrevPos;
 		
 	    } else { //use lot-weighted average cost
 		wtAvgUnitCost = getWeightedCost(matchTable);
 	    }
 	    
-	    return prevTransValues.longBasis + wtAvgUnitCost
-		    * currentTrans.secQuantity;
+	    return prevTransValues.getLongBasis() + wtAvgUnitCost
+		    * currentTrans.getSecQuantity();
 	}
     }
 
@@ -113,9 +113,9 @@ public class GainsLotMatchCalc implements GainsCalc {
 	    totalAllocatedQtyAdjust += allocationQtyAdjust;
 	    
 	    //get unit cost (transaction amt + commission divided by adjusted shares)
-	    Double secQtyUnAdjust = allocationTransValues.secQuantity;
+	    Double secQtyUnAdjust = allocationTransValues.getSecQuantity();
 	    Double secQtyAdjust = secQtyUnAdjust * splitAdjust;
-	    Double unitCostAdjust = (-allocationTransValues.buy - allocationTransValues.commision)
+	    Double unitCostAdjust = (-allocationTransValues.getBuy() - allocationTransValues.getCommision())
 		    / secQtyAdjust;
 	    //add weight
 	    totWeightedNumerator += unitCostAdjust * allocationQtyAdjust;
@@ -130,21 +130,21 @@ public class GainsLotMatchCalc implements GainsCalc {
     //short basis is same as average calc--no provision in MD for short positions
     @Override
     public double getShortBasis() {
-	if (currentTrans.position >= -positionThreshold) { // position long or closed
+	if (currentTrans.getPosition() >= -positionThreshold) { // position long or closed
 	    return 0.0;
-	} else if (currentTrans.position <= (prevTransValues == null ? 0.0
+	} else if (currentTrans.getPosition() <= (prevTransValues == null ? 0.0
 		: adjPrevPos)) {
 	    // first trans or subsequent larger (more negative) position
 	    // add current short sale to previous short basis
-	    return -currentTrans.shortSell
-		    - currentTrans.commision
+	    return -currentTrans.getShortSell()
+		    - currentTrans.getCommision()
 		    + (prevTransValues == null ? 0.0
-			    : +prevTransValues.shortBasis);
+			    : +prevTransValues.getShortBasis());
 	} else { // subsequent pos smaller (closer to 0) than previous
 		 // implies previous short basis must exist
-	    double histAvgUnitCost = prevTransValues.shortBasis / adjPrevPos;
-	    return prevTransValues.shortBasis + histAvgUnitCost
-		    * currentTrans.secQuantity;
+	    double histAvgUnitCost = prevTransValues.getShortBasis() / adjPrevPos;
+	    return prevTransValues.getShortBasis() + histAvgUnitCost
+		    * currentTrans.getSecQuantity();
 	}
     }
 
@@ -155,15 +155,15 @@ public class GainsLotMatchCalc implements GainsCalc {
 	this.currentTrans = thisTrans;
 	this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.last();
 
-	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
+	int currentDateInt = thisTrans.getParentTxn().getDateInt();
+	CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
 	double currentRate = cur == null ? 1.0
 		: cur.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
-		: prevTransValues.parentTxn.getDateInt();
+		: prevTransValues.getParentTxn().getDateInt();
 	double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
 		prevDateInt, currentRate, currentDateInt) / currentRate);
-	this.adjPrevPos = prevTransValues == null ? 0.0 : prevTransValues.position
+	this.adjPrevPos = prevTransValues == null ? 0.0 : prevTransValues.getPosition()
 		* splitAdjust;
 	this.matchTable = getLotMatchTable();
 	
@@ -176,9 +176,9 @@ public class GainsLotMatchCalc implements GainsCalc {
      */
     public Hashtable<Long, Double> getLotMatchTable() {
 	Hashtable<Long, Double> lotMatchTable = new Hashtable<Long, Double>();
-	SplitTxn securitySplit = currentTrans.referenceAccount.getCurrencyType()
+	SplitTxn securitySplit = currentTrans.getReferenceAccount().getCurrencyType()
 		.equals(BulkSecInfo.getCashCurrencyWrapper()) ? null : TxnUtil
-		.getSecurityPart(currentTrans.parentTxn);
+		.getSecurityPart(currentTrans.getParentTxn());
 	Hashtable<String, String> splitTable = null;
 	if (securitySplit != null)
 	    splitTable = TxnUtil.parseCostBasisTag(securitySplit);
@@ -204,12 +204,12 @@ public class GainsLotMatchCalc implements GainsCalc {
      */
     public static Double getSplitAdjust(TransactionValues thisTrans,
 	    TransactionValues priorTrans) {
-	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
+	int currentDateInt = thisTrans.getParentTxn().getDateInt();
+	CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
 	double currentRate = cur == null ? 1.0 : cur
 		.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = priorTrans == null ? Integer.MIN_VALUE
-		: priorTrans.parentTxn.getDateInt();
+		: priorTrans.getParentTxn().getDateInt();
 	double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
 		prevDateInt, currentRate, currentDateInt) / currentRate);
 	return priorTrans == null ? 0.0 : splitAdjust;

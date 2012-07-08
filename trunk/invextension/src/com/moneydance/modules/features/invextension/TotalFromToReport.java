@@ -114,10 +114,10 @@ public class TotalFromToReport<T extends Aggregator, U extends Aggregator>
 	output.append(DateUtils.convertToShort(reportFromDateInt) + " To: ");
 	output.append(DateUtils.convertToShort(reportToDateInt) + " - ");
 	output.append("Aggregate By: "
-		+ super.getOutputName(firstAggregateClass));
-	if (!secondAggregateClass.equals(AllAggregate.class)) {
+		+ super.getOutputName(getFirstAggregateClass()));
+	if (!getSecondAggregateClass().equals(AllAggregate.class)) {
 	    output.append(" Then By: "
-		    + super.getOutputName(secondAggregateClass));
+		    + super.getOutputName(getSecondAggregateClass()));
 	}
 	return output.toString();
 

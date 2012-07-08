@@ -474,7 +474,7 @@ public class ReportProdTest {
 	int reportLeafCount = 0;
 	int testLeafCount = 0;
 
-	for (Iterator iterator = report.securityReports.iterator(); iterator
+	for (Iterator iterator = report.getSecurityReports().iterator(); iterator
 		.hasNext();) {
 	    SecurityReport securityReport = (SecurityReport) iterator.next();
 	    SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
@@ -496,7 +496,7 @@ public class ReportProdTest {
 
 	
 
-	for (Iterator iterator = report.compositeReports.iterator(); iterator
+	for (Iterator iterator = report.getCompositeReports().iterator(); iterator
 		.hasNext();) {
 	    CompositeReport compositeReport = (CompositeReport) iterator.next();
 	    SecurityFromToReport aggregateReport = (SecurityFromToReport)
@@ -568,7 +568,7 @@ public class ReportProdTest {
 	double reportMDReturn = 0.0;
 	double testMDReturn = 0.0;
 
-	for (Iterator iterator = report.compositeReports.iterator(); iterator
+	for (Iterator iterator = report.getCompositeReports().iterator(); iterator
 		.hasNext();) {
 	    CompositeReport compositeReport = (CompositeReport) iterator.next();
 	    SecurityFromToReport aggregateReport = (SecurityFromToReport) 
@@ -589,7 +589,7 @@ public class ReportProdTest {
 	}
 	
 	SecurityFromToReport arbitraryFromToReport = 
-		(SecurityFromToReport) report.securityReports.iterator().next();
+		(SecurityFromToReport) report.getSecurityReports().iterator().next();
 	testMDReturn = arbitraryFromToReport.computeMDReturn(testStartValue, 
 		testEndValue, testIncome, testExpense, testDateMap);
 	
