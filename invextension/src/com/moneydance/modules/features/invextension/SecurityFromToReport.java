@@ -136,76 +136,76 @@ public class SecurityFromToReport extends SecurityReport {
             for (Iterator<TransactionValues> it = transSet.iterator(); it.hasNext();) {
                 TransactionValues transactionValues = it.next();
                 
-                double totalFlows = transactionValues.buy + transactionValues.sell
-                	+ transactionValues.shortSell + transactionValues.coverShort +
-                	transactionValues.commision + transactionValues.income +
-                	transactionValues.expense;
+                double totalFlows = transactionValues.getBuy() + transactionValues.getSell()
+                	+ transactionValues.getShortSell() + transactionValues.getCoverShort() +
+                	transactionValues.getCommision() + transactionValues.getIncome() +
+                	transactionValues.getExpense();
 
                 // Where transactions are before report dates
-                if (transactionValues.dateint <= fromDateInt) {
+                if (transactionValues.getDateint() <= fromDateInt) {
                     double splitAdjust = currency == null
                         ? 1.0
-                        : currency.adjustRateForSplitsInt(transactionValues.dateint,
+                        : currency.adjustRateForSplitsInt(transactionValues.getDateint(),
                                                           fromDateRate,
                                                           fromDateInt) / fromDateRate;
                     // split adjusts last position from TransValuesCum
-                    this.startPos = transactionValues.position * splitAdjust;
+                    this.startPos = transactionValues.getPosition() * splitAdjust;
                     this.startValue = this.startPrice * this.startPos;
-                    startLongBasis = transactionValues.longBasis;
-                    startShortBasis = transactionValues.shortBasis;
+                    startLongBasis = transactionValues.getLongBasis();
+                    startShortBasis = transactionValues.getShortBasis();
 
                     // Initializes ending balance sheet values to start values (in
                     // case there are no transactions within report period).
                     this.endPos = this.startPos;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transactionValues.longBasis;
-                    this.shortBasis = transactionValues.shortBasis;
+                    this.longBasis = transactionValues.getLongBasis();
+                    this.shortBasis = transactionValues.getShortBasis();
                 }
                 // Where transaction period intersects report period
-                if (transactionValues.dateint > fromDateInt
-                    && transactionValues.dateint <= toDateInt) {
+                if (transactionValues.getDateint() > fromDateInt
+                    && transactionValues.getDateint() <= toDateInt) {
                     // cf is net cash effect of buy/sell/short/cover, incl
                     // commission
-                    double cf = -(transactionValues.buy
-                                  + transactionValues.sell
-                                  + transactionValues.shortSell
-                                  + transactionValues.coverShort +
-                                  transactionValues.commision);
+                    double cf = -(transactionValues.getBuy()
+                                  + transactionValues.getSell()
+                                  + transactionValues.getShortSell()
+                                  + transactionValues.getCoverShort() +
+                                  transactionValues.getCommision());
 
                     // add values to date maps
-                    this.arMap.add(transactionValues.dateint,
+                    this.arMap.add(transactionValues.getDateint(),
                                    totalFlows);
-                    this.mdMap.add(transactionValues.dateint, cf);
-                    this.transMap.add(transactionValues.dateint, transactionValues.transfer);
+                    this.mdMap.add(transactionValues.getDateint(), cf);
+                    this.transMap.add(transactionValues.getDateint(), transactionValues.getTransfer());
 
                     // Add the cumulative Values (note buys are defined by change in
                     // long basis, same with sells--commission is included).
-                    this.buy += transactionValues.buy == 0.0
+                    this.buy += transactionValues.getBuy() == 0.0
                         ? 0.0
-                        : -transactionValues.buy - transactionValues.commision;
-                    this.sell += transactionValues.sell == 0.0
+                        : -transactionValues.getBuy() - transactionValues.getCommision();
+                    this.sell += transactionValues.getSell() == 0.0
                         ? 0.0
-                        : -transactionValues.sell - transactionValues.commision;
-                    this.shortSell += transactionValues.shortSell == 0.0
+                        : -transactionValues.getSell() - transactionValues.getCommision();
+                    this.shortSell += transactionValues.getShortSell() == 0.0
                         ? 0.0
-                        : -transactionValues.shortSell - transactionValues.commision;
-                    this.coverShort += transactionValues.coverShort == 0.0
+                        : -transactionValues.getShortSell() - transactionValues.getCommision();
+                    this.coverShort += transactionValues.getCoverShort() == 0.0
                         ? 0.0
-                        : -transactionValues.coverShort - transactionValues.commision;
-                    this.income += transactionValues.income;
-                    this.expense += transactionValues.expense;
-                    this.realizedGain += transactionValues.perRealizedGain;
+                        : -transactionValues.getCoverShort() - transactionValues.getCommision();
+                    this.income += transactionValues.getIncome();
+                    this.expense += transactionValues.getExpense();
+                    this.realizedGain += transactionValues.getPerRealizedGain();
 
                     // retrieves ending balance sheet variables
                     double splitAdjust = currency == null
                         ? 1.0 : currency.adjustRateForSplitsInt
-                        	(transactionValues.dateint, toDateRate,
+                        	(transactionValues.getDateint(), toDateRate,
                         		toDateInt) / toDateRate;
                     
-                    this.endPos = transactionValues.position * splitAdjust;
+                    this.endPos = transactionValues.getPosition() * splitAdjust;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transactionValues.longBasis;
-                    this.shortBasis = transactionValues.shortBasis;
+                    this.longBasis = transactionValues.getLongBasis();
+                    this.shortBasis = transactionValues.getShortBasis();
 
                 } // end--where transaction period intersects report period
             } // end of input transaction set loop

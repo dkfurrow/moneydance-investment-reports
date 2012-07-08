@@ -40,14 +40,24 @@ import com.moneydance.modules.features.invextension.ReportOutputTable.ColType;
 */
 
 public abstract class TotalReport<T extends Aggregator, U extends Aggregator> {
-    public HashSet<SecurityReport> securityReports;
-    public HashSet<CompositeReport<T,U>> compositeReports;
-    public DateRange dateRange;
-    public Class<T> firstAggregateClass;
-    public Class<U> secondAggregateClass;
-    public int firstSortColumn;
-    public int secondSortColumn;
+    private HashSet<SecurityReport> securityReports;
+    private HashSet<CompositeReport<T,U>> compositeReports;
+    private DateRange dateRange;
+    private Class<T> firstAggregateClass;
+    private Class<U> secondAggregateClass;
+    private int firstSortColumn;
+    private int secondSortColumn;
     
+    public HashSet<SecurityReport> getSecurityReports() {
+        return securityReports;
+    }
+
+
+    public HashSet<CompositeReport<T, U>> getCompositeReports() {
+        return compositeReports;
+    }
+
+
     // indicates if second aggregate is a subset of the first aggregate
     Boolean isHierarchy; 
     // indicates a composite report with only one security report will print 
@@ -252,4 +262,24 @@ public abstract class TotalReport<T extends Aggregator, U extends Aggregator> {
     public abstract String getReportTitle() throws SecurityException,
 	    IllegalArgumentException, NoSuchFieldException,
 	    IllegalAccessException;
+
+
+    public Class<T> getFirstAggregateClass() {
+        return firstAggregateClass;
+    }
+
+
+    public Class<U> getSecondAggregateClass() {
+        return secondAggregateClass;
+    }
+
+
+    public int getFirstSortColumn() {
+        return firstSortColumn;
+    }
+
+
+    public int getSecondSortColumn() {
+        return secondSortColumn;
+    }
 }

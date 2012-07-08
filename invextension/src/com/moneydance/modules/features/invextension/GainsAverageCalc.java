@@ -51,21 +51,21 @@ public class GainsAverageCalc implements GainsCalc {
     public double getLongBasis() {
 	
 
-	if (currentTrans.position <= positionTheshold) {// position short or closed
+	if (currentTrans.getPosition() <= positionTheshold) {// position short or closed
 	    return 0.0;
-	} else if (currentTrans.position >= (prevTransValues == null ? 0
+	} else if (currentTrans.getPosition() >= (prevTransValues == null ? 0
 		: adjPrevPos)) {
 	    // first trans or subsequent larger position
 	    // add current buy to previous long basis
-	    return -currentTrans.buy
-		    - currentTrans.commision
+	    return -currentTrans.getBuy()
+		    - currentTrans.getCommision()
 		    + (prevTransValues == null ? 0.0
-			    : prevTransValues.longBasis);
+			    : prevTransValues.getLongBasis());
 	} else { // subsequent pos smaller than previous
 		 // implies prev long basis must exist
-	    double histAvgUnitCost = prevTransValues.longBasis / adjPrevPos;
-	    return prevTransValues.longBasis + histAvgUnitCost
-		    * currentTrans.secQuantity;
+	    double histAvgUnitCost = prevTransValues.getLongBasis() / adjPrevPos;
+	    return prevTransValues.getLongBasis() + histAvgUnitCost
+		    * currentTrans.getSecQuantity();
 	}
     }
 
@@ -74,21 +74,21 @@ public class GainsAverageCalc implements GainsCalc {
      */
     @Override
     public double getShortBasis() {
-	if (currentTrans.position >= -positionTheshold) { // position long or closed
+	if (currentTrans.getPosition() >= -positionTheshold) { // position long or closed
 	    return 0.0;
-	} else if (currentTrans.position <= (prevTransValues == null ? 0.0
+	} else if (currentTrans.getPosition() <= (prevTransValues == null ? 0.0
 		: adjPrevPos)) {
 	    // first trans or subsequent larger (more negative) position
 	    // add current short sale to previous short basis
-	    return -currentTrans.shortSell
-		    - currentTrans.commision
+	    return -currentTrans.getShortSell()
+		    - currentTrans.getCommision()
 		    + (prevTransValues == null ? 0.0
-			    : +prevTransValues.shortBasis);
+			    : +prevTransValues.getShortBasis());
 	} else { // subsequent pos smaller (closer to 0) than previous
 		 // implies previous short basis must exist
-	    double histAvgUnitCost = prevTransValues.shortBasis / adjPrevPos;
-	    return prevTransValues.shortBasis + histAvgUnitCost
-		    * currentTrans.secQuantity;
+	    double histAvgUnitCost = prevTransValues.getShortBasis() / adjPrevPos;
+	    return prevTransValues.getShortBasis() + histAvgUnitCost
+		    * currentTrans.getSecQuantity();
 	}
     }
 
@@ -98,15 +98,15 @@ public class GainsAverageCalc implements GainsCalc {
 	this.currentTrans = thisTrans;
 	this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.last();
 
-	int currentDateInt = thisTrans.parentTxn.getDateInt();
-	CurrencyType cur = thisTrans.referenceAccount.getCurrencyType();
+	int currentDateInt = thisTrans.getParentTxn().getDateInt();
+	CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
 	double currentRate = cur == null ? 1.0
 		: cur.getUserRateByDateInt(currentDateInt);
 	int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
-		: prevTransValues.parentTxn.getDateInt();
+		: prevTransValues.getParentTxn().getDateInt();
 	double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
 		prevDateInt, currentRate, currentDateInt) / currentRate);
-	this.adjPrevPos = prevTransValues == null ? 0.0 : prevTransValues.position
+	this.adjPrevPos = prevTransValues == null ? 0.0 : prevTransValues.getPosition()
 		* splitAdjust;
 	
     }

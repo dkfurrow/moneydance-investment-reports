@@ -24,6 +24,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -33,10 +34,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.prefs.Preferences;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -65,32 +70,34 @@ import com.moneydance.util.CustomDateFormat;
 */
 public class ReportControlPanel extends javax.swing.JPanel { //implements ActionListener
     private static final long serialVersionUID = 1020488211446251526L;
+    private RootAccount root;
     private Preferences prefs = Prefs.reportPrefs;
-    private String iniFilePath
-    = System.getProperty("user.home") + "\\.moneydance\\invextension.ini";
-
+    private static final String datePattern = ((SimpleDateFormat) DateFormat
+	    .getDateInstance(DateFormat.SHORT, Locale.getDefault()))
+	    .toPattern();
+    private static final CustomDateFormat dateFormat = new CustomDateFormat(datePattern);
+    
     private BulkSecInfo currentInfo;
-    //Report types
+    // Report types
     private String[] rptOptionStrings = {
 	    "By Investment Account, Then By Tradeable Securities/Account Cash",
-	    "By Ticker",
-	    "By Security Type, Then By Security SubType" };
+	    "By Ticker", "By Security Type, Then By Security SubType" };
     private String[] costBasisOptionStrings = {
-	    "Use Average Cost Basis Always",
-	    "Use Lot Matching Where Available"};
+	    "Use Average Cost Basis Always", "Use Lot Matching Where Available" };
+    // GUI Fields
 
-    //GUI Fields
+    private JButton setDefaultsButton = new javax.swing.JButton(
+	    "Reset All Fields To Default");
     
-    private JButton setDefaultsButton = new javax.swing.JButton("Reset All Fields To Default");
-    
-    private CustomDateFormat df = new CustomDateFormat("M/d/yyyy");
-    private JLabel snapDateLabel = new javax.swing.JLabel("Report Snapshot Date");
-    private JDateField snapDateField = new JDateField(df);
-    private JLabel fromDateLabel = new javax.swing.JLabel("Report \"From\" Date");
-    private JDateField fromDateField = new JDateField(df);
+    private JLabel snapDateLabel = new javax.swing.JLabel(
+	    "Report Snapshot Date");
+    private JDateField snapDateField = new JDateField(dateFormat);
+    private JLabel fromDateLabel = new javax.swing.JLabel(
+	    "Report \"From\" Date");
+    private JDateField fromDateField = new JDateField(dateFormat);
     private JLabel toDateLabel = new javax.swing.JLabel("Report \"To\" Date");
-    private JDateField toDateField = new JDateField(df);
-    
+    private JDateField toDateField = new JDateField(dateFormat);
+
     private JLabel reportOptionsLabel = new JLabel("Report Aggregation Options");
     private JComboBox reportOptionsComboBox = new JComboBox(rptOptionStrings);
     private JComboBox costBasisOptionsComboBox = new JComboBox(costBasisOptionStrings);
@@ -100,8 +107,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     
     
     private JButton dirChooserButton = new javax.swing.JButton("Set output folder");
-    private JTextField directoryOutputField = new javax.swing.JTextField(
-	    prefs.get(Prefs.exportPathPref, new File(".").getAbsolutePath()));
+    private JTextField directoryOutputField = new javax.swing.JTextField();
     private JCheckBox snapReportCheckbox = new javax.swing.JCheckBox("Shapshot Report");
     private JCheckBox fromToReportCheckbox = new javax.swing.JCheckBox("\"From/To\" Report");
     private JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transaction Activity");
@@ -110,14 +116,13 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     private JTextField reportStatusField = new javax.swing.JTextField("Choose Reports to Run");
 
     private JFileChooser chooser;
-    private RootAccount root;
+    
 
 
     /** Creates new form NewJPanel */
     public ReportControlPanel(RootAccount root) {
-        initComponents();
-        this.root = root;
-       
+	this.root = root;
+	initComponents();  
     }
 
 
@@ -149,7 +154,10 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 	costBasisOptionsComboBox.setSelectedIndex(prefs.getInt(
 		Prefs.costBasisUsed, 0));
 	aggregateSingleCheckBox.setSelected(prefs.getBoolean(
-		Prefs.showSingletonAggregates, false));
+		Prefs.showSingletonAggregates, false));	
+	
+	directoryOutputField.setText(prefs.get(Prefs.exportPathPref,
+		getDefaultDirectoryPath()));
         
 
         // Set text field width, button color
@@ -326,6 +334,37 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
     }
     
+    public static String getDateFormat(){
+   	return datePattern;
+       }
+    
+    private String getDefaultDirectoryPath() {
+	String fileSep = System.getProperty("file.separator");
+	String defaultPath = System.getProperty("user.home") + fileSep
+		+ ".moneydance";
+	File defaultPathFolder = new File(defaultPath);
+	if (defaultPathFolder.canWrite()) {
+	    return System.getProperty("user.home") + "\\" + ".moneydance";
+	} else {
+	    return System.getProperty("user.home");
+
+	}
+
+    }
+    
+    private void openBrowserToDownloadFile() throws IOException {
+	if (Desktop.isDesktopSupported()) {
+	    Desktop desktop = Desktop.getDesktop();
+	    if (desktop.isSupported(Desktop.Action.BROWSE)) {
+		File sampleFolder = new File(directoryOutputField.getText());
+		desktop.browse(sampleFolder.toURI());
+	    }
+
+	}
+	
+    }
+    
+
     /**set Date Fields
      * @param fromDateInt
      * @param toDateInt
@@ -416,9 +455,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
                     = new File(directoryOutputField.getText() + "\\transActivityReport.csv");
                 IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
                                             transActivityReport, transActivityReportFile);
-
             }
-
             if (secPricesCheckbox.isSelected()) {
                 ArrayList<String[]> secPricesReport
                     = BulkSecInfo.ListAllCurrenciesInfo(BulkSecInfo.getCurrencyWrappers());
@@ -428,10 +465,17 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
                                             secPricesReport,
                                             secPricesReportFile);
             }
+            
+	    if (transActivityCheckbox.isSelected()
+		    || secPricesCheckbox.isSelected()) {
+		openBrowserToDownloadFile();
+	    }
+	    
         } catch (Exception e) {
             File errorFile = new File(directoryOutputField.getText() + "\\IRRerportErrors.txt");
             StringBuffer erLOG = getStackTrace(e);
             IOUtils.writeResultsToFile(erLOG, errorFile);
+            reportStatusField.setText("Error! See Log in Output Folder");
         }
         reportStatusField.setText("Reports have been run!");
     }
@@ -445,7 +489,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
 	ReportOutputTable.CreateAndShowTable(model, report.getColumnTypes(),
 		report.getClosedPosColumn(), report.getFrozenColumn(),
-		report.firstSortColumn, report.secondSortColumn,
+		report.getFirstSortColumn(), report.getSecondSortColumn(),
 		ColSizeOption.MAXCONTCOLRESIZE, report.getReportTitle());
     }
 
@@ -514,7 +558,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 	costBasisOptionsComboBox.setSelectedIndex(0);
 	aggregateSingleCheckBox.setSelected(false);
 	
-	directoryOutputField.setText(new File(".").getAbsolutePath());
+	directoryOutputField.setText(getDefaultDirectoryPath());
     }
 
     
@@ -558,6 +602,8 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
             System.out.println("No Selection ");
         }
     }
+    
+   
 
 
     public static StringBuffer getStackTrace(Exception e) {

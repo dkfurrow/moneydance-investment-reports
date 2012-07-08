@@ -171,7 +171,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 	// transaction date if available, creation date if not
 	int firstDateInt = tempTransValues.isEmpty() ? DateUtils
 		.getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
-		: DateUtils.getPrevBusinessDay(tempTransValues.first().dateint);
+		: DateUtils.getPrevBusinessDay(tempTransValues.first().getDateint());
 	cashTransactions.add(new TransactionValues(this, firstDateInt));
 	//now there is guaranteed to be one transaction, so prevTransValues
 	//always exists

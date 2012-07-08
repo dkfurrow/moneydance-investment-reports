@@ -22,6 +22,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -493,7 +494,8 @@ public final class DateUtils {
 
     public static String convertToShort(int dateInt) {
 	Date date = convertToDate(dateInt);
-	SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.US);
+	SimpleDateFormat sdf = new SimpleDateFormat(
+		ReportControlPanel.getDateFormat(), Locale.getDefault());
 	return sdf.format(date);
     }
 

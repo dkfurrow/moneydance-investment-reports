@@ -621,7 +621,7 @@ public class ReportOutputTable extends JScrollPane {
 		    c.setBackground(lightLightGray);
 		}
 		if (accType.startsWith("~") || aggType.startsWith("~")) {
-		    c.setBackground(Color.YELLOW);
+		    c.setBackground(Color.lightGray);
 		}
 		if (accType.startsWith("~") && aggType.startsWith("~")) {
 		    c.setBackground(Color.GREEN);
