@@ -33,13 +33,14 @@ import com.moneydance.apps.md.model.SecurityAccount;
 import com.moneydance.apps.md.model.SecurityType;
 
 /**
- * Wrapper for Investment Account with associated properties
+ * Wrapper for Moneydance Class Investment Account, adds increased 
+ * functionality
  *
  * Version 1.0 
  * @author Dale Furrow
  *
  */
-public class InvestmentAccountWrapper extends Aggregator implements AccountWrapper   {
+public class InvestmentAccountWrapper extends Aggregator implements IAccount   {
     //associated Investment Account
     private InvestmentAccount investmentAccount;
     // Account Number
@@ -69,7 +70,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     }
 
     /* (non-Javadoc)
-     * @see com.moneydance.modules.features.invextension.AccountWrapper#getAccountRef()
+     * @see com.moneydance.modules.features.invextension.IAccount#getAccountRef()
      */
     @Override
     public Account getParentAccountReference() {
@@ -99,15 +100,15 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
 	return true;
     }
 
-    /* Returns all TransactionValues for AccountWrapper
-     * @see com.moneydance.modules.features.invextension.AccountWrapper#getTransValues()
+    /* Returns all TransactionValues for IAccount
+     * @see com.moneydance.modules.features.invextension.IAccount#getTransValues()
      */
     @Override
     public SortedSet<TransactionValues> getTransactionValues() throws Exception {
 	SortedSet<TransactionValues> theseTransValues = new TreeSet<TransactionValues>();
 	for (Iterator<SecurityAccountWrapper> iterator = securityAccountWrappers.iterator(); iterator
 		.hasNext();) {
-	    AccountWrapper acctWrapper = (AccountWrapper) iterator.next();
+	    IAccount acctWrapper = (IAccount) iterator.next();
 
 	    SortedSet<TransactionValues> accountTransValues = acctWrapper
 		    .getTransactionValues();
@@ -187,7 +188,7 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     }
 
     @Override
-    public AccountWrapper getCashAccountWrapper() {
+    public IAccount getCashAccountWrapper() {
 	return this.cashWrapper;
     }
 
@@ -246,22 +247,22 @@ public class InvestmentAccountWrapper extends Aggregator implements AccountWrapp
     }
     
     @Override
-    String getFirstAggregateName() {
+    String getFirstAggregateOutput() {
    	return this.investmentAccount.getAccountName();
        }
 
        @Override
-    String getSecondAggregateName() {
+    String getSecondAggregateOutput() {
 	   return this.investmentAccount.getAccountName() + "~";
        }
 
        @Override
-    String getAllAggregateName() {
+    String getAllAggregateOutput() {
 	   return this.investmentAccount.getAccountName() + "*";
        }
        
        @Override
-    String getDefaultName(){
+    String getDefaultOutput(){
 	   return "~All-Accounts";
        }
 

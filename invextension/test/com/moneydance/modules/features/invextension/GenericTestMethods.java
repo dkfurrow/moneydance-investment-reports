@@ -75,6 +75,8 @@ public class GenericTestMethods {
 //	testCompareSpec();
 //	listTransWithTransUtil(currentInfo);
 	verifyAggregateByCurrencyReport(currentInfo);
+	System.out.println("DataFile Path: "
+		+ root.getDataFile().getParentFile().getAbsolutePath());
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -218,12 +220,12 @@ public class GenericTestMethods {
 //		    + getAcctInfo(parentAccountWrapper.invAcct)
 //		    + "Creation Date: " + creationDateInt + "]"
 //		    + " Child Accounts:");
-//	    HashSet<AccountWrapper> subAcctWrappers = parentAccountWrapper
+//	    HashSet<IAccount> subAcctWrappers = parentAccountWrapper
 //		    .getAllAccountWrappers();
 //
 //	    for (Iterator iterator2 = subAcctWrappers.iterator(); iterator2
 //		    .hasNext();) {
-//		AccountWrapper secAcctWrapper = (AccountWrapper) iterator2
+//		IAccount secAcctWrapper = (IAccount) iterator2
 //			.next();
 //		String numTrans = secAcctWrapper.getTransValues().size()
 //			+ " Transactions ";

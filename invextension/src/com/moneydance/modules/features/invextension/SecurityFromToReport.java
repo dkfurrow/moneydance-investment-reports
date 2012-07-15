@@ -115,7 +115,7 @@ public class SecurityFromToReport extends SecurityReport {
         
         if (secAccountWrapper != null) {
             
-            // Currency will never be null if accountWrapper is cash or security
+            // Currency will never be null if iAccount is cash or security
             CurrencyType currency = secAccountWrapper.getCurrencyWrapper().curType; 
             
             this.startPrice = 1.0 / currency.getUserRateByDateInt(fromDateInt);
