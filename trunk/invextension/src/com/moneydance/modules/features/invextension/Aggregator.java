@@ -35,7 +35,7 @@ public abstract class Aggregator {
      * investment account, returns the investment Account name.
      * @return
      */
-    String getFirstAggregateName() {
+    String getFirstAggregateOutput() {
 	return "~Null";
     }
     
@@ -44,7 +44,7 @@ public abstract class Aggregator {
      * name, so that the report line will sort to the bottom of SecuritySubTypes
      * @return
      */
-    String getSecondAggregateName() {
+    String getSecondAggregateOutput() {
 	return "~Null";
     }
     
@@ -55,14 +55,14 @@ public abstract class Aggregator {
      * name
      * @return
      */
-    String getAllAggregateName() {
+    String getAllAggregateOutput() {
 	return "~Null";
     }
     
     /**Output generic name (e.g. "All Currencies" for Currency Type)
      * @return
      */
-    String getDefaultName(){
+    String getDefaultOutput(){
 	return "~Null";
     }
 

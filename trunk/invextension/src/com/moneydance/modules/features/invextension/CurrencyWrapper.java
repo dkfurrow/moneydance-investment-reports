@@ -84,26 +84,26 @@ public class CurrencyWrapper extends Aggregator {
 	this.secAccts.add(secAcct);
 	
     } @Override
-    public String getFirstAggregateName() {
+    public String getFirstAggregateOutput() {
 	return this.ticker;
     }
 
 
 
     @Override
-    public String getSecondAggregateName() {
+    public String getSecondAggregateOutput() {
 	return this.ticker + "~";
     }
 
 
 
     @Override
-    public String getAllAggregateName() {
+    public String getAllAggregateOutput() {
 	return this.ticker + "*";
     }
     
     @Override
-    public String getDefaultName(){
+    public String getDefaultOutput(){
    	return "~All-Currencies";
        }
     

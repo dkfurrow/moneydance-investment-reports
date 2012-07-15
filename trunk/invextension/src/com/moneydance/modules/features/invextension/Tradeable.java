@@ -24,8 +24,9 @@ package com.moneydance.modules.features.invextension;
 
 /**
  * Tradeable class is a derivative of Currency.
- * Represents Securities of all currencies Except the currency representing
- * uninvested cash (BulkSecInfo.cashCurrencyWrapper)
+ * Main member: Boolean isTradeable: true for Securities of all currencies 
+ * except the currency representing uninvested cash 
+ * (BulkSecInfo.cashCurrencyWrapper)
  * Version 1.0 
  * @author Dale Furrow
  *
@@ -84,24 +85,24 @@ public class Tradeable extends Aggregator {
     }
     
     @Override
-    public String getFirstAggregateName() {
+    public String getFirstAggregateOutput() {
 	return this.isTradeable ? "*AllSec" : "*Cash";
     }
 
 
     @Override
-    public String getSecondAggregateName() {
+    public String getSecondAggregateOutput() {
 	return this.isTradeable ? "*AllSec" : "*Cash";
     }
 
 
     @Override
-    public String getAllAggregateName() {
+    public String getAllAggregateOutput() {
 	return this.isTradeable ? "*AllSec" : "*Cash";
     }
     
     @Override
-    public String getDefaultName(){
+    public String getDefaultOutput(){
 	return "~All Sec + Cash";
     }
 

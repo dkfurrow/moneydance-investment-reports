@@ -25,14 +25,14 @@ package com.moneydance.modules.features.invextension;
 import com.moneydance.apps.md.model.SecurityType;
 
 /**
- * Wrapper for SecurityType property of Security
+ * Wrapper for Moneydance Class SecurityType, adds increased functionality
  *
  * Version 1.0 
  * @author Dale Furrow
  *
  */
 public class SecurityTypeWrapper extends Aggregator {
-    AccountWrapper accountWrapper;
+    IAccount iAccount;
     SecurityType securityType;
     static String defaultName = "~All-SecType";
     // default column to sort on
@@ -40,9 +40,9 @@ public class SecurityTypeWrapper extends Aggregator {
     // name of aggregation method
     static String outputName = "Security Type";
 
-    public SecurityTypeWrapper(AccountWrapper accountWrapper) throws Exception {
-	this.accountWrapper = accountWrapper;
-	SecurityType type = this.accountWrapper.getSecurityAccountWrapper()
+    public SecurityTypeWrapper(IAccount iAccount) throws Exception {
+	this.iAccount = iAccount;
+	SecurityType type = this.iAccount.getSecurityAccountWrapper()
 		.getSecurityType();
 	if (type == null) {
 	    this.securityType = SecurityType.DEFAULT;
@@ -79,26 +79,26 @@ public class SecurityTypeWrapper extends Aggregator {
     }
     
     @Override
-    public String getFirstAggregateName() {
+    public String getFirstAggregateOutput() {
 	return this.securityType.toString();
     }
 
 
 
     @Override
-    public String getSecondAggregateName() {
+    public String getSecondAggregateOutput() {
 	return "*" +  this.securityType;
     }
 
 
 
     @Override
-    public String getAllAggregateName() {
+    public String getAllAggregateOutput() {
 	return this.securityType.toString() + "*";
     }
     
     @Override
-    public String getDefaultName(){
+    public String getDefaultOutput(){
    	return "~All-Types";
        }
     

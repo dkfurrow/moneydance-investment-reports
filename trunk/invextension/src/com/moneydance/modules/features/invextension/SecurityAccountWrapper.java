@@ -36,7 +36,7 @@ import com.moneydance.apps.md.model.SecurityAccount;
  * 
  */
 public class SecurityAccountWrapper extends SecurityAccount implements
-	AccountWrapper, Comparable<SecurityAccountWrapper> {
+	IAccount, Comparable<SecurityAccountWrapper> {
     private SecurityAccount securityAccount;
     private int acctNum;
     private Account parentAccount;
@@ -94,7 +94,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
      * (non-Javadoc)
      * 
      * @see
-     * com.moneydance.modules.features.invextension.AccountWrapper#getAccountRef
+     * com.moneydance.modules.features.invextension.IAccount#getAccountRef
      * ()
      */
     @Override
@@ -108,7 +108,7 @@ public class SecurityAccountWrapper extends SecurityAccount implements
     }
 
     @Override
-    public AccountWrapper getCashAccountWrapper() {
+    public IAccount getCashAccountWrapper() {
 	return this.invAcctWrapper.getCashAccountWrapper();
     }
 

@@ -24,14 +24,14 @@ package com.moneydance.modules.features.invextension;
 
 
 /**
- * Wrapper for SecuritySubType
+ * Wrapper for Moneydance class SecuritySubType, adds increased functionality
  *
  * Version 1.0 
  * @author Dale Furrow
  *
  */
 public class SecuritySubTypeWrapper extends Aggregator {
-    AccountWrapper accountWrapper;
+    IAccount iAccount;
     String securitySubType;
     static String defaultName = "~All-SubType";
     // default column to sort on
@@ -39,10 +39,10 @@ public class SecuritySubTypeWrapper extends Aggregator {
     // name of aggregation method
     static String outputName = "Security Sub Type";
 
-    public SecuritySubTypeWrapper(AccountWrapper accountWrapper)
+    public SecuritySubTypeWrapper(IAccount iAccount)
 	    throws Exception {
-	this.accountWrapper = accountWrapper;
-	String subtypeStr = accountWrapper.getSecurityAccountWrapper().getSecuritySubType();
+	this.iAccount = iAccount;
+	String subtypeStr = iAccount.getSecurityAccountWrapper().getSecuritySubType();
 	if (subtypeStr == null || subtypeStr.length() == 0) {
 	    this.securitySubType = "None";
 	} else {
@@ -82,26 +82,26 @@ public class SecuritySubTypeWrapper extends Aggregator {
     
 
     @Override
-    public String getFirstAggregateName() {
+    public String getFirstAggregateOutput() {
 	return this.securitySubType;
     }
 
 
 
     @Override
-    public String getSecondAggregateName() {
+    public String getSecondAggregateOutput() {
 	return "*" +  this.securitySubType;
     }
 
 
 
     @Override
-    public String getAllAggregateName() {
+    public String getAllAggregateOutput() {
 	return this.securitySubType + "*";
     }
     
     @Override
-    public String getDefaultName(){
+    public String getDefaultOutput(){
    	return "~All-SubTypes";
        }
 

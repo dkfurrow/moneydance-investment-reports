@@ -23,7 +23,9 @@
 package com.moneydance.modules.features.invextension;
 
 /**
- * Singleton class which represents all security reports
+ * Singleton class this is a "placeholder" aggregator
+ * as it aggregates all security reports regardless of Investment Account,
+ * Currency, SecurityType or SecuritySubType
  *
  * Version 1.0 
  * @author Dale Furrow
@@ -49,17 +51,17 @@ public class AllAggregate extends Aggregator {
     }
 
     @Override
-    String getFirstAggregateName() {
+    String getFirstAggregateOutput() {
 	return "~All";
     }
 
     @Override
-    String getSecondAggregateName() {
+    String getSecondAggregateOutput() {
 	return "~All";
     }
 
     @Override
-    String getAllAggregateName() {
+    String getAllAggregateOutput() {
 	return "~All";
     }
 
@@ -69,7 +71,7 @@ public class AllAggregate extends Aggregator {
     }
     
     @Override
-    String getDefaultName(){
+    String getDefaultOutput(){
 	return "~All";
     }
 

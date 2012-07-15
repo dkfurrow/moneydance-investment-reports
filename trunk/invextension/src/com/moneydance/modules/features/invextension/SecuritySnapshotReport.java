@@ -173,7 +173,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 	}
 
 	if (secAccountWrapper != null) {
-	    // Currency will never be null if accountWrapper is cash or security
+	    // Currency will never be null if iAccount is cash or security
 	    CurrencyType currency = secAccountWrapper.getCurrencyWrapper().curType;
 
 	    this.lastPrice = 1.0 / currency.getUserRateByDateInt(snapDateInt);

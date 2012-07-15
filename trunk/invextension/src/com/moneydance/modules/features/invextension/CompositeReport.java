@@ -201,18 +201,18 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 
 	switch (compositeType) {
 	case FIRST:
-	    firstValName = this.firstAggregateVal.getAllAggregateName();
+	    firstValName = this.firstAggregateVal.getAllAggregateOutput();
 	    secondValName = CompositeReport
 		    .getDefaultName(this.secondAggregateClass);
 	    break;
 	case SECOND:
 	    firstValName = CompositeReport
 		    .getDefaultName(this.firstAggregateClass);
-	    secondValName = this.secondAggregateVal.getAllAggregateName();
+	    secondValName = this.secondAggregateVal.getAllAggregateOutput();
 	    break;
 	case BOTH:
-	    firstValName = this.firstAggregateVal.getFirstAggregateName();
-	    secondValName = this.secondAggregateVal.getSecondAggregateName();
+	    firstValName = this.firstAggregateVal.getFirstAggregateOutput();
+	    secondValName = this.secondAggregateVal.getSecondAggregateOutput();
 	    break;
 	case ALL:
 	    firstValName = "ALL-AGGREGATE";
@@ -301,16 +301,16 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	    secondAggStrName = CompositeReport
 		    .getDefaultName(this.secondAggregateClass);
 	} else if (this.compositeType == COMPOSITE_TYPE.FIRST) {
-	    firstAggStrName = this.firstAggregateVal.getAllAggregateName();
+	    firstAggStrName = this.firstAggregateVal.getAllAggregateOutput();
 	    secondAggStrName = CompositeReport
 		    .getDefaultName(this.secondAggregateClass);
 	} else if (this.compositeType == COMPOSITE_TYPE.SECOND) {
 	    firstAggStrName = CompositeReport
 		    .getDefaultName(this.firstAggregateClass);
-	    secondAggStrName = this.secondAggregateVal.getAllAggregateName();
+	    secondAggStrName = this.secondAggregateVal.getAllAggregateOutput();
 	} else {
-	    firstAggStrName = this.firstAggregateVal.getFirstAggregateName();
-	    secondAggStrName = this.secondAggregateVal.getSecondAggregateName();
+	    firstAggStrName = this.firstAggregateVal.getFirstAggregateOutput();
+	    secondAggStrName = this.secondAggregateVal.getSecondAggregateOutput();
 	}
 
 	if (this.firstAggregateClass == InvestmentAccountWrapper.class)
