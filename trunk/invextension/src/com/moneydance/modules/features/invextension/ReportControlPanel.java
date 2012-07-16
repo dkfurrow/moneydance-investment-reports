@@ -340,10 +340,11 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     
     private String getDefaultDirectoryPath() {
 	String fileSep = System.getProperty("file.separator");
-	String defaultPath = root.getDataFile().getParentFile().getAbsolutePath();
+	String defaultPath = root.getDataFile().getParentFile()
+		.getAbsolutePath();
 	File defaultPathFolder = new File(defaultPath);
 	if (defaultPathFolder.canWrite()) {
-	    return System.getProperty("user.home") + "\\" + ".moneydance";
+	    return defaultPath;
 	} else {
 	    return System.getProperty("user.home");
 
