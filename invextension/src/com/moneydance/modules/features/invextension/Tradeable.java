@@ -34,7 +34,7 @@ package com.moneydance.modules.features.invextension;
 public class Tradeable extends Aggregator {
     CurrencyWrapper currencyWrapper;
     Boolean isTradeable;
-    static String defaultName = "~AllSec+Cash";
+    static String defaultName = "Securities/CASH-ALL";
     // default column to sort on
     static Integer defaultColumn = 1;
     // name of aggregation method
@@ -86,24 +86,24 @@ public class Tradeable extends Aggregator {
     
     @Override
     public String getFirstAggregateOutput() {
-	return this.isTradeable ? "*AllSec" : "*Cash";
+	return this.isTradeable ? "AllSec" : "Cash";
     }
 
 
     @Override
     public String getSecondAggregateOutput() {
-	return this.isTradeable ? "*AllSec" : "*Cash";
+	return this.isTradeable ? "Securities-ALL" : "CASH-ALL";
     }
 
 
     @Override
     public String getAllAggregateOutput() {
-	return this.isTradeable ? "*AllSec" : "*Cash";
+	return this.isTradeable ? "Securities-ALL " : "CASH-ALL ";
     }
     
     @Override
     public String getDefaultOutput(){
-	return "~All Sec + Cash";
+	return "Securities/CASH-ALL";
     }
 
 }

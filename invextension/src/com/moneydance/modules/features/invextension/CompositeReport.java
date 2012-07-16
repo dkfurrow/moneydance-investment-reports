@@ -202,12 +202,10 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	switch (compositeType) {
 	case FIRST:
 	    firstValName = this.firstAggregateVal.getAllAggregateOutput();
-	    secondValName = CompositeReport
-		    .getDefaultName(this.secondAggregateClass);
+	    secondValName = this.secondAggregateVal.getDefaultOutput();
 	    break;
 	case SECOND:
-	    firstValName = CompositeReport
-		    .getDefaultName(this.firstAggregateClass);
+	    firstValName = this.firstAggregateVal.getDefaultOutput();
 	    secondValName = this.secondAggregateVal.getAllAggregateOutput();
 	    break;
 	case BOTH:
@@ -282,24 +280,20 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	    IllegalAccessException {
 	ArrayList<Object> rptValues = new ArrayList<Object>();
 
-	String investmentAccountStr = CompositeReport
-		.getDefaultName(InvestmentAccountWrapper.class);
-	String securityAccountStr = "~Null";
-	String securityTypeStr = CompositeReport
-		.getDefaultName(SecurityTypeWrapper.class);
-	String securitySubTypeStr = CompositeReport
-		.getDefaultName(SecuritySubTypeWrapper.class);
-	String tickerStr = CompositeReport
-		.getDefaultName(CurrencyWrapper.class);
+	String investmentAccountStr = "Accounts-ALL";
+	String securityAccountStr = "Securities-ALL";
+	String securityTypeStr = "Null";
+	String securitySubTypeStr = "Null";
+	String tickerStr = "Tickers-ALL";
 
 	String firstAggStrName = "~Null";
 	String secondAggStrName = "~Null";
 
 	if (this.compositeType == COMPOSITE_TYPE.ALL) {
 	    firstAggStrName = CompositeReport
-		    .getDefaultName(this.firstAggregateClass);
+		    .getDefaultName(this.firstAggregateClass) + " ";
 	    secondAggStrName = CompositeReport
-		    .getDefaultName(this.secondAggregateClass);
+		    .getDefaultName(this.secondAggregateClass) + " ";
 	} else if (this.compositeType == COMPOSITE_TYPE.FIRST) {
 	    firstAggStrName = this.firstAggregateVal.getAllAggregateOutput();
 	    secondAggStrName = CompositeReport
@@ -321,7 +315,8 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	    securitySubTypeStr = firstAggStrName;
 	if (this.firstAggregateClass == Tradeable.class)
 	    securityAccountStr = firstAggStrName;
-	if (this.firstAggregateClass == CurrencyWrapper.class && this.compositeType !=COMPOSITE_TYPE.ALL){
+	if (this.firstAggregateClass == CurrencyWrapper.class
+		&& this.compositeType != COMPOSITE_TYPE.ALL) {
 	    tickerStr = firstAggStrName;
 	    //take remaining information from abitrary member of security reports
 	    //covers case where SecurityType, etc, different for same
@@ -331,6 +326,12 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 	    securityTypeStr = securityReport.getSecurityTypeWrapper().getName();
 	    securitySubTypeStr = securityReport.getSecuritySubTypeWrapper().getName();
 	    securityAccountStr = securityReport.getSecAccountWrapper().getName();
+	}
+	if (this.firstAggregateClass == CurrencyWrapper.class
+		&& this.compositeType == COMPOSITE_TYPE.ALL) {
+	    tickerStr = firstAggStrName;
+	    // add space to investment account column to mimic 2-level report
+	    investmentAccountStr = investmentAccountStr + " ";
 	}
 	    
 

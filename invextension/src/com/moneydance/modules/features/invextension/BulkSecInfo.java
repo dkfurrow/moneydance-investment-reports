@@ -426,7 +426,7 @@ public class BulkSecInfo {
 	int nextId = curTable.getNextID();
 	int dateInt = DateUtils.convertToDateInt(new Date());
 	CurrencyType cashCurrency = new CurrencyType
-		(nextId, "", "^CASH", 1.0, 1, "", "", "^CASH",
+		(nextId, "", "CASH", 1.0, 1, "", "", "CASH",
 		dateInt, CurrencyType.CURRTYPE_SECURITY, curTable);
 	cashCurrency.addSnapshotInt(BulkSecInfo.firstDateInt, 1.0);
 	return cashCurrency;

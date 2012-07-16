@@ -38,7 +38,7 @@ public class CurrencyWrapper extends Aggregator {
     int curID;
     String ticker;
     LinkedHashSet<SecurityAccountWrapper> secAccts;
-    static String defaultName = "~All-Cur";
+    static String defaultName = "Ticker-ALL";
     // default column to sort on
     static Integer defaultColumn = 4;
     // name of aggregation method
@@ -51,7 +51,7 @@ public class CurrencyWrapper extends Aggregator {
 	if(curType.getTickerSymbol().isEmpty()){
 	    this.ticker = "NoTicker_" + curID;
 	} else {
-	    this.ticker = curType.getTickerSymbol();
+	    this.ticker = curType.getTickerSymbol().trim();
 	}
     }
     
@@ -85,21 +85,23 @@ public class CurrencyWrapper extends Aggregator {
 	
     } @Override
     public String getFirstAggregateOutput() {
-	return this.ticker;
+	//should never happen
+	return null;
     }
 
 
 
     @Override
     public String getSecondAggregateOutput() {
-	return this.ticker + "~";
+	//should never happen
+	return null;
     }
 
 
 
     @Override
     public String getAllAggregateOutput() {
-	return this.ticker + "*";
+	return this.ticker + " ";
     }
     
     @Override

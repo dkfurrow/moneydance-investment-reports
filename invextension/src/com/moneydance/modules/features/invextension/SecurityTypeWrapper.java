@@ -34,7 +34,7 @@ import com.moneydance.apps.md.model.SecurityType;
 public class SecurityTypeWrapper extends Aggregator {
     IAccount iAccount;
     SecurityType securityType;
-    static String defaultName = "~All-SecType";
+    static String defaultName = "SECTYPES-ALL";
     // default column to sort on
     static Integer defaultColumn = 2;
     // name of aggregation method
@@ -75,31 +75,31 @@ public class SecurityTypeWrapper extends Aggregator {
     }
 
     public String getName(){
-	return this.securityType.name();
+	return this.securityType.name().trim();
     }
     
     @Override
     public String getFirstAggregateOutput() {
-	return this.securityType.toString();
+	return this.getName();
     }
 
 
 
     @Override
     public String getSecondAggregateOutput() {
-	return "*" +  this.securityType;
+	return this.getName() + "-ALL";
     }
 
 
 
     @Override
     public String getAllAggregateOutput() {
-	return this.securityType.toString() + "*";
+	return this.securityType.toString() + " ";
     }
     
     @Override
     public String getDefaultOutput(){
-   	return "~All-Types";
+   	return "SECTYPES-ALL";
        }
     
 
