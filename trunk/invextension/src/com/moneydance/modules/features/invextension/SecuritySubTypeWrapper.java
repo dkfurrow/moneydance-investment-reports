@@ -33,7 +33,7 @@ package com.moneydance.modules.features.invextension;
 public class SecuritySubTypeWrapper extends Aggregator {
     IAccount iAccount;
     String securitySubType;
-    static String defaultName = "~All-SubType";
+    static String defaultName = "SUBTYPES-ALL";
     // default column to sort on
     static Integer defaultColumn = 3;
     // name of aggregation method
@@ -42,7 +42,7 @@ public class SecuritySubTypeWrapper extends Aggregator {
     public SecuritySubTypeWrapper(IAccount iAccount)
 	    throws Exception {
 	this.iAccount = iAccount;
-	String subtypeStr = iAccount.getSecurityAccountWrapper().getSecuritySubType();
+	String subtypeStr = iAccount.getSecurityAccountWrapper().getSecuritySubType().trim();
 	if (subtypeStr == null || subtypeStr.length() == 0) {
 	    this.securitySubType = "None";
 	} else {
@@ -90,19 +90,19 @@ public class SecuritySubTypeWrapper extends Aggregator {
 
     @Override
     public String getSecondAggregateOutput() {
-	return "*" +  this.securitySubType;
+	return this.securitySubType + "-ALL";
     }
 
 
 
     @Override
     public String getAllAggregateOutput() {
-	return this.securitySubType + "*";
+	return this.securitySubType + " ";
     }
     
     @Override
     public String getDefaultOutput(){
-   	return "~All-SubTypes";
+   	return "SUBTYPES-ALL";
        }
 
     

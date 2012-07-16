@@ -106,8 +106,10 @@ public class ReportOutputTable extends JScrollPane {
     int frozenColumns = 0;
     private final JScrollPaneAdjuster adjuster;
     public int firstSort = 0;
-    public int secondSort = 1;
+    public int secondSort = 0;
     public int thirdSort = 0;
+    int firstAgg = 0;
+    int secondAgg = 0;
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
     public SortOrder thirdOrder = SortOrder.ASCENDING;
@@ -127,6 +129,8 @@ public class ReportOutputTable extends JScrollPane {
 	closedPosColumn = indClosedPosColumn;
 	this.firstSort = firstSort;
 	this.secondSort = secondSort;
+	this.firstAgg = firstSort;
+	this.secondAgg = secondSort;
 	// create the two tables
 	lockedTable = new FormattedTable(model, colTypes, sizeOption);
 	scrollTable = new FormattedTable(model, colTypes, sizeOption);
@@ -611,19 +615,19 @@ public class ReportOutputTable extends JScrollPane {
 		c.setBackground(getBackground());
 		int modelRow = convertRowIndexToModel(row);
 		String accType = (String) getModel().getValueAt(modelRow,
-			firstSort);
+			firstAgg);
 		String aggType = (String) getModel().getValueAt(modelRow,
-			secondSort);
+			secondAgg);
 		Double endPos = (Double) getModel().getValueAt(modelRow,
 			closedPosColumn);
 
-		if (accType.startsWith("*") || aggType.startsWith("*")) {
+		if (aggType.endsWith("-ALL")) {
 		    c.setBackground(lightLightGray);
 		}
-		if (accType.startsWith("~") || aggType.startsWith("~")) {
+		if (accType.endsWith(" ") || aggType.endsWith(" ")) {
 		    c.setBackground(Color.lightGray);
 		}
-		if (accType.startsWith("~") && aggType.startsWith("~")) {
+		if (accType.endsWith(" ") && aggType.endsWith(" ")) {
 		    c.setBackground(Color.GREEN);
 		}
 		if (endPos == 0.0) {
@@ -875,27 +879,26 @@ public class ReportOutputTable extends JScrollPane {
 
 	@Override
 	public int compare(String o1, String o2) {
-	    LinkedList<Character> startChars = new LinkedList<Character>();
-	    startChars.add("^".charAt(0));
-	    startChars.add("*".charAt(0));
-	    startChars.add("~".charAt(0));
-	    char o11 = o1.charAt(0);
-	    char o21 = o2.charAt(0);
-	    if (startChars.contains(o11) && startChars.contains(o21)) {
-		int indDiff = startChars.indexOf(o11) - startChars.indexOf(o21);
-		if (indDiff == 0) {
-		    // either they start with the same char, in which case
-		    // compare
-		    return o1.compareTo(o2);
-		} else { // return difference in indices
-		    return indDiff;
-		}
-	    } else if (startChars.contains(o11) && !startChars.contains(o21)) {
-		return 1; // first String has special character
-	    } else if (!startChars.contains(o11) && startChars.contains(o21)) {
-		return -1; // second string has special character
-	    } else {// neither first letter is special character
+	    LinkedList<String> endStrings = new LinkedList<String>();
+	    endStrings.add("CASH");
+	    endStrings.add("CASH "); //handles aggregate by ticker
+	    endStrings.add("-ALL");
+	    endStrings.add("-ALL "); //handles last row of all-aggregate
+
+	    int o1Rank = -1;
+	    int o2Rank = -1;
+
+	    for (String string : endStrings) {
+		if (o1.endsWith(string))
+		    o1Rank = endStrings.indexOf(string);
+		if (o2.endsWith(string))
+		    o2Rank = endStrings.indexOf(string);
+	    }
+
+	    if (o1Rank == o2Rank) {
 		return o1.compareTo(o2);
+	    } else {
+		return o1Rank - o2Rank;
 	    }
 	}
     };

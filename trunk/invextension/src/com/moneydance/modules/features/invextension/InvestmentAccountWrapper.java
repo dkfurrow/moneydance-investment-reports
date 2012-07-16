@@ -52,7 +52,7 @@ public class InvestmentAccountWrapper extends Aggregator implements IAccount   {
     //Security Account Wrappers
     private HashSet<SecurityAccountWrapper> securityAccountWrappers;
     // default name
-    static String defaultName = "~All-Accts";
+    static String defaultName = "Accounts-ALL";
     // default column to sort on
     static Integer defaultColumn = 0;
     // name of aggregation method
@@ -212,7 +212,7 @@ public class InvestmentAccountWrapper extends Aggregator implements IAccount   {
 
     @Override
     public String getName() {
-	return this.investmentAccount.getAccountName();
+	return this.investmentAccount.getAccountName().trim();
     }
 
     @Override
@@ -248,22 +248,22 @@ public class InvestmentAccountWrapper extends Aggregator implements IAccount   {
     
     @Override
     String getFirstAggregateOutput() {
-   	return this.investmentAccount.getAccountName();
+   	return this.getName();
        }
 
        @Override
     String getSecondAggregateOutput() {
-	   return this.investmentAccount.getAccountName() + "~";
+	   return this.getName() + "-ALL";
        }
 
        @Override
     String getAllAggregateOutput() {
-	   return this.investmentAccount.getAccountName() + "*";
+	   return this.getName() + " ";
        }
        
        @Override
     String getDefaultOutput(){
-	   return "~All-Accounts";
+	   return "Accounts-ALL";
        }
 
     public Account getInvestmentAccount() {
