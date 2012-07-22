@@ -585,16 +585,16 @@ public class ReportOutputTable extends JScrollPane {
 	    for (int i = 0; i < colFormats.length; i++) {
 		ColType colType = colFormats[i];
 		tableColumn = this.getColumnModel().getColumn(i);
-		if (colType == colType.DOUBLE0) {
+		if (colType == ColType.DOUBLE0) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(0,
 			    0));
-		} else if (colType == colType.DOUBLE2) {
+		} else if (colType == ColType.DOUBLE2) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(2,
 			    2));
-		} else if (colType == colType.DOUBLE3) {
+		} else if (colType == ColType.DOUBLE3) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(3,
 			    3));
-		} else if (colType == colType.PERCENT1) {
+		} else if (colType == ColType.PERCENT1) {
 		    tableColumn.setCellRenderer(new PercentTableCellRenderer(1,
 			    1));
 		} else {
@@ -939,6 +939,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstSort = cb.getSelectedIndex();
 		}
@@ -947,6 +948,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondSort = cb.getSelectedIndex();
 		}
@@ -955,6 +957,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdSort = cb.getSelectedIndex();
 		}
@@ -964,6 +967,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstOrder = (SortOrder) cb.getSelectedItem();
 		}
@@ -972,6 +976,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondOrder = (SortOrder) cb.getSelectedItem();
 		}
@@ -980,6 +985,7 @@ public class ReportOutputTable extends JScrollPane {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdOrder = (SortOrder) cb.getSelectedItem();
 		}
@@ -1357,6 +1363,7 @@ public class ReportOutputTable extends JScrollPane {
 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
+                @SuppressWarnings("unchecked")
 		JComboBox cb = (JComboBox) e.getSource();
 		thisTable.setFrozenColumns(cb.getSelectedIndex());
 	    }
@@ -1373,7 +1380,7 @@ public class ReportOutputTable extends JScrollPane {
 
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
-		if (e.getStateChange() == e.SELECTED) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
 		    thisTable.closedPosHidden = true;
 		    thisTable.sortRows();
 		} else {

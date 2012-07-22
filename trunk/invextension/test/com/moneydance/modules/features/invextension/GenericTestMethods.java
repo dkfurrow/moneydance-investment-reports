@@ -24,6 +24,8 @@ package com.moneydance.modules.features.invextension;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,6 +79,12 @@ public class GenericTestMethods {
 	verifyAggregateByCurrencyReport(currentInfo);
 	System.out.println("DataFile Path: "
 		+ root.getDataFile().getParentFile().getAbsolutePath());
+	Double sampleDateValue = DateUtils.getExcelDateValue(20100208);
+	System.out.println("Sample Date Value" + sampleDateValue);
+	GregorianCalendar gc = new GregorianCalendar(1900,1,1);
+	gc.setTimeInMillis(0L);
+	
+	System.out.println("Long time: " + gc.getTime());
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
