@@ -470,14 +470,10 @@ public final class DateUtils {
      * @return date
      */
     public static Date convertToDate(int dateInt) {
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.US); // mm.dd.yyyy
-	try {
-	    return sdf.parse(Integer.toString(dateInt));
-	} catch (ParseException ex) {
-	    Logger.getLogger(DateUtils.class.getName()).log(Level.SEVERE, null,
-		    ex);
-	    return null;
-	}
+	@SuppressWarnings("deprecation")
+        Date nd = new Date(dateInt / 10000 - 1900, (dateInt / 100) % 100 - 1, dateInt % 100);
+
+        return nd;
     }
 
     /**
@@ -488,8 +484,10 @@ public final class DateUtils {
      * @return
      */
     public static int convertToDateInt(Date thisDate) {
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.US); // mm.dd.yyyy
-	return Integer.parseInt(sdf.format(thisDate));
+	@SuppressWarnings("deprecation")
+    	int nd = (thisDate.getYear() + 1900) * 10000 + (thisDate.getMonth() + 1) * 100 + thisDate.getDate();
+
+	return nd;
     }
 
     public static String convertToShort(int dateInt) {
@@ -550,15 +548,15 @@ public final class DateUtils {
      *            dateInt to be converted
      * @return exceldate (days from 1/1/1900)
      */
+    private static GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 31);
+
     public static double getExcelDateValue(int dateInt) {
-	GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 30);
 	int dateStartInt = convertToDateInt(dateStart.getTime());
 	Integer daysBetwInt = getDaysBetween(dateStartInt, dateInt);
 	return daysBetwInt.doubleValue();
     }
 
     public static String getExcelDateString(int dateInt) {
-	GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 30);
 	int dateStartInt = convertToDateInt(dateStart.getTime());
 	Integer daysBetwInt = getDaysBetween(dateStartInt, dateInt);
 	double daysBetwD = daysBetwInt.doubleValue();

@@ -110,10 +110,10 @@ public class TotalSnapshotReport<T extends Aggregator, U extends Aggregator>
 	output.append("Investment Performance Snapshot: ");
 	output.append(DateUtils.convertToShort(reportDateInt));
 	output.append(" -- Aggregate By: "
-		+ super.getOutputName(getFirstAggregateClass()));
+		+ TotalReport.getOutputName(getFirstAggregateClass()));
 	if (!getSecondAggregateClass().equals(AllAggregate.class)) {
 	    output.append(" Then By: "
-		    + super.getOutputName(getSecondAggregateClass()));
+		    + TotalReport.getOutputName(getSecondAggregateClass()));
 	}
 
 	return output.toString();
