@@ -22,8 +22,6 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * generic methods to handle business date math
@@ -50,8 +46,7 @@ public final class DateUtils {
     }
 
     // private static Log log = LogFactory.getLog(MDBusinessDayUtil.class);
-    private static transient Map<Integer, List<Date>> computedDates = 
-	    new HashMap<Integer, List<Date>>();
+    private static transient Map<Integer, List<Date>> computedDates = new HashMap<Integer, List<Date>>();
 
     /*
      * This method will calculate the next business day after the one input.
@@ -471,9 +466,10 @@ public final class DateUtils {
      */
     public static Date convertToDate(int dateInt) {
 	@SuppressWarnings("deprecation")
-        Date nd = new Date(dateInt / 10000 - 1900, (dateInt / 100) % 100 - 1, dateInt % 100);
+	Date nd = new Date(dateInt / 10000 - 1900, (dateInt / 100) % 100 - 1,
+		dateInt % 100);
 
-        return nd;
+	return nd;
     }
 
     /**
@@ -485,7 +481,8 @@ public final class DateUtils {
      */
     public static int convertToDateInt(Date thisDate) {
 	@SuppressWarnings("deprecation")
-    	int nd = (thisDate.getYear() + 1900) * 10000 + (thisDate.getMonth() + 1) * 100 + thisDate.getDate();
+	int nd = (thisDate.getYear() + 1900) * 10000
+		+ (thisDate.getMonth() + 1) * 100 + thisDate.getDate();
 
 	return nd;
     }
@@ -509,6 +506,8 @@ public final class DateUtils {
 	return gc;
     }
 
+    static final long MillisPerDay = (24 * 60 * 60 * 1000);
+
     /**
      * gets days between any two dates (integer form) regardless of order
      * 
@@ -519,26 +518,14 @@ public final class DateUtils {
      * @return
      */
     public static int getDaysBetween(int dateInt1, int dateInt2) {
-	Calendar d1 = convertToCal(dateInt1);
-	Calendar d2 = convertToCal(dateInt2);
+	Calendar di1 = convertToCal(dateInt1);
+	Calendar di2 = convertToCal(dateInt2);
 
-	if (d1.after(d2)) {
-	    // swap dates so that d1 is start and d2 is end
-	    Calendar swap = d1;
-	    d1 = d2;
-	    d2 = swap;
-	}
+	int nd = Math.round(Math.abs(di1.getTimeInMillis()
+		- di2.getTimeInMillis())
+		/ (float) MillisPerDay);
 
-	int days = d2.get(Calendar.DAY_OF_YEAR) - d1.get(Calendar.DAY_OF_YEAR);
-	int y2 = d2.get(Calendar.YEAR);
-	if (d1.get(Calendar.YEAR) != y2) {
-	    d1 = (Calendar) d1.clone();
-	    do {
-		days += d1.getActualMaximum(Calendar.DAY_OF_YEAR);
-		d1.add(Calendar.YEAR, 1);
-	    } while (d1.get(Calendar.YEAR) != y2);
-	}
-	return days;
+	return nd;
     }
 
     /**
@@ -548,7 +535,8 @@ public final class DateUtils {
      *            dateInt to be converted
      * @return exceldate (days from 1/1/1900)
      */
-    private static GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 31);
+    private static GregorianCalendar dateStart = new GregorianCalendar(1899,
+	    11, 31);
 
     public static double getExcelDateValue(int dateInt) {
 	int dateStartInt = convertToDateInt(dateStart.getTime());
