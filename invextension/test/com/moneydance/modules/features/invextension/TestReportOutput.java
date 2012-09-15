@@ -1,15 +1,12 @@
 package com.moneydance.modules.features.invextension;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
-import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
-import com.moneydance.modules.features.invextension.ReportControlPanel.ReportTableModel;
 
 
 public class TestReportOutput extends JFrame{
