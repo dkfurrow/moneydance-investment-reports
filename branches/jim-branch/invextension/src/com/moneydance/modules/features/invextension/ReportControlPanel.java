@@ -99,8 +99,8 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     private JDateField toDateField = new JDateField(dateFormat);
 
     private JLabel reportOptionsLabel = new JLabel("Report Aggregation Options");
-    private JComboBox reportOptionsComboBox = new JComboBox(rptOptionStrings);
-    private JComboBox costBasisOptionsComboBox = new JComboBox(costBasisOptionStrings);
+    private JComboBox<String> reportOptionsComboBox = new JComboBox<String>(rptOptionStrings);
+    private JComboBox<String> costBasisOptionsComboBox = new JComboBox<String>(costBasisOptionStrings);
     private JCheckBox aggregateSingleCheckBox = 
 	    new JCheckBox("Show Aggregates for Composite Reports of One Security");
     

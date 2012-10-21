@@ -282,9 +282,9 @@ public class CompositeReport<T extends Aggregator, U extends Aggregator>
 
 	String investmentAccountStr = "Accounts-ALL";
 	String securityAccountStr = "Securities-ALL";
-	String securityTypeStr = "Null";
-	String securitySubTypeStr = "Null";
-	String tickerStr = "Tickers-ALL";
+	String securityTypeStr = "";
+	String securitySubTypeStr = "";
+	String tickerStr = "";
 
 	String firstAggStrName = "~Null";
 	String secondAggStrName = "~Null";

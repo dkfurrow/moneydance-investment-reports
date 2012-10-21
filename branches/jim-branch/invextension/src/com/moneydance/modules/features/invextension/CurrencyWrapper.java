@@ -49,7 +49,7 @@ public class CurrencyWrapper extends Aggregator {
 	this.secAccts = new LinkedHashSet<SecurityAccountWrapper>();
 	this.curID = this.curType.getID();
 	if(curType.getTickerSymbol().isEmpty()){
-	    this.ticker = "NoTicker_" + curID;
+	    this.ticker = "";
 	} else {
 	    this.ticker = curType.getTickerSymbol().trim();
 	}
