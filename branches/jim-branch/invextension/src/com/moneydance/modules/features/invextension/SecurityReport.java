@@ -1,5 +1,5 @@
 /* SecurityReport.java
- * Copyright 2011 Dale K. Furrow . All rights reserved.
+ * Copyright 2012 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -22,151 +22,163 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 
-import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
+import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
 
-/**
- * Base class for security reports.
- *
+/**Generic SecurityReport, generates one data set for each Security in each
+ * investment account
+ * Version 1.0 
  * @author Dale Furrow
- * @version 1.0
- * @since 1.0
-*/
+ *
+ */
+public abstract class SecurityReport extends ComponentReport {
+    private DateRange dateRange;
+    private SecurityAccountWrapper secAccountWrapper; 
+    private InvestmentAccountWrapper invAccountWrapper;
+    private Tradeable tradeable;
+    private CurrencyWrapper currencyWrapper;
+    private SecurityTypeWrapper securityTypeWrapper;
+    private SecuritySubTypeWrapper securitySubTypeWrapper;
+    
+    
+    
+    
 
-public abstract class SecurityReport {
-
-    public abstract Object[] toTableRow();
-
-    public abstract SecurityReport addTo(SecurityReport addend);
-
-    public abstract void recomputeAggregateReturns();
-
-    public abstract SecurityReport computeCashReturns(SecurityReport cash, AGG_TYPE aggType);
-
-    public abstract SecurityReport computeAggregateReturnWCash(SecurityReport cash,
-                                                               AGG_TYPE aggType);
-
-
-    /**
-     * Compute Modified Dietz returns
-     *
-     * @param startValue
-     *            starting value (expressed as positive)
-     *
-     * @param endValue
-     *            ending value
-     *
-     * @param income
-     *            income (to be added to endValue)
-     *
-     * @param expense
-     *            expense (to be added to endValue)
-     *
-     * @param mdMap
-     *            datemap which relates dates to cash flows
-     *
-     * @return Mod Dietz return
+    /**Generic constructor populates all members based on secAccountWrapper
+     * or sets all to null
+     * @param secAccountWrapper
+     * @param dateRange
      */
-    public double computeMDReturn(double startValue,
-                                  double endValue,
-                                  double income,
-                                  double expense,
-                                  DateMap mdMap) {
-        if (mdMap.keySet().size() > 0 && mdMap.values().size() > 0) {
-            double mdValue = 0;
-            double sumCF = 0;
-            double weightCF = 0;
+    public SecurityReport(SecurityAccountWrapper secAccountWrapper,
+	    DateRange dateRange)  {
+	this.dateRange = dateRange;
+	if (secAccountWrapper != null) {
+	    this.secAccountWrapper = secAccountWrapper;
+	    this.invAccountWrapper = secAccountWrapper.getInvAcctWrapper();
+	    this.tradeable = secAccountWrapper.getTradeable();
+	    this.currencyWrapper = secAccountWrapper.getCurrencyWrapper();
+	    this.securityTypeWrapper = secAccountWrapper
+		    .getSecurityTypeWrapper();
+	    this.securitySubTypeWrapper = secAccountWrapper
+		    .getSecuritySubTypeWrapper();
+	    
+	} else {
+	    this.secAccountWrapper = null;
+	    this.invAccountWrapper = null;
+	    this.tradeable = null;
+	    this.currencyWrapper = null;
+	    this.securityTypeWrapper = null;
+	    this.securitySubTypeWrapper = null;
+	    
+	}
 
-            Integer cd = DateUtils.getDaysBetween(mdMap.firstKey(), mdMap.lastKey());
-            Double cdD = cd.doubleValue();
-
-            for (Iterator<Integer> it = mdMap.keySet().iterator(); it.hasNext();) {
-                Integer thisDateInt = it.next();
-                Double cf = mdMap.get(thisDateInt);
-                Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(), thisDateInt);
-                Double dayBetD = dayBetw.doubleValue();
-                double wSubI = (cdD - dayBetD) / cdD;
-                weightCF = weightCF + (wSubI * cf);
-                sumCF = sumCF + cf;
-            }
-
-            mdValue = ((endValue + income + expense) - startValue - sumCF) / (startValue + weightCF);
-            return mdValue;
-        } else {
-            return Double.NaN;
-        }
     }
 
-
-    /**
-     * Returns annualized returns (same as excel XIRR function).
-     *
-     * @param retMap
-     *            date map relating dateInts to cash flows
-     *
-     * @param mdRet
-     *            Mod-Dietz total return for inital guess
-     *
+    /**returns Aggregate value for Security based on an input of any Class
+     * which subclasses Aggregator
+     * @param aggregateClass
      * @return
      */
-    public double computeAnnualReturn(DateMap retMap, double mdRet) {
-        // Assumes first value is startvalue, last is endvalue same with dates.
-
-        int numPeriods = retMap == null ? 0 : retMap.keySet().size();
-        double[] excelDates = new double[numPeriods];
-        double[] annRetValuesArray = new double[numPeriods];
-        int[] dateIntsArray = new int[numPeriods];
-
-        // Put datemap info into primitive arrays
-        if (retMap != null
-            && retMap.keySet().size() > 0
-            && retMap.values().size() > 0) {
-            int i = 0;
-            for (Iterator<Integer> it = retMap.keySet().iterator(); it.hasNext();) {
-                Integer dateInt = it.next();
-                Double value = retMap.get(dateInt);
-
-                dateIntsArray[i] = dateInt;
-                annRetValuesArray[i] = value;
-                i++;
-            }
-        } else {
-            return Double.NaN;
-        }
-
-        for (int i = 0; i < numPeriods; i++) {
-            excelDates[i] = DateUtils.getExcelDateValue(dateIntsArray[i]);
-        }
-        double totYrs = (excelDates[numPeriods - 1] - excelDates[0]) / 365;
-
-        // Need to supply guess to return algorithm, so use modified dietz
-        // return divided by number of years (have to add 1 because of returns
-        // algorithm).  Must be greater than zero
-        double guess = Math.max((1 + mdRet / totYrs), 0.01);
-
-        XIRRData thisData = new XIRRData(numPeriods, guess, annRetValuesArray, excelDates);
-        double annualReturn = XIRR.xirr(thisData);
-
-        return annualReturn;
+    @SuppressWarnings("unchecked")
+    public <T> T getAggregate(Class<? extends Aggregator> aggregateClass) {
+	if (aggregateClass == InvestmentAccountWrapper.class) {
+	    return (T) this.invAccountWrapper;
+	} else if (aggregateClass == SecurityTypeWrapper.class) {
+	    return (T) this.securityTypeWrapper;
+	} else if (aggregateClass == SecuritySubTypeWrapper.class) {
+	    return (T) this.securitySubTypeWrapper;
+	} else if (aggregateClass == Tradeable.class) {
+	    return (T) this.tradeable;
+	} else if (aggregateClass == CurrencyWrapper.class) {
+	    return (T) this.currencyWrapper;	    
+	} else if (aggregateClass == AllAggregate.class) {
+	    return (T) AllAggregate.getInstance();	    
+	}else {
+	    throw new UnsupportedOperationException();
+	}
     }
-
-
-    /**
-     * Rounds values near zero to exactly zero.
-     *
-     * @param input
-     *            input value
-     *
-     * @return input or zero
+    
+    /**Generates composite report consistent with this SecurityReport
+     * @param firstAggClass
+     * @param secondAggClass
+     * @param compositeType
+     * @return
      */
-    public double cleanedValue(double input) {
-        double thresh = 0.0001;
-        if ((input > 0 && input < thresh) || (input < 0 && input > -thresh)) {
-            return 0.0;
-        } else {
-            return input;
-        }
+    public abstract <T extends Aggregator, U extends Aggregator> 
+    CompositeReport<T, U> getCompositeReport(Class<T> firstAggClass, 
+	    Class<U> secondAggClass, COMPOSITE_TYPE compType);    
+    
+    /**Generates aggregateSecurity member of composite report based on the 
+     * fields of this SecurityReport
+     * @return
+     */
+    public abstract SecurityReport getAggregateSecurityReport();
+    
+    public abstract String getName();
+    
+    /**adds line body (unique fields for classes which subclass SecurityReport)
+     * @param rptValues
+     */
+    public abstract void addLineBody(ArrayList<Object> rptValues);
+    
+    public SecurityAccountWrapper getSecAccountWrapper() {
+        return secAccountWrapper;
     }
+
+    public Tradeable getTradeable() {
+        return tradeable;
+    }
+
+    public CurrencyWrapper getCurrencyWrapper() {
+        return currencyWrapper;
+    }
+
+    public SecurityTypeWrapper getSecurityTypeWrapper() {
+        return securityTypeWrapper;
+    }
+
+    public SecuritySubTypeWrapper getSecuritySubTypeWrapper() {
+        return securitySubTypeWrapper;
+    }
+
+    public InvestmentAccountWrapper getInvAccountWrapper() {
+        return invAccountWrapper;
+    }
+    
+    public DateRange getDateRange(){
+	return dateRange;
+    }
+
+    public void setSecAccountWrapper(SecurityAccountWrapper secAccountWrapper) {
+        this.secAccountWrapper = secAccountWrapper;
+    }
+
+    public void setInvAccountWrapper(InvestmentAccountWrapper invAccountWrapper) {
+        this.invAccountWrapper = invAccountWrapper;
+    }
+
+    public void setTradeable(Tradeable tradeable) {
+        this.tradeable = tradeable;
+    }
+
+    public void setSecurityTypeWrapper(SecurityTypeWrapper securityTypeWrapper) {
+        this.securityTypeWrapper = securityTypeWrapper;
+    }
+
+    public void setSecuritySubTypeWrapper(
+    	SecuritySubTypeWrapper securitySubTypeWrapper) {
+        this.securitySubTypeWrapper = securitySubTypeWrapper;
+    }
+    
+    public void setCurrencyWrapper(CurrencyWrapper currencyWrapper){
+	this.currencyWrapper = currencyWrapper;
+    }
+
 }
+
+
+
+
+

@@ -38,9 +38,10 @@ import java.awt.*;
 public class Main
   extends FeatureModule
 {
-  private SecReportFrame reportWindow = null;
+  private ReportControlFrame reportWindow = null;
 
-  public void init() {
+  @Override
+public void init() {
     // the first thing we will do is register this module to be invoked
     // via the application toolbar
     FeatureModuleContext context = getContext();
@@ -54,7 +55,8 @@ public class Main
     }
   }
 
-  public void cleanup() { //API method to end program (no other usages)
+  @Override
+public void cleanup() { //API method to end program (no other usages)
     closeConsole();
   }
   
@@ -77,7 +79,8 @@ public class Main
   
   /** Process an invocation of this module with the given URI */
   //no usages elsewhere, utilized by moneydance
-  public void invoke(String uri) {
+  @Override
+public void invoke(String uri) {
     String command = uri;
     @SuppressWarnings("unused")
     String parameters = "";
@@ -99,13 +102,14 @@ public class Main
     }    
   }
 
-  public String getName() {
+  @Override
+public String getName() {
     return "Investment Reports";
   }
 
   private synchronized void showReportWindow() {
     if(reportWindow==null) {
-      reportWindow = new SecReportFrame(this);
+      reportWindow = new ReportControlFrame(this);
       reportWindow.setVisible(true);
     }
     else {
@@ -119,7 +123,7 @@ public class Main
     return getContext();
   }
 
-  synchronized void closeConsole() { //called from SecReportFrame on Close Button
+  synchronized void closeConsole() { //called from ReportControlFrame on Close Button
     if(reportWindow!=null) {
       reportWindow.goAway(); //method which sets visible to false and disposes
       reportWindow = null;

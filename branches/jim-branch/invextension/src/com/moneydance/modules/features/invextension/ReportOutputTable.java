@@ -1,4 +1,4 @@
-/* ReportTable.java
+/* ReportOutputTable.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
@@ -54,6 +54,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -97,7 +98,7 @@ import javax.swing.table.TableRowSorter;
  * 
  * @author Dale Furrow
  */
-public class ReportTable extends JScrollPane {
+public class ReportOutputTable extends JScrollPane {
     private static final long serialVersionUID = 1654873977162641532L;
 
     private final FormattedTable lockedTable;
@@ -105,24 +106,31 @@ public class ReportTable extends JScrollPane {
     int frozenColumns = 0;
     private final JScrollPaneAdjuster adjuster;
     public int firstSort = 0;
-    public int secondSort = 1;
+    public int secondSort = 0;
     public int thirdSort = 0;
+    int firstAgg = 0;
+    int secondAgg = 0;
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
-    public SortOrder thirdOrder = SortOrder.UNSORTED;
+    public SortOrder thirdOrder = SortOrder.ASCENDING;
     public TableModel model;
     public boolean closedPosHidden = true;
     public int closedPosColumn;
 
     private Color lightLightGray = new Color(230, 230, 230);
 
-    public ReportTable(TableModel model, int numFrozenColumns,
-	    int indClosedPosColumn, ColType[] colTypes, ColSizeOption sizeOption) {
+    public ReportOutputTable(TableModel model, ColType[] colTypes, int numFrozenColumns,
+	    int indClosedPosColumn, int firstSort, int secondSort, 
+	    ColSizeOption sizeOption) {
 	super();
 	adjuster = new JScrollPaneAdjuster(this);
 	this.model = model;
 	frozenColumns = numFrozenColumns;
 	closedPosColumn = indClosedPosColumn;
+	this.firstSort = firstSort;
+	this.secondSort = secondSort;
+	this.firstAgg = firstSort;
+	this.secondAgg = secondSort;
 	// create the two tables
 	lockedTable = new FormattedTable(model, colTypes, sizeOption);
 	scrollTable = new FormattedTable(model, colTypes, sizeOption);
@@ -317,6 +325,7 @@ public class ReportTable extends JScrollPane {
 	    super();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == lockedTable) {
 		lockedTable.transferFocus();
@@ -334,6 +343,7 @@ public class ReportTable extends JScrollPane {
 	    super();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (e.getSource() == scrollTable) {
 		scrollTable.transferFocusBackward();
@@ -355,6 +365,7 @@ public class ReportTable extends JScrollPane {
 	    this.lockedTableNextColumnCellAction = lockedTableNextColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (lockedTable.getSelectedColumn() == lockedTable.getColumnCount() - 1) {
 		lockedTable.transferFocus();
@@ -378,6 +389,7 @@ public class ReportTable extends JScrollPane {
 	    this.scrollTableNextColumnCellAction = scrollTableNextColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (scrollTable.getSelectedColumn() == scrollTable.getColumnCount() - 1) {
 		scrollTable.transferFocusBackward();
@@ -401,6 +413,7 @@ public class ReportTable extends JScrollPane {
 	    this.scrollTablePrevColumnCellAction = scrollTablePrevColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (scrollTable.getSelectedColumn() == 0) {
 		scrollTable.transferFocusBackward();
@@ -425,6 +438,7 @@ public class ReportTable extends JScrollPane {
 	    this.lockedTablePrevColumnCellAction = lockedTablePrevColumnCellAction;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 	    if (lockedTable.getSelectedColumn() == 0) {
 		lockedTable.transferFocus();
@@ -460,6 +474,7 @@ public class ReportTable extends JScrollPane {
 	    pane = null;
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 	    String name = e.getPropertyName();
 	    if (name.equals("viewport")) {
@@ -510,6 +525,7 @@ public class ReportTable extends JScrollPane {
 		}
 	    }
 
+	    @Override
 	    public void stateChanged(ChangeEvent e) {
 		if (viewport == null || header == null) {
 		    return;
@@ -527,6 +543,7 @@ public class ReportTable extends JScrollPane {
 		}
 	    }
 
+	    @Override
 	    public void run() {
 		if (viewport == null || header == null) {
 		    return;
@@ -568,16 +585,16 @@ public class ReportTable extends JScrollPane {
 	    for (int i = 0; i < colFormats.length; i++) {
 		ColType colType = colFormats[i];
 		tableColumn = this.getColumnModel().getColumn(i);
-		if (colType == colType.DOUBLE0) {
+		if (colType == ColType.DOUBLE0) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(0,
 			    0));
-		} else if (colType == colType.DOUBLE2) {
+		} else if (colType == ColType.DOUBLE2) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(2,
 			    2));
-		} else if (colType == colType.DOUBLE3) {
+		} else if (colType == ColType.DOUBLE3) {
 		    tableColumn.setCellRenderer(new NumberTableCellRenderer(3,
 			    3));
-		} else if (colType == colType.PERCENT1) {
+		} else if (colType == ColType.PERCENT1) {
 		    tableColumn.setCellRenderer(new PercentTableCellRenderer(1,
 			    1));
 		} else {
@@ -597,17 +614,21 @@ public class ReportTable extends JScrollPane {
 	    if (!isRowSelected(row)) {
 		c.setBackground(getBackground());
 		int modelRow = convertRowIndexToModel(row);
-		String accType = (String) getModel().getValueAt(modelRow, 0);
-		String aggType = (String) getModel().getValueAt(modelRow, 1);
+		String accType = (String) getModel().getValueAt(modelRow,
+			firstAgg);
+		String aggType = (String) getModel().getValueAt(modelRow,
+			secondAgg);
 		Double endPos = (Double) getModel().getValueAt(modelRow,
 			closedPosColumn);
 
-		if (!accType.startsWith("~") && aggType.startsWith("~")) {
-		    //c.setBackground(Color.lightGray);
+		if (aggType.endsWith("-ALL")) {
 		    c.setBackground(lightLightGray);
 		}
-		if (accType.startsWith("~") && aggType.startsWith("~")) {
-		    c.setBackground(Color.YELLOW);
+		if (accType.endsWith(" ") || aggType.endsWith(" ")) {
+		    c.setBackground(Color.lightGray);
+		}
+		if (accType.endsWith(" ") && aggType.endsWith(" ")) {
+		    c.setBackground(Color.GREEN);
 		}
 		if (endPos == 0.0) {
 		    c.setForeground(new Color(100, 100, 100));
@@ -818,11 +839,13 @@ public class ReportTable extends JScrollPane {
 	    rowSorter.setRowFilter(rf);
 	}
 
-	// apply custom comparator for 1st 3 rows (Strings)
+	// apply custom comparator for 1st 5 rows (Strings)
 	// IMPORTANT! Must implement comparator before Sortkeys!
 	rowSorter.setComparator(0, stringComp);
 	rowSorter.setComparator(1, stringComp);
 	rowSorter.setComparator(2, stringComp);
+	rowSorter.setComparator(3, stringComp);
+	rowSorter.setComparator(4, stringComp);
 
 	// Apply sortKeys
 	List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
@@ -854,25 +877,38 @@ public class ReportTable extends JScrollPane {
 
     Comparator<String> stringComp = new Comparator<String>() {
 
+	@Override
 	public int compare(String o1, String o2) {
-	    if (o1.startsWith("~") && o2.startsWith("~")) {
-		return o1.compareToIgnoreCase(o2);
-	    } else if (o1.startsWith("~") && !o2.startsWith("~")) {
-		return 1;
-	    } else if (!o1.startsWith("~") && o2.startsWith("~")) {
-		return -1;
+	    LinkedList<String> endStrings = new LinkedList<String>();
+	    endStrings.add("CASH");
+	    endStrings.add("CASH "); //handles aggregate by ticker
+	    endStrings.add("-ALL");
+	    endStrings.add("-ALL "); //handles last row of all-aggregate
+
+	    int o1Rank = -1;
+	    int o2Rank = -1;
+
+	    for (String string : endStrings) {
+		if (o1.endsWith(string))
+		    o1Rank = endStrings.indexOf(string);
+		if (o2.endsWith(string))
+		    o2Rank = endStrings.indexOf(string);
+	    }
+
+	    if (o1Rank == o2Rank) {
+		return o1.compareTo(o2);
 	    } else {
-		return o1.compareToIgnoreCase(o2);
+		return o1Rank - o2Rank;
 	    }
 	}
     };
-
+    
     private class RowSortGui extends JPanel {
 	private static final long serialVersionUID = -8349629256510555172L;
 
-	public ReportTable tablePane;
+	public ReportOutputTable tablePane;
 
-	public RowSortGui(ReportTable thisTable) {
+	public RowSortGui(ReportOutputTable thisTable) {
 	    tablePane = thisTable;
 	    String[] colNames = tablePane.getAllColumnNames();
 	    JPanel boxPanel = new JPanel();
@@ -893,6 +929,7 @@ public class ReportTable extends JScrollPane {
 	    JButton sortButton = new JButton("Sort Table");
 	    sortButton.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		    tablePane.sortRows();
 		}
@@ -900,21 +937,27 @@ public class ReportTable extends JScrollPane {
 	    // set sorts
 	    firstSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstSort = cb.getSelectedIndex();
 		}
 	    });
 	    secondSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondSort = cb.getSelectedIndex();
 		}
 	    });
 	    thirdSortBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdSort = cb.getSelectedIndex();
 		}
@@ -922,21 +965,27 @@ public class ReportTable extends JScrollPane {
 	    // set orders within sorts
 	    firstOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    firstOrder = (SortOrder) cb.getSelectedItem();
 		}
 	    });
 	    secondOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    secondOrder = (SortOrder) cb.getSelectedItem();
 		}
 	    });
 	    thirdOrderBox.addActionListener(new ActionListener() {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
+                    @SuppressWarnings("unchecked")
 		    JComboBox cb = (JComboBox) e.getSource();
 		    thirdOrder = (SortOrder) cb.getSelectedItem();
 		}
@@ -1027,9 +1076,9 @@ public class ReportTable extends JScrollPane {
 	    } //
 	}
 
-	ReportTable.adjustColumnPreferredWidths(lockedTable,
+	ReportOutputTable.adjustColumnPreferredWidths(lockedTable,
 		ColSizeOption.MAXCONTCOLRESIZE);
-	ReportTable.adjustColumnPreferredWidths(scrollTable,
+	ReportOutputTable.adjustColumnPreferredWidths(scrollTable,
 		ColSizeOption.MAXCONTCOLRESIZE);
 	this.scrollTable.getTableHeader().repaint();
 	this.lockedTable.getTableHeader().repaint();
@@ -1102,6 +1151,7 @@ public class ReportTable extends JScrollPane {
 		this.priority = priority;
 	    }
 
+	    @Override
 	    public void paintIcon(Component c, Graphics g, int x, int y) {
 
 		// Override base size with a value calculated from the
@@ -1128,10 +1178,12 @@ public class ReportTable extends JScrollPane {
 
 	    }
 
+	    @Override
 	    public int getIconWidth() {
 		return size;
 	    }
 
+	    @Override
 	    public int getIconHeight() {
 		return size;
 	    }
@@ -1158,6 +1210,7 @@ public class ReportTable extends JScrollPane {
 	    setHorizontalAlignment(JLabel.CENTER);
 	}
 
+	@Override
 	public void setHorizontalTextPosition(int textPosition) {
 	    horizontalTextPositionSet = true;
 	    super.setHorizontalTextPosition(textPosition);
@@ -1213,16 +1266,20 @@ public class ReportTable extends JScrollPane {
 	    frameLoc = this.getLocation();
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e) {
 	    frameLoc = this.getLocation();
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
     }
@@ -1275,10 +1332,10 @@ public class ReportTable extends JScrollPane {
     }
 
     public static void CreateAndShowTable(TableModel thisModel,
-	    ColType[] colTypes, int indClosedPosColumn,
-	    ColSizeOption sizeOption, int numFreezeCols, String frameText) {
-	final ReportTable thisTable = new ReportTable(thisModel, numFreezeCols,
-		indClosedPosColumn, colTypes, sizeOption);
+	    ColType[] colTypes, int indClosedPosColumn, int numFreezeCols, int firstSort, int secondSort,
+	    ColSizeOption sizeOption, String frameText) {
+	final ReportOutputTable thisTable = new ReportOutputTable(thisModel,colTypes, numFreezeCols,
+		indClosedPosColumn, firstSort, secondSort,  sizeOption);
 
 	final JFrame outerFrame = new JFrame(frameText);
 
@@ -1304,13 +1361,16 @@ public class ReportTable extends JScrollPane {
 
 	freezeColsBox.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
+                @SuppressWarnings("unchecked")
 		JComboBox cb = (JComboBox) e.getSource();
 		thisTable.setFrozenColumns(cb.getSelectedIndex());
 	    }
 	});
 	buttonSort.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		thisTable.sortRows(new Point(outerFrame.getLocationOnScreen()));
 	    }
@@ -1318,8 +1378,9 @@ public class ReportTable extends JScrollPane {
 
 	hideClosedBox.addItemListener(new ItemListener() {
 
+	    @Override
 	    public void itemStateChanged(ItemEvent e) {
-		if (e.getStateChange() == e.SELECTED) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
 		    thisTable.closedPosHidden = true;
 		    thisTable.sortRows();
 		} else {
@@ -1331,6 +1392,7 @@ public class ReportTable extends JScrollPane {
 
 	copyCB.addActionListener(new ActionListener() {
 
+	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		thisTable.copyTableToClipboard();
 	    }

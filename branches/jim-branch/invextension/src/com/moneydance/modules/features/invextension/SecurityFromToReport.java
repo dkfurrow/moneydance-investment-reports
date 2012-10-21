@@ -1,124 +1,96 @@
 /* SecurityFromToReport.java
- * Copyright 2011 Dale K. Furrow . All rights reserved.
- * Redistribution and use in source and binary forms, with or without
+ * Copyright 2012 Dale Furrow . All rights reserved.
+ * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, 
  * this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * 2. Redistributions in binary form must reproduce the above copyright notice, 
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY EXPRESS
+ * 
+ * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY EXPRESS 
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE LIABLE FOR ANY
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ * IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE LIABLE FOR ANY 
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.moneydance.modules.features.invextension;
 
-
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.CurrencyType;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.SortedSet;
-import com.moneydance.modules.features.invextension.BulkSecInfo.AGG_TYPE;
+
+import com.moneydance.apps.md.model.CurrencyType;
+import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
+
 
 /**
- * Produces report for security defined by "from" date and "to" date.
- *
+ * Report detailing performance attributes based on a specific "from" and
+ * "to" date
+ * Version 1.0 
  * @author Dale Furrow
- * @version 1.0
- * @since 1.0
  */
-
 public class SecurityFromToReport extends SecurityReport {
-    int fromDateInt;            // start of report period
-    int toDateInt;              // end of report period
-    Account account;            // reference account
-    String ticker;
+    private int fromDateInt;            // start of report period
+    private int toDateInt;              // end of report period
 
-    double startPos;            // starting position
-    double endPos;              // ending position
-    double startPrice;          // starting price
-    double endPrice;            // ending price
-    double startValue;          // starting value
-    double endValue;            // ending value
+    private double startPos;            // starting position
+    private double endPos;              // ending position
+    private double startPrice;          // starting price
+    private double endPrice;            // ending price
+    private double startValue;          // starting value
+    private double endValue;            // ending value
+    
+    private double buy;                 // cumulative cash effect of buys (including commission)
+    private double sell;                // cumulative cash effect of sells (including commission)
+    private double shortSell;           // cumulative cash effect of shorts (including commission)
+    private double coverShort;          // cumulative cash effect of covers (including commission)
 
-    double startCash;           // starting "cash effect" (security effect on account cash)
-    double endCash;             // ending "cash effect" (security affect on account cash)
-    double initBalance;         // initial balance of account
+    public double income;              // cumulative income
+    private double expense;             // cumulative expense
 
-    double buy;                 // cumulative cash effect of buys (including commission)
-    double sell;                // cumulative cash effect of sells (including commission)
-    double shortSell;           // cumulative cash effect of shorts (including commission)
-    double coverShort;          // cumulative cash effect of covers (including commission)
+    private double longBasis;           // ending average cost basis of long positions
+    private double shortBasis;          // ending average cost basis of short positions
+    private double realizedGain;        // cumulative realized gains (against avg cost)
+    private double unrealizedGain;      // cumulative unrealized gains
+    private double totalGain;           // sum of realized and unrealized gains
 
-    double income;              // cumulative income
-    double expense;             // cumulative expense
+    private double mdReturn;            // period total return (Mod-Dietz method)
+    private double annualPercentReturn; // period annualized return (Mod-Dietz method)
+    
+    private DateMap arMap;              // date map of annual return data
+    private DateMap mdMap;              // date map of Mod-Dietz return data
+    private DateMap transMap;           // date map of transfer data
 
-    double longBasis;           // ending average cost basis of long positions
-    double shortBasis;          // ending average cost basis of short positions
-    double realizedGain;        // cumulative realized gains (against avg cost)
-    double unrealizedGain;      // cumulative unrealized gains
-    double totalGain;           // sum of realized and unrealized gains
-
-    double mdReturn;            // period total return (Mod-Dietz method)
-    double annualPercentReturn; // period annualized return (Mod-Dietz method)
-    AGG_TYPE aggType;           // aggregation type (e.g. security, investment, etc);
-
-    DateMap arMap;              // date map of annual return data
-    DateMap mdMap;              // date map of Mod-Dietz return data
-    DateMap transMap;           // date map of transfer data
-
+    
     /**
-     * Generic constructor, produced empty report used to aggregate data from
-     * multiple securities.
-     *
-     * @param account
-     *            reference account
-     *
-     * @param fromDateInt
-     *            "from" date
-     *
-     * @param toDateInt
-     *            "to" date
+     * Generic constructor, which produces either the SecurityReport associated
+     * with a given SecurityAccountWrapper or a blank report
+     * @param secAccountWrapper reference account
+     * @param fromDateInt "from" date
+     * @param toDateInt   "to" date
+     * @throws Exception
      */
-    public SecurityFromToReport(Account account, int fromDateInt, int toDateInt, AGG_TYPE aggType) {
+    public SecurityFromToReport(SecurityAccountWrapper secAccountWrapper,
+	    DateRange dateRange) {
 
-        this.fromDateInt = fromDateInt;
-        this.toDateInt = toDateInt;
-        this.account = account;
-        this.ticker = "~Null";
-        if (account != null && account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
-            CurrencyType thisCur = account.getCurrencyType();
-            this.ticker = thisCur.getTickerSymbol().isEmpty()
-                ? "NoTicker"
-                : thisCur.getTickerSymbol();
-        }
+	super(secAccountWrapper, dateRange);
 
-        this.startPos = 0.0;
+	this.fromDateInt = dateRange.fromDateInt();
+	this.toDateInt = dateRange.toDateInt();
+        
+	this.startPos = 0.0;
         this.endPos = 0.0;
         this.startPrice = 0.0;
         this.endPrice = 0.0;
         this.startValue = 0.0;
-        this.endValue = 0.0;
-
-        this.startCash = 0;
-        this.endCash = 0;
-        if (account == null
-            || account.getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
-            this.initBalance = 0.0;
-        } else {
-            this.initBalance = new Long(account.getStartBalance()).doubleValue() / 100.0;
-        }
+        this.endValue = 0.0;        
 
         this.buy = 0.0;
         this.sell = 0.0;
@@ -140,146 +112,100 @@ public class SecurityFromToReport extends SecurityReport {
         this.arMap = new DateMap();
         this.mdMap = new DateMap();
         this.transMap = new DateMap();
-        this.aggType = aggType;
-    }
-
-
-    /**
-     * Constructor for individual security.
-     *
-     * @param account
-     *            reference account
-     *
-     * @param transSet
-     *            transaction set to analyze
-     *
-     * @param currency
-     *            currency for security
-     *
-     * @param fromDateInt
-     *            "from" date
-     *
-     * @param toDateInt
-     *            "to" date
-     */
-    public SecurityFromToReport(Account account,
-                                SortedSet<TransValuesCum> transSet,
-                                CurrencyType currency,
-                                int fromDateInt,
-                                int toDateInt,
-                                AGG_TYPE aggType) {
-        this(account, fromDateInt, toDateInt, aggType);    // Initialize object
-
-        if (transSet != null) {
-            // Currency is null when account is investment account
-            if (currency != null) {
-                this.ticker = currency.getTickerSymbol().isEmpty()
-                    ? "NoTicker"
-                    : currency.getTickerSymbol();
-                this.startPrice = 1.0 / currency.getUserRateByDateInt(fromDateInt);
-                this.endPrice = 1.0 / currency.getUserRateByDateInt(toDateInt);
-            } else {
-                this.startPrice = 1.0;
-                this.endPrice = 1.0;
-            }
-
-            if (account.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-                this.initBalance
-                    = new Long(transSet.first().transValues.accountRef.getStartBalance()).doubleValue() / 100.0;
-            } else {
-                this.initBalance = 0.0;
-            }
-
-            this.aggType = aggType;
+        
+        if (secAccountWrapper != null) {
+            
+            // Currency will never be null if iAccount is cash or security
+            CurrencyType currency = secAccountWrapper.getCurrencyWrapper().curType; 
+            
+            this.startPrice = 1.0 / currency.getUserRateByDateInt(fromDateInt);
+            this.endPrice = 1.0 / currency.getUserRateByDateInt(toDateInt);            
 
             // intialize intermediate calculation variables
             double startCumUnrealGain = 0;
             double endCumUnrealizedGain = 0;
             double startLongBasis = 0;
             double startShortBasis = 0;
-            double toDateRate = currency == null
-                ? 1.0
-                : currency.getUserRateByDateInt(toDateInt);
-            double fromDateRate = currency == null
-                ? 1.0
+            double toDateRate = currency.getUserRateByDateInt(toDateInt);
+            double fromDateRate = currency == null ? 1.0
                 : currency.getUserRateByDateInt(fromDateInt);
+            
+            SortedSet<TransactionValues> transSet = secAccountWrapper.getTransactionValues();
 
             // iterates through full transaction set
-            for (Iterator<TransValuesCum> it = transSet.iterator(); it.hasNext();) {
-                TransValuesCum transValuesCum = it.next();
+            for (Iterator<TransactionValues> it = transSet.iterator(); it.hasNext();) {
+                TransactionValues transactionValues = it.next();
+                
+                double totalFlows = transactionValues.getBuy() + transactionValues.getSell()
+                	+ transactionValues.getShortSell() + transactionValues.getCoverShort() +
+                	transactionValues.getCommision() + transactionValues.getIncome() +
+                	transactionValues.getExpense();
 
                 // Where transactions are before report dates
-                if (transValuesCum.transValues.dateint <= fromDateInt) {
+                if (transactionValues.getDateint() <= fromDateInt) {
                     double splitAdjust = currency == null
                         ? 1.0
-                        : currency.adjustRateForSplitsInt(transValuesCum.transValues.dateint,
+                        : currency.adjustRateForSplitsInt(transactionValues.getDateint(),
                                                           fromDateRate,
                                                           fromDateInt) / fromDateRate;
                     // split adjusts last position from TransValuesCum
-                    this.startPos = transValuesCum.position * splitAdjust;
+                    this.startPos = transactionValues.getPosition() * splitAdjust;
                     this.startValue = this.startPrice * this.startPos;
-                    startLongBasis = transValuesCum.longBasis;
-                    startShortBasis = transValuesCum.shortBasis;
+                    startLongBasis = transactionValues.getLongBasis();
+                    startShortBasis = transactionValues.getShortBasis();
 
                     // Initializes ending balance sheet values to start values (in
                     // case there are no transactions within report period).
                     this.endPos = this.startPos;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transValuesCum.longBasis;
-                    this.shortBasis = transValuesCum.shortBasis;
-                    // increments end cash as well as start
-                    this.startCash += transValuesCum.transValues.cashEffect;
-                    this.endCash += transValuesCum.transValues.cashEffect;
-
+                    this.longBasis = transactionValues.getLongBasis();
+                    this.shortBasis = transactionValues.getShortBasis();
                 }
-
                 // Where transaction period intersects report period
-                if (transValuesCum.transValues.dateint > fromDateInt
-                    && transValuesCum.transValues.dateint <= toDateInt) {
+                if (transactionValues.getDateint() > fromDateInt
+                    && transactionValues.getDateint() <= toDateInt) {
                     // cf is net cash effect of buy/sell/short/cover, incl
                     // commission
-                    double cf = -(transValuesCum.transValues.buy
-                                  + transValuesCum.transValues.sell
-                                  + transValuesCum.transValues.shortSell
-                                  + transValuesCum.transValues.coverShort +
-                                  transValuesCum.transValues.commision);
+                    double cf = -(transactionValues.getBuy()
+                                  + transactionValues.getSell()
+                                  + transactionValues.getShortSell()
+                                  + transactionValues.getCoverShort() +
+                                  transactionValues.getCommision());
 
                     // add values to date maps
-                    this.arMap.add(transValuesCum.transValues.dateint,
-                                   transValuesCum.transValues.cashEffect - transValuesCum.transValues.transfer);
-                    this.mdMap.add(transValuesCum.transValues.dateint, cf);
-                    this.transMap.add(transValuesCum.transValues.dateint, transValuesCum.transValues.transfer);
+                    this.arMap.add(transactionValues.getDateint(),
+                                   totalFlows);
+                    this.mdMap.add(transactionValues.getDateint(), cf);
+                    this.transMap.add(transactionValues.getDateint(), transactionValues.getTransfer());
 
                     // Add the cumulative Values (note buys are defined by change in
                     // long basis, same with sells--commission is included).
-                    this.buy += transValuesCum.transValues.buy == 0.0
+                    this.buy += transactionValues.getBuy() == 0.0
                         ? 0.0
-                        : -transValuesCum.transValues.buy - transValuesCum.transValues.commision;
-                    this.sell += transValuesCum.transValues.sell == 0.0
+                        : -transactionValues.getBuy() - transactionValues.getCommision();
+                    this.sell += transactionValues.getSell() == 0.0
                         ? 0.0
-                        : -transValuesCum.transValues.sell - transValuesCum.transValues.commision;
-                    this.shortSell += transValuesCum.transValues.shortSell == 0.0
+                        : -transactionValues.getSell() - transactionValues.getCommision();
+                    this.shortSell += transactionValues.getShortSell() == 0.0
                         ? 0.0
-                        : -transValuesCum.transValues.shortSell - transValuesCum.transValues.commision;
-                    this.coverShort += transValuesCum.transValues.coverShort == 0.0
+                        : -transactionValues.getShortSell() - transactionValues.getCommision();
+                    this.coverShort += transactionValues.getCoverShort() == 0.0
                         ? 0.0
-                        : -transValuesCum.transValues.coverShort - transValuesCum.transValues.commision;
-                    this.income += transValuesCum.transValues.income;
-                    this.expense += transValuesCum.transValues.expense;
-                    this.realizedGain += transValuesCum.perRealizedGain;
+                        : -transactionValues.getCoverShort() - transactionValues.getCommision();
+                    this.income += transactionValues.getIncome();
+                    this.expense += transactionValues.getExpense();
+                    this.realizedGain += transactionValues.getPerRealizedGain();
 
                     // retrieves ending balance sheet variables
-                    this.endCash += transValuesCum.transValues.cashEffect;
                     double splitAdjust = currency == null
-                        ? 1.0
-                        : currency.adjustRateForSplitsInt(transValuesCum.transValues.dateint,
-                                                         toDateRate,
-                                                         toDateInt) / toDateRate;
-
-                    this.endPos = transValuesCum.position * splitAdjust;
+                        ? 1.0 : currency.adjustRateForSplitsInt
+                        	(transactionValues.getDateint(), toDateRate,
+                        		toDateInt) / toDateRate;
+                    
+                    this.endPos = transactionValues.getPosition() * splitAdjust;
                     this.endValue = this.endPos * this.endPrice;
-                    this.longBasis = transValuesCum.longBasis;
-                    this.shortBasis = transValuesCum.shortBasis;
+                    this.longBasis = transactionValues.getLongBasis();
+                    this.shortBasis = transactionValues.getShortBasis();
 
                 } // end--where transaction period intersects report period
             } // end of input transaction set loop
@@ -299,15 +225,13 @@ public class SecurityFromToReport extends SecurityReport {
             this.unrealizedGain = endCumUnrealizedGain - startCumUnrealGain;
             this.totalGain = this.realizedGain + this.unrealizedGain;
 
-            // Get performance date--first Mod Dietz Returns
-            //
-
+            // Get performance data--first Mod Dietz Returns
+            
             // Add the first value in return arrays (if startpos != 0)
             if (this.startPos != 0) {
                 this.arMap.add(fromDateInt, -this.startValue);
                 this.mdMap.add(fromDateInt, 0.0); // adds dummy value for mod-dietz
             }
-
             // add the last value in return arrays (if endpos != 0)
             if (this.endPos != 0) {
                 this.arMap.add(toDateInt, this.endValue);
@@ -316,9 +240,7 @@ public class SecurityFromToReport extends SecurityReport {
 
             this.mdReturn = computeMDReturn(this.startValue, this.endValue, this.income,
                                       this.expense, this.mdMap);
-
-            // Then, get annualized returns
-            //
+            // Now get annualized returns
             this.annualPercentReturn = computeAnnualReturn(this.arMap, this.mdReturn);
 
             // Remove start and end values from ar date map to enable aggregation
@@ -331,478 +253,272 @@ public class SecurityFromToReport extends SecurityReport {
             }
         }
     }
+    
+    @Override
+    public void addTo(SecurityReport securityReport)  {
+        SecurityFromToReport securityFromToReport = (SecurityFromToReport)securityReport;
+        
+	if (this.getSecAccountWrapper() != null)
+	    throw new UnsupportedOperationException(
+		    "Illegal call to addTo method for SecurityReport");
+        //if CurrencyWrappers are the same then prices and positions can be
+	//added--if not, set prices and positions to zero
+	if (this.getCurrencyWrapper() != null
+		&& securityFromToReport.getCurrencyWrapper() != null
+		&& this.getCurrencyWrapper()
+			.equals(securityFromToReport.getCurrencyWrapper())) {
+	    this.startPos += securityFromToReport.startPos;
+	    this.endPos += securityFromToReport.endPos;
+	    this.startPrice = securityFromToReport.startPrice;
+	    this.endPrice = securityFromToReport.endPrice;
 
-
-    /**
-     * Generates individual line report body.
-     *
-     * @param thisFT
-     *            report line
-     *
-     * @return array of values
-     */
-    public Object[] toTableRow() {
-        ArrayList<Object> snapValues = new ArrayList<Object>();
-        String tilde = "\u007e";
-        switch (aggType) {
-        case SEC: // individual security
-            snapValues.add(this.account.getParentAccount().getAccountName());
-            snapValues.add(this.account.getAccountName());
-            break;
-        case ACCT_SEC: // aggregated securities
-            snapValues.add(this.account.getAccountName());
-            snapValues.add(tilde + "AllSec");
-            break;
-        case ACCT_CASH: // cash balance
-            snapValues.add(this.account.getAccountName());
-            snapValues.add(tilde + "Cash");
-            break;
-        case ACCT_SEC_PLUS_CASH: // aggregated securities + cash
-            snapValues.add(this.account.getAccountName());
-            snapValues.add(tilde + "AllSec+Cash");
-            break;
-        case ALL_SEC: // all securities
-            snapValues.add(tilde + "ALL");
-            snapValues.add(tilde + "AllSec");
-            break;
-        case ALL_CASH: // all cash
-            snapValues.add(tilde + "ALL");
-            snapValues.add(tilde + "Cash");
-            break;
-        case ALL_SEC_PLUS_CASH: // all securities + cash
-            snapValues.add(tilde + "ALL");
-            snapValues.add(tilde + "AllSec+Cash");
-            break;
-        }
-        snapValues.add(this.ticker);
-        snapValues.add(this.startPos);
-        snapValues.add(this.endPos);
-        snapValues.add(this.startPrice);
-        snapValues.add(this.endPrice);
-        snapValues.add(this.startValue);
-        snapValues.add(this.endValue);
-        snapValues.add(this.buy);
-        snapValues.add(this.sell);
-        snapValues.add(this.shortSell);
-        snapValues.add(this.coverShort);
-        snapValues.add(this.income);
-        snapValues.add(this.expense);
-        snapValues.add(this.longBasis);
-        snapValues.add(this.shortBasis);
-        snapValues.add(this.realizedGain);
-        snapValues.add(this.unrealizedGain);
-        snapValues.add(this.totalGain);
-        snapValues.add(this.mdReturn);
-        snapValues.add(this.annualPercentReturn);
-        return snapValues.toArray();
-    }
-
-
-    /**
-     * Add two SecurityFromToReport objects, in order to aggregate data at account level or at
-     * aggregate level.
-     *
-     * @param operand
-     *            SecurityFromToReport associated with Security
-     *
-     * @return output SecurityFromToReport
-     */
-    public SecurityFromToReport addTo(SecurityReport opd) {
-        SecurityFromToReport operand = (SecurityFromToReport)opd;
-
-        this.fromDateInt = this.fromDateInt;
-        this.toDateInt = this.toDateInt;
-        this.account = this.account;
-        this.startPos = 0.0;
-        this.endPos = 0.0;
-        this.startPrice = 0.0;
-        this.endPrice = 0.0;
-        this.startValue += operand.startValue;
-        this.endValue +=  operand.endValue;
-        this.buy += operand.buy;
-        this.sell += operand.sell;
-        this.shortSell += operand.shortSell;
-        this.coverShort += operand.coverShort;
-        this.income += operand.income;
-        this.expense += operand.expense;
-        this.longBasis += operand.longBasis;
-        this.shortBasis += operand.shortBasis;
-        this.realizedGain += operand.realizedGain;
-        this.unrealizedGain += operand.unrealizedGain;
-        this.totalGain += operand.totalGain;
-        this.startCash += operand.startCash;
-        this.endCash += operand.endCash;
-
-        // need to handle both cases of aggregation (1) at investment account
-        // and (2) across multiple investment account
-        if (operand.account == null) {
-            this.initBalance = operand.initBalance;
-        } else if (operand.account.getAccountType() == Account.ACCOUNT_TYPE_INVESTMENT) {
-            this.initBalance += operand.initBalance;
-        }
-
-        this.arMap = this.arMap.combine(operand.arMap, "add");
-        this.mdMap = this.mdMap.combine(operand.mdMap, "add");
-        this.transMap = this.transMap.combine(operand.transMap, "add");
+	} else {
+	    this.startPos = 0.0;
+	    this.endPos = 0.0;
+	    this.startPrice = 0.0;
+	    this.endPrice = 0.0;
+	}
+	
+	//populate other values from this SecurityReport
+        this.startValue += securityFromToReport.startValue;
+        this.endValue +=  securityFromToReport.endValue;
+        this.buy += securityFromToReport.buy;
+        this.sell += securityFromToReport.sell;
+        this.shortSell += securityFromToReport.shortSell;
+        this.coverShort += securityFromToReport.coverShort;
+        this.income += securityFromToReport.income;
+        this.expense += securityFromToReport.expense;
+        this.longBasis += securityFromToReport.longBasis;
+        this.shortBasis += securityFromToReport.shortBasis;
+        this.realizedGain += securityFromToReport.realizedGain;
+        this.unrealizedGain += securityFromToReport.unrealizedGain;
+        this.totalGain += securityFromToReport.totalGain;
+        
+        this.arMap = this.arMap.combine(securityFromToReport.arMap, "add");
+        this.mdMap = this.mdMap.combine(securityFromToReport.mdMap, "add");
+        this.transMap = this.transMap.combine(securityFromToReport.transMap, "add");
+        //set returns to zero
         this.mdReturn = 0.0;
         this.annualPercentReturn = 0.0;
+        }
+    
+    @Override
+    public Object[] toTableRow() throws SecurityException,
+	    IllegalArgumentException, NoSuchFieldException,
+	    IllegalAccessException {
+	
+	ArrayList<Object> snapValues = new ArrayList<Object>();
 
-        return this;
+	snapValues.add(this.getInvAccountWrapper().getName());
+	snapValues.add(this.getSecAccountWrapper().getName());
+	snapValues.add(this.getSecurityTypeWrapper().getName());
+	snapValues.add(this.getSecuritySubTypeWrapper().getName());
+	snapValues.add(this.getCurrencyWrapper().ticker);
+
+	addLineBody(snapValues);
+	
+	return snapValues.toArray();
     }
 
-
-    /**
-     * Update returns in Investment Account level for aggregated securities.
-     *
-     * @param thisInvFromTo
-     *            aggregated securities SecurityFromToReport
-     *
-     */
+    @Override
+    public void addLineBody(ArrayList<Object> rptValues) {
+	rptValues.add(this.startPos);
+	rptValues.add(this.endPos);
+	rptValues.add(this.startPrice);
+	rptValues.add(this.endPrice);
+	rptValues.add(this.startValue);
+	rptValues.add(this.endValue);
+	rptValues.add(this.buy);
+	rptValues.add(this.sell);
+	rptValues.add(this.shortSell);
+	rptValues.add(this.coverShort);
+	rptValues.add(this.income);
+	rptValues.add(this.expense);
+	rptValues.add(this.longBasis);
+	rptValues.add(this.shortBasis);
+	rptValues.add(this.realizedGain);
+	rptValues.add(this.unrealizedGain);
+	rptValues.add(this.totalGain);
+	rptValues.add(this.mdReturn);
+	rptValues.add(this.annualPercentReturn);
+	
+    }
+    
+    
+    @Override
     public void recomputeAggregateReturns() {
-        // get Mod-Dietz Returns
-        double mdReturnVal = computeMDReturn(startValue, endValue, income, expense, mdMap);
+	// get Mod-Dietz Returns
+	double mdReturnVal = computeMDReturn(startValue, endValue, income,
+		expense, mdMap);
 
-        // SecurityFromToReport.mdReturn = thisReturn;
-        mdReturn = mdReturnVal;
+	// SecurityFromToReport.mdReturn = thisReturn;
+	mdReturn = mdReturnVal;
 
-        // add start and end values to return date maps
-        if (startValue != 0) {
-            arMap.add(fromDateInt, -startValue);
-        }
-        if (endValue != 0) {
-            arMap.add(toDateInt, endValue);
-        }
-
-        // get annualized returns
-        annualPercentReturn = computeAnnualReturn(arMap, mdReturnVal);
-
-        // remove start and end values from return date maps (to avoid conflicts
-        // in aggregation)
-        if (startValue != 0) {
-            arMap.add(fromDateInt, startValue);
-        }
-        if (endValue != 0) {
-            arMap.add(toDateInt, -endValue);
-        }
+	// add start and end values to return date maps
+	if (startValue != 0) {
+	    arMap.add(fromDateInt, -startValue);
+	}
+	if (endValue != 0) {
+	    arMap.add(toDateInt, endValue);
+	}
+	// get annualized returns
+	annualPercentReturn = computeAnnualReturn(arMap, mdReturnVal);
     }
 
-
-    /**
-     * Computes from-to report for cash associated with this investment account.
-     *
-     * @param cashFromTo
-     *            SecurityFromToReport associated with Account "bank" transactions
-     *
-     * @return RepFrontTo representing income/returns for cash portion of
-     *         Investment Account
-     */
-    public SecurityFromToReport computeCashReturns(SecurityReport cash, AGG_TYPE aggType) {
-        SecurityFromToReport cashFromTo = (SecurityFromToReport)cash;
-
-        // cashValue has start, end cash positions, income and expenses
-        SecurityFromToReport cashValue = new SecurityFromToReport(this.account,
-                                                                  this.fromDateInt,
-                                                                  this.toDateInt,
-                                                                  aggType);
-
-        // comboTransMDMap has purchases/sales of cash (i.e. reverse of security
-        // transactions) start by adding transfers in and out of securities and
-        // investment accounts
-        DateMap comboTransMDMap = this.transMap.combine(cashFromTo.transMap, "add");
-
-        // generate starting and ending cash balances, non-security related
-        // account transactions
-        double initBal = cashFromTo.initBalance;
-        cashValue.startValue = cleanedValue(this.startCash + cashFromTo.startCash + initBal);
-        cashValue.endValue = cleanedValue(this.endCash + cashFromTo.endCash + initBal);
-        cashValue.startPos = cashValue.startValue;
-        cashValue.endPos = cashValue.endValue;
-        cashValue.income = cashFromTo.income;
-        cashValue.expense = cashFromTo.expense;
-
-        // now add transfer map to map of buys/sells/income/expense
-        // (effectively, purchase/sales of cash caused by security activity
-        comboTransMDMap = comboTransMDMap.combine(this.arMap, "add");
-
-        // cashRetMap effectively reverses sign of previous map (so cash
-        // buys/sells with correct sign for returns calc), and adds
-        // account-level income/expense transactions from arMap (e.g. account
-        // interest)
-        DateMap cashRetMap = cashFromTo.arMap.combine(comboTransMDMap, "subtract");
-
-        // this handles case where fromDateInt < first transaction, AND initBal
-        // != 0 (i.e. startValue = initBal. In that case, start date needs to be
-        // adjusted to day prior to first transaction date
-        int adjFromDateInt = cashValue.fromDateInt;
-        int minDateInt = comboTransMDMap.isEmpty()
-            ? 0
-            : DateUtils.getPrevBusinessDay(comboTransMDMap.firstKey());
-        if (cashValue.startValue == initBal
-            && cashValue.fromDateInt <= minDateInt) {
-            adjFromDateInt = Math.max(cashValue.fromDateInt, minDateInt);
-        }
-        // add dummy (zero) values to Mod-Dietz date maps, start and end to
-        // return maps
-        if (Math.abs(cashValue.startValue) > 0.0001) {
-            comboTransMDMap.add(adjFromDateInt, 0.0);
-            cashRetMap.add(adjFromDateInt, -cashValue.startValue);
-        }
-        if (Math.abs(cashValue.endValue) > 0.0001) {
-            comboTransMDMap.add(this.toDateInt, 0.0);
-            cashRetMap.add(this.toDateInt, cashValue.endValue);// add start and end values w/ cash
-                                                               // balances for ret Calc
-        }
-        // calculate returns
-        cashValue.mdReturn = computeMDReturn(cashValue.startValue,
-                                             cashValue.endValue, cashValue.income, cashValue.expense,
-                                             comboTransMDMap);
-        cashValue.annualPercentReturn = computeAnnualReturn(cashRetMap, cashValue.mdReturn);
-
-        // add maps for auditing purposes
-        cashValue.mdMap = comboTransMDMap;
-        cashValue.arMap = cashRetMap;
-
-        return cashValue;
+    @Override
+    public <T extends Aggregator, U extends Aggregator> CompositeReport<T, U> getCompositeReport(
+	    Class<T> firstAggClass, Class<U> secondAggClass,
+	    COMPOSITE_TYPE compType) {
+	CompositeReport<T, U> thisComposite = new CompositeReport<T, U>(this,
+		this.getDateRange(), firstAggClass, secondAggClass, compType);
+	return thisComposite;
     }
 
-
-    /**
-     * Computes FromTo report for this investment account, with associated cash
-     * accounted for as a security.
-     *
-     * @param thisCashFromTo SecurityFromToReport associated with Account "bank" transactions
-     *
-     * @return RepFrontTo representing income/returns for Investment Account,
-     *         Cash and Securities included
-     */
-    public SecurityFromToReport computeAggregateReturnWCash(SecurityReport cash,
-                                                            AGG_TYPE aggType) {
-        SecurityFromToReport invValue = new SecurityFromToReport(this.account,
-                                                                 this.fromDateInt,
-                                                                 this.toDateInt,
-                                                                 aggType);
-
-        SecurityFromToReport thisCashFromTo = (SecurityFromToReport)cash;
-
-        // copy over aggregate values from aggregated securities
-        invValue.buy = this.buy;
-        invValue.sell = this.sell;
-        invValue.shortSell = this.shortSell;
-        invValue.coverShort = this.coverShort;
-        invValue.longBasis = this.longBasis;
-        invValue.shortBasis = this.shortBasis;
-        invValue.realizedGain = this.realizedGain;
-        invValue.unrealizedGain = this.unrealizedGain;
-        invValue.totalGain = this.totalGain;
-
-        // add balance sheet and income statement values where applicable
-        invValue.startValue = this.startValue + thisCashFromTo.startValue;
-        invValue.endValue = this.endValue + thisCashFromTo.endValue;
-        invValue.income = this.income + thisCashFromTo.income;
-        invValue.expense = this.expense + thisCashFromTo.expense;
-        invValue.startCash = this.startCash + thisCashFromTo.startCash;
-        invValue.endCash = this.endCash + thisCashFromTo.endCash;
-
-        // combine transfer date map
-        invValue.transMap = this.transMap.combine(thisCashFromTo.transMap, "add");
-
-        // get correct start and end balances w/ cash accounted for
-        double initBal = thisCashFromTo.initBalance;
-        invValue.startValue = cleanedValue(invValue.startValue + invValue.startCash + initBal);
-        invValue.endValue = cleanedValue(invValue.endValue + invValue.endCash + initBal);
-
-        // from account returns perspective, only transfers matter, so they
-        // become the "buys" and "sells" for MD returns calculations and annual
-        // returns calcs
-
-        // get MD returns
-        DateMap mdMap = invValue.transMap;
-        /* reverse transfer map for returns calc purposes */
-        DateMap retMap = new DateMap().combine(invValue.transMap, "subtract");
-
-        // this handles case where fromDateInt < first transaction, AND initBal
-        // != 0 (i.e. startValue = initBal). In that case, start date needs to
-        // be adjusted to day prior to first transaction date
-        int adjFromDateInt = invValue.fromDateInt;
-        int minDateInt = mdMap.isEmpty()
-            ? 0
-            : DateUtils.getPrevBusinessDay(mdMap.firstKey());
-
-        if (invValue.startValue == initBal && invValue.fromDateInt <= minDateInt) {
-            adjFromDateInt = Math.max(invValue.fromDateInt, minDateInt);
-        }
-        // add dummy values to Mod-Dietz date maps, start and end to return maps
-        if (Math.abs(invValue.startValue) > 0.0001) {
-            mdMap.add(adjFromDateInt, 0.0);
-            retMap.add(adjFromDateInt, -invValue.startValue);
-        }
-        if (Math.abs(invValue.endValue) > 0.0001) {
-            mdMap.add(invValue.toDateInt, 0.0);
-            retMap.add(this.toDateInt, invValue.endValue);
-        }
-
-        // calc returns (note--no income/expenses since only transfers are
-        // considered i.e. endValue includes income/expenses
-        double allMDReturn = computeMDReturn(invValue.startValue, invValue.endValue, 0.0, 0.0, mdMap);
-        invValue.mdReturn = allMDReturn;
-
-        // get annualized returns
-        invValue.annualPercentReturn = computeAnnualReturn(retMap, allMDReturn);
-
-        // add maps for auditing purposes
-        invValue.mdMap = mdMap;
-        invValue.arMap = retMap;
-
-        return invValue;
+    @Override
+    public SecurityReport getAggregateSecurityReport() {
+	SecurityFromToReport thisAggregate = new SecurityFromToReport(null, getDateRange());
+	//add report body values (except Returns)
+	thisAggregate.startPos = this.startPos;
+	thisAggregate.endPos = this.endPos;
+	thisAggregate.startPrice = this.startPrice;
+	thisAggregate.endPrice = this.endPrice;
+	thisAggregate.startValue = this.startValue;
+	thisAggregate.endValue = this.endValue;
+	thisAggregate.buy = this.buy;
+	thisAggregate.sell = this.sell;
+	thisAggregate.shortSell = this.shortSell;
+	thisAggregate.coverShort = this.coverShort;
+	thisAggregate.income = this.income;
+	thisAggregate.expense = this.expense;
+	thisAggregate.longBasis = this.longBasis;
+	thisAggregate.shortBasis = this.shortBasis;
+	thisAggregate.realizedGain = this.realizedGain;
+	thisAggregate.unrealizedGain = this.unrealizedGain;
+	thisAggregate.totalGain = this.totalGain;
+	
+	thisAggregate.mdMap = this.mdMap;
+	thisAggregate.arMap = this.arMap;
+	thisAggregate.transMap = this.transMap;
+	
+	//make aggregating classes the same except secAccountWrapper
+	thisAggregate.setInvAccountWrapper(this.getInvAccountWrapper());
+	thisAggregate.setSecAccountWrapper(null);
+	thisAggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
+	thisAggregate.setSecuritySubTypeWrapper(this.getSecuritySubTypeWrapper());
+	thisAggregate.setTradeable(this.getTradeable());
+	thisAggregate.setCurrencyWrapper(this.getCurrencyWrapper());
+	
+	return thisAggregate;
     }
 
+    @Override
+    public String getName() {
+	if (this.getSecAccountWrapper() == null) {
+	    return "Null SecAccountWrapper";
+	} else {
+	    return this.getInvAccountWrapper().getName() + ": "
+		    + this.getSecAccountWrapper().getAccountName();
+	}
+    }
 
     public int getFromDateInt() {
         return fromDateInt;
     }
 
-
     public int getToDateInt() {
         return toDateInt;
     }
-
-
-    public Account getAccount() {
-        return account;
-    }
-
-
-    public String getTicker() {
-        return ticker;
-    }
-
 
     public double getStartPos() {
         return startPos;
     }
 
-
     public double getEndPos() {
         return endPos;
     }
-
 
     public double getStartPrice() {
         return startPrice;
     }
 
-
     public double getEndPrice() {
         return endPrice;
     }
-
 
     public double getStartValue() {
         return startValue;
     }
 
-
     public double getEndValue() {
         return endValue;
     }
-
-
-    public double getStartCash() {
-        return startCash;
-    }
-
-
-    public double getEndCash() {
-        return endCash;
-    }
-
-
-    public double getInitBalance() {
-        return initBalance;
-    }
-
 
     public double getBuy() {
         return buy;
     }
 
-
     public double getSell() {
         return sell;
     }
-
 
     public double getShortSell() {
         return shortSell;
     }
 
-
     public double getCoverShort() {
         return coverShort;
     }
-
 
     public double getIncome() {
         return income;
     }
 
-
     public double getExpense() {
         return expense;
     }
-
 
     public double getLongBasis() {
         return longBasis;
     }
 
-
     public double getShortBasis() {
         return shortBasis;
     }
-
 
     public double getRealizedGain() {
         return realizedGain;
     }
 
-
     public double getUnrealizedGain() {
         return unrealizedGain;
     }
-
 
     public double getTotalGain() {
         return totalGain;
     }
 
-
     public double getMdReturn() {
         return mdReturn;
     }
-
 
     public double getAnnualPercentReturn() {
         return annualPercentReturn;
     }
 
-
-    public AGG_TYPE getAggType() {
-        return aggType;
-    }
-
-
     public DateMap getArMap() {
         return arMap;
     }
-
 
     public DateMap getMdMap() {
         return mdMap;
     }
 
-
     public DateMap getTransMap() {
         return transMap;
     }
+
+    public void setTotalGain(double totalGain) {
+        this.totalGain = totalGain;
+    }
+
 }

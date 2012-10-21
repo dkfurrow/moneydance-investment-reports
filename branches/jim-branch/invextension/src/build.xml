@@ -28,10 +28,10 @@ http://jakarta.apache.org/ant/index.html
 
 	<target name="init">
 			<!--i.e. "clean"...gets rid of old build files/directories -->
-			<delete includeemptydirs="true" verbose = "true">
+			<delete includeemptydirs="true" verbose = "true" quiet = "true">
 				<fileset dir="${build}" includes="**/*" />
 			</delete>
-			<delete includeemptydirs="true" verbose = "true">
+			<delete includeemptydirs="true" verbose = "true" quiet = "true">
 				<fileset dir="${dist}" includes="**/*" />
 			</delete>	
 	</target>
@@ -39,7 +39,7 @@ http://jakarta.apache.org/ant/index.html
 	<target name="invextension" depends="init">
 		<mkdir dir="${dist}"/>
 		<mkdir dir="${build}"/>
-		<javac  target="1.6" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+		<javac  target="1.7" srcdir="${src}" debug="${debug}" optimize="${optimize}"
       classpathref="classpath"  destdir="${build}"
       includes="com/moneydance/modules/features/invextension/**"
       includeantruntime = "false">
