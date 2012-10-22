@@ -23,6 +23,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class CheckRepFromTo {
         = new TotalFromToReport(currentInfo, invAggClass,
 		tradeableAggClass, catHierarchy, rptOutputSingle, fromDateInt,
 		toDateInt);
-	ArrayList<ComponentReport> componentReports = fromToReport.getReports();
+	HashSet componentReports = fromToReport.getCompositeReports();
 	for (Iterator<ComponentReport> iterator = componentReports.iterator(); iterator
 		.hasNext();) {
 	    ComponentReport componentReport = iterator.next();

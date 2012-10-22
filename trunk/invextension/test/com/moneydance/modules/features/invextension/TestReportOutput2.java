@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
-import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
+import com.moneydance.modules.features.invextension.FormattedTable.ColSizeOption;
 import com.moneydance.modules.features.invextension.ReportControlPanel.ReportTableModel;
 
 
@@ -50,7 +50,7 @@ public class TestReportOutput2 {
 
     private static void printReport(TotalReport report, int firstSort, int secondSort)
 	    throws NoSuchFieldException, IllegalAccessException {
-	System.out.println("report size" + report.getReports().size());
+	System.out.println("report size" + report.getCompositeReports().size());
 	System.out.println("Object Length" + report.getReportTable().length);
 
 	Object[][] reportTable = report.getReportTable();
@@ -62,11 +62,16 @@ public class TestReportOutput2 {
 	StringBuffer outBuffer = writeObjectToStringBuffer(object);
 	IOUtils.writeResultsToFile(outBuffer, testFile);
 	System.out.println("Finished!");
-
-	ReportOutputTable.CreateAndShowTable(model, report.getColumnTypes(),
-		report.getClosedPosColumn(), report.getFrozenColumn(),
-		firstSort, secondSort, ColSizeOption.MAXCONTCOLRESIZE,
-		report.getReportTitle());
+	
+	 ReportOutputTable.CreateAndShowTable(model,
+                 report.getColumnFormats(),
+                 report.getClosedPosColumn(),
+                 report.getFrozenColumn(),
+                 report.getFirstSortColumn(),
+                 report.getSecondSortColumn(),
+                 ColSizeOption.MAXCONTCOLRESIZE,
+                 report.getReportTitle(),
+                 report.getRowBackgrounds());
     }
     
     

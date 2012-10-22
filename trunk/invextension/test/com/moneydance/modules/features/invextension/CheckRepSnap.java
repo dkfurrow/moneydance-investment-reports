@@ -23,6 +23,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -49,8 +50,8 @@ public class CheckRepSnap {
 	TotalSnapshotReport snapshotReport = new TotalSnapshotReport(
 		currentInfo, invAggClass, tradeableAggClass, catHierarchy,
 		rptOutputSingle, toDateInt);
-	ArrayList<ComponentReport> componentReports = snapshotReport
-		.getReports();
+	HashSet componentReports = snapshotReport
+		.getCompositeReports();
 	for (Iterator<ComponentReport> iterator = componentReports.iterator(); iterator
 		.hasNext();) {
 	    ComponentReport componentReport = iterator.next();
