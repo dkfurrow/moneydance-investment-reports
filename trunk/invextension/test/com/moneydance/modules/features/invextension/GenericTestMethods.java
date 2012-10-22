@@ -24,22 +24,17 @@ package com.moneydance.modules.features.invextension;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.AbstractTxn;
 import com.moneydance.apps.md.model.Account;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.apps.md.model.InvestmentAccount;
-import com.moneydance.apps.md.model.ParentTxn;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.apps.md.model.SplitTxn;
 import com.moneydance.apps.md.model.TransactionSet;
@@ -183,7 +178,7 @@ public class GenericTestMethods {
     private static void listCreateDatesANDInitBals(BulkSecInfo currentInfo) {
 	HashMap<Account, Double> initBals = new HashMap<Account, Double>();
 	HashMap<Account, Integer> createDates = new HashMap<Account, Integer>();
-	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo
+	TreeSet<InvestmentAccountWrapper> theseInvs = currentInfo
 		.getInvestmentWrappers();
 	for (Iterator iterator = theseInvs.iterator(); iterator.hasNext();) {
 	    InvestmentAccountWrapper investmentAccountWrapper = (InvestmentAccountWrapper) iterator

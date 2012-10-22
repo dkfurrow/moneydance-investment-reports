@@ -423,6 +423,28 @@ public class TransactionValues implements Comparable<TransactionValues> {
 	case BUY_XFER:
 	case SELL_XFER:
 	case DIVIDENDXFR:
+	    if (transactionValues.getAccountRef().getAccountType() == Account.ACCOUNT_TYPE_SECURITY) {
+		// All cash quantities stay zero (combined transactions have no
+		// net effect on cash
+	    } else {
+		if (thisTransfer > 0.0) {// transfer in
+		    if (prevPos < 0.0) {
+			this.coverShort = Math.max(-thisTransfer, prevPos);
+			this.buy = Math.min(-thisTransfer - prevPos, 0.0);
+		    } else {
+			this.buy = -thisTransfer;
+		    }
+		} else {// transfer out
+		    if (prevPos > 0.0) {
+			this.sell = Math.min(-thisTransfer, prevPos);
+			this.shortSell = Math.max(-thisTransfer - prevPos, 0.0);
+		    } else {
+			this.shortSell = -thisTransfer;
+		    }
+		}
+	    }
+		
+	    break;
 	case DIVIDEND_REINVEST:
 	    // All cash quantities stay zero (combined transactions have no
 	    // net effect on cash

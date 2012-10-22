@@ -17,7 +17,7 @@ public class TestReportOutput extends JFrame{
     private static final long serialVersionUID = -2315625753772573103L;
     private static final int fromDateInt = 20090601;
     private static final int toDateInt = 20100601;
-    public static final File mdTestFile = new File("./resources/testMD02.md");
+    public static final File mdTestFile = new File("./resources/testMD03.md");
     public static final File testFile = new File("E:\\Temp\\testFile.csv");
     
     

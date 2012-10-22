@@ -84,7 +84,7 @@ public class BulkSecInfo {
     /*TreeMap of Transvalues for leaf-level security Accounts */
     private TreeMap<Double, TransactionValues> securityTransactionValues;
     /* HashSet of InvestmentAccount Wrappers */
-    private HashSet<InvestmentAccountWrapper> investmentWrappers;
+    private TreeSet<InvestmentAccountWrapper> investmentWrappers;
     
     
     
@@ -207,7 +207,7 @@ public class BulkSecInfo {
         return gainsCalc;
     }
 
-    public HashSet<InvestmentAccountWrapper> getInvestmentWrappers() {
+    public TreeSet<InvestmentAccountWrapper> getInvestmentWrappers() {
         return investmentWrappers;
     }   
     public static TransactionSet getTransactionSet() {
@@ -398,15 +398,15 @@ public class BulkSecInfo {
    
 
     /**lists all TransactionValues in InvestmentAccountWrappers
-     * @param invAcctWrappers
+     * @param investmentAccountWrappers
      * @return
      * @throws Exception
      */
     public ArrayList<String[]> listTransValuesSet(
-	    HashSet<InvestmentAccountWrapper> invAcctWrappers) throws Exception {
+	    TreeSet<InvestmentAccountWrapper> investmentAccountWrappers) throws Exception {
 	ArrayList<String[]> txnInfo = new ArrayList<String[]>();
 
-	for (Iterator<InvestmentAccountWrapper> it = invAcctWrappers.iterator(); it
+	for (Iterator<InvestmentAccountWrapper> it = investmentAccountWrappers.iterator(); it
 		.hasNext();) {
 	    InvestmentAccountWrapper thisInvAccount =  it.next();
 	    TreeSet<TransactionValues> accountLines = new TreeSet<TransactionValues>(
@@ -417,7 +417,6 @@ public class BulkSecInfo {
 		txnInfo.add(TransactionValues.loadArrayTransValues(reportLine));
 	    }
 	}
-	Collections.sort(txnInfo, PrntAcct_Order);
 	return txnInfo;
     }
 
@@ -459,10 +458,10 @@ public class BulkSecInfo {
      * information
      * @throws Exception
      */
-    private HashSet<InvestmentAccountWrapper> getInvestmentAccountInfo(
+    private TreeSet<InvestmentAccountWrapper> getInvestmentAccountInfo(
 	    TreeSet<Account> selectedSubAccounts) throws Exception {
-	HashSet<InvestmentAccountWrapper> invAcctWrappers = 
-		new HashSet<InvestmentAccountWrapper>();
+	TreeSet<InvestmentAccountWrapper> invAcctWrappers = 
+		new TreeSet<InvestmentAccountWrapper>();
 //	this.secAccountWrappers = new HashSet<SecurityAccountWrapper>();
 
 	for (Iterator<Account> iterator = selectedSubAccounts.iterator(); iterator
@@ -519,10 +518,10 @@ public class BulkSecInfo {
 	for (Iterator<AbstractTxn> iterator = txnSet.iterator(); iterator
 		.hasNext();) {
 	    AbstractTxn abstractTxn =  iterator.next();
-	    if (getAssociatedAccount(abstractTxn) == thisAccount) {
+	    
 		assocTrans.add(abstractTxn instanceof ParentTxn ? 
 			(ParentTxn) abstractTxn	: abstractTxn.getParentTxn());
-	    }
+	    
 	}
 	for (Iterator<ParentTxn> iterator = assocTrans.iterator(); iterator
 		.hasNext();) {
