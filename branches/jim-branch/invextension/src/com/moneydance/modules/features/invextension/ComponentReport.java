@@ -25,6 +25,8 @@ package com.moneydance.modules.features.invextension;
 import java.util.Iterator;
 
 
+import com.moneydance.modules.features.invextension.FormattedTable.RowBackground;
+
 /**
  * Base class for security reports and composites.
  *
@@ -34,7 +36,7 @@ import java.util.Iterator;
 */
 
 public abstract class ComponentReport {
-    
+
     /**adds SecurityReport to other SecurityReport or CompositeReport
      * @param securityReport
      */
@@ -47,45 +49,43 @@ public abstract class ComponentReport {
      * @return
      */
     public double computeAnnualReturn(DateMap retMap, double mdRet) {
-	// Assumes first value is startvalue, last is endvalue same with dates.
+        // Assumes first value is startvalue, last is endvalue same with dates.
 
-	int numPeriods = retMap == null ? 0 : retMap.keySet().size();
-	double[] excelDates = new double[numPeriods];
-	double[] annRetValuesArray = new double[numPeriods];
-	int[] dateIntsArray = new int[numPeriods];
+        int numPeriods = retMap == null ? 0 : retMap.keySet().size();
+        double[] excelDates = new double[numPeriods];
+        double[] annRetValuesArray = new double[numPeriods];
+        int[] dateIntsArray = new int[numPeriods];
 
-	// Put datemap info into primitive arrays
-	if (retMap != null && retMap.keySet().size() > 0
-		&& retMap.values().size() > 0) {
-	    int i = 0;
-	    for (Iterator<Integer> it = retMap.keySet().iterator(); it
-		    .hasNext();) {
-		Integer dateInt = it.next();
-		Double value = retMap.get(dateInt);
+        // Put datemap info into primitive arrays
+        if (retMap != null && retMap.keySet().size() > 0
+            && retMap.values().size() > 0) {
+            int i = 0;
+            for (Iterator<Integer> it = retMap.keySet().iterator(); it.hasNext();) {
+                Integer dateInt = it.next();
+                Double value = retMap.get(dateInt);
 
-		dateIntsArray[i] = dateInt;
-		annRetValuesArray[i] = value;
-		i++;
-	    }
-	} else {
-	    return Double.NaN;
-	}
+                dateIntsArray[i] = dateInt;
+                annRetValuesArray[i] = value;
+                i++;
+            }
+        } else {
+            return Double.NaN;
+        }
 
-	for (int i = 0; i < numPeriods; i++) {
-	    excelDates[i] = DateUtils.getExcelDateValue(dateIntsArray[i]);
-	}
-	double totYrs = (excelDates[numPeriods - 1] - excelDates[0]) / 365;
+        for (int i = 0; i < numPeriods; i++) {
+            excelDates[i] = DateUtils.getExcelDateValue(dateIntsArray[i]);
+        }
+        double totYrs = (excelDates[numPeriods - 1] - excelDates[0]) / 365;
 
-	// Need to supply guess to return algorithm, so use modified dietz
-	// return divided by number of years (have to add 1 because of returns
-	// algorithm). Must be greater than zero
-	double guess = Math.max((1 + mdRet / totYrs), 0.01);
+        // Need to supply guess to return algorithm, so use modified dietz
+        // return divided by number of years (have to add 1 because of returns
+        // algorithm). Must be greater than zero
+        double guess = Math.max((1 + mdRet / totYrs), 0.01);
 
-	XIRRData thisData = new XIRRData(numPeriods, guess, annRetValuesArray,
-		excelDates);
-	double annualReturn = XIRR.xirr(thisData);
+        XIRRData thisData = new XIRRData(numPeriods, guess, annRetValuesArray, excelDates);
+        double annualReturn = XIRR.xirr(thisData);
 
-	return annualReturn;
+        return annualReturn;
     }
 
 
@@ -99,49 +99,49 @@ public abstract class ComponentReport {
      * @return Mod Dietz return
      */
     public double computeMDReturn(double startValue, double endValue,
-	    double income, double expense, DateMap mdMap) {
-	if (mdMap.keySet().size() > 0 && mdMap.values().size() > 0) {
-	    double mdValue = 0;
-	    double sumCF = 0;
-	    double weightCF = 0;
+                                  double income, double expense, DateMap mdMap) {
+        if (mdMap.keySet().size() > 0 && mdMap.values().size() > 0) {
+            double mdValue = 0;
+            double sumCF = 0;
+            double weightCF = 0;
 
-	    Integer cd = DateUtils.getDaysBetween(mdMap.firstKey(),
-		    mdMap.lastKey());
-	    Double cdD = cd.doubleValue();
+            Integer cd = DateUtils.getDaysBetween(mdMap.firstKey(), mdMap.lastKey());
+            Double cdD = cd.doubleValue();
 
-	    for (Iterator<Integer> it = mdMap.keySet().iterator(); it.hasNext();) {
-		Integer thisDateInt = it.next();
-		Double cf = mdMap.get(thisDateInt);
-		Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(),
-			thisDateInt);
-		Double dayBetD = dayBetw.doubleValue();
-		double wSubI = (cdD - dayBetD) / cdD;
-		weightCF = weightCF + (wSubI * cf);
-		sumCF = sumCF + cf;
-	    }
+            for (Iterator<Integer> it = mdMap.keySet().iterator(); it.hasNext();) {
+                Integer thisDateInt = it.next();
+                Double cf = mdMap.get(thisDateInt);
+                Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(), thisDateInt);
+                Double dayBetD = dayBetw.doubleValue();
+                double wSubI = (cdD - dayBetD) / cdD;
+                weightCF = weightCF + (wSubI * cf);
+                sumCF = sumCF + cf;
+            }
 
-	    mdValue = ((endValue + income + expense) - startValue - sumCF)
-		    / (startValue + weightCF);
-	    return mdValue;
-	} else {
-	    return Double.NaN;
-	}
+            mdValue = ((endValue + income + expense) - startValue - sumCF)
+                / (startValue + weightCF);
+            return mdValue;
+        } else {
+            return Double.NaN;
+        }
     }
 
     /** Recomputes Aggregate Returns after CompositeReport is complete
-     * 
+     *
      */
     public abstract void recomputeAggregateReturns();
-    
+
     /**
      * @return produces report line for output from ComponentReport
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
      */
-    public  Object[] toTableRow() throws SecurityException, IllegalArgumentException, 
-    NoSuchFieldException, IllegalAccessException {
-	return null;
+    public Object[] toTableRow() throws SecurityException,
+        IllegalArgumentException,
+        NoSuchFieldException,
+        IllegalAccessException {
+        return null;
+    }
+
+    public RowBackground getTableRowBackground() {
+        return RowBackground.DEFAULT;
     }
 }

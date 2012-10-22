@@ -1,23 +1,23 @@
 /* FormattedTable.java
  * Copyright 2011 Dale K. Furrow . All rights reserved.
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright notice, 
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice, 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY EXPRESS 
+ *
+ * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
- * IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE LIABLE FOR ANY 
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.moneydance.modules.features.invextension;
@@ -39,42 +39,41 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import com.moneydance.modules.features.invextension.ReportOutputTable.ColType;
-import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
+import com.moneydance.modules.features.invextension.FormattedTable.ColSizeOption;
 
 
 class FormattedTable extends JTable {
     private static final long serialVersionUID = 1616850162785345995L;
 
-    private int firstAgg;
-    private int secondAgg;
-    private int closedPosColumn;
+    public enum RowBackground {DEFAULT, LIGHTGRAY, LIGHTLIGHTGRAY, GREEN}
+
+    public enum ColFormat {STRING, DOUBLE0, DOUBLE2, DOUBLE3, PERCENT1}
+
+    public enum ColSizeOption {NORESIZE, MAXCONTRESIZE, MAXCONTCOLRESIZE}
+
+    private RowBackground[] rowBackgrounds;
 
     private Color lightLightGray = new Color(230, 230, 230);
 
     public FormattedTable(TableModel model,
-                          ColType[] colFormats,
+                          ColFormat[] colFormats,
                           ColSizeOption sizeOption,
-                          int firstAggVal,
-                          int secondAggVal,
-                          int closedPosColumnVal) {
+                          RowBackground[] rowBacks) {
         super(model);
 
-        firstAgg = firstAggVal;
-        secondAgg = secondAggVal;
-        closedPosColumn = closedPosColumnVal;
+        rowBackgrounds = rowBacks;
 
         TableColumn tableColumn = new TableColumn();
         for (int i = 0; i < colFormats.length; i++) {
-            ColType colType = colFormats[i];
+            ColFormat colFormat = colFormats[i];
             tableColumn = this.getColumnModel().getColumn(i);
-            if (colType == ColType.DOUBLE0) {
+            if (colFormat == ColFormat.DOUBLE0) {
                 tableColumn.setCellRenderer(new NumberTableCellRenderer(0, 0));
-            } else if (colType == ColType.DOUBLE2) {
+            } else if (colFormat == ColFormat.DOUBLE2) {
                 tableColumn.setCellRenderer(new NumberTableCellRenderer(2, 2));
-            } else if (colType == ColType.DOUBLE3) {
+            } else if (colFormat == ColFormat.DOUBLE3) {
                 tableColumn.setCellRenderer(new NumberTableCellRenderer(3, 3));
-            } else if (colType == ColType.PERCENT1) {
+            } else if (colFormat == ColFormat.PERCENT1) {
                 tableColumn.setCellRenderer(new PercentTableCellRenderer(1, 1));
             } else {
                 tableColumn.setCellRenderer(new StringTableCellRenderer());
@@ -85,60 +84,60 @@ class FormattedTable extends JTable {
     }
 
     public void adjustColumnPreferredWidths(ColSizeOption option) {
-	// strategy - get max width for cells in column and make that
-	// the preferred width
-	TableColumnModel columnModel = getColumnModel();
-	for (int col = 0; col < getColumnCount(); col++) {
-	    int maxwidth = 0;
-	    for (int row = 0; row < getRowCount(); row++) {
-		TableCellRenderer rend = getCellRenderer(row, col);
-		Object value = getValueAt(row, col);
-		Component comp = rend.getTableCellRendererComponent(this, value, false, false, row, col);
+        // strategy - get max width for cells in column and make that
+        // the preferred width
+        TableColumnModel columnModel = getColumnModel();
+        for (int col = 0; col < getColumnCount(); col++) {
+            int maxwidth = 0;
+            for (int row = 0; row < getRowCount(); row++) {
+                TableCellRenderer rend = getCellRenderer(row, col);
+                Object value = getValueAt(row, col);
+                Component comp = rend.getTableCellRendererComponent(this, value, false, false, row, col);
 
-		int upSize = 0;
-		// workaround--getPreferredSize insufficient for (at
-		// least some) negative numbers, so set width based on
-		// one size larger
-		if ((value instanceof Integer || value instanceof Double)
+                int upSize = 0;
+                // workaround--getPreferredSize insufficient for (at
+                // least some) negative numbers, so set width based on
+                // one size larger
+                if ((value instanceof Integer || value instanceof Double)
                     && ((Double) value < -1.0)) {
-		    JLabel comp1 = (JLabel) comp;
-		    Font f1 = new Font(comp1.getFont().getName(),
+                    JLabel comp1 = (JLabel) comp;
+                    Font f1 = new Font(comp1.getFont().getName(),
                                        comp1.getFont().getStyle(),
                                        comp1.getFont().getSize() + 1);
-		    comp1.setFont(f1);
-		    upSize = comp1.getPreferredSize().width;
-		}
-		int currentWidth = Math.max(getColumnModel().getColumn(col).getWidth(), upSize);
-		// set to maximum of all obtained widths
-		maxwidth = Math.max(comp.getPreferredSize().width, maxwidth);
-		maxwidth = Math.max(currentWidth, maxwidth);
-	    }
-            
+                    comp1.setFont(f1);
+                    upSize = comp1.getPreferredSize().width;
+                }
+                int currentWidth = Math.max(getColumnModel().getColumn(col).getWidth(), upSize);
+                // set to maximum of all obtained widths
+                maxwidth = Math.max(comp.getPreferredSize().width, maxwidth);
+                maxwidth = Math.max(currentWidth, maxwidth);
+            }
+
             // for row following code resizes columns to the maximum of
             // header and contents
-	    TableColumn column = columnModel.getColumn(col);
-	    switch (option) {
-	    case MAXCONTCOLRESIZE:
-		TableCellRenderer headerRenderer = column.getHeaderRenderer();
-		if (headerRenderer == null) {
-		    headerRenderer = getTableHeader().getDefaultRenderer();
-		}
-		Object headerValue = column.getHeaderValue();
-		Component headerComp = headerRenderer
+            TableColumn column = columnModel.getColumn(col);
+            switch (option) {
+            case MAXCONTCOLRESIZE:
+                TableCellRenderer headerRenderer = column.getHeaderRenderer();
+                if (headerRenderer == null) {
+                    headerRenderer = getTableHeader().getDefaultRenderer();
+                }
+                Object headerValue = column.getHeaderValue();
+                Component headerComp = headerRenderer
                     .getTableCellRendererComponent(this, headerValue, false, false, -1, col); // changed to -1
-		maxwidth = Math.max(maxwidth,
+                maxwidth = Math.max(maxwidth,
                                     headerComp.getPreferredSize().width);
-		column.setPreferredWidth(maxwidth);
-		break;
-	    case MAXCONTRESIZE:
-		column.setPreferredWidth(maxwidth);
-		break;
-	    case NORESIZE:
-		break;
-	    default:
-		continue;
-	    }
-	}
+                column.setPreferredWidth(maxwidth);
+                break;
+            case MAXCONTRESIZE:
+                column.setPreferredWidth(maxwidth);
+                break;
+            case NORESIZE:
+                break;
+            default:
+                continue;
+            }
+        }
     }
 
     @Override
@@ -148,24 +147,26 @@ class FormattedTable extends JTable {
         // in Constructor
         if (!isRowSelected(row)) {
             c.setBackground(getBackground());
-            int modelRow = convertRowIndexToModel(row);
-            String accType = (String) getModel().getValueAt(modelRow, firstAgg);
-            String aggType = (String) getModel().getValueAt(modelRow, secondAgg);
-            Double endPos = (Double) getModel().getValueAt(modelRow, closedPosColumn);
 
-            if (aggType.endsWith("-ALL")) {
-                c.setBackground(lightLightGray);
-            }
-            if (accType.endsWith(" ") || aggType.endsWith(" ")) {
+            int modelRow = convertRowIndexToModel(row);
+            switch (rowBackgrounds[modelRow]) {
+            case DEFAULT:
+                break;
+
+            case LIGHTGRAY:
                 c.setBackground(Color.lightGray);
-            }
-            if (accType.endsWith(" ") && aggType.endsWith(" ")) {
+                break;
+
+            case LIGHTLIGHTGRAY:
+                c.setBackground(lightLightGray);
+                break;
+
+            case GREEN:
                 c.setBackground(Color.GREEN);
-            }
-            if (endPos == 0.0) {
-                c.setForeground(new Color(100, 100, 100));
-            } else {
-                c.setForeground(c.getForeground());
+                break;
+
+            default:
+                throw new AssertionError(rowBackgrounds[modelRow]);
             }
         }
 
@@ -186,8 +187,11 @@ class FormattedTable extends JTable {
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
-                                                       Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int column) {
             Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (value instanceof Integer) {// set Integers to Right
@@ -234,8 +238,11 @@ class FormattedTable extends JTable {
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
-                                                       Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int column) {
             Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (value instanceof Double) {
@@ -263,8 +270,11 @@ class FormattedTable extends JTable {
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
-                                                       Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int column) {
             Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (value instanceof String) {
