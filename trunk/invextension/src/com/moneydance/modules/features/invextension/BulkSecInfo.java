@@ -355,7 +355,7 @@ public class BulkSecInfo {
 	currInfo.add(Integer.toString(cur.getID()));
 	currInfo.add(cur.getName());
 	if (cur.getTickerSymbol().isEmpty()) {
-	    currInfo.add("NoTicker");
+	    currInfo.add("");
 	} else {
 	    currInfo.add(cur.getTickerSymbol());
 	}
@@ -523,7 +523,6 @@ public class BulkSecInfo {
 		assocTrans.add(abstractTxn instanceof ParentTxn ? 
 			(ParentTxn) abstractTxn	: abstractTxn.getParentTxn());
 	    }
-
 	}
 	for (Iterator<ParentTxn> iterator = assocTrans.iterator(); iterator
 		.hasNext();) {

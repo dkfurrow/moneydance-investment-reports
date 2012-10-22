@@ -344,7 +344,7 @@ public class SecurityFromToReport extends SecurityReport {
 	
     }
     
-    
+
     @Override
     public void recomputeAggregateReturns() {
 	// get Mod-Dietz Returns

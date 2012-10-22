@@ -29,6 +29,7 @@ import java.util.SortedSet;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
+
 /**
  * Report detailing performance attributes based on a specific snapshot
  * date
@@ -580,6 +581,7 @@ public class SecuritySnapshotReport extends SecurityReport {
         rptValues.add(this.income);
         rptValues.add(this.totalGain);
     }
+
 
     /*
      * Combine returns category maps.

@@ -29,50 +29,46 @@ import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TY
 
 /**Generic SecurityReport, generates one data set for each Security in each
  * investment account
- * Version 1.0 
+ * Version 1.0
  * @author Dale Furrow
  *
  */
+
 public abstract class SecurityReport extends ComponentReport {
     private DateRange dateRange;
-    private SecurityAccountWrapper secAccountWrapper; 
+    private SecurityAccountWrapper secAccountWrapper;
     private InvestmentAccountWrapper invAccountWrapper;
     private Tradeable tradeable;
     private CurrencyWrapper currencyWrapper;
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
-    
-    
-    
-    
+
 
     /**Generic constructor populates all members based on secAccountWrapper
      * or sets all to null
      * @param secAccountWrapper
      * @param dateRange
      */
-    public SecurityReport(SecurityAccountWrapper secAccountWrapper,
-	    DateRange dateRange)  {
-	this.dateRange = dateRange;
-	if (secAccountWrapper != null) {
-	    this.secAccountWrapper = secAccountWrapper;
-	    this.invAccountWrapper = secAccountWrapper.getInvAcctWrapper();
-	    this.tradeable = secAccountWrapper.getTradeable();
-	    this.currencyWrapper = secAccountWrapper.getCurrencyWrapper();
-	    this.securityTypeWrapper = secAccountWrapper
-		    .getSecurityTypeWrapper();
-	    this.securitySubTypeWrapper = secAccountWrapper
-		    .getSecuritySubTypeWrapper();
-	    
-	} else {
-	    this.secAccountWrapper = null;
-	    this.invAccountWrapper = null;
-	    this.tradeable = null;
-	    this.currencyWrapper = null;
-	    this.securityTypeWrapper = null;
-	    this.securitySubTypeWrapper = null;
-	    
-	}
+    public SecurityReport(SecurityAccountWrapper secAccountWrapper, DateRange dateRange)  {
+        this.dateRange = dateRange;
+        if (secAccountWrapper != null) {
+            this.secAccountWrapper = secAccountWrapper;
+            this.invAccountWrapper = secAccountWrapper.getInvAcctWrapper();
+            this.tradeable = secAccountWrapper.getTradeable();
+            this.currencyWrapper = secAccountWrapper.getCurrencyWrapper();
+            this.securityTypeWrapper = secAccountWrapper
+                .getSecurityTypeWrapper();
+            this.securitySubTypeWrapper = secAccountWrapper.getSecuritySubTypeWrapper();
+        
+        } else {
+            this.secAccountWrapper = null;
+            this.invAccountWrapper = null;
+            this.tradeable = null;
+            this.currencyWrapper = null;
+            this.securityTypeWrapper = null;
+            this.securitySubTypeWrapper = null;
+        
+        }
 
     }
 
@@ -83,46 +79,47 @@ public abstract class SecurityReport extends ComponentReport {
      */
     @SuppressWarnings("unchecked")
     public <T> T getAggregate(Class<? extends Aggregator> aggregateClass) {
-	if (aggregateClass == InvestmentAccountWrapper.class) {
-	    return (T) this.invAccountWrapper;
-	} else if (aggregateClass == SecurityTypeWrapper.class) {
-	    return (T) this.securityTypeWrapper;
-	} else if (aggregateClass == SecuritySubTypeWrapper.class) {
-	    return (T) this.securitySubTypeWrapper;
-	} else if (aggregateClass == Tradeable.class) {
-	    return (T) this.tradeable;
-	} else if (aggregateClass == CurrencyWrapper.class) {
-	    return (T) this.currencyWrapper;	    
-	} else if (aggregateClass == AllAggregate.class) {
-	    return (T) AllAggregate.getInstance();	    
-	}else {
-	    throw new UnsupportedOperationException();
-	}
+        if (aggregateClass == InvestmentAccountWrapper.class) {
+            return (T) this.invAccountWrapper;
+        } else if (aggregateClass == SecurityTypeWrapper.class) {
+            return (T) this.securityTypeWrapper;
+        } else if (aggregateClass == SecuritySubTypeWrapper.class) {
+            return (T) this.securitySubTypeWrapper;
+        } else if (aggregateClass == Tradeable.class) {
+            return (T) this.tradeable;
+        } else if (aggregateClass == CurrencyWrapper.class) {
+            return (T) this.currencyWrapper;    
+        } else if (aggregateClass == AllAggregate.class) {
+            return (T) AllAggregate.getInstance();      
+        }else {
+            throw new UnsupportedOperationException();
+        }
     }
-    
+
     /**Generates composite report consistent with this SecurityReport
      * @param firstAggClass
      * @param secondAggClass
      * @param compositeType
      * @return
      */
-    public abstract <T extends Aggregator, U extends Aggregator> 
-    CompositeReport<T, U> getCompositeReport(Class<T> firstAggClass, 
-	    Class<U> secondAggClass, COMPOSITE_TYPE compType);    
-    
-    /**Generates aggregateSecurity member of composite report based on the 
+    public abstract <T extends Aggregator, U extends Aggregator>
+                                             CompositeReport<T, U> getCompositeReport(Class<T> firstAggClass,
+                                                                                      Class<U> secondAggClass,
+                                                                                      COMPOSITE_TYPE compType);
+
+    /**Generates aggregateSecurity member of composite report based on the
      * fields of this SecurityReport
      * @return
      */
     public abstract SecurityReport getAggregateSecurityReport();
-    
+
     public abstract String getName();
-    
+
     /**adds line body (unique fields for classes which subclass SecurityReport)
      * @param rptValues
      */
     public abstract void addLineBody(ArrayList<Object> rptValues);
-    
+
     public SecurityAccountWrapper getSecAccountWrapper() {
         return secAccountWrapper;
     }
@@ -146,9 +143,9 @@ public abstract class SecurityReport extends ComponentReport {
     public InvestmentAccountWrapper getInvAccountWrapper() {
         return invAccountWrapper;
     }
-    
+
     public DateRange getDateRange(){
-	return dateRange;
+        return dateRange;
     }
 
     public void setSecAccountWrapper(SecurityAccountWrapper secAccountWrapper) {
@@ -168,12 +165,12 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     public void setSecuritySubTypeWrapper(
-    	SecuritySubTypeWrapper securitySubTypeWrapper) {
+                                          SecuritySubTypeWrapper securitySubTypeWrapper) {
         this.securitySubTypeWrapper = securitySubTypeWrapper;
     }
-    
+
     public void setCurrencyWrapper(CurrencyWrapper currencyWrapper){
-	this.currencyWrapper = currencyWrapper;
+        this.currencyWrapper = currencyWrapper;
     }
 
 }

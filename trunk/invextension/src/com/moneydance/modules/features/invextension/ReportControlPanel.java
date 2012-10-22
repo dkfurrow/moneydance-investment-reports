@@ -59,8 +59,9 @@ import javax.swing.table.AbstractTableModel;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
 import com.moneydance.awt.JDateField;
-import com.moneydance.modules.features.invextension.ReportOutputTable.ColSizeOption;
 import com.moneydance.util.CustomDateFormat;
+
+import com.moneydance.modules.features.invextension.FormattedTable.ColSizeOption;
 
 
 /** produces panel for reports
@@ -73,39 +74,35 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     private RootAccount root;
     private Preferences prefs = Prefs.reportPrefs;
     private static final String datePattern = ((SimpleDateFormat) DateFormat
-	    .getDateInstance(DateFormat.SHORT, Locale.getDefault()))
-	    .toPattern();
+                                               .getDateInstance(DateFormat.SHORT, Locale.getDefault())).toPattern();
     private static final CustomDateFormat dateFormat = new CustomDateFormat(datePattern);
-    
+
     private BulkSecInfo currentInfo;
     // Report types
     private String[] rptOptionStrings = {
-	    "By Investment Account, Then By Tradeable Securities/Account Cash",
-	    "By Ticker", "By Security Type, Then By Security SubType" };
+        "By Investment Account, Then By Tradeable Securities/Account Cash",
+        "By Ticker", "By Security Type, Then By Security SubType" };
     private String[] costBasisOptionStrings = {
-	    "Use Average Cost Basis Always", "Use Lot Matching Where Available" };
+        "Use Average Cost Basis Always", "Use Lot Matching Where Available" };
     // GUI Fields
 
-    private JButton setDefaultsButton = new javax.swing.JButton(
-	    "Reset All Fields To Default");
-    
-    private JLabel snapDateLabel = new javax.swing.JLabel(
-	    "Report Snapshot Date");
+    private JButton setDefaultsButton = new javax.swing.JButton("Reset All Fields To Default");
+
+    private JLabel snapDateLabel = new javax.swing.JLabel("Report Snapshot Date");
     private JDateField snapDateField = new JDateField(dateFormat);
-    private JLabel fromDateLabel = new javax.swing.JLabel(
-	    "Report \"From\" Date");
+    private JLabel fromDateLabel = new javax.swing.JLabel("Report \"From\" Date");
     private JDateField fromDateField = new JDateField(dateFormat);
     private JLabel toDateLabel = new javax.swing.JLabel("Report \"To\" Date");
     private JDateField toDateField = new JDateField(dateFormat);
 
     private JLabel reportOptionsLabel = new JLabel("Report Aggregation Options");
-    private JComboBox reportOptionsComboBox = new JComboBox(rptOptionStrings);
-    private JComboBox costBasisOptionsComboBox = new JComboBox(costBasisOptionStrings);
-    private JCheckBox aggregateSingleCheckBox = 
-	    new JCheckBox("Show Aggregates for Composite Reports of One Security");
-    
-    
-    
+    private JComboBox<String> reportOptionsComboBox = new JComboBox<String>(rptOptionStrings);
+    private JComboBox<String> costBasisOptionsComboBox = new JComboBox<String>(costBasisOptionStrings);
+    private JCheckBox aggregateSingleCheckBox =
+        new JCheckBox("Show Aggregates for Composite Reports of One Security");
+
+
+
     private JButton dirChooserButton = new javax.swing.JButton("Set output folder");
     private JTextField directoryOutputField = new javax.swing.JTextField();
     private JCheckBox snapReportCheckbox = new javax.swing.JCheckBox("Shapshot Report");
@@ -116,13 +113,13 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
     private JTextField reportStatusField = new javax.swing.JTextField("Choose Reports to Run");
 
     private JFileChooser chooser;
-    
+
 
 
     /** Creates new form NewJPanel */
     public ReportControlPanel(RootAccount root) {
-	this.root = root;
-	initComponents();  
+        this.root = root;
+        initComponents();
     }
 
 
@@ -131,34 +128,26 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         int todayDateInt = DateUtils.getLastCurrentDateInt();
         int yearAgoDateInt = DateUtils.addMonthsInt(todayDateInt, -12);
 
-	snapDateField.setDateInt(todayDateInt);
-	toDateField.setDateInt(todayDateInt);
-	fromDateField.setDateInt(prefs.getInt(Prefs.fromReportDate,
-		yearAgoDateInt));
+        snapDateField.setDateInt(todayDateInt);
+        toDateField.setDateInt(todayDateInt);
+        fromDateField.setDateInt(prefs.getInt(Prefs.fromReportDate,
+                                              yearAgoDateInt));
 
-	snapDateField.setHorizontalAlignment(JTextField.RIGHT); // alignment
-	toDateField.setHorizontalAlignment(JTextField.RIGHT);
-	fromDateField.setHorizontalAlignment(JTextField.RIGHT);
+        snapDateField.setHorizontalAlignment(JTextField.RIGHT); // alignment
+        toDateField.setHorizontalAlignment(JTextField.RIGHT);
+        fromDateField.setHorizontalAlignment(JTextField.RIGHT);
 
-	snapReportCheckbox.setSelected(prefs.getBoolean(Prefs.runSnapshot,
-		false));
-	fromToReportCheckbox.setSelected(prefs.getBoolean(Prefs.runFromTo,
-		false));
-	transActivityCheckbox.setSelected(prefs.getBoolean(
-		Prefs.runTransActivity, false));
-	secPricesCheckbox.setSelected(prefs.getBoolean(
-		Prefs.runSecuritiesPrices, false));
+        snapReportCheckbox.setSelected(prefs.getBoolean(Prefs.runSnapshot, false));
+        fromToReportCheckbox.setSelected(prefs.getBoolean(Prefs.runFromTo, false));
+        transActivityCheckbox.setSelected(prefs.getBoolean(Prefs.runTransActivity, false));
+        secPricesCheckbox.setSelected(prefs.getBoolean(Prefs.runSecuritiesPrices, false));
 
-	reportOptionsComboBox.setSelectedIndex(prefs.getInt(
-		Prefs.aggregationOptions, 0));
-	costBasisOptionsComboBox.setSelectedIndex(prefs.getInt(
-		Prefs.costBasisUsed, 0));
-	aggregateSingleCheckBox.setSelected(prefs.getBoolean(
-		Prefs.showSingletonAggregates, false));	
-	
-	directoryOutputField.setText(prefs.get(Prefs.exportPathPref,
-		getDefaultDirectoryPath()));
+        reportOptionsComboBox.setSelectedIndex(prefs.getInt(Prefs.aggregationOptions, 0));
+        costBasisOptionsComboBox.setSelectedIndex(prefs.getInt(Prefs.costBasisUsed, 0));
+        aggregateSingleCheckBox.setSelected(prefs.getBoolean(Prefs.showSingletonAggregates, false));    
         
+        directoryOutputField.setText(prefs.get(Prefs.exportPathPref, getDefaultDirectoryPath()));
+
 
         // Set text field width, button color
         Dimension textFields
@@ -172,20 +161,20 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
         // button action listeners
         setDefaultsButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-		public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setDefaultsButtonActionPerformed(evt);
-            }
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    setDefaultsButtonActionPerformed(evt);
+                }
 
-	 });
+            });
         dirChooserButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
-		public void actionPerformed(java.awt.event.ActionEvent evt) {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
                     dirChooserButtonActionPerformed(evt);
                 }});
         runReportsButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
-		public void actionPerformed(java.awt.event.ActionEvent evt) {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
                     runReportsButtonActionPerformed(evt);
                 }});
 
@@ -199,8 +188,8 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         // Set all panel borders the same
         String[] titles = { "Report Dates", "Reports to Run", "Report Options",
                             "Download Location", "Report Status" };
-	JPanel[] panels = { datePanel, reportsToRunPanel, reportOptionsPanel,
-		folderPanel, runPanel };
+        JPanel[] panels = { datePanel, reportsToRunPanel, reportOptionsPanel,
+                            folderPanel, runPanel };
 
         for (int i = 0; i < panels.length; i++) {
             TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
@@ -260,7 +249,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         reportOptionsPanel.add(costBasisOptionsComboBox, c);
         c.gridy = 3;
         reportOptionsPanel.add(aggregateSingleCheckBox, c);
-        
+
         // directory sub-panel
         folderPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
@@ -283,23 +272,23 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         runPanel.add(reportStatusField, c);
 
         // lay out main panel
-        this.setLayout(new GridBagLayout());	
+        this.setLayout(new GridBagLayout());    
         c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
-        
+
         //add setDefaultsButton
         c.gridwidth = 2;
         c.anchor = GridBagConstraints.WEST;
         c.fill = GridBagConstraints.NONE;
         c.gridx = 0;
-	c.gridy = 0;
+        c.gridy = 0;
         this.add(setDefaultsButton, c);
-        
+
         //fill in side-by-side panels
         c.gridwidth = 1;
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.BOTH; //fill all components
-       
+
         c.gridwidth = 1;
         // add date sub-panel to left
         c.gridy = 1;
@@ -313,7 +302,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         c.anchor = GridBagConstraints.CENTER;
         c.gridwidth = 2;
         c.gridx = 0;
-        
+
         //add Report options sub-panel
         c.gridy = 2;
         this.add(reportOptionsPanel, c);
@@ -333,36 +322,36 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         this.add(runPanel, c);
 
     }
-    
+
     public static String getDateFormat(){
-   	return datePattern;
-       }
-    
+        return datePattern;
+    }
+
     private String getDefaultDirectoryPath() {
-	String defaultPath = root.getDataFile().getParentFile()
-		.getAbsolutePath();
-	File defaultPathFolder = new File(defaultPath);
-	if (defaultPathFolder.canWrite()) {
-	    return defaultPath;
-	} else {
-	    return System.getProperty("user.home");
+        String defaultPath = root.getDataFile().getParentFile()
+            .getAbsolutePath();
+        File defaultPathFolder = new File(defaultPath);
+        if (defaultPathFolder.canWrite()) {
+            return defaultPath;
+        } else {
+            return System.getProperty("user.home");
 
-	}
+        }
 
     }
-    
+
     private void openBrowserToDownloadFile() throws IOException {
-	if (Desktop.isDesktopSupported()) {
-	    Desktop desktop = Desktop.getDesktop();
-	    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-		File sampleFolder = new File(directoryOutputField.getText());
-		desktop.browse(sampleFolder.toURI());
-	    }
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                File sampleFolder = new File(directoryOutputField.getText());
+                desktop.browse(sampleFolder.toURI());
+            }
 
-	}
-	
+        }
+        
     }
-    
+
 
     /**set Date Fields
      * @param fromDateInt
@@ -370,15 +359,15 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
      * @param snapDateInt
      */
     public void setDates(int fromDateInt, int toDateInt, int snapDateInt){
-	fromDateField.setDateInt(fromDateInt);
-	toDateField.setDateInt(toDateInt);
-	snapDateField.setDateInt(snapDateInt);
-        
-        
+        fromDateField.setDateInt(fromDateInt);
+        toDateField.setDateInt(toDateInt);
+        snapDateField.setDateInt(snapDateInt);
+
+
     }
-    
+
     private void setDefaultsButtonActionPerformed(ActionEvent evt) {
-	setDefaultPreferences();
+        setDefaultPreferences();
     }
 
     private void dirChooserButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -396,54 +385,61 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         } else {
             implGainsCalc = new GainsLotMatchCalc();
         }
-        
+
         if(this.root != null) {
             try {
-		this.currentInfo = new BulkSecInfo(this.root, implGainsCalc);
-	    } catch (Exception e) {
-		File errorFile = new File(directoryOutputField.getText()
-			+ "\\IRBaseErrorlog.txt");
-		StringBuffer erLOG = getStackTrace(e);
-		IOUtils.writeResultsToFile(erLOG, errorFile);
-	    }
+                this.currentInfo = new BulkSecInfo(this.root, implGainsCalc);
+            } catch (Exception e) {
+                File errorFile = new File(directoryOutputField.getText()
+                                          + "\\IRBaseErrorlog.txt");
+                StringBuffer erLOG = getStackTrace(e);
+                IOUtils.writeResultsToFile(erLOG, errorFile);
+            }
         } else {
             this.currentInfo = null;
         }
 
         try {
-            
-	    int reportType = reportOptionsComboBox.getSelectedIndex();
-	    Class<?> firstAggClass = null;
-	    Class<?> secondAggClass = null;
-	    Boolean catHierarchy = false;
-	    Boolean rptOutputSingle = aggregateSingleCheckBox.isSelected() ? true
-		    : false;
-	    if (reportType == 2) {
-		firstAggClass = SecurityTypeWrapper.class;
-		secondAggClass = SecuritySubTypeWrapper.class;
-		catHierarchy = true; //Sub Type is subset of SecurityType
-	    } else if (reportType == 1) {
-		firstAggClass = CurrencyWrapper.class;
-		secondAggClass = AllAggregate.class;
-	    } else {
-		firstAggClass = InvestmentAccountWrapper.class;
-		secondAggClass = Tradeable.class;
-	    }
-            
-	    if (snapReportCheckbox.isSelected()) {
-		int snapDateInt = snapDateField.getDateInt();
-		TotalReport report = new TotalSnapshotReport(currentInfo,
-			firstAggClass, secondAggClass, catHierarchy,
-			rptOutputSingle, snapDateInt);
-		displayReport(report);
+
+            int reportType = reportOptionsComboBox.getSelectedIndex();
+            Class<?> firstAggClass = null;
+            Class<?> secondAggClass = null;
+            Boolean catHierarchy = false;
+            Boolean rptOutputSingle = aggregateSingleCheckBox.isSelected() ? true
+                : false;
+            if (reportType == 2) {
+                firstAggClass = SecurityTypeWrapper.class;
+                secondAggClass = SecuritySubTypeWrapper.class;
+                catHierarchy = true; //Sub Type is subset of SecurityType
+            } else if (reportType == 1) {
+                firstAggClass = CurrencyWrapper.class;
+                secondAggClass = AllAggregate.class;
+            } else {
+                firstAggClass = InvestmentAccountWrapper.class;
+                secondAggClass = Tradeable.class;
+            }
+
+            if (snapReportCheckbox.isSelected()) {
+                int snapDateInt = snapDateField.getDateInt();
+                TotalReport report = new TotalSnapshotReport(currentInfo,
+                                                             firstAggClass,
+                                                             secondAggClass,
+                                                             catHierarchy,
+                                                             rptOutputSingle,
+                                                             snapDateInt);
+                displayReport(report);
             }
 
             if (fromToReportCheckbox.isSelected()) {
                 int fromDateInt = fromDateField.getDateInt();
                 int toDateInt = toDateField.getDateInt();
                 TotalReport report = new TotalFromToReport(currentInfo,
-			firstAggClass, secondAggClass, catHierarchy,
-			rptOutputSingle, fromDateInt, toDateInt);
+                                                           firstAggClass,
+                                                           secondAggClass,
+                                                           catHierarchy,
+                                                           rptOutputSingle,
+                                                           fromDateInt,
+                                                           toDateInt);
                 displayReport(report);
             }
 
@@ -453,7 +449,8 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
                 File transActivityReportFile
                     = new File(directoryOutputField.getText() + "\\transActivityReport.csv");
                 IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
-                                            transActivityReport, transActivityReportFile);
+                                            transActivityReport,
+                                            transActivityReportFile);
             }
             if (secPricesCheckbox.isSelected()) {
                 ArrayList<String[]> secPricesReport
@@ -464,12 +461,12 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
                                             secPricesReport,
                                             secPricesReportFile);
             }
-            
-	    if (transActivityCheckbox.isSelected()
-		    || secPricesCheckbox.isSelected()) {
-		openBrowserToDownloadFile();
-	    }
-	    
+
+            if (transActivityCheckbox.isSelected()
+                || secPricesCheckbox.isSelected()) {
+                openBrowserToDownloadFile();
+            }
+        
         } catch (Exception e) {
             File errorFile = new File(directoryOutputField.getText() + "\\IRRerportErrors.txt");
             StringBuffer erLOG = getStackTrace(e);
@@ -481,107 +478,107 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
 
     private void displayReport(TotalReport<?, ?> report) throws SecurityException,
-	    IllegalArgumentException, NoSuchFieldException,
-	    IllegalAccessException {
-	ReportTableModel model = new ReportTableModel(report.getReportTable(),
-		report.getReportHeader());
+        IllegalArgumentException, NoSuchFieldException,
+        IllegalAccessException {
+        ReportTableModel model = new ReportTableModel(report.getReportTable(),
+                                                      report.getReportHeader());
 
-	ReportOutputTable.CreateAndShowTable(model, report.getColumnTypes(),
-		report.getClosedPosColumn(), report.getFrozenColumn(),
-		report.getFirstSortColumn(), report.getSecondSortColumn(),
-		ColSizeOption.MAXCONTCOLRESIZE, report.getReportTitle());
+        ReportOutputTable.CreateAndShowTable(model,
+                                             report.getColumnFormats(),
+                                             report.getClosedPosColumn(),
+                                             report.getFrozenColumn(),
+                                             report.getFirstSortColumn(),
+                                             report.getSecondSortColumn(),
+                                             ColSizeOption.MAXCONTCOLRESIZE,
+                                             report.getReportTitle(),
+                                             report.getRowBackgrounds());
     }
 
 
     public static void main(String[] args) {
-	ReportControlPanel testPanel = new ReportControlPanel(null);
-	@SuppressWarnings("unused")
-	TestFrame frame = new TestFrame(testPanel);
+        ReportControlPanel testPanel = new ReportControlPanel(null);
+        @SuppressWarnings("unused")
+            TestFrame frame = new TestFrame(testPanel);
     }
-    
-    
+
+
     public static class TestFrame extends JFrame {
-	private static final long serialVersionUID = 2202318227772787528L;
-	public TestFrame(final ReportControlPanel testPanel) {
-	    this.setTitle("Test Investment Reports Panel");
-	    testPanel.setOpaque(true);
-	    this.setContentPane(testPanel);
-	    this.addWindowListener(new WindowListener() {
-	        @Override
-	        public void windowOpened(WindowEvent e) {
-	        }
-	        @Override
-	        public void windowIconified(WindowEvent e) {
-	        }
-	        @Override
-	        public void windowDeiconified(WindowEvent e) {
-	        }
-	        @Override
-	        public void windowDeactivated(WindowEvent e) {
-	        }
-	        @Override
-	        public void windowClosing(WindowEvent e) {
-	            testPanel.savePreferences();
-	        }
-	        @Override
-	        public void windowClosed(WindowEvent e) {
-	    	e.getWindow().setVisible(false);
-	    	e.getWindow().dispose();
-	    	System.exit(0);
-	        }
-	        @Override
-	        public void windowActivated(WindowEvent e) {
-	        }
-	    });
-	    this.pack();
-	    AwtUtil.centerWindow(this);
-	    this.setVisible(true);
-	}
+        private static final long serialVersionUID = 2202318227772787528L;
+        public TestFrame(final ReportControlPanel testPanel) {
+            this.setTitle("Test Investment Reports Panel");
+            testPanel.setOpaque(true);
+            this.setContentPane(testPanel);
+            this.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+                    }
+                    @Override
+                    public void windowIconified(WindowEvent e) {
+                    }
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {
+                    }
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {
+                    }
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        testPanel.savePreferences();
+                    }
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        e.getWindow().setVisible(false);
+                        e.getWindow().dispose();
+                        System.exit(0);
+                    }
+                    @Override
+                    public void windowActivated(WindowEvent e) {
+                    }
+                });
+            this.pack();
+            AwtUtil.centerWindow(this);
+            this.setVisible(true);
+        }
     }
-    
+
     public void setDefaultPreferences() {
 
-	int todayDateInt = DateUtils.getLastCurrentDateInt();
+        int todayDateInt = DateUtils.getLastCurrentDateInt();
         int yearAgoDateInt = DateUtils.addMonthsInt(todayDateInt, -12);
 
-	snapDateField.setDateInt(todayDateInt);
-	toDateField.setDateInt(todayDateInt);
-	fromDateField.setDateInt(yearAgoDateInt);
-	
-	snapReportCheckbox.setSelected(false);
-	fromToReportCheckbox.setSelected(false);
-	transActivityCheckbox.setSelected(false);
-	secPricesCheckbox.setSelected(false);
+        snapDateField.setDateInt(todayDateInt);
+        toDateField.setDateInt(todayDateInt);
+        fromDateField.setDateInt(yearAgoDateInt);
+        
+        snapReportCheckbox.setSelected(false);
+        fromToReportCheckbox.setSelected(false);
+        transActivityCheckbox.setSelected(false);
+        secPricesCheckbox.setSelected(false);
 
-	reportOptionsComboBox.setSelectedIndex(0);
-	costBasisOptionsComboBox.setSelectedIndex(0);
-	aggregateSingleCheckBox.setSelected(false);
-	
-	directoryOutputField.setText(getDefaultDirectoryPath());
+        reportOptionsComboBox.setSelectedIndex(0);
+        costBasisOptionsComboBox.setSelectedIndex(0);
+        aggregateSingleCheckBox.setSelected(false);
+        
+        directoryOutputField.setText(getDefaultDirectoryPath());
     }
 
-    
-    
-    
+
+
+
     public void savePreferences() {
 
-	prefs.putInt(Prefs.fromReportDate, fromDateField.getDateInt());
+        prefs.putInt(Prefs.fromReportDate, fromDateField.getDateInt());
 
-	prefs.putBoolean(Prefs.runSnapshot, snapReportCheckbox.isSelected());
-	prefs.putBoolean(Prefs.runFromTo, fromToReportCheckbox.isSelected());
-	prefs.putBoolean(Prefs.runTransActivity,
-		transActivityCheckbox.isSelected());
-	prefs.putBoolean(Prefs.runSecuritiesPrices,
-		secPricesCheckbox.isSelected());
+        prefs.putBoolean(Prefs.runSnapshot, snapReportCheckbox.isSelected());
+        prefs.putBoolean(Prefs.runFromTo, fromToReportCheckbox.isSelected());
+        prefs.putBoolean(Prefs.runTransActivity, transActivityCheckbox.isSelected());
+        prefs.putBoolean(Prefs.runSecuritiesPrices, secPricesCheckbox.isSelected());
 
-	prefs.putInt(Prefs.aggregationOptions,
-		reportOptionsComboBox.getSelectedIndex());
-	prefs.putInt(Prefs.costBasisUsed,
-		costBasisOptionsComboBox.getSelectedIndex());
-	prefs.putBoolean(Prefs.showSingletonAggregates,
-		aggregateSingleCheckBox.isSelected());
-	
-	prefs.put(Prefs.exportPathPref, directoryOutputField.getText());
+        prefs.putInt(Prefs.aggregationOptions, reportOptionsComboBox.getSelectedIndex());
+        prefs.putInt(Prefs.costBasisUsed, costBasisOptionsComboBox.getSelectedIndex());
+        prefs.putBoolean(Prefs.showSingletonAggregates, aggregateSingleCheckBox.isSelected());
+        
+        prefs.put(Prefs.exportPathPref, directoryOutputField.getText());
 
     }
 
@@ -594,15 +591,14 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                               + chooser.getSelectedFile().getAbsolutePath());
+            System.out.println("getCurrentDirectory(): " + chooser.getSelectedFile().getAbsolutePath());
             directoryOutputField.setText(chooser.getSelectedFile().getAbsolutePath());
         } else {
             System.out.println("No Selection ");
         }
     }
-    
-   
+
+
 
 
     public static StringBuffer getStackTrace(Exception e) {
@@ -635,17 +631,17 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
 
         @Override
-	public int getColumnCount() {
+        public int getColumnCount() {
             return columnNames.length;
         }
 
         @Override
-	public int getRowCount() {
+        public int getRowCount() {
             return data.length;
         }
 
         @Override
-	public String getColumnName(int col) {
+        public String getColumnName(int col) {
             return columnNames[col];
         }
 
@@ -654,19 +650,19 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
         }
 
         @Override
-	public Object getValueAt(int row, int col) {
+        public Object getValueAt(int row, int col) {
             return data[row][col];
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Class getColumnClass(int c) {
+        @Override
+        public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();
         }
 
         // Allows table to be editable
         @Override
-	public boolean isCellEditable(int row, int col) {
+        public boolean isCellEditable(int row, int col) {
             // Note that the data/cell address is constant, no matter where the
             // cell appears onscreen.
             return col >= 2;
@@ -674,7 +670,7 @@ public class ReportControlPanel extends javax.swing.JPanel { //implements Action
 
         // allows table to be editable
         @Override
-	public void setValueAt(Object value, int row, int col) {
+        public void setValueAt(Object value, int row, int col) {
             data[row][col] = value;
             fireTableCellUpdated(row, col);
         }

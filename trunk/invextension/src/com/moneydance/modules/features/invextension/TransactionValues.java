@@ -220,7 +220,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
             this.expense = this.expense + thisSplit.splitExpense;
             this.transfer = this.transfer + thisSplit.splitTransfer;
             this.secQuantity = this.secQuantity + thisSplit.splitSecQuantity;
-
         }
         
         //fill in rest of transValues
@@ -369,6 +368,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 		} else {
 		    this.buy = -thisTransfer;
 		}
+
 	    } else if (thisTransfer < 0.0) {// transfer out
 		if (prevPos > 0.0) {
 		    this.sell = Math.min(-thisTransfer, prevPos);
@@ -428,6 +428,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
 	    // net effect on cash
 	    break;
 	
+        default:
+            throw new AssertionError(txnType);
 	}
     	
 	this.secQuantity = -this.buy - this.coverShort - this.sell
@@ -627,10 +629,10 @@ public double getSecQuantity() {
      * @return
      */
     public Integer getTxnSortOrder() {
-        InvestTxnType transType = this.parentTxn != null ? 
+        InvestTxnType txnType = this.parentTxn != null ? 
         	TxnUtil.getInvestTxnType(parentTxn) : InvestTxnType.BANK;
         Integer txnOrder = 0;
-        switch (transType) {
+        switch (txnType) {
             case BUY:
                 txnOrder = 0;
                 break;
@@ -667,6 +669,8 @@ public double getSecQuantity() {
             case BANK:
                 txnOrder = 11;
                 break;
+        default:
+            throw new AssertionError(txnType);
         }
         return txnOrder;
     }
@@ -774,12 +778,16 @@ public double getSecQuantity() {
 		case Account.ACCOUNT_TYPE_BANK:
 		case Account.ACCOUNT_TYPE_ASSET:
 		case Account.ACCOUNT_TYPE_LIABILITY:
+                case Account.ACCOUNT_TYPE_CREDIT_CARD:
+                case Account.ACCOUNT_TYPE_LOAN:
 		    if (split.getAccount() == accountRef) {
 			this.splitTransfer = -amountDouble;
 		    } else {
 			this.splitTransfer = amountDouble;
 		    }
 		    break;
+                default:
+                    throw new AssertionError(txnType);
 		}
 		break;
 	    case DIVIDEND:
@@ -809,6 +817,8 @@ public double getSecQuantity() {
 		case Account.ACCOUNT_TYPE_INCOME:
 		    this.splitIncome = amountDouble;
 		    break;
+                default:
+                    throw new AssertionError(txnType);
 		}
 		break;
 	    case COVER:// short covers + commission
@@ -823,6 +833,8 @@ public double getSecQuantity() {
 		case Account.ACCOUNT_TYPE_INCOME:
 		    this.splitIncome = amountDouble;
 		    break;
+                default:
+                    throw new AssertionError(txnType);
 		}
 		break;
 	    case MISCINC: // misc income and expense
@@ -852,6 +864,8 @@ public double getSecQuantity() {
 		    this.splitSecQuantity = valueDouble;//of capital 
 		    //possible treatment of dividend payment of short
 		    break;
+                default:
+                    throw new AssertionError(txnType);
 		}
 		break;
 	    case DIVIDEND_REINVEST: // income and buy with no net cash effect
@@ -866,7 +880,12 @@ public double getSecQuantity() {
 		    this.splitBuy = amountDouble;
 		    this.splitSecQuantity = valueDouble;
 		    break;
+                default:
+                    throw new AssertionError(txnType);
 		}
+                break;
+            default:
+                throw new AssertionError(txnType);
 	    } // end txnType Switch Statement
 	} // end splitValues Constructor
     } // end splitValues subClass
