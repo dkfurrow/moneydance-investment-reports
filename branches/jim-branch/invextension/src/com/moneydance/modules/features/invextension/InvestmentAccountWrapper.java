@@ -40,7 +40,7 @@ import com.moneydance.apps.md.model.SecurityType;
  * @author Dale Furrow
  * 
  */
-public class InvestmentAccountWrapper extends Aggregator implements IAccount {
+public class InvestmentAccountWrapper extends Aggregator implements IAccount, Comparable<InvestmentAccountWrapper> {
     // associated Investment Account
     private InvestmentAccount investmentAccount;
     // Account Number
@@ -281,4 +281,8 @@ public class InvestmentAccountWrapper extends Aggregator implements IAccount {
 	return this.investmentAccount;
     }
 
+    @Override
+    public int compareTo(InvestmentAccountWrapper o) {
+	return o.getName().compareTo(this.getName());
+    }
 }
