@@ -1,5 +1,5 @@
 /* TransactionValues.java
- * Copyright 2011 Dale K. Furrow . All rights reserved.
+ * Copyright 2011 Dale K. Furrow. All rights reserved.
  * Redistribution and use in source and binary forms, with or without 
  * modification, are permitted provided that the following conditions are met:
  * 
@@ -221,7 +221,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
             this.transfer = this.transfer + thisSplit.splitTransfer;
             this.secQuantity = this.secQuantity + thisSplit.splitSecQuantity;
         }
-        
         //fill in rest of transValues
 	TransactionValues prevTransLine = prevTransLines.isEmpty() ? null : prevTransLines
 		.last();
@@ -240,7 +239,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
 	// mktPrice (Set to 1 if cur is null: Implies (Cash) Investment Account
 	this.mktPrice = (cur == null ? 1.0 : 1 / cur
 		.getUserRateByDateInt(currentDateInt));
-
 	// position
 	if (prevTransLine == null) { // first transaction (buy || shortSell) 
 	    this.position = this.secQuantity;
@@ -295,21 +293,19 @@ public class TransactionValues implements Comparable<TransactionValues> {
 		}
 	    }
 	}
-	
 	// Period Realized gains
 	if (this.sell > 0) { // sale transaction
 	    this.perRealizedGain = (this.sell + this.commision)
-		    + (this.longBasis - prevTransLine.longBasis) ;
+		    + (this.longBasis - (prevTransLine == null ? 0.0 : prevTransLine.longBasis));
 	} else if (this.coverShort < 0) { // cover transaction
 	    this.perRealizedGain = (this.coverShort + this.commision)
-		    + (this.shortBasis - prevTransLine.shortBasis);
+		    + (this.shortBasis - (prevTransLine == null ? 0.0 : prevTransLine.shortBasis));
 	} else {
 	    // implies for closed pos, cumUnrealized-cumRealized =
 	    // commission (on last trade)
 	    this.perRealizedGain = 0;
 	}
 	
-
 	// period income/expense
 	this.perIncomeExpense = this.income + this.expense;
 	
@@ -321,7 +317,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
 	this.cumTotalGain = prevTransLine == null ? this.perTotalGain : 
 	    this.perTotalGain + prevTransLine.cumTotalGain;
 	
-
     }
     /**Generic Constructor for TransactionValues which are inserted into
      * synthetically created cash account
