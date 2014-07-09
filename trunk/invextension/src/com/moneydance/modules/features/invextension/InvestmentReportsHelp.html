@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>help file v2</title>
+
+</head>
+<body>
+<h1>Investment Reports Extension: Help/Notes:</h1>
+The Investment Reports Extension (invextension.mxt) is a set of four useful investment reports which are displayed in
+table form or downloaded in .csv form to a directory of the user's choosing. Reports are detailed below, and a basic
+overview of classes is provided.&nbsp; Reference website is:&nbsp;<a
+        href="http://code.google.com/p/moneydance-investment-reports/">http://code.google.com/p/moneydance-investment-reports/</a>.&nbsp;Email
+for more info is: dkfurrow@gmail.com.
+<h2>Report Control Panel--Options:</h2>
+<ol>
+    <li>Aggregation Options: Specifies how securities in different accounts will be summarized: choices are:<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>USE AGGREGATION METHOD IN SAVED REPORT:&nbsp; Uses
+                the aggregation method (as noted in (b)-(d)) that is in the saved report configuration (see Report
+                Configuration help below). If one of the options (b)-(d) is selected, that value&nbsp;<span
+                        style="font-style: italic; font-weight: bold;">will override whatever value is saved in the selected Report Configuration.</span>
+            </li>
+            <li>By Investment Account, Then By Tradeable Securities/Account Cash&lt;/i&gt;: Aggregates by Investment
+                Account, and then, within each investment account, breaks out performance data for all tradeable
+                investments (e.g. Stocks/Bonds/Mutual Funds) and uninvested cash.<span
+                        style="font-style: italic;"></span><span style="font-style: italic; font-weight: bold;"></span>
+            </li>
+            <li>Aggregates by Security (regardless of which investment account). For example, if IBM is held in a
+                taxable investment account and 401K, the aggregate will show total performance for IBM for both
+                accounts.
+            </li>
+        </ol>
+    </li>
+    <li>Basis Options: Determines whether security basis always defaults to average cost, or uses lot matching (on
+        accounts where the user has enabled it). Please note that Moneydance currently only offers lot matching on long
+        positions.
+    </li>
+    <li>Download Location: Sets the download location for the Transaction Activity and Security Prices downloads. Note:
+        if report generation generates any errors, the log file will also be in the download location.
+    </li>
+    <li>
+        Date Range: A Date Range consists of <i>either</i>
+        <ol style="list-style-type: lower-alpha;">
+            <li>
+                a Rule Input (i.e. sets a reference date and a date rule [e.g."quarter-to-date"]) <i>or</i>
+            </li>
+            <li>
+                Direct Input: A set of fixed dates (from/to dates in the case of the 'From/To' Report, snapshot case in
+                the case of the Snapshot Report. <i><b>A Rule Input will override (and automatically refresh) any inputs
+                in the Direct Input area.</b></i>
+            </li>
+        </ol>
+    </li>
+    <li>Report Dates: Set effective dates for Snapshot Reports and "From/To" Performance reports, as detailed below.
+    </li>
+    <li> Reports to Run: Selects which reports to run.<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>'From-To' Reports describe investment performance over a prescribed period of time.</li>
+            <li>Snapshot Reports describe investment performance on a specific date</li>
+            <li>Transaction Activity and Securities Prices are downloaded reports which contain all investment and
+                pricing activity, respectively.
+            </li>
+        </ol>
+    </li>
+    <li>Run Reports or Customize<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li><b>Run Reports</b> runs selected reports as outlined in (6).</li>
+            <li><b>Customize Reports</b> opens the Customize Report Configuration Dialog.</li>
+        </ol>
+    </li>
+</ol>
+<h2>Customize Report Configuration--Options:</h2>
+<ol>
+    <li>Saved Reports list current saved reports under either the 'From-To' or Snapshot Trees. The default configuration
+        is always listed first. Select the default configuration (or other saved configuration) to begin.
+    </li>
+    <li>Save Current Configuration: Saves all data under the given report name. Please note that the name "default" is
+        reserved. The default report cannot be removed or saved over.
+    </li>
+    <li>Report Name: provide an easy-to-remember name for your report.</li>
+    <li>Report Aggregation Options: in accordance with above.</li>
+    <li>Show Aggregates for Single Row: If enabled, prints composite report lines even if the composite consists of one
+        security (e.g. if IBM is held in only one investment account, the report will include 2 lines for IBM, as a
+        single security and as an aggregate). Uncheck to suppress printing of single-security composites.
+    </li>
+    <li>Display Number Of Frozen Columns: The report output consists of a table with fixed (i.e. non-scrollable) columns
+        on the left side. Choose how many columns are fixed.
+    </li>
+    <li>Hide Closed Positions: Controls whether closed positions are shown in report output.</li>
+    <li>Date Range: in accordance with above.</li>
+    <li>Field Chooser Tab: Choose which of the available fields will be shown in report output, and the order of viewed
+        fields.
+    </li>
+</ol>
+<h2>Reports:</h2>
+
+<p>Definitons:</p>
+
+<p>Each report line item represents either a Security or a Composite. A Security represents a unique accounting unit in
+    Moneydance. For example, if IBM is held in two different investment accounts, then each holding represents a unique
+    Security. A composite is a grouping of securities based on common characteristics. For example, the user can choose
+    to aggregate &lt;i&gt;By Ticker&lt;/i&gt;, and that option will form composites of all securities with a common
+    ticker (i.e. CurrencyType in the language of the Moneydance API). For the example just cited, the Composite will
+    consist of both IBM holdings, presumably held in different investment accounts.<br>
+    Color Coding/Hide Closed Positions: Both From/To Report and Portfolio snapshot report use color coding to represent
+    Composite. Light Gray represents secondary Composites, Dark Gray represents primary Composites, and Green represents
+    All Securities. Secondary Composites combine to produce Primary Composites, and Primary Composites combine to
+    produce the ALL Securities line. Double-clicking a security in any report allows the user to edit security
+    properties.</p>
+<ol>
+    <li>"From/To" Report (FromDate, ToDate)<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>InvAcct: Investment Account: The investment account in which securities and cash are held.</li>
+            <li>Security: Either a designated security, or one of 3 aggregated values:<br>
+                <ol style="list-style-type: lower-roman;">
+                    <li>Securities-ALL represents aggregated securities</li>
+                    <li>Securities/CASH-ALL represents aggregated securities plus uninvested cash</li>
+                    <li>CASH represents uninvested cash</li>
+                </ol>
+            </li>
+            <li>
+                SecType: User defined Security Type as recorded in Moneydance. Please Note: Security Type and SubType
+                are managed in Moneydance at the account level: thus it is entirely possible to characterize the same
+                traded security differently in two accounts. For example, IBM can be listed as a "Bond", "Municipal" in
+                one account and a "Stock", "Large-Cap" in another. This report is not designed to check for such
+                potential discrepancies.
+            </li>
+            <li>SecSubType: User defined Security Sub Type as recorded in Moneydance (see note above).</li>
+            <li>Ticker: Ticker symbol for security, "No Ticker" if security has no ticker.</li>
+            <li>StartPos: Position in security on the "From" Date</li>
+            <li>EndPos: Position in security on the "To" Date</li>
+            <li>StartPrice: Price in security on the "From" Date</li>
+            <li>End Price: Price in security on the "To" Date</li>
+            <li>StartValue: StartPos * StartValue</li>
+            <li>EndValue: EndPos * EndValue</li>
+            <li>buy: aggregate purchases between "From" and "To" dates(includes commission)</li>
+            <li>sell: aggregate sales between "From" and "To" dates(includes commission)</li>
+            <li>shortSell: aggregate short sales between "From" and "To" dates (includes commission)</li>
+            <li>coverShort: aggregate short cover transactions between "From" and "To" dates (includes commission)</li>
+            <li>income: aggregate income between "From" and "To" dates</li>
+            <li>expense: aggregate expense between "From" and "To"
+                dates, excluding commission
+            </li>
+            <li>longBasis: cost basis of securities with long positions on "To" date</li>
+            <li>shortBasis: cost basis of securities with short positions on "To" date</li>
+            <li>realizedGain: realized gain (against cost basis) of securities between "From" and "To" dates</li>
+            <li>unrealizedGain: unrealized gain (against cost basis) of securities between "From" and "To" dates</li>
+            <li>periodReturn: sum of realizedGain and unrealizedGain</li>
+            <li>percentReturn: Total Return between "From" and "To" date</li>
+            <li>annualPercentReturn: Annualized Percent Return between
+                "From" and "To" date.
+            </li>
+        </ol>
+    </li>
+    <li>
+        Portfolio Snapshot Report: (SnapDate)<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>First 5 Columns: See From/To Report above.</li>
+            <li>LastPrice: The price of the security on the Report Date.</li>
+            <li>End Pos: Position in security on the Report Date</li>
+            <li>AbsPrcChg: Absolute Price Change: difference in between LastPrice and the price on the business day
+                prior to the Report Date.
+            </li>
+            <li>AbsValChg: Absolute Value Change: AbsPrcChg * EndPos</li>
+            <li>PctPrcChg: Percentage Price Change: percent difference in between LastPrice and the price on the
+                business day prior to the Report Date.
+            </li>
+            <li>TR1Day: Total Return between report date and the previous business day.</li>
+            <li>TR1Wk: Total Return between report date and one week prior.</li>
+            <li>TR1Mth: Total Return between report date and one month prior.</li>
+            <li>TR3Mth: Total Return between report date and three months prior.</li>
+            <li>TRYTD: Total Return between report date and the end of the previous year.</li>
+            <li>TR1Year: Total Return between report date and one year prior.</li>
+            <li>TR3Year: Total Return between report date and 3 years prior.</li>
+            <li>TR_All: Total Return since inception of security/investment account.</li>
+            <li>AnnRet_All: Annualized Return since inception of security/investment account.</li>
+            <li>Long Basis: cost basis of securities with long positions as of the snapshot date.</li>
+            <li>Short Basis: cost basis of securities with short positions as of the snapshot date.</li>
+            <li>Income: Income associated with security/investment account since inception.</li>
+            <li>Ann. Div: Annualized Dividend--Dividend quantity from the security/composite, expressed as an annualized
+                calculation.
+            </li>
+            <li>Div Yield: Annualized Dividend divided by total long value.</li>
+            <li>Yield On Basis: Annualized Dividend divided by long basis.</li>
+            <li>Rlzd Gain: cumulative realized gain (against cost basis) of securities as of the snapshot date</li>
+            <li>Unlzd Gain: cumulative unrealized gain (against cost basis) of securities as of the snapshot date</li>
+            <li>TotGain: Realized + Unrealized Gain for a security/investment account since inception.</li>
+        </ol>
+    </li>
+    <li>
+        Transaction Activity Report:<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>Parent Account: Investment Account</li>
+            <li>Security: Security or Investment Account associated with transaction</li>
+            <li>Ticker: Security Ticker (note: if security has no ticker a unique identifier is assigned during report
+                intialization).
+            </li>
+            <li>DivFreqency: Estimated Dividend Frequency (e.g. "ANNUAL", "QUARTERLY", "BIANNUAL", "MONTHLY",
+                "UNKNOWN")
+            </li>
+            <li>TxnNum: Transaction Number (Parent Transaction) assigned by Moneydance</li>
+            <li>Date: Date of transaction</li>
+            <li>TxnType: Type of Parent Transaction, in accordance with the following table:<br>
+                <br>
+                <table style="text-align: left; width: 513px; height: 370px;" border="1" cellpadding="2"
+                       cellspacing="2">
+                    <tbody>
+                    <tr>
+                        <td style="width: 86px; font-weight: bold;">Report
+                            Output
+                        </td>
+                        <td style="width: 183px; font-weight: bold;">Moneydance
+                            Enum Name
+                        </td>
+                        <td style="font-weight: bold;">Integer Value</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"Bank"</td>
+                        <td style="width: 183px;">TXN_TYPE_BANK</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"Buy"</td>
+                        <td style="width: 183px;">TXN_TYPE_BUY</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"BuyTransfer"</td>
+                        <td style="width: 183px;">TXN_TYPE_BUY_XFER</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"ConverShort"</td>
+                        <td style="width: 183px;">TXN_TYPE_COVER</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"Dividend"</td>
+                        <td style="width: 183px;">TXN_TYPE_DIVIDEND</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"DivReinvest"</td>
+                        <td style="width: 183px;">TXN_TYPE_DIVIDEND_REINVEST</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"DivTransfer"</td>
+                        <td style="width: 183px;">TXN_TYPE_DIVIDENDXFR</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"MiscExpense"</td>
+                        <td style="width: 183px;">TXN_TYPE_MISCEXP</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"MiscIncome"</td>
+                        <td style="width: 183px;">TXN_TYPE_MISCINC</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"Sell"</td>
+                        <td style="width: 183px;">TXN_TYPE_SELL</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"SellTransfer"</td>
+                        <td style="width: 183px;">TXN_TYPE_SELL_XFER</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 86px;">"ShortSell"</td>
+                        <td style="width: 183px;">TXN_TYPE_SHORT</td>
+                        <td>6</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+            <br>
+            <li>
+                Desc: Description field of transaction (Parent Transaction)
+            </li>
+            <li>Buy: Dollar amount of security purchased</li>
+            <li>Sell: Dollar amount of security sold</li>
+            <li>Short: Dollar amount of security sold short</li>
+            <li>Cover: Dollar amount of security short-covered</li>
+            <li>Dollar amount of commission associated with buy/sell/short/cover</li>
+            <li>Income: Dollar amount of income</li>
+            <li>Expense: Dollar amount of expense</li>
+            <li>Transfer: Dollar amount of transfer (positive indicates transfer-in)</li>
+            <li>cashEffect: sum of Buy/Sell/Short/Cover/Commission/Income/Expense/Transfer</li>
+            <li>secQuantity: security quantity associated with transaction</li>
+            <li>MktPrice: Market Price of security on transaction date</li>
+            <li>Position: Total Split-Adjusted position in security after accounting for transaction.</li>
+            <li>Long Basis: Cost basis of security with long position (includes commission)</li>
+            <li>Short Basis: Cost basis of security with short position (includes commission)</li>
+            <li>Open Value: Mark-to-Market value of security (market price * position)</li>
+            <li>CumUnrealGain: Open Value compared to long/short basis:</li>
+            <li>PerUnrealGain: Unrealized gain from previous transaction to current transaction</li>
+            <li>PerRealGain: Realized gain from Sell/Short Cover transaction against long/short basis.</li>
+            <li>PerInc/Exp: Sum of transaction income/expense</li>
+            <li>PerTotalGain: period unrealized gain + period realized gain</li>
+            <li>CumTotalGain: sum of all PerTotalGain to date.</li>
+        </ol>
+    </li>
+    <br>
+    <li>
+        Securities Prices Report<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>id: Currency ID assigned by Moneydance</li>
+            <li>Name: Currency Name</li>
+            <li>Ticker: Currency Ticker or NoTicker</li>
+            <li>Date: Snapshot Date:</li>
+            <li>PricebyDate: Closing price on SnapshotDate</li>
+            <li>PriceByDate(Adjust): Split Adjusted price as referenced by the current date<br>
+            </li>
+        </ol>
+    </li>
+</ol>
+<h2>Notes on Report Information:</h2>
+<ol>
+    <li>Total Return:<br>
+        Total Return is calculated as shown below.&nbsp; Please note the following<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>Ending Market Value (EMV) is calculated as the end position * end price,&nbsp;plus all income and
+                expenses associated with the security (securities) during the report period.
+            </li>
+            <li>Start Date is the later of (a) report start date (b) the date on which the first buy or short sale
+                occurs. End Date is the earlier of (a) report end date and (b) the date on which a security position is
+                closed.&nbsp; Therefore, changing report start and end dates has no effect on the returns calculation
+                for a position which is closed at start or end date, respectively.<br>
+            </li>
+        </ol>
+    </li>
+    The formula for the Modified Dietz method is as follows:
+    <p>R<sub>MDietz</sub> = (EMV-BMV-CF)/[BMV +
+        SUMPRODUCT(W<sub>i</sub>*CF<sub>i</sub>)]</p>
+
+    <p><span style="font-style: italic; font-weight: bold;">where:</span><br>
+        EMV = ending market value<br>
+        BMV = beginning market value<br>
+        CF = the net cash flow for the period (contributions to a portfolio are
+        entered as positive cash flows while withdrawals are entered as negative cash flows).<br>
+        SUMPRODUCT(W<sub>i</sub>*CF<sub>i</sub>)] = the sum of each cash flow, CFi, multiplied by its weight, Wi. <br>
+        The weight (Wi) is the proportion of the total number of days in the period that the cash flow CFi is in
+        (or out) of the portfolio. <br>
+        Wi can be calculated as: W<sub>i</sub> = (CD - D<sub>i</sub>) / CD<br>
+        where:<br>
+        CD = the number of calendar days during the return period being calculated<br>
+        Di = The day in the return period on which the cash flow (CFi) occurred</p>
+    <li>
+        Annualized Percent Return:<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>APR is calculated using the net cash effect (less transfer) or each transaction associated with a
+                security (securities), plus the start value and end value associated with the Start and End date as
+                noted below.
+            </li>
+            <li>Start Date is the later of (a) report start date (b) the date on which the first buy or short sale
+                occurs. End Date is the earlier of (a) report end date and (b) the date on which a security position is
+                closed.&nbsp; Therefore, changing report start and end dates has no effect on the returns calculation
+                for a position which is closed at start or end date, respectively.
+            </li>
+            <li>This calculation method can be replicated by the XIRR function of Microsoft Excel.</li>
+        </ol>
+    </li>
+    <li>
+        Transaction Entry:<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>any expense associated with a buy/sell/short cover/cover short transaction is considered to be a
+                commission.
+            </li>
+            <li>All income and expense associated with an investment account is considered as income (or expense)
+                associated with Cash.
+            </li>
+        </ol>
+    </li>
+    <li>
+        Dividend Frequency/ Dividend Calculations:<br>
+        <ol style="list-style-type: lower-alpha;">
+            <li>Dividend Frequency (which affects annualized dividend, dividend yield calculations) is estimated through
+                a heuristic.&nbsp; Multiple dividends which occur within 21 days of each other (such cases as separate
+                dividend/capital gains transactions, or dividend corrections) are ignored.&nbsp; The heuristic currently
+                assigns one frequency to each security, based on the time between dividends of the last two dividend
+                instances.&nbsp; If only one dividend is found, the dividend frequency is assumed to be annual.
+            </li>
+            <li>Annualized Dividend: The report first calculates the total of the most current dividend (which might
+                consist of multiple transactions within an assumed 21 day window, as noted previously).&nbsp; Next an
+                annualized Dividend/Share value is calculated, using the position prior to the most recent set of
+                dividend transactions (this covers the case of mutual fund dividend/reinvest transactions, where buys
+                are recorded coincident with dividends).&nbsp; Finally, the Dividend/Share value is multiplied by the
+                current position, in order to get the final value for Annualized Dividend.
+            </li>
+        </ol>
+    </li>
+</ol>
+<h2>Notes on Classes:</h2>
+<ol>
+    <li>The Main class registers the extension and passes Moneydance data to other classes.</li>
+    <li>The&nbsp;ReportControlFrame class receives the output of Main, creates a frame to hold the report controller
+        GUI.
+    </li>
+    <li>The&nbsp;ReportControlPanel class controls report output: the user selects report parameters, executes reports
+        via the Run Reports button.
+    </li>
+    <li>The&nbsp;BulkSecInfo class contains mapping of investment accounts to security accounts, security accounts to
+        transactions, and contains&nbsp;AccountWrapper classes which hold transaction-level and security-level data.&nbsp;&nbsp;BulkSecInfo
+        also produces the Securities Prices Report and Transaction Activity Report from these transaction and pricing
+        data.
+    </li>
+    <li>TransactionValues returns one line of data for each parent transaction with buy, sell, short sell, cover short,
+        commission, transfer, and security quantity data.<br>
+        TransactionValues also create synthetic cash account to record movement of uninvested cash for each Investment
+        Account. The initial account balance is recorded as a purchase of cash, and new TransactionValues objects are
+        created for each related Security Transaction or Investment Account transaction.&nbsp; For example, a purchase
+        of a security and the payment of the related commission creates a sale of the appropriate amount of cash
+        (potentially a short-sale if the account does not contain enough cash). All synthetically created
+        TransactionValues object have a transaction id of x.1, where x is the transaction number of the primary
+        transaction which created the cash transaction.&nbsp; For example if a security purchase has id 121, then the
+        corresponding cash sale has id 121.1.<br>
+        TransactionValues includes a GainsCalc object (current concrete implementations GainsAverageCalc and
+        GainsLotMatchCalc), which calculates long and short basis for a security.
+    </li>
+    <li>The TotalReport Class is an abstract class holding HashSets of&nbsp; SecurityReport and CompositeReport objects.&nbsp;
+        Its concrete implementations are the TotalFromToReport and TotalSnapShotReport.
+    </li>
+    <li>ComponentReport is an abstract class which is a superclass to both SecurityReport and CompositeReport.</li>
+    <li>SecurityReport Class is an abstract class representing one report line of either the From/To or Snapshort
+        report.&nbsp; Therefore, its concrete implementations are SecurityFromToReport and SecuritySnapshotReport.&nbsp;
+        Note that a SecurityReport can either represent a report line for a leaf-level security or the aggregation line
+        for a CompositeReport (described below).
+    </li>
+    <li>CompositeReport class performs aggregation of one or more leaf-level (i.e. unique security in unique investment
+        account) security reports.&nbsp; It holds one placeholder SecurityReport (used to store aggregate data) and
+        contains references to all leaf-level SecurityReports aggregated by the CompositeReport.
+    </li>
+    <li>Aggregator is an interface for the classes which are used to aggregate leaf-level security Reports.&nbsp; To
+        accomplish this, Moneydance classes are wrapped in classes which implement Aggregator.&nbsp; The wrapped classes
+        are InvestmentAccountWrapper, CurrencyWrapper, SecurityAccountWrapper, Tradeable, SecurityTypeWrapper, and
+        SecuritySubTypeWrapper.&nbsp; In this case Tradeable is defined by a single Boolean member false for the
+        CurrencyType used to define uninvested cash, true for all other securities.
+    </li>
+    <li>The&nbsp;DateUtils and&nbsp;IOUtils classes provide useful methods for date math and input/output,
+        respectively.
+    </li>
+    <li>The&nbsp;GoalSeek,&nbsp;GoalSeekData,&nbsp;GoalSeekFunction,&nbsp;XIRR,&nbsp;XIRRData, and&nbsp;XIRRNPV classes
+        are all used for calculation of Annualized Percent Return.&nbsp; More info can be found at
+        http://gautam.satpathy.org/software/java/jxirr.
+    </li>
+    <li>The ReportConfigControlFrame, ReportConfigControlPanel, ReportConfigTreePanel, ReportConfigFieldChooserPanel all
+        control the process by which a user may generate, update, or delete custom report configurations.
+    </li>
+    <li>The SecurityAccountEditorForm controls the editing of security properties. Double-clicking on the report display
+        generates this form to edit security properties.
+    </li>
+    <li>ReportOutputTable class implements and enhanced JTable for use in report display.&nbsp; The display implements
+        methods so that the columns are sized based on cell data length, the user can fix columns for ease of scrolling,
+        closed positions can be either displayed or hidden, and the user may implement a hierarchical sort of data (3
+        columns or less).
+    </li>
+    <li>The Prefs class holds report preferences.</li>
+</ol>
+<h2>Notes on Test Classes:</h2>
+<ol>
+    <li>The project supports JUnit testing.&nbsp; Test classes are under the test folder.</li>
+    <li>BulkSecInfoTest checks for consistency of transaction data from the test database testMD02.md and stored data in
+        csv format.&nbsp; Both the average cost and lot-matching cost accounting methods are supported.
+    </li>
+    <li>The&nbsp;ReportProdTest class contains 3 tests:&nbsp;testGetFromToReport() and&nbsp;testGetSnapReport() generate
+        From/To and Snap reports, respectively, from the MD test database testMD01.md included in the resources folder.&nbsp;
+        The generated reports are then compared to saved versions (in csv files) also contained in the resources folder.&nbsp;
+        Finally, the&nbsp;testRepSnapAgainstFT&nbsp;generates a Snap Report and compares the columns in that report to
+        series of generated From/To reports. This ensures that the Snap Report and FT Reports are producing the same
+        data. The class also contains tests which check for consistency between aggregated returns and leaf-level
+        security reports for different aggregation methods.
+    </li>
+    <li>The CheckRepFromTo and&nbsp;CheckRepSnap classes, also in the test folder, are not actually JUnit tests.&nbsp;
+        Instead, they output, in tabbed-text form, and exploded view of the From/To and Snap reports, respectively.&nbsp;
+        This allows report output to be checked against intermediate calculations.&nbsp; An example of how to do that is
+        found in the spreadsheet ReportCheckExample.xlsm&, also found in the resources directory.&nbsp; That spreadsheet
+        also breaks down some sample transactions in order to show Mark-to-Market T-account entries.
+    </li>
+</ol>
+<p></p>
+</body>
+</html>
