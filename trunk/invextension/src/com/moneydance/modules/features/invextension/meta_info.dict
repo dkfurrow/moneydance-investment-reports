@@ -1,8 +1,0 @@
-{
-  "vendor" = "Dale Furrow"
-  "module_build" = "104"
-  "vendor.url" = "http://code.google.com/p/moneydance-investment-reports/"
-  "module_name" = "Investment Reports v 2.5"
-  "module_desc" = "<html><body><title>Investment Reports</title><p>Useful reports on security/investment performance</p></body></html>"
-  "desc" = "Reports on investment performance, raw data dump to CSV at user-designated location. Reports: Two-Date reports with accounting and performance data ('From/To'), and a Single-date, standardized report ('Snapshot').  Also data dumps of transaction data and securities prices."
-}
