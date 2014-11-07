@@ -1,0 +1,2059 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" readonly="true" id="3c2b6ea3-27ae-4a9f-b7d5-55b0d49873cc" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/s-invextension.mxt" afterPath="$PROJECT_DIR$/src/s-invextension.mxt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/log.xml" afterPath="$PROJECT_DIR$/src/log.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/meta_info.dict" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/meta_info.dict" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+    <ignored path="invextension-local.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/invextension-local$TestReportOutput.coverage" NAME="TestReportOutput Coverage Results" MODIFIED="1413220373483" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.moneydance.modules.features.invextension.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any converted="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <breakpoint_rules converted="true" />
+    <ui_properties converted="true" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="invextension-local" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="meta_info.dict" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/meta_info.dict">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.05414013" vertical-offset="0" max-vertical-offset="628">
+              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="true" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/sampletext.txt" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Resources.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/Main.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestBrowser.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/helpReportControlPanel.html" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TestBrowser.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/BareBonesBrowserLaunch.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HelpFileBrowser.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HtmlEditorTestKit.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Investment Reports Help-v2.html" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SwingBoxTest.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HelpFileDisplay2.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HtmlEditorKitTest.java" />
+        <option value="$PROJECT_DIR$/src/build.xml" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityAccountWrapper.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalFromToReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalSnapshotReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/CompositeReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HelpFileDisplay.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/LogController.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TestShow.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportSaveTreePanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/AggregationController.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/DateRangePanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigControlFrame.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigControlPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigTreePanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportControlFrame.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/CheckRepFromTo.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/CheckRepSnap.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/ReportProdTest.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityAccountEditorForm.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/GenericTestMethods.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/BulkSecInfo.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/BulkSecInfoTest.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfig.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportSaveControlPanel.java" />
+        <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportSaveControlFrame.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReportOutputFrame.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/DateRange.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReportOutputPane.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Prefs.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportControlPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/meta_info.dict" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="363" />
+    <option name="width" value="1557" />
+    <option name="height" value="1170" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Serialization issues</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>SerializableHasSerialVersionUIDField</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <OptionsSetting value="true" id="Undo Check Out" />
+    <OptionsSetting value="true" id="Get Latest Version" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectStructureProblems">
+    <ignored-problems>
+      <problem id="library-invalid-classes-path(library:project:lib)" />
+    </ignored-problems>
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="invextension-local" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="invextension-local" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="invextension-local" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="invextension-local" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="invextension-local" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.lastSelected" value="Errors" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mdheadlessutil-local" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="recentsLimit" value="5" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="58" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="144" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="58" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="31" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="76" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="376" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder5" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="73" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth1" value="73" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth2" value="73" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="73" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="74" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="377" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="LayoutCode.rearrangeEntriesJava" value="true" />
+    <property name="LayoutCode.rearrangeEntries" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension" />
+    <property name="extract.method.default.visibility" value="private" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.moneydance.modules.features.invextension" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib" />
+      <recent name="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.moneydance.modules.features.invextension.TotalReportOutputFrame" />
+      <recent name="com.moneydance.modules.features.invextension.ReportSaveControlFrame" />
+      <recent name="com.moneydance.modules.features.invextension.TotalReportOutputPane" />
+      <recent name="com.moneydance.modules.features.invextension.ReportOutputTable" />
+      <recent name="com.moneydance.modules.features.invextension.ReportOutputTable.FormattedTable" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.moneydance.modules.features.invextension" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Batch.BUILD_ANT_LOCAL">
+    <configuration default="false" name="com.moneydance.modules.features.invextension in invextension-local" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="invextension-local" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.moneydance.modules.features.invextension" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="AllTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="invextension-local" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.moneydance.modules.features.invextension" />
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.AllTests" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReportConfigAccountChooserPanel" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.ReportConfigAccountChooserPanel" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="BatchConfigurationType" factoryName="Batch">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <module name="invextension-local" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReportProdTest.testGetSnapReport" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="invextension-local" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.moneydance.modules.features.invextension" />
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.ReportProdTest" />
+      <option name="METHOD_NAME" value="testGetSnapReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestReportOutput" type="Application" factoryName="Application" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.TestReportOutput" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Cover" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Cover" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Prefs" type="Application" factoryName="Application" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.Prefs" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestShow" type="Application" factoryName="Application" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.TestShow" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReportConfigControlPanel" type="Application" factoryName="Application" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.ReportConfigControlPanel" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReportSaveControlPanel" type="Application" factoryName="Application" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.ReportSaveControlPanel" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="invextension-local" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="BUILD_ANT_LOCAL" type="BatchConfigurationType" factoryName="Batch">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <module name="invextension-local" />
+      <option name="SCRIPT_NAME" value="BUILD_ANT_LOCAL.bat" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="BatchRunner" />
+      <ConfigurationWrapper RunnerId="BatchRunner" />
+      <method />
+    </configuration>
+    <list size="10">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.ReportProdTest.testGetSnapReport" />
+      <item index="1" class="java.lang.String" itemvalue="Application.TestReportOutput" />
+      <item index="2" class="java.lang.String" itemvalue="Application.Prefs" />
+      <item index="3" class="java.lang.String" itemvalue="Application.TestShow" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ReportConfigControlPanel" />
+      <item index="5" class="java.lang.String" itemvalue="Application.ReportSaveControlPanel" />
+      <item index="6" class="java.lang.String" itemvalue="Batch.BUILD_ANT_LOCAL" />
+      <item index="7" class="java.lang.String" itemvalue="JUnit.com.moneydance.modules.features.invextension in invextension-local" />
+      <item index="8" class="java.lang.String" itemvalue="JUnit.AllTests" />
+      <item index="9" class="java.lang.String" itemvalue="Application.ReportConfigAccountChooserPanel" />
+    </list>
+    <recent_temporary>
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Application.ReportConfigAccountChooserPanel" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.AllTests" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.com.moneydance.modules.features.invextension in invextension-local" />
+      </list>
+    </recent_temporary>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SliceManager">
+    <option name="analysisUIOptions">
+      <AnalysisUIOptions />
+    </option>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\Dale Furrow\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local" />
+          <option name="myCopyRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\.idea" />
+          <option name="myCopyRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\.idea" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local" />
+          <option name="myCopyRoot" value="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3c2b6ea3-27ae-4a9f-b7d5-55b0d49873cc" name="Default" comment="" />
+      <created>1396022606268</created>
+      <updated>1396022606268</updated>
+      <workItem from="1396022607553" duration="618000" />
+      <workItem from="1396023656506" duration="15000" />
+      <workItem from="1396023812795" duration="16000" />
+      <workItem from="1396024560680" duration="24000" />
+      <workItem from="1397854651932" duration="1902000" />
+      <workItem from="1398096610682" duration="19000" />
+      <workItem from="1398096680660" duration="21000" />
+      <workItem from="1400260365784" duration="436000" />
+      <workItem from="1400798401678" duration="1086000" />
+      <workItem from="1400800017921" duration="29000" />
+      <workItem from="1401209115055" duration="77000" />
+      <workItem from="1401810101460" duration="4320000" />
+      <workItem from="1401814877061" duration="6458000" />
+      <workItem from="1401987912443" duration="7306000" />
+      <workItem from="1401995227495" duration="364000" />
+      <workItem from="1402065886980" duration="26747000" />
+      <workItem from="1402159364471" duration="22805000" />
+      <workItem from="1402182220383" duration="109000" />
+      <workItem from="1402330541381" duration="5505000" />
+      <workItem from="1402339654620" duration="5732000" />
+      <workItem from="1402410181724" duration="1911000" />
+      <workItem from="1402414015338" duration="646000" />
+      <workItem from="1402414698035" duration="8000" />
+      <workItem from="1402415099492" duration="12979000" />
+      <workItem from="1402502925687" duration="10417000" />
+      <workItem from="1402530948984" duration="7436000" />
+      <workItem from="1402585545925" duration="16127000" />
+      <workItem from="1402700028448" duration="3171000" />
+      <workItem from="1402764400699" duration="550000" />
+      <workItem from="1402933797589" duration="14635000" />
+      <workItem from="1403028378570" duration="2391000" />
+      <workItem from="1403052855680" duration="10937000" />
+      <workItem from="1403103024690" duration="19390000" />
+      <workItem from="1403196683087" duration="5804000" />
+      <workItem from="1403203358764" duration="3375000" />
+      <workItem from="1403279176824" duration="7181000" />
+      <workItem from="1403290416887" duration="11806000" />
+      <workItem from="1403349307493" duration="7669000" />
+      <workItem from="1403369324183" duration="17516000" />
+      <workItem from="1403387916062" duration="181000" />
+      <workItem from="1403538392035" duration="11528000" />
+      <workItem from="1403633640407" duration="3688000" />
+      <workItem from="1403710675076" duration="12211000" />
+      <workItem from="1403797857656" duration="10362000" />
+      <workItem from="1403892038946" duration="11396000" />
+      <workItem from="1403972088640" duration="9031000" />
+      <workItem from="1404059485108" duration="6304000" />
+      <workItem from="1404141063360" duration="21408000" />
+      <workItem from="1404231781304" duration="1978000" />
+      <workItem from="1404233776968" duration="1072000" />
+      <workItem from="1404234867221" duration="7755000" />
+      <workItem from="1404310620452" duration="19820000" />
+      <workItem from="1404395101925" duration="2783000" />
+      <workItem from="1404404284782" duration="1661000" />
+      <workItem from="1404411202238" duration="6742000" />
+      <workItem from="1404421535261" duration="1163000" />
+      <workItem from="1404424342781" duration="2378000" />
+      <workItem from="1404578636431" duration="3520000" />
+      <workItem from="1404669214316" duration="11707000" />
+      <workItem from="1404697081979" duration="9978000" />
+      <workItem from="1404713721260" duration="499000" />
+      <workItem from="1404753998602" duration="1526000" />
+      <workItem from="1404838081426" duration="12257000" />
+      <workItem from="1404853690461" duration="93000" />
+      <workItem from="1406905346744" duration="12568000" />
+      <workItem from="1407101331623" duration="4156000" />
+      <workItem from="1407170936171" duration="10224000" />
+      <workItem from="1407181728214" duration="2716000" />
+      <workItem from="1407199218188" duration="4543000" />
+      <workItem from="1407203971358" duration="17000" />
+      <workItem from="1412878364831" duration="266000" />
+      <workItem from="1412878873457" duration="7206000" />
+      <workItem from="1412886156671" duration="1855000" />
+      <workItem from="1412948842016" duration="1455000" />
+      <workItem from="1412973488033" duration="343000" />
+      <workItem from="1412973876911" duration="629000" />
+      <workItem from="1412976327411" duration="774000" />
+      <workItem from="1413142814312" duration="973000" />
+      <workItem from="1413216332513" duration="4643000" />
+      <workItem from="1413221030196" duration="8309000" />
+      <workItem from="1413229571549" duration="5057000" />
+      <workItem from="1413235472381" duration="117000" />
+      <workItem from="1413235777694" duration="23000" />
+      <workItem from="1413239082392" duration="1970000" />
+      <workItem from="1413292281991" duration="14000" />
+      <workItem from="1413313722471" duration="734000" />
+      <workItem from="1413317830696" duration="178000" />
+      <workItem from="1413385410340" duration="427000" />
+      <workItem from="1413474029148" duration="22594000" />
+      <workItem from="1413568567573" duration="13590000" />
+      <workItem from="1413819591780" duration="9546000" />
+      <workItem from="1413913764334" duration="8309000" />
+      <workItem from="1413994380791" duration="11373000" />
+      <workItem from="1414081470529" duration="4045000" />
+      <workItem from="1414087053768" duration="4123000" />
+      <workItem from="1414424431199" duration="9118000" />
+      <workItem from="1414517490439" duration="3147000" />
+      <workItem from="1414608456329" duration="6567000" />
+      <workItem from="1414687468848" duration="4903000" />
+      <workItem from="1414776577921" duration="4871000" />
+      <workItem from="1414863680494" duration="5056000" />
+      <workItem from="1415034557826" duration="13686000" />
+      <workItem from="1415120010772" duration="7695000" />
+      <workItem from="1415209698022" duration="4259000" />
+      <workItem from="1415224057357" duration="4025000" />
+      <workItem from="1415291416367" duration="11000000" />
+      <workItem from="1415316399310" duration="316000" />
+      <workItem from="1415321942931" duration="66000" />
+      <workItem from="1415322025140" duration="4730000" />
+      <workItem from="1415326779772" duration="13323000" />
+      <workItem from="1415380784237" duration="2880000" />
+      <workItem from="1415383682838" duration="8152000" />
+    </task>
+    <task id="LOCAL-00001" summary="Added config files">
+      <created>1396022949497</created>
+      <updated>1396022949497</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changed Trans Activity Tests to account for new columns &quot;Ticker&quot; and &quot;dividend frequency&quot;  all tests passed">
+      <created>1401813716361</created>
+      <updated>1401813716361</updated>
+    </task>
+    <task id="LOCAL-00003" summary="updated file format to most recent moneydance file">
+      <created>1401824212078</created>
+      <updated>1401824212078</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added Swingworker Functionality to loading of md file, &quot;Run Reports&quot; button">
+      <created>1401995086474</created>
+      <updated>1401995086474</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fixed minor issues in ReportConfigControlFrame">
+      <created>1402068348728</created>
+      <updated>1402068348728</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Cleanup of generics issues in ReportConfig Classes">
+      <created>1402076614011</created>
+      <updated>1402076614011</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Minor changes to date range panel">
+      <created>1402078834465</created>
+      <updated>1402078834465</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Cleanup of various classes to fix issues highlighted in static analysis">
+      <created>1402089841197</created>
+      <updated>1402089841197</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Continue cleanup of various classes to fix issues highlighted in static analysis">
+      <created>1402093357685</created>
+      <updated>1402093357685</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Continued cleanup from static analysis for Total Report">
+      <created>1402159985508</created>
+      <updated>1402159985508</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added AggregationMode">
+      <created>1402175378529</created>
+      <updated>1402175378529</updated>
+    </task>
+    <task id="LOCAL-00012" summary="More from static analysis">
+      <created>1402181120329</created>
+      <updated>1402181120329</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Fixed issue with cash currency not returning &quot;1&quot; price for current date">
+      <created>1402343281070</created>
+      <updated>1402343281070</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Cleaned up/refactored split adjustment for position">
+      <created>1402344186480</created>
+      <updated>1402344186480</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Fixed minor problem with application not exiting when run in headless mode">
+      <created>1402410798927</created>
+      <updated>1402410798927</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Cleaned up prefs configuration, minor issues with aggregation mode">
+      <created>1402423489356</created>
+      <updated>1402423489356</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Cleaned up report output table per static analysis">
+      <created>1402424761734</created>
+      <updated>1402424761734</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Attempt to cleanup AggregationMode prior to associated commit">
+      <created>1402590384433</created>
+      <updated>1402590384433</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Changed Aggregation mode to enum, changed Aggregator to interface, implemented across project.  Must solve sorting issues next">
+      <created>1402590489443</created>
+      <updated>1402590489443</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Minor changes from previous, trying to get right sort order">
+      <created>1402601320163</created>
+      <updated>1402601320163</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Minor changes from previous--test passed, still working on sort order">
+      <created>1402602360778</created>
+      <updated>1402602360778</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Minor Renaming: AggregationMode to AggregationController">
+      <created>1402702768519</created>
+      <updated>1402702768519</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Streamlined sorting/naming of first, second aggregates">
+      <created>1402940442772</created>
+      <updated>1402940442772</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Minor formatting changes to correct issues with sorting">
+      <created>1402946655971</created>
+      <updated>1402946655971</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Streamlined report output, checked old format and new format FT and snap reports against old, replaced with new format, checked unit testing to ensure that results still tie">
+      <created>1403030174247</created>
+      <updated>1403030174247</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Cleanup of test suite from static analysis">
+      <created>1403054240114</created>
+      <updated>1403054240114</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Interim commit--implementing objects in JTable">
+      <created>1403105714524</created>
+      <updated>1403105714524</updated>
+    </task>
+    <task id="LOCAL-00028" summary="minor reformatting of FormattedTable">
+      <created>1403125382859</created>
+      <updated>1403125382859</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Implemented aggregator objects (instead of strings) for JTable">
+      <created>1403198630442</created>
+      <updated>1403198630442</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Cleaned up report prod test via static analysis&#10;">
+      <created>1403201339318</created>
+      <updated>1403201339318</updated>
+    </task>
+    <task id="LOCAL-00031" summary="added annotations.jar to svn">
+      <created>1403203588762</created>
+      <updated>1403203588762</updated>
+    </task>
+    <task id="LOCAL-00032" summary="(1) fixed issue with build and use of annotations.jar&#10;(2) fixed display issues by intially setting frozen columns to zero and then adjusting for report config afterward&#10;(3) fixed copy to clipboard method in order to output meaningful strings for aggregation object">
+      <created>1403206679394</created>
+      <updated>1403206679394</updated>
+    </task>
+    <task id="LOCAL-00033" summary="minor renaming and formatting, also added maps to securitytype and securitysubtype">
+      <created>1403291902561</created>
+      <updated>1403291902561</updated>
+    </task>
+    <task id="LOCAL-00034" summary="added SecurityAccountEditorForm to Edit Securities">
+      <created>1403375603902</created>
+      <updated>1403375603902</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Minor changes to get editing to save, working on repainting  table">
+      <created>1403380559299</created>
+      <updated>1403380559299</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Continuing work to repaint table, interim commit">
+      <created>1403383083868</created>
+      <updated>1403383083868</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Sucessful repaint, previously tested to see that update in MD works">
+      <created>1403386608407</created>
+      <updated>1403386608407</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Minor change from previous updated Security button to close editor frame">
+      <created>1403386826315</created>
+      <updated>1403386826315</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Added instruction to double-click security in order to edit">
+      <created>1403546111686</created>
+      <updated>1403546111686</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Added Constructor with ReportConfig to TotalReport, eliminated alternate constructors">
+      <created>1403551426907</created>
+      <updated>1403551426907</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Added FrameInfo to ReportConfig">
+      <created>1403712061545</created>
+      <updated>1403712061545</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Created Internal Class for JFrame inside TotalReportOutputPane, added listeners on JFrame to save size/dimension info">
+      <created>1403717646066</created>
+      <updated>1403717646066</updated>
+    </task>
+    <task id="LOCAL-00043" summary="implemented action listener on Frame Extension in TotalReportOutputPane">
+      <created>1403718860246</created>
+      <updated>1403718860246</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Refactored TotalReportOutputPane to just take TotalReport Argument">
+      <created>1403722772120</created>
+      <updated>1403722772120</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Added multi-line renderer to output pane, adjusted header entries accordingly">
+      <created>1403815174971</created>
+      <updated>1403815174971</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Minor changes to adjustColumnPreferredWidths method to get optimum column width for various output types">
+      <created>1403894144207</created>
+      <updated>1403894144207</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Cleanup of multi-line renderer from static analysis">
+      <created>1403895713490</created>
+      <updated>1403895713490</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Created Exception for case in which security record does not begin with a buy, buyxfer or short.">
+      <created>1403899755651</created>
+      <updated>1403899755651</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Fixed issue with dividend frequency analyzer--was flipping frequency back to annual when two dividends occurred on the same date">
+      <created>1403903479698</created>
+      <updated>1403903479698</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Minor refactoring and formatting">
+      <created>1403975127346</created>
+      <updated>1403975127346</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Added Annual Dividend Calculator to SecuritySnapshotReport, tested output">
+      <created>1404065523181</created>
+      <updated>1404065523181</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Changed annualized dividend calculation to reflect annualized dividend per share, then calc dividend yield from current share price, and yield on basis as product of annualized Dividend per share and end position divided by cost basis">
+      <created>1404149330325</created>
+      <updated>1404149330325</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Added new fields to snapshot report, debugged &quot;addTo&quot; methods">
+      <created>1404161455572</created>
+      <updated>1404161455572</updated>
+    </task>
+    <task id="LOCAL-00054" summary="debugged new snapshot report, fixed tests, modified copy table to clipboard method so that view (not model) is copied to clipboard">
+      <created>1404234970132</created>
+      <updated>1404234970132</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Minor edits based on static analysis, and documentation">
+      <created>1404246598848</created>
+      <updated>1404246598848</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Updated Copyrights">
+      <created>1404312226461</created>
+      <updated>1404312226461</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Updated help files, minor change to Annualized Dividend Calculation">
+      <created>1404319255128</created>
+      <updated>1404319255128</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Update meta Info">
+      <created>1404321709842</created>
+      <updated>1404321709842</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Intermediate commit--testing solution for helpfiles">
+      <created>1404579297053</created>
+      <updated>1404579297053</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Intermediate commit--debugging html in help file">
+      <created>1404702952569</created>
+      <updated>1404702952569</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Intermediate commit--debugging html in help file">
+      <created>1404705840537</created>
+      <updated>1404705840537</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Continue Debug...edits to make swingbox work">
+      <created>1404706946332</created>
+      <updated>1404706946332</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Continue Debug...edits to make swingbox work">
+      <created>1404711851081</created>
+      <updated>1404711851081</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Basic functionality of helpfile display works">
+      <created>1404755192459</created>
+      <updated>1404755192459</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Minor refactoring of ReportControlFrame, HelpFileDisplay.  Deleted Resources.java as its function is assumed in HelpFileDisplay">
+      <created>1404840114026</created>
+      <updated>1404840114026</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Refactoring associated with ANT build warnings">
+      <created>1404844264962</created>
+      <updated>1404844264962</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Eliminated ReportConfig generic type, refactored to eliminate ANT warnings">
+      <created>1404849620400</created>
+      <updated>1404849620400</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Fixed issue on deployed product which prevented config saving">
+      <created>1406912725739</created>
+      <updated>1406912725739</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Cleaned up error reporting in general, introduced logcontroller class">
+      <created>1407176121429</created>
+      <updated>1407176121429</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Altered error report generation to allow for multiple thrown errors">
+      <created>1407184154362</created>
+      <updated>1407184154363</updated>
+    </task>
+    <task id="LOCAL-00071" summary="added scroll pane for report status for main panel">
+      <created>1412881159184</created>
+      <updated>1412881159184</updated>
+    </task>
+    <task id="LOCAL-00072" summary="changed subsequent transaction tests severity to WARNING from SEVERE...updated report panel notifications accordingly">
+      <created>1412887791658</created>
+      <updated>1412887791658</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Minor change from previous, changed height of directory output field">
+      <created>1412887983811</created>
+      <updated>1412887983811</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Changed Reset Button on main page to reset date panel.  Changed path separator on log file">
+      <created>1413218743150</created>
+      <updated>1413218743150</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Changed Reset Button on main page to reset date panel.  Changed path separator on log file">
+      <created>1413220938618</created>
+      <updated>1413220938618</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Comments from previous:.  Changed &quot;Default&quot; Report Name to &quot;standard&quot;  Added validation check for date range in save report config method">
+      <created>1413221162267</created>
+      <updated>1413221162267</updated>
+    </task>
+    <task id="LOCAL-00077" summary="further renaming to get to standard name.  Minor refactoring in prefs">
+      <created>1413230064889</created>
+      <updated>1413230064889</updated>
+    </task>
+    <task id="LOCAL-00078" summary="minor changes reduced text in meta_info.dict">
+      <created>1413474074611</created>
+      <updated>1413474074611</updated>
+    </task>
+    <task id="LOCAL-00079" summary="intermediate commit...working on DateRangePanel">
+      <created>1413574456662</created>
+      <updated>1413574456662</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Intermediate commit...still working on DateRangePanel...">
+      <created>1413576456521</created>
+      <updated>1413576456521</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Further improvements to DateRangePanel...need to remove debug statements">
+      <created>1413582058142</created>
+      <updated>1413582058142</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Minor cleanup of DateRange Panel">
+      <created>1413821037250</created>
+      <updated>1413821037251</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Initial Commit...migration of all functions to ReportControlPanel">
+      <created>1413828905892</created>
+      <updated>1413828905892</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Refactored Report Control Panel into sub-panels, restructured output to optimize space">
+      <created>1413921216674</created>
+      <updated>1413921216674</updated>
+    </task>
+    <task id="LOCAL-00085" summary="made folder panel a component of ReportControl panel, changed layout to accomodate">
+      <created>1413997878152</created>
+      <updated>1413997878152</updated>
+    </task>
+    <task id="LOCAL-00086" summary="added ReportConfig to ReportControlPanel, set run options to return to last report run">
+      <created>1414006684183</created>
+      <updated>1414006684183</updated>
+    </task>
+    <task id="LOCAL-00087" summary="DateRange now has addChangeListener, ReportControlPanel implements actionlistener, propertychange listener.  added cost basis to report config">
+      <created>1414091173781</created>
+      <updated>1414091173782</updated>
+    </task>
+    <task id="LOCAL-00088" summary="Added itemlistener to ReportControlPanel, FieldChooser now populates correctly">
+      <created>1414434688469</created>
+      <updated>1414434688470</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Added ReportSavePanel, interim commit, rearranging display">
+      <created>1414519016731</created>
+      <updated>1414519016731</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Rearranged display, still needs improvement">
+      <created>1414519953038</created>
+      <updated>1414519953038</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Basic rearrangement of &quot;ReportSave&quot; Series, hooked up to ReportControlPanel">
+      <created>1414615028603</created>
+      <updated>1414615028603</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Fixed issues with saving of reports, interaction with itemchangelistener in ReportControlPanel">
+      <created>1414695552736</created>
+      <updated>1414695552736</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Set Report Panel to populate correctly with saved report config, adjusted save feature to avoid duplicate names, and to automatically populate with saved name only when report is custom">
+      <created>1414783929155</created>
+      <updated>1414783929155</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Rearranged main panel to include new buttons to remove custom report, all custom reports.">
+      <created>1414868443407</created>
+      <updated>1414868443407</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Added change listeners to remove report, remove all reports buttons in ReportControlPanel">
+      <created>1415040372736</created>
+      <updated>1415040372736</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Removed ability to remove reports from Report Save Control Panel">
+      <created>1415044709136</created>
+      <updated>1415044709136</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Added method to remove report from report last run, fixed various issues with reports saving / deleting correctly">
+      <created>1415136701020</created>
+      <updated>1415136701020</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Deleted unused classes in reportConfigControl family, as functions have been moved elsewhere">
+      <created>1415138106884</created>
+      <updated>1415138106884</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Removed menu item for helpfile, added button to get help">
+      <created>1415220739450</created>
+      <updated>1415220739450</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Removed menu item for helpfile, added button to get help file">
+      <created>1415220773015</created>
+      <updated>1415220773015</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Reset NumberCellRenderer, PercentCellRenderer to display &quot;&quot; when a Double.NaN is encountered">
+      <created>1415221817993</created>
+      <updated>1415221817993</updated>
+    </task>
+    <task id="LOCAL-00102" summary="initial commit for AccountChooserPanel">
+      <created>1415225127950</created>
+      <updated>1415225127950</updated>
+    </task>
+    <task id="LOCAL-00103" summary="AccountChooserPanel, interim commit...initial loading works">
+      <created>1415292975020</created>
+      <updated>1415292975020</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Added account chooser panel to ReportControlPanel">
+      <created>1415296041399</created>
+      <updated>1415296041399</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Added excluded accounts to bulksecinfo, removed the &quot;addAccounts&quot; function from account chooser, made minor fixes to actionlisteners">
+      <created>1415302761858</created>
+      <updated>1415302761858</updated>
+    </task>
+    <task id="LOCAL-00106" summary="Changed testSubsequentTransaction method to only apply if absolute value of secquantity &gt; positionThreshold">
+      <created>1415316646292</created>
+      <updated>1415316646292</updated>
+    </task>
+    <task id="LOCAL-00107" summary="Fixed test implementation">
+      <created>1415322271415</created>
+      <updated>1415322271415</updated>
+    </task>
+    <task id="LOCAL-00108" summary="Various changes: fixed issue which occured when deleting last report run, set save panel to dismiss when save button is pressed, other minor changes">
+      <created>1415327195521</created>
+      <updated>1415327195521</updated>
+    </task>
+    <task id="LOCAL-00109" summary="Edited Help File">
+      <created>1415328602665</created>
+      <updated>1415328602665</updated>
+    </task>
+    <task id="LOCAL-00110" summary="Edited Help File, altered formatting">
+      <created>1415329922674</created>
+      <updated>1415329922674</updated>
+    </task>
+    <task id="LOCAL-00111" summary="added sizing options to Account Chooser and Field Chooser based on Report Control Panel">
+      <created>1415332400746</created>
+      <updated>1415332400746</updated>
+    </task>
+    <task id="LOCAL-00112" summary="fixed compiler warnings">
+      <created>1415334467563</created>
+      <updated>1415334467563</updated>
+    </task>
+    <task id="LOCAL-00113" summary="fixed 2 more compiler warnings, fixed issue of reports saving in unintended manner">
+      <created>1415380865604</created>
+      <updated>1415380865604</updated>
+    </task>
+    <task id="LOCAL-00114" summary="Refactored, simplified totalreportoutputpane, split out totalreportoutputframe">
+      <created>1415384497637</created>
+      <updated>1415384497637</updated>
+    </task>
+    <task id="LOCAL-00115" summary="Minor formatting and refactoring changes">
+      <created>1415384803221</created>
+      <updated>1415384803221</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Added 3, 5, 10 years to date range">
+      <created>1415385398890</created>
+      <updated>1415385398890</updated>
+    </task>
+    <task id="LOCAL-00117" summary="Fixed issue with copy to clipboard (created error when columns were removed from report">
+      <created>1415389825403</created>
+      <updated>1415389825403</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Fixed minor issues with report downloads initial loading, added some capabilities to Prefs">
+      <created>1415392234157</created>
+      <updated>1415392234157</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="655150000" />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="363" y="0" width="1557" height="1170" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32627526" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30991337" sideWeight="0.498708" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2495238" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3974976" sideWeight="0.78795564" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35803658" sideWeight="0.502584" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32772276" sideWeight="0.49968255" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32338786" sideWeight="0.498708" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916266" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19146097" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19412942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35803658" sideWeight="0.49741602" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916266" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18285714" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32627526" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2495238" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35803658" sideWeight="0.502584" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32772276" sideWeight="0.49968255" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916266" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18285714" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916266" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26808786" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35803658" sideWeight="0.49741602" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31027856" sideWeight="0.498708" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3974976" sideWeight="0.78795564" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32338786" sideWeight="0.498708" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18604651" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <MESSAGE value="Rearranged main panel to include new buttons to remove custom report, all custom reports." />
+    <MESSAGE value="Added change listeners to remove report, remove all reports buttons in ReportControlPanel" />
+    <MESSAGE value="Removed ability to remove reports from Report Save Control Panel" />
+    <MESSAGE value="Added method to remove report from report last run, fixed various issues with reports saving / deleting correctly" />
+    <MESSAGE value="Deleted unused classes in reportConfigControl family, as functions have been moved elsewhere" />
+    <MESSAGE value="Removed menu item for helpfile, added button to get help" />
+    <MESSAGE value="Removed menu item for helpfile, added button to get help file" />
+    <MESSAGE value="Reset NumberCellRenderer, PercentCellRenderer to display &quot;&quot; when a Double.NaN is encountered" />
+    <MESSAGE value="initial commit for AccountChooserPanel" />
+    <MESSAGE value="AccountChooserPanel, interim commit...initial loading works" />
+    <MESSAGE value="Added account chooser panel to ReportControlPanel" />
+    <MESSAGE value="Added excluded accounts to bulksecinfo, removed the &quot;addAccounts&quot; function from account chooser, made minor fixes to actionlisteners" />
+    <MESSAGE value="Changed testSubsequentTransaction method to only apply if absolute value of secquantity &gt; positionThreshold" />
+    <MESSAGE value="Fixed test implementation" />
+    <MESSAGE value="Various changes: fixed issue which occured when deleting last report run, set save panel to dismiss when save button is pressed, other minor changes" />
+    <MESSAGE value="Edited Help File" />
+    <MESSAGE value="Edited Help File, altered formatting" />
+    <MESSAGE value="added sizing options to Account Chooser and Field Chooser based on Report Control Panel" />
+    <MESSAGE value="fixed compiler warnings" />
+    <MESSAGE value="fixed 2 more compiler warnings, fixed issue of reports saving in unintended manner" />
+    <MESSAGE value="Refactored, simplified totalreportoutputpane, split out totalreportoutputframe" />
+    <MESSAGE value="Minor formatting and refactoring changes" />
+    <MESSAGE value="Added 3, 5, 10 years to date range" />
+    <MESSAGE value="Fixed issue with copy to clipboard (created error when columns were removed from report" />
+    <MESSAGE value="Fixed minor issues with report downloads initial loading, added some capabilities to Prefs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed minor issues with report downloads initial loading, added some capabilities to Prefs" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="200" />
+    </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/java/util/logging/Logger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="21259" max-vertical-offset="28016">
+          <caret line="1369" column="16" selection-start-line="1369" selection-start-column="16" selection-end-line="1369" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/moneydance.jar!/com/moneydance/apps/md/model/Account.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3995" max-vertical-offset="7514">
+          <caret line="235" column="59" selection-start-line="235" selection-start-column="59" selection-end-line="235" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/moneydance.jar!/com/moneydance/apps/md/model/CurrencyType.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3434" max-vertical-offset="5389">
+          <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/InvestmentAccountWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2241" max-vertical-offset="3400">
+          <caret line="205" column="30" selection-start-line="205" selection-start-column="30" selection-end-line="205" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/java/io/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2865" max-vertical-offset="36346">
+          <caret line="221" column="31" selection-start-line="221" selection-start-column="31" selection-end-line="221" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/LogController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="63" max-vertical-offset="1428">
+          <caret line="53" column="88" selection-start-line="53" selection-start-column="88" selection-end-line="53" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/java/awt/Component.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61243147" vertical-offset="18110" max-vertical-offset="163659">
+          <caret line="1244" column="19" selection-start-line="1244" selection-start-column="19" selection-end-line="1244" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/tree/DefaultMutableTreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="5718" max-vertical-offset="24582">
+          <caret line="387" column="16" selection-start-line="387" selection-start-column="16" selection-end-line="387" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/java/util/prefs/Preferences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="15595" max-vertical-offset="20706">
+          <caret line="999" column="25" selection-start-line="999" selection-start-column="25" selection-end-line="999" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1547">
+          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ComponentReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1293" max-vertical-offset="2108">
+          <caret line="125" column="9" selection-start-line="125" selection-start-column="9" selection-end-line="125" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/CompositeReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3401" max-vertical-offset="5168">
+          <caret line="324" column="32" selection-start-line="324" selection-start-column="32" selection-end-line="324" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1599" max-vertical-offset="2856">
+          <caret line="137" column="39" selection-start-line="137" selection-start-column="39" selection-end-line="137" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/table/DefaultTableCellRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2267" max-vertical-offset="6324">
+          <caret line="186" column="21" selection-start-line="186" selection-start-column="21" selection-end-line="186" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3112" max-vertical-offset="7021">
+          <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityAccountWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4001" max-vertical-offset="5474">
+          <caret line="318" column="18" selection-start-line="318" selection-start-column="18" selection-end-line="318" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/RepaintManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.81198" vertical-offset="21203" max-vertical-offset="27387">
+          <caret line="1454" column="17" selection-start-line="1454" selection-start-column="17" selection-end-line="1454" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalSnapshotReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="317" max-vertical-offset="1071">
+          <caret line="61" column="11" selection-start-line="61" selection-start-column="11" selection-end-line="61" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/moneydance.jar!/com/moneydance/awt/JDateField.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="1598">
+          <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalFromToReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
+          <caret line="58" column="10" selection-start-line="58" selection-start-column="10" selection-end-line="58" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1972">
+          <caret line="121" column="21" selection-start-line="121" selection-start-column="21" selection-end-line="121" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/JComboBox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="9689" max-vertical-offset="38318">
+          <caret line="641" column="15" selection-start-line="641" selection-start-column="15" selection-end-line="641" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/JComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33215547" vertical-offset="53855" max-vertical-offset="91494">
+          <caret line="3319" column="0" selection-start-line="3319" selection-start-column="0" selection-end-line="3319" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.7.0_65/src.zip!/javax/swing/SwingWorker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33222038" vertical-offset="8063" max-vertical-offset="13464">
+          <caret line="536" column="22" selection-start-line="536" selection-start-column="22" selection-end-line="536" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/AggregationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19604613" vertical-offset="0" max-vertical-offset="731">
+          <caret line="33" column="35" selection-start-line="33" selection-start-column="35" selection-end-line="33" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/CheckRepSnap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="235" max-vertical-offset="2482">
+          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/CheckRepFromTo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43387097" vertical-offset="224" max-vertical-offset="2737">
+          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/moneydance.jar!/com/moneydance/apps/md/controller/io/FileUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14604811" vertical-offset="0" max-vertical-offset="1428">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1530">
+          <caret line="53" column="117" selection-start-line="53" selection-start-column="56" selection-end-line="53" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/GenericTestMethods.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="48" max-vertical-offset="4352">
+          <caret line="45" column="117" selection-start-line="45" selection-start-column="117" selection-end-line="45" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/BulkSecInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5598" max-vertical-offset="6613">
+          <caret line="423" column="61" selection-start-line="423" selection-start-column="61" selection-end-line="423" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/ReportProdTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4197" max-vertical-offset="11356">
+          <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/BulkSecInfoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="593" max-vertical-offset="5814">
+          <caret line="92" column="49" selection-start-line="92" selection-start-column="49" selection-end-line="92" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/HelpFileDisplay.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1005" max-vertical-offset="2040">
+          <caret line="124" column="38" selection-start-line="124" selection-start-column="38" selection-end-line="124" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2243" max-vertical-offset="4539">
+          <caret line="181" column="0" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1250" max-vertical-offset="4624">
+          <caret line="79" column="29" selection-start-line="79" selection-start-column="29" selection-end-line="79" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportControlFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="406" max-vertical-offset="1513">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportSaveControlPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1983" max-vertical-offset="2720">
+          <caret line="162" column="13" selection-start-line="162" selection-start-column="13" selection-end-line="162" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityAccountEditorForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="524" max-vertical-offset="3740">
+          <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
+          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportSaveControlFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07176287" vertical-offset="600" max-vertical-offset="1241">
+          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3375796" vertical-offset="8135" max-vertical-offset="15759">
+          <caret line="525" column="74" selection-start-line="525" selection-start-column="74" selection-end-line="525" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/DateRangePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7452229" vertical-offset="5040" max-vertical-offset="6086">
+          <caret line="376" column="83" selection-start-line="376" selection-start-column="83" selection-end-line="376" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/DateRange.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.4315287" vertical-offset="1498" max-vertical-offset="3060">
+          <caret line="167" column="5" selection-start-line="167" selection-start-column="5" selection-end-line="167" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReportOutputFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.51592356" vertical-offset="1903" max-vertical-offset="2856">
+          <caret line="160" column="44" selection-start-line="160" selection-start-column="44" selection-end-line="160" selection-end-column="44" />
+          <folding>
+            <element signature="e#6002#6003#0" expanded="true" />
+            <element signature="e#6056#6057#0" expanded="true" />
+            <element signature="e#7615#7616#0" expanded="true" />
+            <element signature="e#7681#7682#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3607908" vertical-offset="206" max-vertical-offset="5083">
+          <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReportOutputPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="7.92" vertical-offset="7610" max-vertical-offset="20910">
+          <caret line="477" column="80" selection-start-line="477" selection-start-column="80" selection-end-line="477" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/Prefs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1717">
+          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="13.331137" vertical-offset="1326" max-vertical-offset="9605">
+          <caret line="636" column="9" selection-start-line="636" selection-start-column="9" selection-end-line="636" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportControlPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="17.112026" vertical-offset="0" max-vertical-offset="15691">
+          <caret line="676" column="18" selection-start-line="676" selection-start-column="18" selection-end-line="676" selection-end-column="18" />
+          <folding>
+            <element signature="e#30114#30115#0" expanded="true" />
+            <element signature="e#30215#30216#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/meta_info.dict">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05414013" vertical-offset="0" max-vertical-offset="628">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="Copyright.UI">
+        <settings>
+          <last-edited>BSD-Simple</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>invextension-local</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>lib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
+
