@@ -87,12 +87,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private JComboBox<String> snapReportComboBox = new JComboBox<>();
     private JLabel fromToReportLabel = new JLabel("'From-To' Reports");
     private JComboBox<String> fromToReportComboBox = new JComboBox<>();
-    private JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transaction Activity");
+    private JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transactions");
     private JCheckBox secPricesCheckbox = new javax.swing.JCheckBox("Securities Prices");
     private JButton runReportsButton = new javax.swing.JButton("Run Reports");
-    private JButton saveCustomReportsButton = new javax.swing.JButton("Save Report Configuration");
-    private JButton removeCustomReportButton = new JButton("Remove Selected Report");
-    private JButton showHelpFileButton = new JButton("Show Help File!");
+    private JButton saveCustomReportsButton = new javax.swing.JButton("Save Custom Report");
+    private JButton removeCustomReportButton = new JButton("Remove Custom Report");
+    private JButton showHelpFileButton = new JButton("Help");
     JButton removeAllCustomReportsButton = new JButton("Remove All Custom Reports and Reset");
 
 
@@ -208,9 +208,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         // Set all panel borders the same
         setPanelTitle(reportsToRunPanel, "Reports to Run (Choose One)");
-        setPanelTitle(downloadsPanel, "Download Transaction/Price Data");
-        setPanelTitle(runPanel, "Report Status");
-        setPanelTitle(buttonPanel, "Run Reports, Save/Remove Custom Reports, Get Help");
+        setPanelTitle(downloadsPanel, "Export Transaction/Price Data");
+        setPanelTitle(runPanel, "Generate Report");
+        setPanelTitle(buttonPanel, "Custom Reports");
 
         // Layout sub-panels
         GridBagConstraints c;
@@ -225,18 +225,19 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx = 0;
         c.gridy = 0;
         reportsToRunPanel.add(fromToReportLabel, c);
-        c.gridy++;
+        c.gridx = 1;
         reportsToRunPanel.add(fromToReportComboBox, c);
+        c.gridx = 0;
         c.gridy++;
         reportsToRunPanel.add(snapReportLabel, c);
-        c.gridy++;
+        c.gridx = 1;
         reportsToRunPanel.add(snapReportComboBox, c);
         // downloads panel
         downloadsPanel.setLayout(new GridBagLayout());
         c.gridx = 0;
         c.gridy = 0;
         downloadsPanel.add(transActivityCheckbox, c);
-        c.gridy++;
+        c.gridx++;
         downloadsPanel.add(secPricesCheckbox, c);
 
 
@@ -244,7 +245,14 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         // run sub-panel (for program results)
         runPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
-        c.ipady = 12;
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0;
+        c.gridy = 0;
+        runPanel.add(runReportsButton, c);
+        c.gridx++;
+        runPanel.add(showHelpFileButton, c);
+        c.gridx = 0;
+        c.gridy++;
         runPanel.add(reportStatusPane, c);
 
         //button panel
@@ -253,13 +261,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.insets = new Insets(5, 5, 5, 5);
         c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridwidth = 2;
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 0;
-        buttonPanel.add(runReportsButton, c);
-        c.gridwidth = 1;
-        c.gridy++;
         buttonPanel.add(saveCustomReportsButton, c);
         c.gridx++;
         buttonPanel.add(removeCustomReportButton, c);
@@ -268,15 +272,14 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx = 0;
         c.gridy++;
         buttonPanel.add(removeAllCustomReportsButton, c);
-        c.gridy++;
-        buttonPanel.add(showHelpFileButton, c);
+
 
         // lay out main panel
         mainReportPanel.setLayout(new GridBagLayout());
 
         // lay out left/right panels
         JComponent[] leftPanelComponents = {reportOptionsPanel, folderPanel, reportsToRunPanel, downloadsPanel};
-        JComponent[] rightPanelComponents = {dateRangePanel, buttonPanel, runPanel};
+        JComponent[] rightPanelComponents = {dateRangePanel, buttonPanel};
 
         JPanel leftPanel = addVerticalComponents(leftPanelComponents);
         JPanel rightPanel = addVerticalComponents(rightPanelComponents);
@@ -291,6 +294,10 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         mainReportPanel.add(leftPanel, c);
         c.gridx++;
         mainReportPanel.add(rightPanel, c);
+        c.gridx = 0;
+        c.gridy++;
+        c.gridwidth = 2;
+        mainReportPanel.add(runPanel, c);
         // finally, add tabbed pain to 'this'
         this.add(reportTabbedPane);
         //set preferences
@@ -727,9 +734,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             c = new GridBagConstraints();
             c.insets = new Insets(2, 5, 2, 5);
             c.anchor = GridBagConstraints.WEST;
-            this.add(dirChooserButton, c);
-            c.gridy = 1;
             this.add(directoryOutputField, c);
+            c.gridx =1;
+            this.add(dirChooserButton, c);
         }
 
 
@@ -786,24 +793,22 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         public Integer[] numFrozenColumnsOptions = {0, 1, 2, 3, 4, 5};
 
         private JButton resetReportOptions = new javax.swing.JButton(
-                "Reset Report Options To Default");
+                "Reset To Default");
 
-        public JLabel aggregationOptionsLabel = new JLabel("Report Aggregation Options");
+        public JLabel aggregationOptionsLabel = new JLabel("Aggregate by");
         public JComboBox<AggregationController> aggregationOptionsComboBox =
                 new JComboBox<>(new DefaultComboBoxModel<>(AggregationController.values()));
-        public JLabel costBasisOptionsLabel = new JLabel("Cost Basis Reporting Options");
+        public JLabel costBasisOptionsLabel = new JLabel("Cost Basis");
         public String[] costBasisOptionStrings = {
-                "Use Average Cost Basis Always", "Use Lot Matching Where Available"};
+                "Average Cost Basis Always", "Lot Matching Where Available"};
         // GUI Fields
         public JComboBox<String> costBasisOptionsComboBox = new JComboBox<>(costBasisOptionStrings);
 
         public AggregationController aggregationController;
-        public JLabel aggregateSingleLabel = new JLabel("Show Aggregates for Single Row?");
-        public JCheckBox aggregateSingleCheckBox = new JCheckBox("Show Aggregates for Single Row" +
+        public JCheckBox aggregateSingleCheckBox = new JCheckBox("Show Aggregates for Single " +
                 "Security", false);
-        public JLabel numFrozenColumnsLabel = new JLabel("Display-Number of Frozen Columns");
+        public JLabel numFrozenColumnsLabel = new JLabel("Number of Frozen Display Columns");
         public JComboBox<Integer> numFrozenColumnsComboBox = new JComboBox<>(numFrozenColumnsOptions);
-        public JLabel hideClosedPosLabel = new JLabel("Hide Closed Positions?");
         public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Closed Positions", true);
 
 
@@ -826,59 +831,49 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
             //initialize sub-panels
             JPanel topPanel = new JPanel();
-            JPanel secondPanel = new JPanel();
             // Layout sub-panels
             GridBagConstraints c;
             topPanel.setLayout(new GridBagLayout());
             c = new GridBagConstraints();
-            c.insets = new Insets(2, 5, 2, 5);
-            //labels
+            c.insets = new Insets(0, 5, 0, 5);
             c.anchor = GridBagConstraints.WEST;
             c.gridx = 0;
             c.gridy = 0;
-            // add reset button
-            topPanel.add(resetReportOptions, c);
-            //add labels
+
             c.gridy++;
             topPanel.add(aggregationOptionsLabel, c);
-            c.gridy++;
+            c.gridx = 1;
             topPanel.add(aggregationOptionsComboBox, c);
+            c.gridx = 0;
+            c.gridy++;
+            topPanel.add(aggregateSingleCheckBox, c);
             c.gridy++;
             topPanel.add(costBasisOptionsLabel, c);
-            c.gridy++;
+            c.gridx = 1;
             topPanel.add(costBasisOptionsComboBox, c);
-
-            secondPanel.setLayout(new GridBagLayout());
-            c = new GridBagConstraints();
-            c.insets = new Insets(0, 5, 0, 5); // left-right padding only
-            c.anchor = GridBagConstraints.WEST;
-            c.insets = new Insets(2, 5, 2, 5);
             c.gridx = 0;
-            c.gridy = 0;
-            secondPanel.add(aggregateSingleLabel, c);
             c.gridy++;
-            secondPanel.add(numFrozenColumnsLabel, c);
+            topPanel.add(hideClosedPosCheckBox, c);
             c.gridy++;
-            secondPanel.add(hideClosedPosLabel, c);
+
+            topPanel.add(numFrozenColumnsLabel, c);
             //data
             c.gridx = 1;
-            c.gridy = 0;
-            secondPanel.add(aggregateSingleCheckBox, c);
-            c.gridy++;
-            secondPanel.add(numFrozenColumnsComboBox, c);
-            c.gridy++;
-            secondPanel.add(hideClosedPosCheckBox, c);
+            topPanel.add(numFrozenColumnsComboBox, c);
 
             setPanelTitle(this, "Report Options");
             this.setLayout(new GridBagLayout());
             c = new GridBagConstraints();
+            c.insets = new Insets(2, 5, 2, 5);
             c.anchor = GridBagConstraints.WEST;
             c.gridx = 0;
             c.gridy = 0;
-            this.add(topPanel, c);
-            c.gridy = 1;
-            this.add(secondPanel, c);
 
+            this.add(topPanel, c);
+            c.gridy++;
+
+            // add reset button
+            this.add(resetReportOptions, c);
         }
 
 

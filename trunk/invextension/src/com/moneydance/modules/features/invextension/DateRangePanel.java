@@ -83,7 +83,7 @@ public class DateRangePanel extends JPanel {
         fromDateField.setReformatOnFocusLost(false);
         toDateField.setReformatOnFocusLost(false);
         //set up listeners
-        JButton resetButton = new JButton("Reset Date Range");
+        JButton resetButton = new JButton("Reset Dates");
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
