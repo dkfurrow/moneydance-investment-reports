@@ -244,14 +244,26 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         // run sub-panel (for program results)
         runPanel.setLayout(new GridBagLayout());
+        JPanel runButtonPanel = new JPanel(new GridBagLayout());
         c = new GridBagConstraints();
-        c.insets = new Insets(5, 5, 5, 5);
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5,5,5,5);
+        c.weightx = 1;
         c.gridx = 0;
         c.gridy = 0;
-        runPanel.add(runReportsButton, c);
-        c.gridx++;
-        runPanel.add(showHelpFileButton, c);
+        runButtonPanel.add(runReportsButton, c);
+        c.gridx ++;
+        runButtonPanel.add(showHelpFileButton, c);
+        c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5);
+//        c.fill = GridBagConstraints.HORIZONTAL;
+//        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0;
         c.gridx = 0;
+        c.gridy = 0;
+        runPanel.add(runButtonPanel, c);
         c.gridy++;
         runPanel.add(reportStatusPane, c);
 
@@ -297,6 +309,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx = 0;
         c.gridy++;
         c.gridwidth = 2;
+        c.fill = GridBagConstraints.BOTH;
         mainReportPanel.add(runPanel, c);
         // finally, add tabbed pain to 'this'
         this.add(reportTabbedPane);
@@ -734,9 +747,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             c = new GridBagConstraints();
             c.insets = new Insets(2, 5, 2, 5);
             c.anchor = GridBagConstraints.WEST;
-            this.add(directoryOutputField, c);
-            c.gridx =1;
             this.add(dirChooserButton, c);
+            c.gridy =1;
+            this.add(directoryOutputField, c);
         }
 
 
@@ -809,7 +822,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 "Security", false);
         public JLabel numFrozenColumnsLabel = new JLabel("Number of Frozen Display Columns");
         public JComboBox<Integer> numFrozenColumnsComboBox = new JComboBox<>(numFrozenColumnsOptions);
-        public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Closed Positions", true);
+        public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Positions with Zero Value", true);
 
 
 
@@ -844,18 +857,19 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             topPanel.add(aggregationOptionsLabel, c);
             c.gridx = 1;
             topPanel.add(aggregationOptionsComboBox, c);
-            c.gridx = 0;
+            c.gridx = 1;
             c.gridy++;
             topPanel.add(aggregateSingleCheckBox, c);
+            c.gridx = 0;
             c.gridy++;
             topPanel.add(costBasisOptionsLabel, c);
             c.gridx = 1;
             topPanel.add(costBasisOptionsComboBox, c);
-            c.gridx = 0;
+            c.gridx = 1;
             c.gridy++;
             topPanel.add(hideClosedPosCheckBox, c);
+            c.gridx = 0;
             c.gridy++;
-
             topPanel.add(numFrozenColumnsLabel, c);
             //data
             c.gridx = 1;

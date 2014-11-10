@@ -87,7 +87,9 @@ public class DateRangePanel extends JPanel {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                populateDateRangePanel(new DateRange());
+                int lastCurrentDateInt = DateUtils.getLastCurrentDateInt();
+                populateDateRangePanel(new DateRange(19700101, lastCurrentDateInt,
+                        lastCurrentDateInt));
             }
         });
         ItemChangeListener itemChangeListener = new ItemChangeListener();
