@@ -59,6 +59,8 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     private DefaultListModel<Account> includedAccountsListModel = new DefaultListModel<>();
     private JList<Account> includedAccountsList = new JList<>(includedAccountsListModel);
     private JScrollPane includedAccountsPane = new JScrollPane(includedAccountsList);
+    JCheckBox removeHideOnHomepageAccountsBox = new JCheckBox("<HTML>Remove Accounts<br>" +
+            "if Set to<br>'Hide on Home Page'</HTML>", false);
 
     //buttons
     private JButton removeButton = new JButton("<<-Remove Accounts");
@@ -109,10 +111,11 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         availableAccountsPanel.add(availableAccountPane);
         accountsIncludedPanel.add(includedAccountsPane);
         //button panel
-//        accountControlPanel.add(Box.createHorizontalStrut(3));
-        accountControlPanel.setLayout(new GridLayout(2, 1));
+        removeHideOnHomepageAccountsBox.setBorderPainted(true);
+        accountControlPanel.setLayout(new GridLayout(3, 1));
         accountControlPanel.add(removeButton);
         accountControlPanel.add(resetButton);
+        accountControlPanel.add(removeHideOnHomepageAccountsBox);
 
 
         GridBagConstraints c = new GridBagConstraints();
@@ -134,11 +137,41 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         //listeners
         removeButton.addActionListener(new RemoveAccountsListener());
         resetButton.addActionListener(new ResetListener());
+        removeHideOnHomepageAccountsBox.addActionListener(new RemoveHideOnHomePageAccountListener());
 
         // renderers
         availableAccountsList.setCellRenderer(new AccountCellRenderer());
         includedAccountsList.setCellRenderer(new AccountCellRenderer());
 
+    }
+
+    public void setHideOnHomePageAccountsRemoved(){
+        boolean hideOnHomePageAccountsRemoved = true;
+        HashSet<Account> hideOnHomePageAccounts = new HashSet<>();
+        for(int i=0;i<availableAccountsListModel.getSize(); i++){
+            Account account = availableAccountsListModel.getElementAt(i);
+            if(account.getHideOnHomePage()) hideOnHomePageAccounts.add(account);
+        }
+        for(int i=0;i<includedAccountsListModel.getSize(); i++){
+            Account account = includedAccountsListModel.getElementAt(i);
+            if(hideOnHomePageAccounts.contains(account)){
+                hideOnHomePageAccountsRemoved = false;
+                break;
+            }
+        }
+        removeHideOnHomepageAccountsBox.setSelected(hideOnHomePageAccountsRemoved);
+    }
+
+    public void removeHideOnHomePageAccounts(){
+        HashSet<Account> accountsToRemove = new HashSet<>();
+        for(int i=0;i<includedAccountsListModel.getSize(); i++){
+            Account account = includedAccountsListModel.getElementAt(i);
+            if(account.getHideOnHomePage()) accountsToRemove.add(account);
+        }
+        for(Account account : accountsToRemove){
+            includedAccountsListModel.removeElement(account);
+        }
+        if(this.reportControlPanel != null) updateReportConfig();
     }
 
     public void populateBothAccountLists(ReportConfig reportConfig)
@@ -150,6 +183,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         Dimension dimension = reportControlPanel.getRelatedDimension(availableAccountPane);
         availableAccountPane.setPreferredSize(dimension);
         includedAccountsPane.setPreferredSize(dimension);
+        setHideOnHomePageAccountsRemoved();
     }
 
     private void populateAvailableAccountsList() throws Exception {
@@ -209,26 +243,42 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
 
             int[] indices = includedAccountsList.getSelectedIndices();
-            if (indices.length > 0) {
-                includedAccountsListModel.removeRange(indices[0], indices[indices.length - 1]);
-                int sizeRemaining = includedAccountsListModel.getSize();
+            removeAccountRange(indices);
+        }
+    }
 
-                if (sizeRemaining == 0) { //Nobody's left, disable firing.
+    class RemoveHideOnHomePageAccountListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == removeHideOnHomepageAccountsBox){
+                if(removeHideOnHomepageAccountsBox.isSelected()){
+                    removeHideOnHomePageAccounts();
+                } else {
                     refillIncludedAccounts();
-                    JOptionPane.showMessageDialog(ReportConfigAccountChooserPanel.this,
-                            "Must include at least one account!");
-                } else { //Select an index.
-                    int index = indices[indices.length - 1];
-                    if (index == includedAccountsListModel.getSize()) {
-                        //removed item in last position
-                        index -= indices.length;
-                    }
-                    includedAccountsList.setSelectedIndex(index);
-                    includedAccountsList.ensureIndexIsVisible(index);
                 }
             }
-            if(ReportConfigAccountChooserPanel.this.reportControlPanel != null) updateReportConfig();
         }
+    }
+
+    private void removeAccountRange(int[] indices) {
+        if (indices.length > 0) {
+            includedAccountsListModel.removeRange(indices[0], indices[indices.length - 1]);
+            int sizeRemaining = includedAccountsListModel.getSize();
+
+            if (sizeRemaining == 0) { //Nobody's left, disable firing.
+                refillIncludedAccounts();
+                JOptionPane.showMessageDialog(this,
+                        "Must include at least one account!");
+            } else { //Select an index.
+                int index = indices[indices.length - 1];
+                if (index == includedAccountsListModel.getSize()) {
+                    //removed item in last position
+                    index -= indices.length;
+                }
+                includedAccountsList.setSelectedIndex(index);
+                includedAccountsList.ensureIndexIsVisible(index);
+            }
+        }
+        if(this.reportControlPanel != null) updateReportConfig();
     }
 
     class ResetListener implements ActionListener {

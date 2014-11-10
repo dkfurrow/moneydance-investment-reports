@@ -68,7 +68,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         freezeColsBox = new JComboBox<>(freezeCols);
         freezeColsBox.setSelectedIndex(reportConfig.getNumFrozenColumns());
         sortButton = new JButton("Sort Table");
-        hideClosedBox = new JCheckBox("Hide Closed Positions", reportConfig.isClosedPosHidden());
+        hideClosedBox = new JCheckBox("Hide Positions with Zero Value", reportConfig.isClosedPosHidden());
         copyToClipboardButton = new JButton("Copy Table to Clipboard");
         JLabel editInstructionLabel = new JLabel("Double-Click Security to Edit Properties");
         editInstructionLabel.setFont(editInstructionLabel.getFont().deriveFont(Font.ITALIC, 10));
