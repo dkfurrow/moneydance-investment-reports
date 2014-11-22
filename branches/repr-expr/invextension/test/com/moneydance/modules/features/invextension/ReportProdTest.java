@@ -430,10 +430,10 @@ public class ReportProdTest {
         HashSet<SecurityFromToReport> securityFromToReports =
                 new HashSet<>();
         DateMap testDateMap = new DateMap();
-        double testIncome = 0.0;
-        double testExpense = 0.0;
-        double testStartValue = 0.0;
-        double testEndValue = 0.0;
+        long testIncome = 0;
+        long testExpense = 0;
+        long testStartValue = 0;
+        long testEndValue = 0;
 
         int reportLeafCount = 0;
         int testLeafCount = 0;
@@ -454,7 +454,7 @@ public class ReportProdTest {
                 .next()
                 .computeMDReturn(testStartValue, testEndValue, testIncome,
                         testExpense, testDateMap);
-        double reportMDReturn = 0.0;
+        double reportMDReturn = 0;
 
 
         for (CompositeReport compositeReport : report.getCompositeReports()) {
@@ -521,14 +521,14 @@ public class ReportProdTest {
 
 
         DateMap testDateMap = new DateMap();
-        double testIncome = 0.0;
-        double testExpense = 0.0;
-        double testStartValue = 0.0;
-        double testEndValue = 0.0;
+        long testIncome = 0;
+        long testExpense = 0;
+        long testStartValue = 0;
+        long testEndValue = 0;
 
         int reportLeafCount = 0;
         int testLeafCount = 0;
-        double reportMDReturn = 0.0;
+        double reportMDReturn = 0;
         double testMDReturn;
 
         for (CompositeReport compositeReport : report.getCompositeReports()) {

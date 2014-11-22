@@ -125,11 +125,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         setTransValuesList(transValuesSet);
     }
 
-    public double getPrice(int dateInt) {
+    public long getPrice(int dateInt) {
         if (currencyWrapper.isCash) {
-            return 1.0;
+            return 100;
         } else {
-            return 1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt);
+            return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
         }
     }
 

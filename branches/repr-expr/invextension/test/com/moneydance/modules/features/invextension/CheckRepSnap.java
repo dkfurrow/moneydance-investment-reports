@@ -132,7 +132,7 @@ public class CheckRepSnap {
         System.out.println(outStr.toString());
     }
 
-    public static void printInputMap(CategoryMap<Double> categoryMap, String msg) {
+    public static void printInputMap(CategoryMap<Long> categoryMap, String msg) {
         StringBuilder outStr = new StringBuilder();
         String tab = "\u0009";
         String[] retCats = {"PREV", "1Wk", "4Wk", "3Mnth", "1Yr", "3Yr",

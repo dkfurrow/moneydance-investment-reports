@@ -40,25 +40,25 @@ import java.util.ArrayList;
  * @author Dale Furrow
  */
 public class SecurityFromToReport extends SecurityReport {
-    public double income;              // cumulative income
+    public long income;                 // cumulative income
     private int fromDateInt;            // start of report period
     private int toDateInt;              // end of report period
-    private double startPos;            // starting position
-    private double endPos;              // ending position
-    private double startPrice;          // starting price
-    private double endPrice;            // ending price
-    private double startValue;          // starting value
-    private double endValue;            // ending value
-    private double buy;                 // cumulative cash effect of buys (including commission)
-    private double sell;                // cumulative cash effect of sells (including commission)
-    private double shortSell;           // cumulative cash effect of shorts (including commission)
-    private double coverShort;          // cumulative cash effect of covers (including commission)
-    private double expense;             // cumulative expense
-    private double longBasis;           // ending average cost basis of long positions
-    private double shortBasis;          // ending average cost basis of short positions
-    private double realizedGain;        // cumulative realized gains
-    private double unrealizedGain;      // cumulative unrealized gains
-    private double totalGain;           // sum of realized and unrealized gains
+    private long startPos;              // starting position
+    private long endPos;                // ending position
+    private long startPrice;            // starting price
+    private long endPrice;              // ending price
+    private long startValue;            // starting value
+    private long endValue;              // ending value
+    private long buy;                   // cumulative cash effect of buys (including commission)
+    private long sell;                  // cumulative cash effect of sells (including commission)
+    private long shortSell;             // cumulative cash effect of shorts (including commission)
+    private long coverShort;            // cumulative cash effect of covers (including commission)
+    private long expense;               // cumulative expense
+    private long longBasis;             // ending average cost basis of long positions
+    private long shortBasis;            // ending average cost basis of short positions
+    private long realizedGain;          // cumulative realized gains
+    private long unrealizedGain;        // cumulative unrealized gains
+    private long totalGain;             // sum of realized and unrealized gains
     private double mdReturn;            // period total return (Mod-Dietz method)
     private double annualPercentReturn; // period annualized return (Mod-Dietz method)
     private DateMap arMap;              // date map of annual return data
@@ -81,29 +81,29 @@ public class SecurityFromToReport extends SecurityReport {
         this.fromDateInt = dateRange.getFromDateInt();
         this.toDateInt = dateRange.getToDateInt();
 
-        this.startPos = 0.0;
-        this.endPos = 0.0;
-        this.startPrice = 0.0;
-        this.endPrice = 0.0;
-        this.startValue = 0.0;
-        this.endValue = 0.0;
+        this.startPos = 0;
+        this.endPos = 0;
+        this.startPrice = 0;
+        this.endPrice = 0;
+        this.startValue = 0;
+        this.endValue = 0;
 
-        this.buy = 0.0;
-        this.sell = 0.0;
-        this.shortSell = 0.0;
-        this.coverShort = 0.0;
+        this.buy = 0;
+        this.sell = 0;
+        this.shortSell = 0;
+        this.coverShort = 0;
 
-        this.income = 0.0;
-        this.expense = 0.0;
+        this.income = 0;
+        this.expense = 0;
 
-        this.longBasis = 0.0;
-        this.shortBasis = 0.0;
-        this.realizedGain = 0.0;
-        this.unrealizedGain = 0.0;
-        this.totalGain = 0.0;
+        this.longBasis = 0;
+        this.shortBasis = 0;
+        this.realizedGain = 0;
+        this.unrealizedGain = 0;
+        this.totalGain = 0;
 
-        this.mdReturn = 0.0;
-        this.annualPercentReturn = 0.0;
+        this.mdReturn = 0;
+        this.annualPercentReturn = 0;
 
         this.arMap = new DateMap();
         this.mdMap = new DateMap();
@@ -115,10 +115,10 @@ public class SecurityFromToReport extends SecurityReport {
             this.endPrice = secAccountWrapper.getPrice(toDateInt);
 
             // intialize intermediate calculation variables
-            double startCumUnrealGain = 0;
-            double endCumUnrealizedGain = 0;
-            double startLongBasis = 0;
-            double startShortBasis = 0;
+            long startCumUnrealGain = 0;
+            long endCumUnrealizedGain = 0;
+            long startLongBasis = 0;
+            long startShortBasis = 0;
 
             ArrayList<TransactionValues> fullTransactionSet = secAccountWrapper.getTransactionValues();
             ArrayList<Integer> fromToIndices = secAccountWrapper.getFromToIndices(dateRange);
@@ -152,8 +152,8 @@ public class SecurityFromToReport extends SecurityReport {
                 // buySellFlows is net cash effect of buy/sell/short/cover, incl commission
                 // totalFlows are all cash flows (including income/expense)
                 // add values to date maps
-                double totalFlows = transactionValues.getTotalFlows();
-                double buySellFlows = transactionValues.getBuySellFlows();
+                long totalFlows = transactionValues.getTotalFlows();
+                long buySellFlows = transactionValues.getBuySellFlows();
 
                 this.arMap.add(transactionValues.getDateint(),
                         totalFlows);
@@ -162,17 +162,17 @@ public class SecurityFromToReport extends SecurityReport {
 
                 // Add the cumulative Values (note buys are defined by change in
                 // long basis, same with sells--commission is included).
-                this.buy += transactionValues.getBuy() == 0.0
-                        ? 0.0
+                this.buy += transactionValues.getBuy() == 0
+                        ? 0
                         : -transactionValues.getBuy() - transactionValues.getCommission();
-                this.sell += transactionValues.getSell() == 0.0
-                        ? 0.0
+                this.sell += transactionValues.getSell() == 0
+                        ? 0
                         : -transactionValues.getSell() - transactionValues.getCommission();
-                this.shortSell += transactionValues.getShortSell() == 0.0
-                        ? 0.0
+                this.shortSell += transactionValues.getShortSell() == 0
+                        ? 0
                         : -transactionValues.getShortSell() - transactionValues.getCommission();
-                this.coverShort += transactionValues.getCoverShort() == 0.0
-                        ? 0.0
+                this.coverShort += transactionValues.getCoverShort() == 0
+                        ? 0
                         : -transactionValues.getCoverShort() - transactionValues.getCommission();
                 this.income += transactionValues.getIncome();
                 this.expense += transactionValues.getExpense();
@@ -206,12 +206,12 @@ public class SecurityFromToReport extends SecurityReport {
             // Add the first value in return arrays (if startpos != 0)
             if (this.startPos != 0) {
                 this.arMap.add(fromDateInt, -this.startValue);
-                this.mdMap.add(fromDateInt, 0.0); // adds dummy value for mod-dietz
+                this.mdMap.add(fromDateInt, 0L); // adds dummy value for mod-dietz
             }
             // add the last value in return arrays (if endpos != 0)
             if (this.endPos != 0) {
                 this.arMap.add(toDateInt, this.endValue);
-                this.mdMap.add(toDateInt, 0.0); // adds dummy value for mod-dietz
+                this.mdMap.add(toDateInt, 0L); // adds dummy value for mod-dietz
             }
 
             this.mdReturn = computeMDReturn(this.startValue, this.endValue, this.income,
@@ -249,10 +249,10 @@ public class SecurityFromToReport extends SecurityReport {
             this.endPrice = securityFromToReport.endPrice;
 
         } else {
-            this.startPos = 0.0;
-            this.endPos = 0.0;
-            this.startPrice = 0.0;
-            this.endPrice = 0.0;
+            this.startPos = 0;
+            this.endPos = 0;
+            this.startPrice = 0;
+            this.endPrice = 0;
         }
 
         //populate other values from this SecurityReport
@@ -274,8 +274,8 @@ public class SecurityFromToReport extends SecurityReport {
         this.mdMap = this.mdMap.combine(securityFromToReport.mdMap, "add");
         this.transMap = this.transMap.combine(securityFromToReport.transMap, "add");
         //set returns to zero
-        this.mdReturn = 0.0;
-        this.annualPercentReturn = 0.0;
+        this.mdReturn = 0;
+        this.annualPercentReturn = 0;
     }
 
     @Override
@@ -392,71 +392,71 @@ public class SecurityFromToReport extends SecurityReport {
         return toDateInt;
     }
 
-    public double getStartPos() {
+    public long getStartPos() {
         return startPos;
     }
 
-    public double getEndPos() {
+    public long getEndPos() {
         return endPos;
     }
 
-    public double getStartPrice() {
+    public long getStartPrice() {
         return startPrice;
     }
 
-    public double getEndPrice() {
+    public long getEndPrice() {
         return endPrice;
     }
 
-    public double getStartValue() {
+    public long getStartValue() {
         return startValue;
     }
 
-    public double getEndValue() {
+    public long getEndValue() {
         return endValue;
     }
 
-    public double getBuy() {
+    public long getBuy() {
         return buy;
     }
 
-    public double getSell() {
+    public long getSell() {
         return sell;
     }
 
-    public double getShortSell() {
+    public long getShortSell() {
         return shortSell;
     }
 
-    public double getCoverShort() {
+    public long getCoverShort() {
         return coverShort;
     }
 
-    public double getIncome() {
+    public long getIncome() {
         return income;
     }
 
-    public double getExpense() {
+    public long getExpense() {
         return expense;
     }
 
-    public double getLongBasis() {
+    public long getLongBasis() {
         return longBasis;
     }
 
-    public double getShortBasis() {
+    public long getShortBasis() {
         return shortBasis;
     }
 
-    public double getRealizedGain() {
+    public long getRealizedGain() {
         return realizedGain;
     }
 
-    public double getUnrealizedGain() {
+    public long getUnrealizedGain() {
         return unrealizedGain;
     }
 
-    public double getTotalGain() {
+    public long getTotalGain() {
         return totalGain;
     }
 

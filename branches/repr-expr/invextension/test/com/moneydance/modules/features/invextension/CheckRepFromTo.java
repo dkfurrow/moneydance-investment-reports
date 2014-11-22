@@ -163,10 +163,10 @@ public class CheckRepFromTo {
         }
     }
 
-    public static Integer[] returnKeySetArray(Map<Integer, Double> map) {
+    public static Integer[] returnKeySetArray(Map<Integer, Long> map) {
         Integer[] outArray = new Integer[map.size()];
         int i = 0;
-        for (Map.Entry<Integer, Double> mapEntry : map.entrySet()) {
+        for (Map.Entry<Integer, Long> mapEntry : map.entrySet()) {
             outArray[i] = mapEntry.getKey();
             i++;
         }

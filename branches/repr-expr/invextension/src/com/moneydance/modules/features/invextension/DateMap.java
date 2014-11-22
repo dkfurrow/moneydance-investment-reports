@@ -37,7 +37,7 @@ Map which matches dates to cash flows for returns
 calculations
  */
 public class DateMap {
-    private TreeMap<Integer, Double> map;
+    private TreeMap<Integer, Long> map;
 
     DateMap() {
         map = new TreeMap<>();
@@ -50,17 +50,15 @@ public class DateMap {
     }
 
 
-    public Double put(Integer dateInt, Double value) {
-        return map.put(dateInt, value);
-    }
+    public Long put(Integer dateInt, Long value) { return map.put(dateInt, value); }
 
 
-    public TreeMap<Integer, Double> getMap() {
+    public TreeMap<Integer, Long> getMap() {
         return map;
     }
 
 
-    public Double get(Integer dateInt) {
+    public Long get(Integer dateInt) {
         return map.get(dateInt);
     }
 
@@ -85,7 +83,7 @@ public class DateMap {
     }
 
 
-    public Collection<Double> values() {
+    public Collection<Long> values() {
         return map.values();
     }
 
@@ -96,8 +94,8 @@ public class DateMap {
      * @param dateInt dateInto to add
      * @return old value
      */
-    public Double add(Integer dateInt, Double incr) {
-        Double oldVal = get(dateInt);
+    public Long add(Integer dateInt, Long incr) {
+        Long oldVal = get(dateInt);
         if (oldVal == null) {
             return map.put(dateInt, incr);
         } else {
@@ -118,7 +116,7 @@ public class DateMap {
 
         if (operand != null) {
             for (Integer operandDateInt : operand.keySet()) {
-                Double value2 = operand.get(operandDateInt);
+                Long value2 = operand.get(operandDateInt);
 
                 if (outMap.get(operandDateInt) == null) {
                     if ("add".equals(combType)) {
@@ -129,12 +127,10 @@ public class DateMap {
                     }
                 } else {
                     if ("add".equals(combType)) {
-                        outMap.put(operandDateInt,
-                                this == null ? 0 : this.get(operandDateInt) + value2);
+                        outMap.put(operandDateInt, this.get(operandDateInt) + value2);
                     }
                     if ("subtract".equals(combType)) {
-                        outMap.put(operandDateInt,
-                                this == null ? 0 : this.get(operandDateInt) - value2);
+                        outMap.put(operandDateInt, this.get(operandDateInt) - value2);
                     }
                 }
             }

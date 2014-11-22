@@ -63,13 +63,13 @@ public abstract class ComponentReport {
                 && retMap.values().size() > 0) {
             int i = 0;
             for (Integer dateInt : retMap.keySet()) {
-                Double value = retMap.get(dateInt);
+                long value = retMap.get(dateInt);
                 dateIntsArray[i] = dateInt;
                 annRetValuesArray[i] = value;
                 i++;
             }
         } else {
-            return Double.NaN;
+            return 0.0;
         }
 
         for (int i = 0; i < numPeriods; i++) {
@@ -99,32 +99,28 @@ public abstract class ComponentReport {
      * @param mdMap      datemap which relates dates to cash flows
      * @return Mod Dietz return
      */
-    public double computeMDReturn(double startValue, double endValue,
-                                  double income, double expense, DateMap mdMap) {
+    public double computeMDReturn(long startValue, long endValue,
+                                  long income, long expense, DateMap mdMap) {
         if (mdMap.keySet().size() > 0 && mdMap.values().size() > 0) {
-            double mdValue;
-            double sumCF = 0;
-            double weightCF = 0;
+            Double mdValue;
+            long sumCF = 0;
+            long weightCF = 0;
 
-            Integer cd = DateUtils.getDaysBetween(mdMap.firstKey(),
-                    mdMap.lastKey());
-            Double cdD = cd.doubleValue();
+            int cd = DateUtils.getDaysBetween(mdMap.firstKey(), mdMap.lastKey());
 
             for (Integer thisDateInt : mdMap.keySet()) {
-                Double cf = mdMap.get(thisDateInt);
-                Integer dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(),
-                        thisDateInt);
-                Double dayBetD = dayBetw.doubleValue();
-                double wSubI = (cdD - dayBetD) / cdD;
-                weightCF = weightCF + (wSubI * cf);
-                sumCF = sumCF + cf;
+                Long cf = mdMap.get(thisDateInt);
+                int dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(), thisDateInt);
+                double wSubI = ((double)cd - (double)dayBetw) / (double)cd;
+                weightCF += Math.round(wSubI * cf);
+                sumCF += cf;
             }
 
-            mdValue = ((endValue + income + expense) - startValue - sumCF)
-                    / (startValue + weightCF);
+            mdValue = (double)((endValue + income + expense) - startValue - sumCF)
+                    / (double)(startValue + weightCF);
             return mdValue;
         } else {
-            return Double.NaN;
+            return 0.0;
         }
     }
 

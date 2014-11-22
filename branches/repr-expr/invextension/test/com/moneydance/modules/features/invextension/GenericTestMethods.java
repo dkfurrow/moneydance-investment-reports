@@ -59,7 +59,7 @@ public class GenericTestMethods {
         verifyAggregateByCurrencyReport(currentInfo);
         System.out.println("DataFile Path: "
                 + root.getDataFile().getParentFile().getAbsolutePath());
-        Double sampleDateValue = DateUtils.getExcelDateValue(20100208);
+        long sampleDateValue = DateUtils.getExcelDateValue(20100208);
         System.out.println("Sample Date Value" + sampleDateValue);
         GregorianCalendar gc = new GregorianCalendar(1900, 1, 1);
         gc.setTimeInMillis(0L);
@@ -82,10 +82,10 @@ public class GenericTestMethods {
 
         HashSet<SecurityFromToReport> securityFromToReports = new HashSet<>();
         DateMap testDateMap = new DateMap();
-        double testIncome = 0.0;
-        double testExpense = 0.0;
-        double testStartValue = 0.0;
-        double testEndValue = 0.0;
+        long testIncome = 0;
+        long testExpense = 0;
+        long testStartValue = 0;
+        long testEndValue = 0;
 
         int reportLeafCount = 0;
         int testLeafCount = 0;
@@ -106,7 +106,7 @@ public class GenericTestMethods {
                 .next()
                 .computeMDReturn(testStartValue, testEndValue, testIncome,
                         testExpense, testDateMap);
-        double reportMDReturn = 0.0;
+        double reportMDReturn = 0;
 
         System.out.println("Test Return: " + testMDReturn);
 
@@ -162,15 +162,14 @@ public class GenericTestMethods {
 
     @SuppressWarnings("unused")
     private static void listCreateDatesANDInitBals(BulkSecInfo currentInfo) {
-        HashMap<Account, Double> initBals = new HashMap<>();
+        HashMap<Account, Long> initBals = new HashMap<>();
         HashMap<Account, Integer> createDates = new HashMap<>();
         HashSet<InvestmentAccountWrapper> theseInvs = currentInfo
                 .getInvestmentWrappers();
         for (InvestmentAccountWrapper investmentAccountWrapper : theseInvs) {
             InvestmentAccount invAcct = (InvestmentAccount) investmentAccountWrapper
                     .getInvestmentAccount();
-            initBals.put(invAcct, Long.valueOf(invAcct.getStartBalance())
-                    .doubleValue());
+            initBals.put(invAcct, Long.valueOf(invAcct.getStartBalance()));
             createDates.put(invAcct, invAcct.getCreationDateInt());
         }
         System.out

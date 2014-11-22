@@ -534,10 +534,10 @@ public final class DateUtils {
      */
 
 
-    public static double getExcelDateValue(int dateInt) {
+    public static long getExcelDateValue(int dateInt) {
         int dateStartInt = convertToDateInt(dateStart.getTime());
-        Integer daysBetwInt = getDaysBetween(dateStartInt, dateInt);
-        return daysBetwInt.doubleValue();
+        int daysBetwInt = getDaysBetween(dateStartInt, dateInt);
+        return daysBetwInt;
     }
 
     /**

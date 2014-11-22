@@ -41,8 +41,8 @@ public interface GainsCalc {
     public void initializeGainsCalc(BulkSecInfo currentInfo,
                                     TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses);
 
-    public double getLongBasis();
+    public long getLongBasis();
 
-    public double getShortBasis();
+    public long getShortBasis();
 
 }

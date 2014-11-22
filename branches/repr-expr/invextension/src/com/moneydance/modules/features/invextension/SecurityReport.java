@@ -114,7 +114,7 @@ public abstract class SecurityReport extends ComponentReport {
         }
     }
 
-    public double getSplitAdjustedPosition(double referencePosition, int referenceDateInt,
+    public long getSplitAdjustedPosition(long referencePosition, int referenceDateInt,
                                            int currentDateInt) {
         CurrencyType currency = currencyWrapper.currencyType;
         double currentRate = currency == null ? 1.0 : currency
@@ -122,7 +122,7 @@ public abstract class SecurityReport extends ComponentReport {
         double splitAdjust = currency == null ? 1.0 : currency
                 .adjustRateForSplitsInt(referenceDateInt,
                         currentRate, currentDateInt) / currentRate;
-        return referencePosition * splitAdjust;
+        return Math.round(referencePosition * splitAdjust);
     }
 
     /**
