@@ -164,10 +164,10 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.secQuantity = -this.buy - this.coverShort - this.sell - this.shortSell;
 
         this.position = this.secQuantity;
-        this.longBasis = Math.max(this.position, 0);
-        this.shortBasis = Math.min(this.position, 0);
+        this.longBasis = Math.max(this.position, 0) * 100;
+        this.shortBasis = Math.min(this.position, 0) * 100;
         // OpenValue
-        this.openValue = this.position * this.mktPrice / 100;
+        this.openValue = this.position * this.mktPrice / 10000;
         // mkt price is always 1, so no realized/unrealized gains
         this.cumUnrealizedGain = 0;
         this.perUnrealizedGain = 0;
@@ -257,9 +257,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
             } else { // subsequent transaction
                 if(securityAccountWrapper.isTradeable()) testSubsequentTransaction(TxnUtil.getInvestTxnType(parentTxn),
                         secQuantity, adjPrevPos);
-                //round to zero if negligibly small
                 this.position = this.secQuantity + adjPrevPos;
-
             }
 
 
@@ -271,7 +269,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
 
             // OpenValue
-            this.openValue = this.position * this.mktPrice / 100;
+            this.openValue = this.position * this.mktPrice / 10000;
 
             // cumulative unrealized gains
             if (this.position > 0) {
@@ -303,7 +301,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                         // unrealized gains equal 0 on position-closing
                         // transaction
                         this.perUnrealizedGain = this.position
-                                * (this.mktPrice - adjPrevMktPrc) / 100;
+                                * (this.mktPrice - adjPrevMktPrc) / 10000;
                     }
                 }
             }
@@ -460,14 +458,13 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
         }
 
-        this.secQuantity = -this.buy - this.coverShort - this.sell
-                - this.shortSell;
+        this.secQuantity = (-this.buy - this.coverShort - this.sell - this.shortSell) * 100;
 
         this.position = this.secQuantity + prevPos;
-        this.longBasis = Math.max(this.position, 0);
-        this.shortBasis = Math.min(this.position, 0);;
+        this.longBasis = Math.max(this.position, 0) / 100;
+        this.shortBasis = Math.min(this.position, 0) / 100;;
         // OpenValue
-        this.openValue = this.position * this.mktPrice / 100;
+        this.openValue = this.position * this.mktPrice / 10000;
         //mkt price is always 1, so no realized/unrealized gains
         this.cumUnrealizedGain = 0;
         this.perUnrealizedGain = 0;

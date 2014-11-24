@@ -56,7 +56,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 
     //one day values
     private long absPriceChange;      //absolute price change (from previous day to snapDate)
-    private long pctPriceChange;      //percent price change (from previous day to snapDate)
+    private double pctPriceChange;      //percent price change (from previous day to snapDate)
     private long absValueChange;      //absolute value change (from previous day to snapDate)
 
     //total numbers
@@ -68,7 +68,7 @@ public class SecuritySnapshotReport extends SecurityReport {
     private double annRetAll;           //annualized return (all dates)
 
     //Dividend Yields
-    private double annualizedDividend = 0;
+    private long annualizedDividend = 0;
     private double dividendYield = 0;
     private double yieldOnBasis = 0;
 
@@ -347,9 +347,9 @@ public class SecuritySnapshotReport extends SecurityReport {
                 this.absPriceChange = this.lastPrice - prevPrice;
                 this.absValueChange = this.endPos * this.absPriceChange / 10000;
                 if (prevPrice != 0) {
-                    this.pctPriceChange = this.lastPrice / prevPrice;
+                    this.pctPriceChange = ((double)this.lastPrice) / prevPrice - 1.0;
                 } else {
-                    this.pctPriceChange = 1;
+                    this.pctPriceChange = 0;
                 }
             }
             this.totRet1Day = this.mdReturns.get("PREV") == null ? Double.NaN
@@ -394,7 +394,7 @@ public class SecuritySnapshotReport extends SecurityReport {
                     arMap.get(retCat).add(returnsStartDate.get(retCat),
                             -startValues.get(retCat));
                 }
-                if (endValue != 0.0) {
+                if (endValue != 0) {
                     arMap.get(retCat).add(snapDateInt, endValue);
                 }
                 // get return
@@ -542,20 +542,20 @@ public class SecuritySnapshotReport extends SecurityReport {
      * @param operand security snapshot to be combined
      */
     private void combineDividendData(SecuritySnapshotReport operand) {
-        if (Double.isNaN(this.annualizedDividend) & !Double.isNaN(operand.annualizedDividend)) {
+        if (this.annualizedDividend == 0 & operand.annualizedDividend != 0) {
             //take operand values
             this.annualizedDividend = operand.annualizedDividend;
             this.dividendYield = operand.dividendYield;
             this.yieldOnBasis = operand.yieldOnBasis;
 
-        } else if (!Double.isNaN(this.annualizedDividend) & !Double.isNaN(operand.annualizedDividend)) {
+        } else if (this.annualizedDividend != 0 & operand.annualizedDividend != 0) {
             // both valid, add
             this.annualizedDividend += operand.annualizedDividend;
             this.dividendYield = annualizedDividend / endValue;
             this.yieldOnBasis = annualizedDividend / longBasis;
         }
-        // if both are NaN, ignore and return
-        // if operand is Nan, then ignore and return
+        // if both are zero, ignore and return
+        // if operand is zero, then ignore and return
         // retain current values --return
     }
 
@@ -589,7 +589,7 @@ public class SecuritySnapshotReport extends SecurityReport {
         outputLine.add(this.longBasis/100.0);
         outputLine.add(this.shortBasis/100.0);
         outputLine.add(this.income/100.0);
-        outputLine.add(this.annualizedDividend);
+        outputLine.add(this.annualizedDividend / 100.0);
         outputLine.add(this.dividendYield);
         outputLine.add(this.yieldOnBasis);
         outputLine.add(this.realizedGain/100.0);
@@ -861,13 +861,13 @@ public class SecuritySnapshotReport extends SecurityReport {
                 long splitAdjustReferencePos = getSplitAdjustedPosition(basisReferenceTransaction.getPosition(),
                         basisReferenceTransaction.getDateint(), snapDateInt);
                 long annualizedDivTotal = getAnnualizedDividend();
-                long annualizedDivPerShare = (splitAdjustReferencePos > 0 && endPos > 0) ?
-                        annualizedDivTotal / splitAdjustReferencePos * 100 : 0;
-                annualizedDividend = annualizedDivPerShare * endPos / 100;
+                double annualizedDivPerShare = (splitAdjustReferencePos > 0 && endPos > 0) ?
+                        ((double)annualizedDivTotal) / splitAdjustReferencePos * 10000 : 0;
+                annualizedDividend = Math.round(annualizedDivPerShare * endPos) / 10000;
                 dividendYield = (lastPrice != 0 && annualizedDivPerShare != 0) ?
                         annualizedDivPerShare / lastPrice : 0.0;
                 yieldOnBasis = (longBasis > 0 && annualizedDivPerShare != 0) ?
-                        annualizedDividend / longBasis : 0.0;
+                        ((double)annualizedDividend) / longBasis : 0.0;
             }
         }
 

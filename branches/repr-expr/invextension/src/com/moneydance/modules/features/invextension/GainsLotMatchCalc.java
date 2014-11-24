@@ -91,16 +91,16 @@ public class GainsLotMatchCalc implements GainsCalc {
                     : prevTransValues.getLongBasis());
         } else { // subsequent pos smaller than previous
             // implies prev long basis must exist
-            long wtAvgUnitCost;
+            double wtAvgUnitCost;
             if (matchTable == null) {//use average cost
-                wtAvgUnitCost = Math.round(prevTransValues.getLongBasis() / adjPrevPos * 100);
+                wtAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
 
             } else { //use lot-weighted average cost
                 wtAvgUnitCost = getWeightedCost(matchTable);
             }
 
             return prevTransValues.getLongBasis()
-                    + Math.round(wtAvgUnitCost * currentTrans.getSecQuantity() / 10000);
+                    + Math.round(wtAvgUnitCost * currentTrans.getSecQuantity());
         }
     }
 
@@ -110,9 +110,9 @@ public class GainsLotMatchCalc implements GainsCalc {
      * @param thisMatchTable match table from security
      * @return weighted cost of security
      */
-    private long getWeightedCost(Hashtable<Long, Long> thisMatchTable) {
-        long totWeightedNumerator = 0;
-        long totalAllocatedQtyAdjust = 0;
+    private double getWeightedCost(Hashtable<Long, Long> thisMatchTable) {
+        double totWeightedNumerator = 0.0;
+        double totalAllocatedQtyAdjust = 0.0;
         for (Long allocationSplitTransNum : thisMatchTable.keySet()) {
             //split transaction number
             //parent transaction of associated split
@@ -125,7 +125,8 @@ public class GainsLotMatchCalc implements GainsCalc {
             TransactionValues allocationTransValues = currentInfo.getSecurityTransactionValues()
                     .get(allocationParentTransNum);
             //Split-adjustment for shares (adjusts previous shares to current)
-            Double splitAdjust = getSplitAdjust(currentTrans, allocationTransValues);
+            Double splitAdjust = getSplitAdjust(currentTrans,
+                    allocationTransValues);
             //Lots to include in weighted average
             Long allocationQtyAdjust = thisMatchTable.get(allocationSplitTransNum);
             //add to total quantity (will use as denominator later)
@@ -137,10 +138,10 @@ public class GainsLotMatchCalc implements GainsCalc {
             Double unitCostAdjust = (-allocationTransValues.getBuy() - allocationTransValues.getCommission())
                     / secQtyAdjust;
             //add weight
-            totWeightedNumerator += Math.round(unitCostAdjust * allocationQtyAdjust);
+            totWeightedNumerator += unitCostAdjust * allocationQtyAdjust;
         }
         //Divide by total adjusted shares for weighted average
-        return Math.round(totWeightedNumerator / totalAllocatedQtyAdjust * 100);
+        return totWeightedNumerator / totalAllocatedQtyAdjust;
     }
 
     /* (non-Javadoc)
@@ -161,9 +162,9 @@ public class GainsLotMatchCalc implements GainsCalc {
                     : +prevTransValues.getShortBasis());
         } else { // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
-            long histAvgUnitCost = Math.round(prevTransValues.getShortBasis() / adjPrevPos * 100);
+            double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return (prevTransValues.getShortBasis()
-                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity() / 10000));
+                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity()));
         }
     }
 

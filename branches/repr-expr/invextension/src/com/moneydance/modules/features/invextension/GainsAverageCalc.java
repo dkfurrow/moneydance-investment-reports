@@ -66,9 +66,9 @@ public class GainsAverageCalc implements GainsCalc {
         } else {
             // subsequent pos smaller than previous
             // implies prev long basis must exist
-            long histAvgUnitCost = Math.round(prevTransValues.getLongBasis() / adjPrevPos * 100);
+            double histAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
             return prevTransValues.getLongBasis()
-                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity() / 10000);
+                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
         }
     }
 
@@ -89,9 +89,9 @@ public class GainsAverageCalc implements GainsCalc {
                     : +prevTransValues.getShortBasis());
         } else { // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
-            long histAvgUnitCost = Math.round(prevTransValues.getShortBasis() / adjPrevPos * 100);
+            double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return prevTransValues.getShortBasis()
-                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity() / 10000);
+                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
         }
     }
 
