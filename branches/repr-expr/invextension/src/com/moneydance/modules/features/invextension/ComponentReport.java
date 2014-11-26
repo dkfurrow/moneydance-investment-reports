@@ -27,6 +27,8 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import java.math.BigDecimal;
+
 /**
  * Base class for security reports and composites.
  *
@@ -63,9 +65,9 @@ public abstract class ComponentReport {
                 && retMap.values().size() > 0) {
             int i = 0;
             for (Integer dateInt : retMap.keySet()) {
-                long value = retMap.get(dateInt);
+                BigDecimal value = retMap.get(dateInt);
                 dateIntsArray[i] = dateInt;
-                annRetValuesArray[i] = value;
+                annRetValuesArray[i] = value.intValue();
                 i++;
             }
         } else {
@@ -109,7 +111,7 @@ public abstract class ComponentReport {
             int cd = DateUtils.getDaysBetween(mdMap.firstKey(), mdMap.lastKey());
 
             for (Integer thisDateInt : mdMap.keySet()) {
-                Long cf = mdMap.get(thisDateInt);
+                Long cf = mdMap.get(thisDateInt).longValue();
                 int dayBetw = DateUtils.getDaysBetween(mdMap.firstKey(), thisDateInt);
                 double wSubI = ((double)cd - (double)dayBetw) / (double)cd;
                 weightCF += Math.round(wSubI * cf);

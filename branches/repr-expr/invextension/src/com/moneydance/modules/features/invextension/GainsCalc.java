@@ -27,6 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -41,8 +42,8 @@ public interface GainsCalc {
     public void initializeGainsCalc(BulkSecInfo currentInfo,
                                     TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses);
 
-    public long getLongBasis();
+    public BigDecimal getLongBasis();
 
-    public long getShortBasis();
+    public BigDecimal getShortBasis();
 
 }

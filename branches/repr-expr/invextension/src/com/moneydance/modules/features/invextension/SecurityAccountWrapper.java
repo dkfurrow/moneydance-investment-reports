@@ -34,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
+import java.math.BigDecimal;
+
 
 /**
  * Adds functionality to
@@ -125,11 +127,13 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         setTransValuesList(transValuesSet);
     }
 
-    public long getPrice(int dateInt) {
+    public BigDecimal getPrice(int dateInt) {
         if (currencyWrapper.isCash) {
-            return 100;
+            return BigDecimal.ONE;
         } else {
-            return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
+            return BigDecimal.ONE.divide(BigDecimal.valueOf(currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)),
+                    BigDecimal.ROUND_HALF_EVEN)
+                .setScale(SecurityReport.moneyScale, BigDecimal.ROUND_HALF_EVEN);
         }
     }
 
@@ -348,14 +352,14 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         }
 
         void analyzeDividend(@NotNull TransactionValues transactionValues) {
-            if (transactionValues.getIncome() > 0) {
+            if (transactionValues.getIncome().compareTo(BigDecimal.ZERO) > 0) {
                 InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());
                 switch (transType) {
                     case DIVIDEND:
                     case DIVIDENDXFR:
                     case DIVIDEND_REINVEST:
                     case BANK:
-                        if (transactionValues.getIncome() != 0.0) {
+                        if (transactionValues.getIncome().compareTo(BigDecimal.ZERO) != 0) {
                             int dividendDate = transactionValues.getDateint();
                             int daysBetweenDivs = lastDividendDateInt == -1 ? -1 : DateUtils
                                     .getDaysBetween(dividendDate, lastDividendDateInt);

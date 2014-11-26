@@ -30,8 +30,11 @@ package com.moneydance.modules.features.invextension;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  * Generic SecurityReport, generates one data set for each Security in each
@@ -50,6 +53,8 @@ public abstract class SecurityReport extends ComponentReport {
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
 
+    public static int quantityScale = 4;
+    public static int moneyScale = 2;
 
     /**
      * Generic constructor populates all members based on securityAccountWrapper
@@ -61,6 +66,7 @@ public abstract class SecurityReport extends ComponentReport {
     public SecurityReport(SecurityAccountWrapper securityAccountWrapper,
                           DateRange dateRange) {
         this.dateRange = dateRange;
+
         if (securityAccountWrapper != null) {
             this.securityAccountWrapper = securityAccountWrapper;
             this.investmentAccountWrapper = securityAccountWrapper.getInvAcctWrapper();
@@ -114,7 +120,7 @@ public abstract class SecurityReport extends ComponentReport {
         }
     }
 
-    public long getSplitAdjustedPosition(long referencePosition, int referenceDateInt,
+    public BigDecimal getSplitAdjustedPosition(BigDecimal referencePosition, int referenceDateInt,
                                            int currentDateInt) {
         CurrencyType currency = currencyWrapper.currencyType;
         double currentRate = currency == null ? 1.0 : currency
@@ -122,7 +128,8 @@ public abstract class SecurityReport extends ComponentReport {
         double splitAdjust = currency == null ? 1.0 : currency
                 .adjustRateForSplitsInt(referenceDateInt,
                         currentRate, currentDateInt) / currentRate;
-        return Math.round(referencePosition * splitAdjust);
+        return referencePosition.multiply(BigDecimal.valueOf(splitAdjust))
+                .setScale(quantityScale, BigDecimal.ROUND_HALF_EVEN);
     }
 
     /**

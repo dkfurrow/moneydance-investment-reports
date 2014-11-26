@@ -35,6 +35,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import java.math.BigDecimal;
+
+
 /**
  * Report detailing performance attributes based on a specific snapshot
  * date
@@ -47,28 +50,28 @@ public class SecuritySnapshotReport extends SecurityReport {
     private int snapDateInt;
 
 
-    private long lastPrice;           //ending price
-    private long endPos;              //ending position
-    private long endValue;            //ending value
+    private BigDecimal lastPrice;           //ending price
+    private BigDecimal endPos;              //ending position
+    private BigDecimal endValue;            //ending value
 
-    private long longBasis;           //final long basis
-    private long shortBasis;          //final short basis
+    private BigDecimal longBasis;           //final BigDecimal basis
+    private BigDecimal shortBasis;          //final short basis
 
     //one day values
-    private long absPriceChange;      //absolute price change (from previous day to snapDate)
+    private BigDecimal absPriceChange;      //absolute price change (from previous day to snapDate)
     private double pctPriceChange;      //percent price change (from previous day to snapDate)
-    private long absValueChange;      //absolute value change (from previous day to snapDate)
+    private BigDecimal absValueChange;      //absolute value change (from previous day to snapDate)
 
     //total numbers
-    private long income;              //total income (all dates)
-    private long unrealizedGain;      // unrealized gain
-    private long realizedGain;        //realized gain
-    private long totalGain;           //total absolute gain (all dates)
+    private BigDecimal income;              //total income (all dates)
+    private BigDecimal unrealizedGain;      // unrealized gain
+    private BigDecimal realizedGain;        //realized gain
+    private BigDecimal totalGain;           //total absolute gain (all dates)
     private double totRetAll;           //total Mod-Dietz return (all dates)
     private double annRetAll;           //annualized return (all dates)
 
     //Dividend Yields
-    private long annualizedDividend = 0;
+    private BigDecimal annualizedDividend = BigDecimal.ZERO;
     private double dividendYield = 0;
     private double yieldOnBasis = 0;
 
@@ -84,11 +87,11 @@ public class SecuritySnapshotReport extends SecurityReport {
 
     // intermediate values
     private CategoryMap<Integer> returnsStartDate;      //maps return category to start dates
-    private CategoryMap<Long> startValues;              //maps return category to start values
-    private CategoryMap<Long> startPoses;               //maps return category to start positions
-    private CategoryMap<Long> startPrices;              //maps return category to start positions
-    private CategoryMap<Long> incomes;                  //maps return category to income
-    private CategoryMap<Long> expenses;                 //maps return category to expense
+    private CategoryMap<BigDecimal> startValues;              //maps return category to start values
+    private CategoryMap<BigDecimal> startPoses;               //maps return category to start positions
+    private CategoryMap<BigDecimal> startPrices;              //maps return category to start positions
+    private CategoryMap<BigDecimal> incomes;                  //maps return category to income
+    private CategoryMap<BigDecimal> expenses;                 //maps return category to expense
     private CategoryMap<Double> mdReturns;              //maps return category to Mod-Dietz returns
 
 
@@ -111,25 +114,25 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         this.snapDateInt = dateRange.getSnapDateInt();
 
-        this.lastPrice = 0;
-        this.endPos = 0;
-        this.endValue = 0;
+        this.lastPrice= BigDecimal.ZERO;
+        this.endPos= BigDecimal.ZERO;
+        this.endValue= BigDecimal.ZERO;
 
-        this.longBasis = 0;
-        this.shortBasis = 0;
+        this.longBasis= BigDecimal.ZERO;
+        this.shortBasis= BigDecimal.ZERO;
 
-        this.absPriceChange = 0;
-        this.pctPriceChange = 0;
-        this.absValueChange = 0;
+        this.absPriceChange= BigDecimal.ZERO;
+        this.pctPriceChange= 0;
+        this.absValueChange= BigDecimal.ZERO;
 
-        this.income = 0;
-        this.unrealizedGain = 0;
-        this.realizedGain = 0;
-        this.totalGain = 0;
+        this.income= BigDecimal.ZERO;
+        this.unrealizedGain= BigDecimal.ZERO;
+        this.realizedGain= BigDecimal.ZERO;
+        this.totalGain= BigDecimal.ZERO;
         this.totRetAll = 0;
         this.annRetAll = 0;
 
-        this.annualizedDividend = 0;
+        this.annualizedDividend= BigDecimal.ZERO;
         this.dividendYield = 0;
         this.yieldOnBasis = 0;
 
@@ -186,10 +189,10 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         // initialize ArrayLists values to zero
         for (String retCat : this.returnsStartDate.keySet()) {
-            startPoses.put(retCat, 0L);
-            this.startValues.put(retCat, 0L);
-            this.incomes.put(retCat, 0L);
-            this.expenses.put(retCat, 0L);
+            startPoses.put(retCat, BigDecimal.ZERO);
+            this.startValues.put(retCat, BigDecimal.ZERO);
+            this.incomes.put(retCat, BigDecimal.ZERO);
+            this.expenses.put(retCat, BigDecimal.ZERO);
             this.mdReturns.put(retCat, 0.0);
 
             this.arMap.put(retCat, new DateMap());
@@ -213,8 +216,8 @@ public class SecuritySnapshotReport extends SecurityReport {
 
             // these values dependent only on snapDate
 
-            longBasis = 0;
-            shortBasis = 0;
+            longBasis= BigDecimal.ZERO;
+            shortBasis= BigDecimal.ZERO;
             double annualPercentReturn;
 
             // fill startPrice Array List
@@ -225,10 +228,10 @@ public class SecuritySnapshotReport extends SecurityReport {
 
             // iterate through transaction values list
             for (TransactionValues transactionValues : transSet) {
-                long totalFlows = transactionValues.getBuy() + transactionValues.getSell()
-                        + transactionValues.getShortSell() + transactionValues.getCoverShort()
-                        + transactionValues.getCommission() + transactionValues.getIncome()
-                        + transactionValues.getExpense();
+                BigDecimal totalFlows = transactionValues.getBuy().add(transactionValues.getSell())
+                        .add(transactionValues.getShortSell()).add(transactionValues.getCoverShort())
+                        .add(transactionValues.getCommission()).add(transactionValues.getIncome())
+                        .add(transactionValues.getExpense());
 
                 // iterate through return dates
                 for (String retCat : this.returnsStartDate.keySet()) {
@@ -237,13 +240,14 @@ public class SecuritySnapshotReport extends SecurityReport {
 
                     // where transactions are before report dates
                     if (transValuesDate <= thisFromDateInt) {
-                        long adjustedPos = getSplitAdjustedPosition(transactionValues.getPosition(),
+                        BigDecimal adjustedPos = getSplitAdjustedPosition(transactionValues.getPosition(),
                                 transValuesDate, thisFromDateInt);
                         startPoses.put(retCat, adjustedPos); // split adjusts last position
                         // from
                         // TransValuesCum
                         this.startValues.put(retCat,
-                                startPrices.get(retCat) * startPoses.get(retCat)/10000);
+                                             startPrices.get(retCat).multiply(startPoses.get(retCat))
+                                                     .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN));
 
                     }
 
@@ -253,9 +257,10 @@ public class SecuritySnapshotReport extends SecurityReport {
 
                         // MDCalc variable--net effect of calculation is to
                         // return buys and sells, including commission
-                        long cf = -(transactionValues.getBuy() + transactionValues.getSell()
-                                + transactionValues.getShortSell()
-                                + transactionValues.getCoverShort() + transactionValues.getCommission());
+                        BigDecimal cf = (transactionValues.getBuy().add(transactionValues.getSell())
+                                .add(transactionValues.getShortSell())
+                                .add(transactionValues.getCoverShort())
+                                .add(transactionValues.getCommission())).negate();
 
                         // add variables to arrays needed for returns
                         // calculation
@@ -264,15 +269,16 @@ public class SecuritySnapshotReport extends SecurityReport {
                         this.mdMap.get(retCat).add(transValuesDate, cf);
                         this.transMap.get(retCat).add(transValuesDate, transactionValues.getTransfer());
 
-                        this.incomes.put(retCat, this.incomes.get(retCat) + transactionValues.getIncome());
-                        this.expenses.put(retCat, this.expenses.get(retCat) + transactionValues.getExpense());
+                        this.incomes.put(retCat, this.incomes.get(retCat).add(transactionValues.getIncome()));
+                        this.expenses.put(retCat, this.expenses.get(retCat).add(transactionValues.getExpense()));
 
                         if ("All".equals(retCat)) {//For values which are common to all returns transactions
                             //or are unused in returns calculations
-                            realizedGain += transactionValues.getPerRealizedGain();
+                            realizedGain = realizedGain.add(transactionValues.getPerRealizedGain());
                             this.endPos = getSplitAdjustedPosition(transactionValues.getPosition(),
                                     transValuesDate, snapDateInt);
-                            this.endValue = this.endPos * this.lastPrice / 10000;
+                            this.endValue = this.endPos.multiply(this.lastPrice)
+                                    .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN);
                             longBasis = transactionValues.getLongBasis();
                             shortBasis = transactionValues.getShortBasis();
                             annualDividendCalculator.analyzeTransaction(transactionValues);
@@ -282,37 +288,38 @@ public class SecuritySnapshotReport extends SecurityReport {
                 } // end of start date iterative loop
             } // end of input transaction set loop
 
-            if (this.endPos > 0) {
-                unrealizedGain = this.endValue - longBasis;
-            } else if (this.endPos < 0) {
-                unrealizedGain = this.endValue - shortBasis;
+            if (this.endPos.compareTo(BigDecimal.ZERO) > 0) {
+                unrealizedGain = this.endValue.subtract(longBasis);
+            } else if (this.endPos.compareTo(BigDecimal.ZERO) < 0) {
+                unrealizedGain = this.endValue.subtract(shortBasis);
             }
 
 
-            this.totalGain = realizedGain + unrealizedGain;
+            this.totalGain = realizedGain.add(unrealizedGain);
 
             // now go through arrays and get returns/calc values
             for (String retCat : this.returnsStartDate.keySet()) {
                 int thisFromDateInt = this.returnsStartDate.get(retCat);
                 // add the first value in return arrays (if startpos != 0)
-                if (startPoses.get(retCat) != 0) {
-                    this.arMap.get(retCat).add(thisFromDateInt,
-                            -this.startValues.get(retCat));
+                if (startPoses.get(retCat).compareTo(BigDecimal.ZERO) != 0) {
+                    this.arMap.get(retCat).add(thisFromDateInt, this.startValues.get(retCat).negate());
                     // dummy values for Mod-dietz
-                    this.mdMap.get(retCat).add(thisFromDateInt, 0L);
+                    this.mdMap.get(retCat).add(thisFromDateInt, BigDecimal.ZERO);
                 }
                 // add the last value in return arrays (if endpos != 0)
-                if (this.endPos != 0) {
+                if (this.endPos.compareTo(BigDecimal.ZERO) != 0) {
                     this.arMap.get(retCat).add(snapDateInt, this.endValue);
                     // dummy values for Mod-dietz
-                    this.mdMap.get(retCat).add(snapDateInt, 0L);
+                    this.mdMap.get(retCat).add(snapDateInt, BigDecimal.ZERO);
                 }
 
                 // get MD returns on all start dates, only get annualized return
                 // on all dates
 
-                this.mdReturns.put(retCat, computeMDReturn(this.startValues.get(retCat),
-                        this.endValue, this.incomes.get(retCat), this.expenses.get(retCat),
+                this.mdReturns.put(retCat, computeMDReturn(this.startValues.get(retCat).longValue(),
+                        this.endValue.longValue(),
+                        this.incomes.get(retCat).longValue(),
+                        this.expenses.get(retCat).longValue(),
                         this.mdMap.get(retCat)));
                 //get annualized returns only for total period
                 if ("All".equals(retCat)) {
@@ -324,30 +331,31 @@ public class SecuritySnapshotReport extends SecurityReport {
 
                 // remove start and end values from return date maps for ease of
                 // aggregation
-                if (startPoses.get(retCat) != 0) {
+                if (startPoses.get(retCat).compareTo(BigDecimal.ZERO) != 0) {
                     this.arMap.get(retCat).add(thisFromDateInt,
-                            +this.startValues.get(retCat));
+                            this.startValues.get(retCat));
                 }
                 // remove start and end values from return date maps for ease of
                 // aggregation
-                if (this.endPos != 0) {
-                    this.arMap.get(retCat).add(snapDateInt, -this.endValue);
+                if (this.endPos.compareTo(BigDecimal.ZERO) != 0) {
+                    this.arMap.get(retCat).add(snapDateInt, this.endValue.negate());
                 }
             } // end of start date iterateration
 
             // Produce output, get returns
 
             if (this.returnsStartDate.get("PREV") == null) {
-                this.absPriceChange = 0;
-                this.absValueChange = 0;
+                this.absPriceChange= BigDecimal.ZERO;
+                this.absValueChange= BigDecimal.ZERO;
                 this.pctPriceChange = 0;
             } else {
-                long prevPrice = secAccountWrapper.getPrice(this.returnsStartDate.get("PREV"));
+                BigDecimal prevPrice = secAccountWrapper.getPrice(this.returnsStartDate.get("PREV"));
 
-                this.absPriceChange = this.lastPrice - prevPrice;
-                this.absValueChange = this.endPos * this.absPriceChange / 10000;
-                if (prevPrice != 0) {
-                    this.pctPriceChange = ((double)this.lastPrice) / prevPrice - 1.0;
+                this.absPriceChange = this.lastPrice.subtract(prevPrice);
+                this.absValueChange = this.endPos.multiply(this.absPriceChange)
+                        .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN);
+                if (prevPrice.compareTo(BigDecimal.ZERO) != 0) {
+                    this.pctPriceChange = this.lastPrice.doubleValue() / prevPrice.doubleValue() - 1.0;
                 } else {
                     this.pctPriceChange = 0;
                 }
@@ -385,16 +393,16 @@ public class SecuritySnapshotReport extends SecurityReport {
         for (String retCat : returnsStartDate.keySet()) {
             // get MD returns on all start dates, only get annualized return for
             // "All" dates
-            mdReturns.put(retCat, computeMDReturn(startValues.get(retCat), endValue,
-                    incomes.get(retCat), expenses.get(retCat), mdMap.get(retCat)));
+            mdReturns.put(retCat, computeMDReturn(startValues.get(retCat).longValue(), endValue.longValue(),
+                    incomes.get(retCat).longValue(), expenses.get(retCat).longValue(), mdMap.get(retCat)));
 
             if ("All".equals(retCat)) {
                 // add start and end values to return date maps
-                if (startValues.get(retCat) != 0.0) {
+                if (startValues.get(retCat).compareTo(BigDecimal.ZERO) != 0) {
                     arMap.get(retCat).add(returnsStartDate.get(retCat),
-                            -startValues.get(retCat));
+                            startValues.get(retCat).negate());
                 }
-                if (endValue != 0) {
+                if (endValue.compareTo(BigDecimal.ZERO) != 0) {
                     arMap.get(retCat).add(snapDateInt, endValue);
                 }
                 // get return
@@ -496,24 +504,24 @@ public class SecuritySnapshotReport extends SecurityReport {
         if (this.getCurrencyWrapper() != null && operand.getCurrencyWrapper() != null
                 && this.getCurrencyWrapper().equals(operand.getCurrencyWrapper())) {
 
-            this.endPos += operand.endPos;
+            this.endPos = this.endPos.add(operand.endPos);
             this.lastPrice = operand.lastPrice;
 
         } else {
-            this.endPos = 0;
-            this.lastPrice = 0;
+            this.endPos= BigDecimal.ZERO;
+            this.lastPrice= BigDecimal.ZERO;
         }
 
-        this.endValue += operand.endValue;
-        this.longBasis += operand.longBasis;
-        this.shortBasis += operand.shortBasis;
-        this.absPriceChange = 0;
+        this.endValue = this.endValue.add(operand.endValue);
+        this.longBasis = this.longBasis.add(operand.longBasis);
+        this.shortBasis = this.shortBasis.add(operand.shortBasis);
+        this.absPriceChange= BigDecimal.ZERO;
         this.pctPriceChange = 0;
-        this.absValueChange += operand.absValueChange;
-        this.income += operand.income;
-        this.unrealizedGain += operand.unrealizedGain;
-        this.realizedGain += operand.realizedGain;
-        this.totalGain += operand.totalGain;
+        this.absValueChange = this.absValueChange.add(operand.absValueChange);
+        this.income = this.income.add(operand.income);
+        this.unrealizedGain = this.unrealizedGain.add(operand.unrealizedGain);
+        this.realizedGain = this.realizedGain.add(operand.realizedGain);
+        this.totalGain = this.totalGain.add(operand.totalGain);
         this.totRetAll = 0;
         this.annRetAll = 0;
         combineDividendData(operand);
@@ -527,9 +535,9 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         this.returnsStartDate = combineReturns(this.returnsStartDate,
                 operand.returnsStartDate);
-        this.startValues = addLongMap(this.startValues, operand.startValues);
-        this.incomes = addLongMap(this.incomes, operand.incomes);
-        this.expenses = addLongMap(this.expenses, operand.expenses);
+        this.startValues = addBigDecimalMap(this.startValues, operand.startValues);
+        this.incomes = addBigDecimalMap(this.incomes, operand.incomes);
+        this.expenses = addBigDecimalMap(this.expenses, operand.expenses);
 
         this.mdMap = combineDateMapMap(this.mdMap, operand.mdMap, "add");
         this.arMap = combineDateMapMap(this.arMap, operand.arMap, "add");
@@ -542,17 +550,19 @@ public class SecuritySnapshotReport extends SecurityReport {
      * @param operand security snapshot to be combined
      */
     private void combineDividendData(SecuritySnapshotReport operand) {
-        if (this.annualizedDividend == 0 & operand.annualizedDividend != 0) {
+        if (this.annualizedDividend.compareTo(BigDecimal.ZERO) == 0
+                && operand.annualizedDividend.compareTo(BigDecimal.ZERO) != 0) {
             //take operand values
             this.annualizedDividend = operand.annualizedDividend;
             this.dividendYield = operand.dividendYield;
             this.yieldOnBasis = operand.yieldOnBasis;
 
-        } else if (this.annualizedDividend != 0 & operand.annualizedDividend != 0) {
+        } else if (this.annualizedDividend.compareTo(BigDecimal.ZERO) != 0
+                && operand.annualizedDividend.compareTo(BigDecimal.ZERO) != 0) {
             // both valid, add
-            this.annualizedDividend += operand.annualizedDividend;
-            this.dividendYield = annualizedDividend / endValue;
-            this.yieldOnBasis = annualizedDividend / longBasis;
+            this.annualizedDividend = this.annualizedDividend.add(operand.annualizedDividend);
+            this.dividendYield = annualizedDividend.divide(endValue, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            this.yieldOnBasis = annualizedDividend.divide(longBasis, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
         // if both are zero, ignore and return
         // if operand is zero, then ignore and return
@@ -571,11 +581,11 @@ public class SecuritySnapshotReport extends SecurityReport {
     @Override
     public void addLineBody() {
         ArrayList<Object> outputLine = super.getOutputLine();
-        outputLine.add(this.lastPrice/100.0); // FIXME
-        outputLine.add(this.endPos/10000.0);
-        outputLine.add(this.endValue/100.0);
-        outputLine.add(this.absPriceChange/100.0);
-        outputLine.add(this.absValueChange/100.0);
+        outputLine.add(this.lastPrice.doubleValue());
+        outputLine.add(this.endPos.doubleValue());
+        outputLine.add(this.endValue.doubleValue());
+        outputLine.add(this.absPriceChange.doubleValue());
+        outputLine.add(this.absValueChange.doubleValue());
         outputLine.add(this.pctPriceChange);
         outputLine.add(this.totRet1Day);
         outputLine.add(this.totRetWk);
@@ -586,15 +596,15 @@ public class SecuritySnapshotReport extends SecurityReport {
         outputLine.add(this.totRet3year);
         outputLine.add(this.totRetAll);
         outputLine.add(this.annRetAll);
-        outputLine.add(this.longBasis/100.0);
-        outputLine.add(this.shortBasis/100.0);
-        outputLine.add(this.income/100.0);
-        outputLine.add(this.annualizedDividend / 100.0);
+        outputLine.add(this.longBasis.doubleValue());
+        outputLine.add(this.shortBasis.doubleValue());
+        outputLine.add(this.income.doubleValue());
+        outputLine.add(this.annualizedDividend.doubleValue());
         outputLine.add(this.dividendYield);
         outputLine.add(this.yieldOnBasis);
-        outputLine.add(this.realizedGain/100.0);
-        outputLine.add(this.unrealizedGain/100.0);
-        outputLine.add(this.totalGain/100.0);
+        outputLine.add(this.realizedGain.doubleValue());
+        outputLine.add(this.unrealizedGain.doubleValue());
+        outputLine.add(this.totalGain.doubleValue());
     }
 
     /*
@@ -620,17 +630,17 @@ public class SecuritySnapshotReport extends SecurityReport {
      * Combines intermediate values for start value, end value, income, expense
      * for aggregate mod-dietz returns calculations.
      */
-    private CategoryMap<Long> addLongMap(CategoryMap<Long> map1,
-                                             CategoryMap<Long> map2) {
-        CategoryMap<Long> outMap = new CategoryMap<>(map1);
+    private CategoryMap<BigDecimal> addBigDecimalMap(CategoryMap<BigDecimal> map1,
+                                             CategoryMap<BigDecimal> map2) {
+        CategoryMap<BigDecimal> outMap = new CategoryMap<>(map1);
 
         if (map2 != null) {
             for (String retCat2 : map2.keySet()) {
-                Long value2 = map2.get(retCat2);
+                BigDecimal value2 = map2.get(retCat2);
                 if (map1.get(retCat2) == null) {
                     outMap.put(retCat2, value2);
                 } else {
-                    outMap.put(retCat2, map1.get(retCat2) + value2);
+                    outMap.put(retCat2, map1.get(retCat2).add(value2));
                 }
             }
         }
@@ -671,19 +681,19 @@ public class SecuritySnapshotReport extends SecurityReport {
         return snapDateInt;
     }
 
-    public long getLastPrice() {
+    public BigDecimal getLastPrice() {
         return lastPrice;
     }
 
-    public long getEndPos() {
+    public BigDecimal getEndPos() {
         return endPos;
     }
 
-    public long getEndValue() {
+    public BigDecimal getEndValue() {
         return endValue;
     }
 
-    public long getIncome() {
+    public BigDecimal getIncome() {
         return income;
     }
 
@@ -727,23 +737,23 @@ public class SecuritySnapshotReport extends SecurityReport {
         return returnsStartDate;
     }
 
-    public CategoryMap<Long> getStartValues() {
+    public CategoryMap<BigDecimal> getStartValues() {
         return startValues;
     }
 
-    public CategoryMap<Long> getStartPoses() {
+    public CategoryMap<BigDecimal> getStartPoses() {
         return startPoses;
     }
 
-    public CategoryMap<Long> getStartPrices() {
+    public CategoryMap<BigDecimal> getStartPrices() {
         return startPrices;
     }
 
-    public CategoryMap<Long> getIncomes() {
+    public CategoryMap<BigDecimal> getIncomes() {
         return incomes;
     }
 
-    public CategoryMap<Long> getExpenses() {
+    public CategoryMap<BigDecimal> getExpenses() {
         return expenses;
     }
 
@@ -776,7 +786,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         void analyzeTransaction(@NotNull TransactionValues transactionValues) {
             InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());
-            boolean isDividend = dividendTypes.contains(transType) && transactionValues.getIncome() != 0;
+            boolean isDividend = dividendTypes.contains(transType) && transactionValues.getIncome().compareTo(BigDecimal.ZERO) != 0;
             updateBasisTransactions(transactionValues);
             if (isDividend) updateDividendTransactions(transactionValues);
         }
@@ -827,11 +837,11 @@ public class SecuritySnapshotReport extends SecurityReport {
          *
          * @return annualized dividend in units of currency
          */
-        public long getAnnualizedDividend() {
-            long totalDividends = 0;
-            long annualizingFactor = 0;
+        public BigDecimal getAnnualizedDividend() {
+            BigDecimal totalDividends= BigDecimal.ZERO;
+            long annualizingFactor= 0;
             for (TransactionValues transactionValues : dividendTransactions) {
-                totalDividends += transactionValues.getIncome();
+                totalDividends = totalDividends.add(transactionValues.getIncome());
             }
             SecurityAccountWrapper.DIV_FREQUENCY div_frequency = getSecurityAccountWrapper().getDivFrequency();
             switch (div_frequency) {
@@ -850,7 +860,8 @@ public class SecuritySnapshotReport extends SecurityReport {
                 default:
                     break;
             }
-            return totalDividends > 0 ? totalDividends * annualizingFactor : 0;
+            return totalDividends.compareTo(BigDecimal.ZERO) > 0 ? totalDividends.multiply(BigDecimal.valueOf(annualizingFactor))
+                    : BigDecimal.ZERO;
         }
 
         public void updateYieldInformation() {
@@ -858,16 +869,21 @@ public class SecuritySnapshotReport extends SecurityReport {
                 //reference transaction is last transaction older than MINIMUM_EX_DIV_DAYS
                 // allows for situations where dividends are immediately reinvested
                 TransactionValues basisReferenceTransaction = basisTransactions.getFirst();
-                long splitAdjustReferencePos = getSplitAdjustedPosition(basisReferenceTransaction.getPosition(),
+                BigDecimal splitAdjustReferencePos = getSplitAdjustedPosition(basisReferenceTransaction.getPosition(),
                         basisReferenceTransaction.getDateint(), snapDateInt);
-                long annualizedDivTotal = getAnnualizedDividend();
-                double annualizedDivPerShare = (splitAdjustReferencePos > 0 && endPos > 0) ?
-                        ((double)annualizedDivTotal) / splitAdjustReferencePos * 10000 : 0;
-                annualizedDividend = Math.round(annualizedDivPerShare * endPos) / 10000;
-                dividendYield = (lastPrice != 0 && annualizedDivPerShare != 0) ?
-                        annualizedDivPerShare / lastPrice : 0.0;
-                yieldOnBasis = (longBasis > 0 && annualizedDivPerShare != 0) ?
-                        ((double)annualizedDividend) / longBasis : 0.0;
+                BigDecimal annualizedDivTotal = getAnnualizedDividend();
+                BigDecimal annualizedDivPerShare = (splitAdjustReferencePos.compareTo(BigDecimal.ZERO) > 0
+                        && endPos.compareTo(BigDecimal.ZERO) > 0) ?
+                    annualizedDivTotal.divide(splitAdjustReferencePos, BigDecimal.ROUND_HALF_EVEN)
+                            .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN)
+                        : BigDecimal.ZERO;
+                annualizedDividend = annualizedDivPerShare.multiply(endPos);
+                dividendYield = (lastPrice.compareTo(BigDecimal.ZERO) != 0
+                        && annualizedDivPerShare.compareTo(BigDecimal.ZERO) != 0)
+                        ? annualizedDivPerShare.divide(lastPrice, BigDecimal.ROUND_HALF_EVEN).doubleValue() : 0.0;
+                yieldOnBasis = (longBasis.compareTo(BigDecimal.ZERO) > 0
+                        && annualizedDivPerShare.compareTo(BigDecimal.ZERO) != 0) ?
+                        annualizedDividend.divide(longBasis, BigDecimal.ROUND_HALF_EVEN).doubleValue() : 0.0;
             }
         }
 
