@@ -47,25 +47,25 @@ public class SecuritySnapshotReport extends SecurityReport {
     private int snapDateInt;
 
 
-    private long lastPrice;           //ending price
-    private long endPos;              //ending position
-    private long endValue;            //ending value
+    private long lastPrice = 0;           //ending price
+    private long endPos = 0;              //ending position
+    private long endValue = 0;            //ending value
 
-    private long longBasis;           //final long basis
-    private long shortBasis;          //final short basis
+    private long longBasis = 0;           //final long basis
+    private long shortBasis = 0;          //final short basis
 
     //one day values
-    private long absPriceChange;      //absolute price change (from previous day to snapDate)
-    private double pctPriceChange;      //percent price change (from previous day to snapDate)
-    private long absValueChange;      //absolute value change (from previous day to snapDate)
+    private long absPriceChange = 0;      //absolute price change (from previous day to snapDate)
+    private double pctPriceChange = 0;    //percent price change (from previous day to snapDate)
+    private long absValueChange = 0;      //absolute value change (from previous day to snapDate)
 
     //total numbers
-    private long income;              //total income (all dates)
-    private long unrealizedGain;      // unrealized gain
-    private long realizedGain;        //realized gain
-    private long totalGain;           //total absolute gain (all dates)
-    private double totRetAll;           //total Mod-Dietz return (all dates)
-    private double annRetAll;           //annualized return (all dates)
+    private long income = 0;              //total income (all dates)
+    private long unrealizedGain = 0;      // unrealized gain
+    private long realizedGain = 0;        //realized gain
+    private long totalGain = 0;           //total absolute gain (all dates)
+    private double totRetAll = 0;         //total Mod-Dietz return (all dates)
+    private double annRetAll = 0;         //annualized return (all dates)
 
     //Dividend Yields
     private long annualizedDividend = 0;
@@ -74,13 +74,13 @@ public class SecuritySnapshotReport extends SecurityReport {
 
 
     //returns
-    private double totRet1Day;          //Mod-Dietz return (1 day)
-    private double totRetWk;            //Mod-Dietz return (1 week)
-    private double totRet4Wk;           //Mod-Dietz return (1 month)
-    private double totRet3Mnth;         //Mod-Dietz return (3 month)
-    private double totRetYTD;           //Mod-Dietz return (Year-to-Date)
-    private double totRetYear;          //Mod-Dietz return (1 Year)
-    private double totRet3year;         //Mod-Dietz return (1 Years)
+    private double totRet1Day = 0;          //Mod-Dietz return (1 day)
+    private double totRetWk = 0;            //Mod-Dietz return (1 week)
+    private double totRet4Wk = 0;           //Mod-Dietz return (1 month)
+    private double totRet3Mnth = 0;         //Mod-Dietz return (3 month)
+    private double totRetYTD = 0;           //Mod-Dietz return (Year-to-Date)
+    private double totRetYear = 0;          //Mod-Dietz return (1 Year)
+    private double totRet3year = 0;         //Mod-Dietz return (1 Years)
 
     // intermediate values
     private CategoryMap<Integer> returnsStartDate;      //maps return category to start dates
@@ -111,36 +111,6 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         this.snapDateInt = dateRange.getSnapDateInt();
 
-        this.lastPrice = 0;
-        this.endPos = 0;
-        this.endValue = 0;
-
-        this.longBasis = 0;
-        this.shortBasis = 0;
-
-        this.absPriceChange = 0;
-        this.pctPriceChange = 0;
-        this.absValueChange = 0;
-
-        this.income = 0;
-        this.unrealizedGain = 0;
-        this.realizedGain = 0;
-        this.totalGain = 0;
-        this.totRetAll = 0;
-        this.annRetAll = 0;
-
-        this.annualizedDividend = 0;
-        this.dividendYield = 0;
-        this.yieldOnBasis = 0;
-
-        this.totRet1Day = 0;
-        this.totRetWk = 0;
-        this.totRet4Wk = 0;
-        this.totRet3Mnth = 0;
-        this.totRetYTD = 0;
-        this.totRetYear = 0;
-        this.totRet3year = 0;
-
         this.returnsStartDate = new CategoryMap<>();
         this.startValues = new CategoryMap<>();
         this.startPoses = new CategoryMap<>();
@@ -160,16 +130,11 @@ public class SecuritySnapshotReport extends SecurityReport {
         // possible
         int fromDateInt = snapDateInt;
         int prevFromDateInt = DateUtils.getPrevBusinessDay(snapDateInt);
-        int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
-                .addDaysInt(snapDateInt, -7));
-        int mnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
-                .addMonthsInt(snapDateInt, -1));
-        int threeMnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
-                .addMonthsInt(snapDateInt, -3));
-        int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
-                .addMonthsInt(snapDateInt, -12));
-        int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils
-                .addMonthsInt(snapDateInt, -36));
+        int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addDaysInt(snapDateInt, -7));
+        int mnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -1));
+        int threeMnthFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -3));
+        int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -12));
+        int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -36));
         int ytdFromDateInt = DateUtils.getStartYear(snapDateInt);
 
         // put dates in return map
@@ -198,23 +163,20 @@ public class SecuritySnapshotReport extends SecurityReport {
         }
 
         if (secAccountWrapper != null) {
-
             this.lastPrice = secAccountWrapper.getPrice(snapDateInt);
 
             // create dates for returns calculations
             // ensures all dates for appropriate variables
             ArrayList<TransactionValues> transSet = secAccountWrapper.getTransactionValues();
 
-            fromDateInt = transSet.isEmpty() ? snapDateInt : DateUtils
-                    .getPrevBusinessDay(transSet.get(0).getDateint());
+            fromDateInt = transSet.isEmpty() ? snapDateInt
+                    : DateUtils.getPrevBusinessDay(transSet.get(0).getDateint());
 
             // put dates in return map
             this.returnsStartDate.put("All", fromDateInt);
 
             // these values dependent only on snapDate
 
-            longBasis = 0;
-            shortBasis = 0;
             double annualPercentReturn;
 
             // fill startPrice Array List
@@ -242,15 +204,11 @@ public class SecuritySnapshotReport extends SecurityReport {
                         startPoses.put(retCat, adjustedPos); // split adjusts last position
                         // from
                         // TransValuesCum
-                        this.startValues.put(retCat,
-                                startPrices.get(retCat) * startPoses.get(retCat)/10000);
-
+                        this.startValues.put(retCat, startPrices.get(retCat) * startPoses.get(retCat)/10000);
                     }
 
                     // where transaction period intersects report period
-                    if (transValuesDate > thisFromDateInt
-                            && transValuesDate <= snapDateInt) {
-
+                    if (transValuesDate > thisFromDateInt && transValuesDate <= snapDateInt) {
                         // MDCalc variable--net effect of calculation is to
                         // return buys and sells, including commission
                         long cf = -(transactionValues.getBuy() + transactionValues.getSell()
@@ -288,7 +246,6 @@ public class SecuritySnapshotReport extends SecurityReport {
                 unrealizedGain = this.endValue - shortBasis;
             }
 
-
             this.totalGain = realizedGain + unrealizedGain;
 
             // now go through arrays and get returns/calc values
@@ -310,7 +267,6 @@ public class SecuritySnapshotReport extends SecurityReport {
 
                 // get MD returns on all start dates, only get annualized return
                 // on all dates
-
                 this.mdReturns.put(retCat, computeMDReturn(this.startValues.get(retCat),
                         this.endValue, this.incomes.get(retCat), this.expenses.get(retCat),
                         this.mdMap.get(retCat)));
@@ -333,7 +289,7 @@ public class SecuritySnapshotReport extends SecurityReport {
                 if (this.endPos != 0) {
                     this.arMap.get(retCat).add(snapDateInt, -this.endValue);
                 }
-            } // end of start date iterateration
+            } // end of start date iteration
 
             // Produce output, get returns
 
@@ -352,26 +308,25 @@ public class SecuritySnapshotReport extends SecurityReport {
                     this.pctPriceChange = 0;
                 }
             }
-            this.totRet1Day = this.mdReturns.get("PREV") == null ? Double.NaN
+            this.totRet1Day = this.mdReturns.get("PREV") == null ? 0
                     : this.mdReturns.get("PREV");
-            this.totRetAll = this.mdReturns.get("All") == null ? Double.NaN
+            this.totRetAll = this.mdReturns.get("All") == null ? 0
                     : this.mdReturns.get("All");
-            this.totRetWk = this.mdReturns.get("1Wk") == null ? Double.NaN
+            this.totRetWk = this.mdReturns.get("1Wk") == null ? 0
                     : this.mdReturns.get("1Wk");
-            this.totRet4Wk = this.mdReturns.get("4Wk") == null ? Double.NaN
+            this.totRet4Wk = this.mdReturns.get("4Wk") == null ? 0
                     : this.mdReturns.get("4Wk");
-            this.totRet3Mnth = this.mdReturns.get("3Mnth") == null ? Double.NaN
+            this.totRet3Mnth = this.mdReturns.get("3Mnth") == null ? 0
                     : this.mdReturns.get("3Mnth");
-            this.totRetYear = this.mdReturns.get("1Yr") == null ? Double.NaN
+            this.totRetYear = this.mdReturns.get("1Yr") == null ? 0
                     : this.mdReturns.get("1Yr");
-            this.totRet3year = this.mdReturns.get("3Yr") == null ? Double.NaN
+            this.totRet3year = this.mdReturns.get("3Yr") == null ? 0
                     : this.mdReturns.get("3Yr");
-            this.totRetYTD = this.mdReturns.get("YTD") == null ? Double.NaN
+            this.totRetYTD = this.mdReturns.get("YTD") == null ? 0
                     : this.mdReturns.get("YTD");
 
             annualDividendCalculator.updateYieldInformation();
         }
-
     }
 
     @Override
@@ -391,36 +346,25 @@ public class SecuritySnapshotReport extends SecurityReport {
             if ("All".equals(retCat)) {
                 // add start and end values to return date maps
                 if (startValues.get(retCat) != 0.0) {
-                    arMap.get(retCat).add(returnsStartDate.get(retCat),
-                            -startValues.get(retCat));
+                    arMap.get(retCat).add(returnsStartDate.get(retCat), -startValues.get(retCat));
                 }
                 if (endValue != 0) {
                     arMap.get(retCat).add(snapDateInt, endValue);
                 }
                 // get return
-                annRetAll = computeAnnualReturn(arMap.get(retCat),
-                        mdReturns.get("All"));
+                annRetAll = computeAnnualReturn(arMap.get(retCat), mdReturns.get("All"));
                 income = incomes.get(retCat);
 
             }
         }
-        totRet1Day = returnsStartDate.get("PREV") == null ? Double.NaN
-                : mdReturns.get("PREV");
-        totRetAll = returnsStartDate.get("All") == null ? Double.NaN
-                : mdReturns.get("All");
-        totRetWk = returnsStartDate.get("1Wk") == null ? Double.NaN
-                : mdReturns.get("1Wk");
-        totRet4Wk = returnsStartDate.get("4Wk") == null ? Double.NaN
-                : mdReturns.get("4Wk");
-        totRet3Mnth = returnsStartDate.get("3Mnth") == null ? Double.NaN
-                : mdReturns.get("3Mnth");
-        totRetYear = returnsStartDate.get("1Yr") == null ? Double.NaN
-                : mdReturns.get("1Yr");
-        totRet3year = returnsStartDate.get("3Yr") == null ? Double.NaN
-                : mdReturns.get("3Yr");
-        totRetYTD = returnsStartDate.get("YTD") == null ? Double.NaN
-                : mdReturns.get("YTD");
-
+        totRet1Day = returnsStartDate.get("PREV") == null ? 0 : mdReturns.get("PREV");
+        totRetAll = returnsStartDate.get("All") == null ? 0 : mdReturns.get("All");
+        totRetWk = returnsStartDate.get("1Wk") == null ? 0 : mdReturns.get("1Wk");
+        totRet4Wk = returnsStartDate.get("4Wk") == null ? 0 : mdReturns.get("4Wk");
+        totRet3Mnth = returnsStartDate.get("3Mnth") == null ? 0 : mdReturns.get("3Mnth");
+        totRetYear = returnsStartDate.get("1Yr") == null ? 0 : mdReturns.get("1Yr");
+        totRet3year = returnsStartDate.get("3Yr") == null ? 0 : mdReturns.get("3Yr");
+        totRetYTD = returnsStartDate.get("YTD") == null ? 0 : mdReturns.get("YTD");
     }
 
     @Override
@@ -467,13 +411,11 @@ public class SecuritySnapshotReport extends SecurityReport {
         thisAggregate.setInvestmentAccountWrapper(this.getInvestmentAccountWrapper());
         thisAggregate.setSecurityAccountWrapper(null);
         thisAggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
-        thisAggregate.setSecuritySubTypeWrapper(this
-                .getSecuritySubTypeWrapper());
+        thisAggregate.setSecuritySubTypeWrapper(this.getSecuritySubTypeWrapper());
         thisAggregate.setTradeable(this.getTradeable());
         thisAggregate.setCurrencyWrapper(this.getCurrencyWrapper());
 
         return thisAggregate;
-
     }
 
     @Override
@@ -495,10 +437,8 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         if (this.getCurrencyWrapper() != null && operand.getCurrencyWrapper() != null
                 && this.getCurrencyWrapper().equals(operand.getCurrencyWrapper())) {
-
             this.endPos += operand.endPos;
             this.lastPrice = operand.lastPrice;
-
         } else {
             this.endPos = 0;
             this.lastPrice = 0;
@@ -551,8 +491,8 @@ public class SecuritySnapshotReport extends SecurityReport {
         } else if (this.annualizedDividend != 0 & operand.annualizedDividend != 0) {
             // both valid, add
             this.annualizedDividend += operand.annualizedDividend;
-            this.dividendYield = annualizedDividend / endValue;
-            this.yieldOnBasis = annualizedDividend / longBasis;
+            this.dividendYield = ((double)annualizedDividend) / endValue;
+            this.yieldOnBasis = ((double)annualizedDividend) / longBasis;
         }
         // if both are zero, ignore and return
         // if operand is zero, then ignore and return
@@ -563,7 +503,6 @@ public class SecuritySnapshotReport extends SecurityReport {
     public Object[] toTableRow() throws SecurityException,
             IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {
-
         addLineBody();
         return super.getOutputLine().toArray();
     }
@@ -600,8 +539,7 @@ public class SecuritySnapshotReport extends SecurityReport {
     /*
      * Combine returns category maps.
      */
-    private CategoryMap<Integer> combineReturns(CategoryMap<Integer> map1,
-                                                CategoryMap<Integer> map2) {
+    private CategoryMap<Integer> combineReturns(CategoryMap<Integer> map1, CategoryMap<Integer> map2) {
         CategoryMap<Integer> outMap = new CategoryMap<>(map1);
 
         for (String map2Key : map2.keySet()) {
@@ -620,8 +558,7 @@ public class SecuritySnapshotReport extends SecurityReport {
      * Combines intermediate values for start value, end value, income, expense
      * for aggregate mod-dietz returns calculations.
      */
-    private CategoryMap<Long> addLongMap(CategoryMap<Long> map1,
-                                             CategoryMap<Long> map2) {
+    private CategoryMap<Long> addLongMap(CategoryMap<Long> map1, CategoryMap<Long> map2) {
         CategoryMap<Long> outMap = new CategoryMap<>(map1);
 
         if (map2 != null) {
@@ -770,7 +707,6 @@ public class SecuritySnapshotReport extends SecurityReport {
         HashSet<InvestTxnType> dividendTypes = new HashSet<>(Arrays.asList(InvestTxnType.DIVIDEND,
                 InvestTxnType.DIVIDEND_REINVEST, InvestTxnType.DIVIDENDXFR, InvestTxnType.BANK));
 
-
         AnnualDividendCalculator() {
         }
 
@@ -793,7 +729,8 @@ public class SecuritySnapshotReport extends SecurityReport {
                     int daysFromLastDivTransaction = DateUtils.getDaysBetween(currentDateInt,
                             iterator.next().getDateint());
                     //remove transaction if older than MINIMUM_EX_DIV_DAYS
-                    if (daysFromLastDivTransaction > SecurityAccountWrapper.DividendFrequencyAnalyzer.MINIMUM_EX_DIV_DAYS)
+                    if (daysFromLastDivTransaction
+                            > SecurityAccountWrapper.DividendFrequencyAnalyzer.MINIMUM_EX_DIV_DAYS)
                         iterator.remove();
                 }
             }
@@ -810,7 +747,8 @@ public class SecuritySnapshotReport extends SecurityReport {
             TransactionValues lastTransactonValues = basisTransactions.removeLast();
             int daysFromLastBasisTransaction = DateUtils.getDaysBetween(transactionValues.getDateint(),
                     lastTransactonValues.getDateint());
-            if (daysFromLastBasisTransaction <= SecurityAccountWrapper.DividendFrequencyAnalyzer.MINIMUM_EX_DIV_DAYS) {
+            if (daysFromLastBasisTransaction
+                    <= SecurityAccountWrapper.DividendFrequencyAnalyzer.MINIMUM_EX_DIV_DAYS) {
                 //possible correct to previous, or multiple distributions, update last transaction value only
                 lastTransactonValues = transactionValues;
             } else {
@@ -865,13 +803,11 @@ public class SecuritySnapshotReport extends SecurityReport {
                         ((double)annualizedDivTotal) / splitAdjustReferencePos * 10000 : 0;
                 annualizedDividend = Math.round(annualizedDivPerShare * endPos) / 10000;
                 dividendYield = (lastPrice != 0 && annualizedDivPerShare != 0) ?
-                        annualizedDivPerShare / lastPrice : 0.0;
+                        ((double)annualizedDivPerShare) / lastPrice : 0.0;
                 yieldOnBasis = (longBasis > 0 && annualizedDivPerShare != 0) ?
                         ((double)annualizedDividend) / longBasis : 0.0;
             }
         }
-
-
     }
 }
 

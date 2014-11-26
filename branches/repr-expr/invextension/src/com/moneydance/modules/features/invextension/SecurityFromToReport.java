@@ -40,27 +40,27 @@ import java.util.ArrayList;
  * @author Dale Furrow
  */
 public class SecurityFromToReport extends SecurityReport {
-    public long income;                 // cumulative income
-    private int fromDateInt;            // start of report period
-    private int toDateInt;              // end of report period
-    private long startPos;              // starting position
-    private long endPos;                // ending position
-    private long startPrice;            // starting price
-    private long endPrice;              // ending price
-    private long startValue;            // starting value
-    private long endValue;              // ending value
-    private long buy;                   // cumulative cash effect of buys (including commission)
-    private long sell;                  // cumulative cash effect of sells (including commission)
-    private long shortSell;             // cumulative cash effect of shorts (including commission)
-    private long coverShort;            // cumulative cash effect of covers (including commission)
-    private long expense;               // cumulative expense
-    private long longBasis;             // ending average cost basis of long positions
-    private long shortBasis;            // ending average cost basis of short positions
-    private long realizedGain;          // cumulative realized gains
-    private long unrealizedGain;        // cumulative unrealized gains
-    private long totalGain;             // sum of realized and unrealized gains
-    private double mdReturn;            // period total return (Mod-Dietz method)
-    private double annualPercentReturn; // period annualized return (Mod-Dietz method)
+    public long income = 0;                 // cumulative income
+    private int fromDateInt = 0;            // start of report period
+    private int toDateInt = 0;              // end of report period
+    private long startPos = 0;              // starting position
+    private long endPos = 0;                // ending position
+    private long startPrice = 0;            // starting price
+    private long endPrice = 0;              // ending price
+    private long startValue = 0;            // starting value
+    private long endValue = 0;              // ending value
+    private long buy = 0;                   // cumulative cash effect of buys (including commission)
+    private long sell = 0;                  // cumulative cash effect of sells (including commission)
+    private long shortSell = 0;             // cumulative cash effect of shorts (including commission)
+    private long coverShort = 0;            // cumulative cash effect of covers (including commission)
+    private long expense = 0;               // cumulative expense
+    private long longBasis = 0;             // ending average cost basis of long positions
+    private long shortBasis = 0;            // ending average cost basis of short positions
+    private long realizedGain = 0;          // cumulative realized gains
+    private long unrealizedGain = 0;        // cumulative unrealized gains
+    private long totalGain = 0;             // sum of realized and unrealized gains
+    private double mdReturn = 0;            // period total return (Mod-Dietz method)
+    private double annualPercentReturn = 0; // period annualized return (Mod-Dietz method)
     private DateMap arMap;              // date map of annual return data
     private DateMap mdMap;              // date map of Mod-Dietz return data
     private DateMap transMap;           // date map of transfer data
@@ -81,36 +81,11 @@ public class SecurityFromToReport extends SecurityReport {
         this.fromDateInt = dateRange.getFromDateInt();
         this.toDateInt = dateRange.getToDateInt();
 
-        this.startPos = 0;
-        this.endPos = 0;
-        this.startPrice = 0;
-        this.endPrice = 0;
-        this.startValue = 0;
-        this.endValue = 0;
-
-        this.buy = 0;
-        this.sell = 0;
-        this.shortSell = 0;
-        this.coverShort = 0;
-
-        this.income = 0;
-        this.expense = 0;
-
-        this.longBasis = 0;
-        this.shortBasis = 0;
-        this.realizedGain = 0;
-        this.unrealizedGain = 0;
-        this.totalGain = 0;
-
-        this.mdReturn = 0;
-        this.annualPercentReturn = 0;
-
         this.arMap = new DateMap();
         this.mdMap = new DateMap();
         this.transMap = new DateMap();
 
         if (secAccountWrapper != null) {
-
             this.startPrice = secAccountWrapper.getPrice(fromDateInt);
             this.endPrice = secAccountWrapper.getPrice(toDateInt);
 
@@ -144,7 +119,6 @@ public class SecurityFromToReport extends SecurityReport {
                 this.endValue = this.endPos * this.endPrice;
                 this.longBasis = priorTransactionValues.getLongBasis();
                 this.shortBasis = priorTransactionValues.getShortBasis();
-
             }
 
             // Where transaction period intersects report period
@@ -155,8 +129,7 @@ public class SecurityFromToReport extends SecurityReport {
                 long totalFlows = transactionValues.getTotalFlows();
                 long buySellFlows = transactionValues.getBuySellFlows();
 
-                this.arMap.add(transactionValues.getDateint(),
-                        totalFlows);
+                this.arMap.add(transactionValues.getDateint(), totalFlows);
                 this.mdMap.add(transactionValues.getDateint(), buySellFlows);
                 this.transMap.add(transactionValues.getDateint(), transactionValues.getTransfer());
 
@@ -234,9 +207,9 @@ public class SecurityFromToReport extends SecurityReport {
     public void addTo(SecurityReport securityReport) {
         SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
 
-        if (this.getSecurityAccountWrapper() != null)
-            throw new UnsupportedOperationException(
-                    "Illegal call to addTo method for SecurityReport");
+        if (this.getSecurityAccountWrapper() != null) {
+            throw new UnsupportedOperationException("Illegal call to addTo method for SecurityReport");
+        }
         //if CurrencyWrappers are the same then prices and positions can be
         //added--if not, set prices and positions to zero
         if (this.getCurrencyWrapper() != null
@@ -281,8 +254,7 @@ public class SecurityFromToReport extends SecurityReport {
     @Override
     public void recomputeAggregateReturns() {
         // get Mod-Dietz Returns
-        double mdReturnVal = computeMDReturn(startValue, endValue, income,
-                expense, mdMap);
+        double mdReturnVal = computeMDReturn(startValue, endValue, income, expense, mdMap);
 
         // SecurityFromToReport.mdReturn = thisReturn;
         mdReturn = mdReturnVal;
@@ -479,5 +451,4 @@ public class SecurityFromToReport extends SecurityReport {
     public DateMap getTransMap() {
         return transMap;
     }
-
 }
