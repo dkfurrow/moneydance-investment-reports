@@ -31,14 +31,13 @@ package com.moneydance.modules.features.invextension;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
-import java.math.BigDecimal;
 
 /*
 Map which matches dates to cash flows for returns
 calculations
  */
 public class DateMap {
-    private TreeMap<Integer, BigDecimal> map;
+    private TreeMap<Integer, Long> map;
 
     DateMap() {
         map = new TreeMap<>();
@@ -51,15 +50,15 @@ public class DateMap {
     }
 
 
-    public BigDecimal put(Integer dateInt, BigDecimal value) { return map.put(dateInt, value); }
+    public Long put(Integer dateInt, Long value) { return map.put(dateInt, value); }
 
 
-    public TreeMap<Integer, BigDecimal> getMap() {
+    public TreeMap<Integer, Long> getMap() {
         return map;
     }
 
 
-    public BigDecimal get(Integer dateInt) {
+    public Long get(Integer dateInt) {
         return map.get(dateInt);
     }
 
@@ -84,7 +83,7 @@ public class DateMap {
     }
 
 
-    public Collection<BigDecimal> values() {
+    public Collection<Long> values() {
         return map.values();
     }
 
@@ -95,12 +94,12 @@ public class DateMap {
      * @param dateInt dateInto to add
      * @return old value
      */
-    public BigDecimal add(Integer dateInt, BigDecimal incr) {
-        BigDecimal oldVal = get(dateInt);
+    public Long add(Integer dateInt, Long incr) {
+        Long oldVal = get(dateInt);
         if (oldVal == null) {
             return map.put(dateInt, incr);
         } else {
-            return put(dateInt, oldVal.add(incr));
+            return put(dateInt, oldVal + incr);
         }
     }
 
@@ -117,21 +116,21 @@ public class DateMap {
 
         if (operand != null) {
             for (Integer operandDateInt : operand.keySet()) {
-                BigDecimal value2 = operand.get(operandDateInt);
+                Long value2 = operand.get(operandDateInt);
 
                 if (outMap.get(operandDateInt) == null) {
                     if ("add".equals(combType)) {
                         outMap.put(operandDateInt, value2);
                     }
                     if ("subtract".equals(combType)) {
-                        outMap.put(operandDateInt, value2.negate());
+                        outMap.put(operandDateInt, -value2);
                     }
                 } else {
                     if ("add".equals(combType)) {
-                        outMap.put(operandDateInt, this.get(operandDateInt).add(value2));
+                        outMap.put(operandDateInt, this.get(operandDateInt) + value2);
                     }
                     if ("subtract".equals(combType)) {
-                        outMap.put(operandDateInt, this.get(operandDateInt).subtract(value2));
+                        outMap.put(operandDateInt, this.get(operandDateInt) - value2);
                     }
                 }
             }

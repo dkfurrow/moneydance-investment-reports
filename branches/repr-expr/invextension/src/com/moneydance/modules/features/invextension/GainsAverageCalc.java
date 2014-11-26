@@ -29,7 +29,6 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.model.CurrencyType;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -40,10 +39,10 @@ import java.util.ArrayList;
  * @author Dale Furrow
  */
 public class GainsAverageCalc implements GainsCalc {
-    private static final BigDecimal positionThreshold = BigDecimal.valueOf(0.00001);
+    private static final double positionTheshold = 0.00001;
     TransactionValues currentTrans;
     TransactionValues prevTransValues;
-    BigDecimal adjPrevPos;
+    long adjPrevPos;
 
 
     public GainsAverageCalc() {
@@ -53,23 +52,23 @@ public class GainsAverageCalc implements GainsCalc {
      * @see com.moneydance.modules.features.invextension.GainsCalc#getLongBasis()
      */
     @Override
-    public BigDecimal getLongBasis() {
-        if (currentTrans.getPosition().compareTo(positionThreshold) <= 0) {// position short or closed
-            return BigDecimal.ZERO;
-        } else if (currentTrans.getPosition().compareTo((prevTransValues == null ? BigDecimal.ZERO : adjPrevPos))
-                >= 0) {
+    public long getLongBasis() {
+        if (currentTrans.getPosition() <= positionTheshold) {// position short or closed
+            return 0;
+        } else if (currentTrans.getPosition()
+                >= (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger position
             // add current buy to previous long basis
-            return currentTrans.getBuy().negate()
-                    .subtract(currentTrans.getCommission())
-                    .add(prevTransValues == null ? BigDecimal.ZERO
-                            : prevTransValues.getLongBasis());
+            return -currentTrans.getBuy()
+                    - currentTrans.getCommission()
+                    + (prevTransValues == null ? 0
+                    : prevTransValues.getLongBasis());
         } else {
             // subsequent pos smaller than previous
             // implies prev long basis must exist
-            BigDecimal histAvgUnitCost = prevTransValues.getLongBasis().divide(adjPrevPos, BigDecimal.ROUND_HALF_EVEN)
-                    .setScale(SecurityReport.moneyScale, BigDecimal.ROUND_HALF_EVEN);
-            return prevTransValues.getLongBasis().add(histAvgUnitCost.multiply(currentTrans.getSecQuantity()));
+            double histAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
+            return prevTransValues.getLongBasis()
+                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
         }
     }
 
@@ -77,21 +76,22 @@ public class GainsAverageCalc implements GainsCalc {
      * @see com.moneydance.modules.features.invextension.GainsCalc#getShortBasis()
      */
     @Override
-    public BigDecimal getShortBasis() {
-        if (currentTrans.getPosition().compareTo(positionThreshold.negate()) >= 0) { // position long or closed
-            return BigDecimal.ZERO;
-        } else if (currentTrans.getPosition().compareTo(prevTransValues == null ? BigDecimal.ZERO : adjPrevPos) <= 0) {
+    public long getShortBasis() {
+        if (currentTrans.getPosition() >= -positionTheshold) { // position long or closed
+            return 0;
+        } else if (currentTrans.getPosition() <= (prevTransValues == null ? 0
+                : adjPrevPos)) {
             // first trans or subsequent larger (more negative) position
             // add current short sale to previous short basis
-            return currentTrans.getShortSell().negate().subtract(currentTrans.getCommission())
-                    .add(prevTransValues == null ? BigDecimal.ZERO : prevTransValues.getShortBasis());
+            return -currentTrans.getShortSell()
+                    - currentTrans.getCommission()
+                    + (prevTransValues == null ? 0
+                    : +prevTransValues.getShortBasis());
         } else { // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
-            BigDecimal histAvgUnitCost = prevTransValues.getShortBasis().divide(adjPrevPos, BigDecimal.ROUND_HALF_EVEN)
-                    .setScale(SecurityReport.moneyScale, BigDecimal.ROUND_HALF_EVEN);
+            double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return prevTransValues.getShortBasis()
-                .add(currentTrans.getSecQuantity().multiply(histAvgUnitCost)
-                        .setScale(SecurityReport.moneyScale, BigDecimal.ROUND_HALF_EVEN));
+                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
         }
     }
 
@@ -103,17 +103,14 @@ public class GainsAverageCalc implements GainsCalc {
 
         int currentDateInt = thisTrans.getParentTxn().getDateInt();
         CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
-        double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);
-
+        double currentRate = cur == null ? 1.0
+                : cur.getUserRateByDateInt(currentDateInt);
         int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
                 : prevTransValues.getParentTxn().getDateInt();
-
-        double splitAdjust = cur == null ? 1.0
-                : cur.adjustRateForSplitsInt(prevDateInt, currentRate, currentDateInt) / currentRate;
-
-        this.adjPrevPos = prevTransValues == null ? BigDecimal.ZERO
-            : prevTransValues.getPosition().multiply(BigDecimal.valueOf(splitAdjust))
-                .setScale(SecurityReport.quantityScale, BigDecimal.ROUND_HALF_EVEN);
+        double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
+                prevDateInt, currentRate, currentDateInt) / currentRate);
+        this.adjPrevPos = prevTransValues == null ? 0
+                : Math.round(prevTransValues.getPosition() * splitAdjust);
     }
 
 }

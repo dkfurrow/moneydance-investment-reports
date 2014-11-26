@@ -30,7 +30,6 @@ package com.moneydance.modules.features.invextension;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 
 /**
@@ -41,25 +40,25 @@ import java.math.BigDecimal;
  * @author Dale Furrow
  */
 public class SecurityFromToReport extends SecurityReport {
-    public BigDecimal income;                 // cumulative income
+    public long income;                 // cumulative income
     private int fromDateInt;            // start of report period
     private int toDateInt;              // end of report period
-    private BigDecimal startPos;              // starting position
-    private BigDecimal endPos;                // ending position
-    private BigDecimal startPrice;            // starting price
-    private BigDecimal endPrice;              // ending price
-    private BigDecimal startValue;            // starting value
-    private BigDecimal endValue;              // ending value
-    private BigDecimal buy;                   // cumulative cash effect of buys (including commission)
-    private BigDecimal sell;                  // cumulative cash effect of sells (including commission)
-    private BigDecimal shortSell;             // cumulative cash effect of shorts (including commission)
-    private BigDecimal coverShort;            // cumulative cash effect of covers (including commission)
-    private BigDecimal expense;               // cumulative expense
-    private BigDecimal longBasis;             // ending average cost basis of long positions
-    private BigDecimal shortBasis;            // ending average cost basis of short positions
-    private BigDecimal realizedGain;          // cumulative realized gains
-    private BigDecimal unrealizedGain;        // cumulative unrealized gains
-    private BigDecimal totalGain;             // sum of realized and unrealized gains
+    private long startPos;              // starting position
+    private long endPos;                // ending position
+    private long startPrice;            // starting price
+    private long endPrice;              // ending price
+    private long startValue;            // starting value
+    private long endValue;              // ending value
+    private long buy;                   // cumulative cash effect of buys (including commission)
+    private long sell;                  // cumulative cash effect of sells (including commission)
+    private long shortSell;             // cumulative cash effect of shorts (including commission)
+    private long coverShort;            // cumulative cash effect of covers (including commission)
+    private long expense;               // cumulative expense
+    private long longBasis;             // ending average cost basis of long positions
+    private long shortBasis;            // ending average cost basis of short positions
+    private long realizedGain;          // cumulative realized gains
+    private long unrealizedGain;        // cumulative unrealized gains
+    private long totalGain;             // sum of realized and unrealized gains
     private double mdReturn;            // period total return (Mod-Dietz method)
     private double annualPercentReturn; // period annualized return (Mod-Dietz method)
     private DateMap arMap;              // date map of annual return data
@@ -82,29 +81,29 @@ public class SecurityFromToReport extends SecurityReport {
         this.fromDateInt = dateRange.getFromDateInt();
         this.toDateInt = dateRange.getToDateInt();
 
-        this.startPos = BigDecimal.ZERO;
-        this.endPos = BigDecimal.ZERO;
-        this.startPrice = BigDecimal.ZERO;
-        this.endPrice = BigDecimal.ZERO;
-        this.startValue=  BigDecimal.ZERO;
-        this.endValue = BigDecimal.ZERO;
+        this.startPos = 0;
+        this.endPos = 0;
+        this.startPrice = 0;
+        this.endPrice = 0;
+        this.startValue = 0;
+        this.endValue = 0;
 
-        this.buy = BigDecimal.ZERO;
-        this.sell = BigDecimal.ZERO;
-        this.shortSell = BigDecimal.ZERO;
-        this.coverShort = BigDecimal.ZERO;
+        this.buy = 0;
+        this.sell = 0;
+        this.shortSell = 0;
+        this.coverShort = 0;
 
-        this.income = BigDecimal.ZERO;
-        this.expense = BigDecimal.ZERO;
+        this.income = 0;
+        this.expense = 0;
 
-        this.longBasis = BigDecimal.ZERO;
-        this.shortBasis = BigDecimal.ZERO;
-        this.realizedGain = BigDecimal.ZERO;
-        this.unrealizedGain = BigDecimal.ZERO;
-        this.totalGain = BigDecimal.ZERO;
+        this.longBasis = 0;
+        this.shortBasis = 0;
+        this.realizedGain = 0;
+        this.unrealizedGain = 0;
+        this.totalGain = 0;
 
-        this.mdReturn = 0.0;
-        this.annualPercentReturn = 0.0;
+        this.mdReturn = 0;
+        this.annualPercentReturn = 0;
 
         this.arMap = new DateMap();
         this.mdMap = new DateMap();
@@ -116,10 +115,10 @@ public class SecurityFromToReport extends SecurityReport {
             this.endPrice = secAccountWrapper.getPrice(toDateInt);
 
             // intialize intermediate calculation variables
-            BigDecimal startCumUnrealGain = BigDecimal.ZERO;
-            BigDecimal endCumUnrealizedGain = BigDecimal.ZERO;
-            BigDecimal startLongBasis = BigDecimal.ZERO;
-            BigDecimal startShortBasis = BigDecimal.ZERO;
+            long startCumUnrealGain = 0;
+            long endCumUnrealizedGain = 0;
+            long startLongBasis = 0;
+            long startShortBasis = 0;
 
             ArrayList<TransactionValues> fullTransactionSet = secAccountWrapper.getTransactionValues();
             ArrayList<Integer> fromToIndices = secAccountWrapper.getFromToIndices(dateRange);
@@ -135,15 +134,14 @@ public class SecurityFromToReport extends SecurityReport {
                 // split adjusts last position from TransValuesCum
                 this.startPos = getSplitAdjustedPosition(priorTransactionValues.getPosition(),
                         priorTransactionValues.getDateint(), fromDateInt);
-                this.startValue = this.startPrice.multiply(this.startPos);
+                this.startValue = this.startPrice * this.startPos;
                 startLongBasis = priorTransactionValues.getLongBasis();
                 startShortBasis = priorTransactionValues.getShortBasis();
 
                 // Initializes ending balance sheet values to start values (in
                 // case there are no transactions within report period).
                 this.endPos = this.startPos;
-                this.endValue = this.endPos.multiply(this.endPrice)
-                        .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN);
+                this.endValue = this.endPos * this.endPrice;
                 this.longBasis = priorTransactionValues.getLongBasis();
                 this.shortBasis = priorTransactionValues.getShortBasis();
 
@@ -154,8 +152,8 @@ public class SecurityFromToReport extends SecurityReport {
                 // buySellFlows is net cash effect of buy/sell/short/cover, incl commission
                 // totalFlows are all cash flows (including income/expense)
                 // add values to date maps
-                BigDecimal totalFlows = transactionValues.getTotalFlows();
-                BigDecimal buySellFlows = transactionValues.getBuySellFlows();
+                long totalFlows = transactionValues.getTotalFlows();
+                long buySellFlows = transactionValues.getBuySellFlows();
 
                 this.arMap.add(transactionValues.getDateint(),
                         totalFlows);
@@ -164,29 +162,24 @@ public class SecurityFromToReport extends SecurityReport {
 
                 // Add the cumulative Values (note buys are defined by change in
                 // long basis, same with sells--commission is included).
-                this.buy = this.buy.add(
-                        transactionValues.getBuy().compareTo(BigDecimal.ZERO) == 0
-                        ? BigDecimal.ZERO
-                        : transactionValues.getBuy().negate().subtract(transactionValues.getCommission()));
-                this.sell = this.sell.add(
-                        transactionValues.getSell().compareTo(BigDecimal.ZERO) == 0
-                        ? BigDecimal.ZERO
-                        : transactionValues.getSell().negate().subtract(transactionValues.getCommission()));
-                this.shortSell = this.shortSell.add(
-                        transactionValues.getShortSell().compareTo(BigDecimal.ZERO) == 0
-                        ? BigDecimal.ZERO
-                        : transactionValues.getShortSell().negate().subtract(transactionValues.getCommission()));
-                this.coverShort = this.coverShort.add(
-                        transactionValues.getCoverShort().compareTo(BigDecimal.ZERO) == 0
-                        ? BigDecimal.ZERO
-                        : transactionValues.getCoverShort().negate().subtract(transactionValues.getCommission()));
-                this.income = this.income.add(transactionValues.getIncome());
-                this.expense = this.expense.add(transactionValues.getExpense());
-                this.realizedGain = this.realizedGain.add(transactionValues.getPerRealizedGain());
+                this.buy += transactionValues.getBuy() == 0
+                        ? 0
+                        : -transactionValues.getBuy() - transactionValues.getCommission();
+                this.sell += transactionValues.getSell() == 0
+                        ? 0
+                        : -transactionValues.getSell() - transactionValues.getCommission();
+                this.shortSell += transactionValues.getShortSell() == 0
+                        ? 0
+                        : -transactionValues.getShortSell() - transactionValues.getCommission();
+                this.coverShort += transactionValues.getCoverShort() == 0
+                        ? 0
+                        : -transactionValues.getCoverShort() - transactionValues.getCommission();
+                this.income += transactionValues.getIncome();
+                this.expense += transactionValues.getExpense();
+                this.realizedGain += transactionValues.getPerRealizedGain();
                 this.endPos = getSplitAdjustedPosition(transactionValues.getPosition(),
                         transactionValues.getDateint(), toDateInt);
-                this.endValue = this.endPos.multiply(this.endPrice)
-                        .setScale(moneyScale, BigDecimal.ROUND_HALF_EVEN);
+                this.endValue = this.endPos * this.endPrice;
                 this.longBasis = transactionValues.getLongBasis();
                 this.shortBasis = transactionValues.getShortBasis();
 
@@ -194,45 +187,45 @@ public class SecurityFromToReport extends SecurityReport {
 
 
             // Calculate the total period unrealized gain
-            if (this.startPos.compareTo(BigDecimal.ZERO) > 0) {
-                startCumUnrealGain = this.startValue.subtract(startLongBasis);
-            } else if (this.startPos.compareTo(BigDecimal.ZERO) < 0) {
-                startCumUnrealGain = this.startValue.subtract(startShortBasis);
+            if (this.startPos > 0) {
+                startCumUnrealGain = this.startValue - startLongBasis;
+            } else if (this.startPos < 0) {
+                startCumUnrealGain = this.startValue - startShortBasis;
             }
 
-            if (this.endPos.compareTo(BigDecimal.ZERO) > 0) {
-                endCumUnrealizedGain = this.endValue.subtract(this.longBasis);
-            } else if (this.endPos.compareTo(BigDecimal.ZERO) < 0) {
-                endCumUnrealizedGain = this.endValue.subtract(this.shortBasis);
+            if (this.endPos > 0) {
+                endCumUnrealizedGain = this.endValue - this.longBasis;
+            } else if (this.endPos < 0) {
+                endCumUnrealizedGain = this.endValue - this.shortBasis;
             }
-            this.unrealizedGain = endCumUnrealizedGain.subtract(startCumUnrealGain);
-            this.totalGain = this.realizedGain.add(this.unrealizedGain);
+            this.unrealizedGain = endCumUnrealizedGain - startCumUnrealGain;
+            this.totalGain = this.realizedGain + this.unrealizedGain;
 
             // Get performance data--first Mod Dietz Returns
 
             // Add the first value in return arrays (if startpos != 0)
-            if (this.startPos.compareTo(BigDecimal.ZERO) != 0) {
-                this.arMap.add(fromDateInt, this.startValue.negate());
-                this.mdMap.add(fromDateInt, BigDecimal.ZERO); // adds dummy value for mod-dietz
+            if (this.startPos != 0) {
+                this.arMap.add(fromDateInt, -this.startValue);
+                this.mdMap.add(fromDateInt, 0L); // adds dummy value for mod-dietz
             }
             // add the last value in return arrays (if endpos != 0)
-            if (this.endPos.compareTo(BigDecimal.ZERO) != 0) {
+            if (this.endPos != 0) {
                 this.arMap.add(toDateInt, this.endValue);
-                this.mdMap.add(toDateInt, BigDecimal.ZERO); // adds dummy value for mod-dietz
+                this.mdMap.add(toDateInt, 0L); // adds dummy value for mod-dietz
             }
 
-            this.mdReturn = computeMDReturn(this.startValue.longValue(), this.endValue.longValue(), this.income.longValue(),
-                    this.expense.longValue(), this.mdMap);
+            this.mdReturn = computeMDReturn(this.startValue, this.endValue, this.income,
+                    this.expense, this.mdMap);
             // Now get annualized returns
             this.annualPercentReturn = computeAnnualReturn(this.arMap, this.mdReturn);
 
             // Remove start and end values from ar date map to enable aggregation
-            if (this.startPos.compareTo(BigDecimal.ZERO) != 0) {
-                this.arMap.add(fromDateInt, this.startValue);
+            if (this.startPos != 0) {
+                this.arMap.add(fromDateInt, +this.startValue);
             }
             // Remove start and end values from date map for ease of aggregation
-            if (this.endPos.compareTo(BigDecimal.ZERO) != 0) {
-                this.arMap.add(toDateInt, this.endValue.negate());
+            if (this.endPos != 0) {
+                this.arMap.add(toDateInt, -this.endValue);
             }
         }
     }
@@ -248,33 +241,34 @@ public class SecurityFromToReport extends SecurityReport {
         //added--if not, set prices and positions to zero
         if (this.getCurrencyWrapper() != null
                 && securityFromToReport.getCurrencyWrapper() != null
-                && this.getCurrencyWrapper().equals(securityFromToReport.getCurrencyWrapper())) {
-            this.startPos = this.startPos.add(securityFromToReport.startPos);
-            this.endPos = this.endPos.add(securityFromToReport.endPos);
+                && this.getCurrencyWrapper()
+                .equals(securityFromToReport.getCurrencyWrapper())) {
+            this.startPos += securityFromToReport.startPos;
+            this.endPos += securityFromToReport.endPos;
             this.startPrice = securityFromToReport.startPrice;
             this.endPrice = securityFromToReport.endPrice;
 
         } else {
-            this.startPos = BigDecimal.ZERO;
-            this.endPos = BigDecimal.ZERO;
-            this.startPrice = BigDecimal.ZERO;
-            this.endPrice = BigDecimal.ZERO;
+            this.startPos = 0;
+            this.endPos = 0;
+            this.startPrice = 0;
+            this.endPrice = 0;
         }
 
         //populate other values from this SecurityReport
-        this.startValue = this.startValue.add(securityFromToReport.startValue);
-        this.endValue = this.endValue.add(securityFromToReport.endValue);
-        this.buy = this.buy.add(securityFromToReport.buy);
-        this.sell = this.sell.add(securityFromToReport.sell);
-        this.shortSell = this.shortSell.add(securityFromToReport.shortSell);
-        this.coverShort = this.coverShort.add(securityFromToReport.coverShort);
-        this.income = this.income.add(securityFromToReport.income);
-        this.expense = this.expense.add(securityFromToReport.expense);
-        this.longBasis = this.longBasis.add(securityFromToReport.longBasis);
-        this.shortBasis = this.shortBasis.add(securityFromToReport.shortBasis);
-        this.realizedGain = this.realizedGain.add(securityFromToReport.realizedGain);
-        this.unrealizedGain = this.unrealizedGain.add(securityFromToReport.unrealizedGain);
-        this.totalGain = this.totalGain.add(securityFromToReport.totalGain);
+        this.startValue += securityFromToReport.startValue;
+        this.endValue += securityFromToReport.endValue;
+        this.buy += securityFromToReport.buy;
+        this.sell += securityFromToReport.sell;
+        this.shortSell += securityFromToReport.shortSell;
+        this.coverShort += securityFromToReport.coverShort;
+        this.income += securityFromToReport.income;
+        this.expense += securityFromToReport.expense;
+        this.longBasis += securityFromToReport.longBasis;
+        this.shortBasis += securityFromToReport.shortBasis;
+        this.realizedGain += securityFromToReport.realizedGain;
+        this.unrealizedGain += securityFromToReport.unrealizedGain;
+        this.totalGain += securityFromToReport.totalGain;
 
         this.arMap = this.arMap.combine(securityFromToReport.arMap, "add");
         this.mdMap = this.mdMap.combine(securityFromToReport.mdMap, "add");
@@ -287,17 +281,17 @@ public class SecurityFromToReport extends SecurityReport {
     @Override
     public void recomputeAggregateReturns() {
         // get Mod-Dietz Returns
-        double mdReturnVal = computeMDReturn(startValue.longValue(), endValue.longValue(), income.longValue(),
-                expense.longValue(), mdMap);
+        double mdReturnVal = computeMDReturn(startValue, endValue, income,
+                expense, mdMap);
 
         // SecurityFromToReport.mdReturn = thisReturn;
         mdReturn = mdReturnVal;
 
         // add start and end values to return date maps
-        if (startValue.compareTo(BigDecimal.ZERO) != 0) {
-            arMap.add(fromDateInt, startValue.negate());
+        if (startValue != 0) {
+            arMap.add(fromDateInt, -startValue);
         }
-        if (endValue.compareTo(BigDecimal.ZERO) != 0) {
+        if (endValue != 0) {
             arMap.add(toDateInt, endValue);
         }
         // get annualized returns
@@ -398,71 +392,71 @@ public class SecurityFromToReport extends SecurityReport {
         return toDateInt;
     }
 
-    public BigDecimal getStartPos() {
+    public long getStartPos() {
         return startPos;
     }
 
-    public BigDecimal getEndPos() {
+    public long getEndPos() {
         return endPos;
     }
 
-    public BigDecimal getStartPrice() {
+    public long getStartPrice() {
         return startPrice;
     }
 
-    public BigDecimal getEndPrice() {
+    public long getEndPrice() {
         return endPrice;
     }
 
-    public BigDecimal getStartValue() {
+    public long getStartValue() {
         return startValue;
     }
 
-    public BigDecimal getEndValue() {
+    public long getEndValue() {
         return endValue;
     }
 
-    public BigDecimal getBuy() {
+    public long getBuy() {
         return buy;
     }
 
-    public BigDecimal getSell() {
+    public long getSell() {
         return sell;
     }
 
-    public BigDecimal getShortSell() {
+    public long getShortSell() {
         return shortSell;
     }
 
-    public BigDecimal getCoverShort() {
+    public long getCoverShort() {
         return coverShort;
     }
 
-    public BigDecimal getIncome() {
+    public long getIncome() {
         return income;
     }
 
-    public BigDecimal getExpense() {
+    public long getExpense() {
         return expense;
     }
 
-    public BigDecimal getLongBasis() {
+    public long getLongBasis() {
         return longBasis;
     }
 
-    public BigDecimal getShortBasis() {
+    public long getShortBasis() {
         return shortBasis;
     }
 
-    public BigDecimal getRealizedGain() {
+    public long getRealizedGain() {
         return realizedGain;
     }
 
-    public BigDecimal getUnrealizedGain() {
+    public long getUnrealizedGain() {
         return unrealizedGain;
     }
 
-    public BigDecimal getTotalGain() {
+    public long getTotalGain() {
         return totalGain;
     }
 
