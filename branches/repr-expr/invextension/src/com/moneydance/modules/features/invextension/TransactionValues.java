@@ -128,7 +128,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
     public TransactionValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
             throws Exception {
         // copy base values from Security Transaction
-        String memo = "Inserted for Inital Balance: "
+        String memo = "Inserted for Initial Balance: "
                 + invAcctWrapper.getInvestmentAccount().getAccountName();
         this.securityAccountWrapper = invAcctWrapper.getCashAccountWrapper();
         this.parentTxn = new ParentTxn(firstDateInt, firstDateInt,
@@ -147,15 +147,15 @@ public class TransactionValues implements Comparable<TransactionValues> {
         long initBal = invAcctWrapper.getInvestmentAccount().getStartBalance();
         if (initBal > 0) {
             this.buy = -initBal;
+            this.longBasis = initBal;
         }
         if (initBal < 0) {
             this.shortSell = -initBal;
+            this.shortBasis = -initBal;
         }
-        this.secQuantity = -this.buy - this.coverShort - this.sell - this.shortSell;
+        this.secQuantity = (-this.buy - this.coverShort - this.sell - this.shortSell) * 100;
 
         this.position = this.secQuantity;
-        this.longBasis = Math.max(this.position, 0) * 100;
-        this.shortBasis = Math.min(this.position, 0) * 100;
         // OpenValue
         this.openValue = this.position * this.mktPrice / 10000;
         // mkt price is always 1, so no realized/unrealized gains
