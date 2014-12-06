@@ -260,8 +260,8 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     public int binarySearchRecursive(int searchDateInt, int left, int right, boolean getFromDate) {
         if (left > right || getTransactionValues().isEmpty()) return -1;
-        int leftDateInt = getTransactionValues().get(left).getDateint();
-        int rightDateInt = getTransactionValues().get(right).getDateint();
+        int leftDateInt = getTransactionValues().get(left).getDateInt();
+        int rightDateInt = getTransactionValues().get(right).getDateInt();
         if (getFromDate) {//check endpoints of list
             if (searchDateInt < leftDateInt) return left;
             if (searchDateInt >= rightDateInt) return -1;
@@ -271,15 +271,15 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         }
         //"middle" defined so that 2 element-set returns correct side
         int middle = getFromDate ? Math.max((left + right) / 2, 1) : (left + right) / 2;
-        int middleDateInt = getTransactionValues().get(middle).getDateint();
+        int middleDateInt = getTransactionValues().get(middle).getDateInt();
         if (getFromDate) { //get "from" element
-            int leftOfMiddleDateInt = getTransactionValues().get(middle - 1).getDateint();
+            int leftOfMiddleDateInt = getTransactionValues().get(middle - 1).getDateInt();
             if (searchDateInt < middleDateInt && searchDateInt >= leftOfMiddleDateInt) return middle;
             else if (searchDateInt < leftOfMiddleDateInt) return binarySearchRecursive(searchDateInt, left, middle - 1,
                     getFromDate); //search left side
             else return binarySearchRecursive(searchDateInt, middle + 1, right, getFromDate);
         } else { //get "to" element
-            int rightOfMiddleDateInt = getTransactionValues().get(middle + 1).getDateint();
+            int rightOfMiddleDateInt = getTransactionValues().get(middle + 1).getDateInt();
             if (searchDateInt >= middleDateInt && searchDateInt < rightOfMiddleDateInt) return middle;
             else if (searchDateInt >= rightOfMiddleDateInt)
                 return binarySearchRecursive(searchDateInt, middle + 1, right,
@@ -356,7 +356,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                     case DIVIDEND_REINVEST:
                     case BANK:
                         if (transactionValues.getIncome() != 0.0) {
-                            int dividendDate = transactionValues.getDateint();
+                            int dividendDate = transactionValues.getDateInt();
                             int daysBetweenDivs = lastDividendDateInt == -1 ? -1 : DateUtils
                                     .getDaysBetween(dividendDate, lastDividendDateInt);
                             if (daysBetweenDivs == -1) {//implies first dividend in history
@@ -372,10 +372,13 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                                 } else if (daysBetweenDivs >= DIV_FREQENCY_INCREMENT * 2 && daysBetweenDivs <
                                         DIV_FREQENCY_INCREMENT * 4) {
                                     setDivFrequency(DIV_FREQUENCY.BIANNUAL);
+                                } else {
+                                    // else dividend frequency still assumed to be annual
+                                    setDivFrequency(DIV_FREQUENCY.ANNUAL);
                                 }
-                                // else dividend frequency still assumed to be annual
                                 lastDividendDateInt = dividendDate;
                                 dividendDetermined = true;
+
                             }
                         }
                 }

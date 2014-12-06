@@ -109,7 +109,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         int firstDateInt = tempTransValues.isEmpty() ? DateUtils
                 .getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
                 : DateUtils.getPrevBusinessDay(tempTransValues.get(0)
-                .getDateint());
+                .getDateInt());
         TransactionValues initialTransactionValues = new TransactionValues(this, firstDateInt);
         cashTransactions.add(initialTransactionValues);
         // now there is guaranteed to be one transaction, so prevTransValues

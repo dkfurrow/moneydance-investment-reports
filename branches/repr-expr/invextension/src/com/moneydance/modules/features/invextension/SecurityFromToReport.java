@@ -108,7 +108,7 @@ public class SecurityFromToReport extends SecurityReport {
                         (fullTransactionSet.size() - 1) : fullTransactionSet.get(fromToIndices.get(0) - 1);
                 // split adjusts last position from TransValuesCum
                 this.startPos = getSplitAdjustedPosition(priorTransactionValues.getPosition(),
-                        priorTransactionValues.getDateint(), fromDateInt);
+                        priorTransactionValues.getDateInt(), fromDateInt);
                 this.startValue = this.startPrice * this.startPos;
                 startLongBasis = priorTransactionValues.getLongBasis();
                 startShortBasis = priorTransactionValues.getShortBasis();
@@ -129,9 +129,9 @@ public class SecurityFromToReport extends SecurityReport {
                 long totalFlows = transactionValues.getTotalFlows();
                 long buySellFlows = transactionValues.getBuySellFlows();
 
-                this.arMap.add(transactionValues.getDateint(), totalFlows);
-                this.mdMap.add(transactionValues.getDateint(), buySellFlows);
-                this.transMap.add(transactionValues.getDateint(), transactionValues.getTransfer());
+                this.arMap.add(transactionValues.getDateInt(), totalFlows);
+                this.mdMap.add(transactionValues.getDateInt(), buySellFlows);
+                this.transMap.add(transactionValues.getDateInt(), transactionValues.getTransfer());
 
                 // Add the cumulative Values (note buys are defined by change in
                 // long basis, same with sells--commission is included).
@@ -151,7 +151,7 @@ public class SecurityFromToReport extends SecurityReport {
                 this.expense += transactionValues.getExpense();
                 this.realizedGain += transactionValues.getPerRealizedGain();
                 this.endPos = getSplitAdjustedPosition(transactionValues.getPosition(),
-                        transactionValues.getDateint(), toDateInt);
+                        transactionValues.getDateInt(), toDateInt);
                 this.endValue = this.endPos * this.endPrice;
                 this.longBasis = transactionValues.getLongBasis();
                 this.shortBasis = transactionValues.getShortBasis();

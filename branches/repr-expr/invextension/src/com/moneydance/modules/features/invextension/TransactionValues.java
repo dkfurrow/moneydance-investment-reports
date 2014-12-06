@@ -50,14 +50,14 @@ public class TransactionValues implements Comparable<TransactionValues> {
     // reference account (to determine correct sign for transfers)
     private Account referenceAccount;
     private SecurityAccountWrapper securityAccountWrapper;
-    private Integer dateint; // transaction date
+    private Integer dateInt; // transaction date
     private double txnID; // transaction ID
 
     static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
         @Override
         public int compare(TransactionValues t1, TransactionValues t2) {
-            Integer d1 = t1.dateint;
-            Integer d2 = t2.dateint;
+            Integer d1 = t1.dateInt;
+            Integer d2 = t2.dateInt;
             Double id1 = t1.txnID;
             Double id2 = t2.txnID;
             Integer assocAcctNum1 = t1.referenceAccount.getAccountNum();
@@ -139,7 +139,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         BulkSecInfo.setNextTxnNumber(BulkSecInfo.getNextTxnNumber() + 1L);
 
         this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccount();
-        this.dateint = firstDateInt;
+        this.dateInt = firstDateInt;
 
         this.desc = this.parentTxn.getDescription();
         this.mktPrice = 100;
@@ -179,7 +179,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.parentTxn = thisParentTxn;
         this.referenceAccount = referenceAccount;
         this.securityAccountWrapper = securityAccountWrapper;
-        this.dateint = thisParentTxn.getDateInt();
+        this.dateInt = thisParentTxn.getDateInt();
         this.txnID = Long.valueOf(thisParentTxn.getTxnId()).doubleValue();
         this.desc = thisParentTxn.getDescription();
 
@@ -315,7 +315,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
             this.cumTotalGain = prevTransLine == null ? this.perTotalGain :
                     this.perTotalGain + prevTransLine.cumTotalGain;
         } catch (Exception e) {
-            String dateString = " Date: " + DateUtils.convertToShort(dateint);
+            String dateString = " Date: " + DateUtils.convertToShort(dateInt);
             String errorString = "Error in transaction values calculation: " + securityAccountWrapper.getInvAcctWrapper().getName() +
                     " Security: " + securityAccountWrapper.getName() + dateString;
             LogController.logException(e, errorString);
@@ -337,7 +337,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.parentTxn = transactionValues.parentTxn;
         this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccount();
         this.securityAccountWrapper = prevTransValues.getSecurityAccountWrapper();
-        this.dateint = transactionValues.dateint;
+        this.dateInt = transactionValues.dateInt;
         // adding 0.1 to related transValues id to ensure unique cash id
         this.txnID = TxnUtil.getInvestTxnType(transactionValues.parentTxn) ==
                 InvestTxnType.BANK ? transactionValues.parentTxn.getTxnId() :
@@ -491,7 +491,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
     private void testSubsequentTransaction(InvestTxnType investTxnType, long secQuantity, long adjPrevPos) throws Exception {
         String warningStr = "";
-        String dateString = " Date: " + DateUtils.convertToShort(dateint);
+        String dateString = " Date: " + DateUtils.convertToShort(dateInt);
         long thisPosition = this.secQuantity + adjPrevPos;
         if (adjPrevPos > 0) {
             if (thisPosition < 0) warningStr = "Error in investment account: " + securityAccountWrapper.getInvAcctWrapper().getName() +
@@ -548,8 +548,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
         return cumUnrealizedGain;
     }
 
-    public Integer getDateint() {
-        return dateint;
+    public Integer getDateInt() {
+        return dateInt;
     }
 
     @SuppressWarnings("unused")
@@ -635,7 +635,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         txnInfo.add(securityAccountWrapper.getCurrencyWrapper().getTicker() == null ? "NoTicker" : securityAccountWrapper.getCurrencyWrapper().getTicker());
         txnInfo.add(securityAccountWrapper.getDivFrequency().toString());
         txnInfo.add(Double.toString(txnID));
-        txnInfo.add(DateUtils.convertToShort(dateint));
+        txnInfo.add(DateUtils.convertToShort(dateInt));
         txnInfo.add(transType.toString());
         txnInfo.add(desc);
         txnInfo.add(Long.toString(buy));

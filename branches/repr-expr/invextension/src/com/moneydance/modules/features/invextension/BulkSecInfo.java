@@ -271,11 +271,11 @@ public class BulkSecInfo {
             currencyInfo.add(cur.getTickerSymbol());
         }
         int todayDate = DateUtils.getLastCurrentDateInt();
-        int dateint = cur.getSnapshot(i).getDateInt();
+        int dateInt = cur.getSnapshot(i).getDateInt();
         double closeRate = cur.getSnapshot(i).getUserRate();
-        currencyInfo.add(DateUtils.convertToShort(dateint));
+        currencyInfo.add(DateUtils.convertToShort(dateInt));
         currencyInfo.add(Double.toString(1 / closeRate));
-        currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateint,
+        currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateInt,
                 closeRate, todayDate)));
         return currencyInfo.toArray(new String[currencyInfo.size()]);
     }
@@ -376,7 +376,7 @@ public class BulkSecInfo {
         int nextId = currencyTable.getNextID();
         int dateInt = DateUtils.convertToDateInt(new Date());
         CurrencyType cashCurrencyType = new CurrencyType
-                (nextId, "", "CASH", 1.0, 1, "", "", "CASH",
+                (nextId, "", "CASH", 1.0, 4, "", "", "CASH",
                         dateInt, CurrencyType.CURRTYPE_SECURITY, currencyTable);
         cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
