@@ -32,7 +32,7 @@ package com.moneydance.modules.features.invextension;
  * Aggregation controller sets overall method for aggregation for a given report
  */
 public enum AggregationController {
-    INVACCT("<html>Investement Account, then<br>Tradeable Securities/Account Cash</html>", new InvestmentAccountWrapper(), new Tradeable()),
+    INVACCT("Investment Account, then Securities/Cash", new InvestmentAccountWrapper(), new Tradeable()),
     TICKER("Ticker", new CurrencyWrapper(), new InvestmentAccountWrapper()),
     SECTYPE("Security Type, then Security SubType", new SecurityTypeWrapper(), new SecuritySubTypeWrapper());
     private final String description;
