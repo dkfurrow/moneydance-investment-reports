@@ -268,10 +268,6 @@ public abstract class TotalReport {
                             COMPOSITE_TYPE.SECOND));
             }
         }
-        // recompute returns
-        for (CompositeReport compositeReport : compositeReports) {
-            compositeReport.recomputeAggregateReturns();
-        }
     }
 
     public void displayReport() throws SecurityException,

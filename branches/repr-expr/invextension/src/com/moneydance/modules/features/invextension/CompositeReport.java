@@ -257,11 +257,6 @@ public class CompositeReport
     }
 
     @Override
-    public void recomputeAggregateReturns() {
-        this.aggregateReport.recomputeAggregateReturns();
-    }
-
-    @Override
     public Object[] toTableRow() throws SecurityException,
             IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {

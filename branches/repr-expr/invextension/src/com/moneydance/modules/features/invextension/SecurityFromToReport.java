@@ -25,11 +25,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -40,415 +43,141 @@ import java.util.ArrayList;
  * @author Dale Furrow
  */
 public class SecurityFromToReport extends SecurityReport {
-    public long income = 0;                 // cumulative income
-    private int fromDateInt = 0;            // start of report period
-    private int toDateInt = 0;              // end of report period
-    private long startPos = 0;              // starting position
-    private long endPos = 0;                // ending position
-    private long startPrice = 0;            // starting price
-    private long endPrice = 0;              // ending price
-    private long startValue = 0;            // starting value
-    private long endValue = 0;              // ending value
-    private long buy = 0;                   // cumulative cash effect of buys (including commission)
-    private long sell = 0;                  // cumulative cash effect of sells (including commission)
-    private long shortSell = 0;             // cumulative cash effect of shorts (including commission)
-    private long coverShort = 0;            // cumulative cash effect of covers (including commission)
-    private long expense = 0;               // cumulative expense
-    private long longBasis = 0;             // ending average cost basis of long positions
-    private long shortBasis = 0;            // ending average cost basis of short positions
-    private long realizedGain = 0;          // cumulative realized gains
-    private long unrealizedGain = 0;        // cumulative unrealized gains
-    private long totalGain = 0;             // sum of realized and unrealized gains
-    private double mdReturn = 0;            // period total return (Mod-Dietz method)
-    private double annualPercentReturn = 0; // period annualized return (Mod-Dietz method)
-    private DateMap arMap;              // date map of annual return data
-    private DateMap mdMap;              // date map of Mod-Dietz return data
-    private DateMap transMap;           // date map of transfer data
-
-
     /**
      * Generic constructor, which produces either the SecurityReport associated
      * with a given SecurityAccountWrapper or a blank report
      *
-     * @param secAccountWrapper reference account
-     * @param dateRange         date range
+     * @param securityAccount reference account
+     * @param dateRange       date range
      */
-    public SecurityFromToReport(SecurityAccountWrapper secAccountWrapper,
-                                DateRange dateRange) {
+    public SecurityFromToReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
+        super(securityAccount, dateRange);
 
-        super(secAccountWrapper, dateRange);
+        int fromDateInt = dateRange.getFromDateInt();
+        int toDateInt = dateRange.getToDateInt();
 
-        this.fromDateInt = dateRange.getFromDateInt();
-        this.toDateInt = dateRange.getToDateInt();
+        // Extractors for metrics
+        ExtractorStartPrice eStartPrice = new ExtractorStartPrice(securityAccount, fromDateInt, toDateInt);
+        ExtractorStartPosition eStartPosition = new ExtractorStartPosition(securityAccount, fromDateInt, toDateInt);
+        ExtractorStartValue eStartValue = new ExtractorStartValue(securityAccount, fromDateInt, toDateInt);
+        ExtractorStartLongBasis eLongBasis = new ExtractorStartLongBasis(securityAccount, fromDateInt, toDateInt);
+        ExtractorStartShortBasis eShortBasis = new ExtractorStartShortBasis(securityAccount, fromDateInt, toDateInt);
 
-        this.arMap = new DateMap();
-        this.mdMap = new DateMap();
-        this.transMap = new DateMap();
+        ExtractorEndPrice eEndPrice = new ExtractorEndPrice(securityAccount, fromDateInt, toDateInt);
+        ExtractorEndPosition eEndPosition = new ExtractorEndPosition(securityAccount, fromDateInt, toDateInt);
+        ExtractorEndValue eEndValue = new ExtractorEndValue(securityAccount, fromDateInt, toDateInt);
+        ExtractorLongBasis eStartLongBasis = new ExtractorLongBasis(securityAccount, fromDateInt, toDateInt);
+        ExtractorShortBasis eStartShortBasis = new ExtractorShortBasis(securityAccount, fromDateInt, toDateInt);
 
-        if (secAccountWrapper != null) {
-            this.startPrice = secAccountWrapper.getPrice(fromDateInt);
-            this.endPrice = secAccountWrapper.getPrice(toDateInt);
+        ExtractorBuy eBuys = new ExtractorBuy(securityAccount, fromDateInt, toDateInt);
+        ExtractorCoveredShort eCoverShorts = new ExtractorCoveredShort(securityAccount, fromDateInt, toDateInt);
+        ExtractorExpense eExpense = new ExtractorExpense(securityAccount, fromDateInt, toDateInt);
+        ExtractorIncome eIncome = new ExtractorIncome(securityAccount, fromDateInt, toDateInt);
+        ExtractorSell eSells = new ExtractorSell(securityAccount, fromDateInt, toDateInt);
+        ExtractorShortSell eShortSells = new ExtractorShortSell(securityAccount, fromDateInt, toDateInt);
 
-            // intialize intermediate calculation variables
-            long startCumUnrealGain = 0;
-            long endCumUnrealizedGain = 0;
-            long startLongBasis = 0;
-            long startShortBasis = 0;
+        // Put them into a table under the appropriate names
+        simpleMetric.put("StartPrice", new pair<Number>(0L, eStartPrice));
+        simpleMetric.put("StartPosition", new pair<Number>(0L, eStartPosition));
+        simpleMetric.put("StartValue", new pair<Number>(0L, eStartValue));
+        simpleMetric.put("StartLongBasis", new pair<Number>(0L, eStartLongBasis));
+        simpleMetric.put("StartShortBasis", new pair<Number>(0L, eStartShortBasis));
 
-            ArrayList<TransactionValues> fullTransactionSet = secAccountWrapper.getTransactionValues();
-            ArrayList<Integer> fromToIndices = secAccountWrapper.getFromToIndices(dateRange);
-            ArrayList<TransactionValues> subTransactionSet = secAccountWrapper.getFromToSubset(fromToIndices);
+        simpleMetric.put("EndPrice", new pair<Number>(0L, eEndPrice));
+        simpleMetric.put("EndPosition", new pair<Number>(0L, eEndPosition));
+        simpleMetric.put("EndValue", new pair<Number>(0L, eEndValue));
+        simpleMetric.put("LongBasis", new pair<Number>(0L, eLongBasis));
+        simpleMetric.put("ShortBasis", new pair<Number>(0L, eShortBasis));
 
-            boolean hasInitialPosition = !fullTransactionSet.isEmpty() &&
-                    !(!fromToIndices.isEmpty() && fromToIndices.get(0) == 0);
+        simpleMetric.put("Buy", new pair<Number>(0L, eBuys));
+        simpleMetric.put("CoveredShort", new pair<Number>(0L, eCoverShorts));
+        simpleMetric.put("Expense", new pair<Number>(0L, eExpense));
+        simpleMetric.put("Income", new pair<Number>(0L, eIncome));
+        simpleMetric.put("Sell", new pair<Number>(0L, eSells));
+        simpleMetric.put("ShortSell", new pair<Number>(0L, eShortSells));
 
-            if (hasInitialPosition) {
-                //security has initial position for this Date Range...so get position
-                TransactionValues priorTransactionValues = fromToIndices.isEmpty() ? fullTransactionSet.get
-                        (fullTransactionSet.size() - 1) : fullTransactionSet.get(fromToIndices.get(0) - 1);
-                // split adjusts last position from TransValuesCum
-                this.startPos = getSplitAdjustedPosition(priorTransactionValues.getPosition(),
-                        priorTransactionValues.getDateInt(), fromDateInt);
-                this.startValue = this.startPrice * this.startPos;
-                startLongBasis = priorTransactionValues.getLongBasis();
-                startShortBasis = priorTransactionValues.getShortBasis();
+        simpleMetric.put("RealizedGain", new pair<Number>(0L, null));
+        simpleMetric.put("UnrealizedGain", new pair<Number>(0L, null));
+        simpleMetric.put("TotalGain", new pair<Number>(0L, null));
 
-                // Initializes ending balance sheet values to start values (in
-                // case there are no transactions within report period).
-                this.endPos = this.startPos;
-                this.endValue = this.endPos * this.endPrice;
-                this.longBasis = priorTransactionValues.getLongBasis();
-                this.shortBasis = priorTransactionValues.getShortBasis();
-            }
+        // These extractors return multiple values, which are exploded into values in the normal metrics
+        ExtractorGains eGains = new ExtractorGains(securityAccount, fromDateInt, toDateInt);              // x 3
 
-            // Where transaction period intersects report period
-            for (TransactionValues transactionValues : subTransactionSet) {
-                // buySellFlows is net cash effect of buy/sell/short/cover, incl commission
-                // totalFlows are all cash flows (including income/expense)
-                // add values to date maps
-                long totalFlows = transactionValues.getTotalFlows();
-                long buySellFlows = transactionValues.getBuySellFlows();
+        multipleMetrics.put("_Gains", new pair<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
-                this.arMap.add(transactionValues.getDateInt(), totalFlows);
-                this.mdMap.add(transactionValues.getDateInt(), buySellFlows);
-                this.transMap.add(transactionValues.getDateInt(), transactionValues.getTransfer());
+        // Extractors for return calculations. Cannot point to same as above, since they have state.
+        ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, toDateInt);
+        ExtractorAnnualReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, fromDateInt, toDateInt);
 
-                // Add the cumulative Values (note buys are defined by change in
-                // long basis, same with sells--commission is included).
-                this.buy += transactionValues.getBuy() == 0
-                        ? 0
-                        : -transactionValues.getBuy() - transactionValues.getCommission();
-                this.sell += transactionValues.getSell() == 0
-                        ? 0
-                        : -transactionValues.getSell() - transactionValues.getCommission();
-                this.shortSell += transactionValues.getShortSell() == 0
-                        ? 0
-                        : -transactionValues.getShortSell() - transactionValues.getCommission();
-                this.coverShort += transactionValues.getCoverShort() == 0
-                        ? 0
-                        : -transactionValues.getCoverShort() - transactionValues.getCommission();
-                this.income += transactionValues.getIncome();
-                this.expense += transactionValues.getExpense();
-                this.realizedGain += transactionValues.getPerRealizedGain();
-                this.endPos = getSplitAdjustedPosition(transactionValues.getPosition(),
-                        transactionValues.getDateInt(), toDateInt);
-                this.endValue = this.endPos * this.endPrice;
-                this.longBasis = transactionValues.getLongBasis();
-                this.shortBasis = transactionValues.getShortBasis();
+        returnsMetric.put("AllReturn", new pair<>(0.0, aggregatedAllReturn));
+        returnsMetric.put("AnnualReturn", new pair<>(0.0, aggregatedAnnualReturn));
 
-            } // end--where transaction period intersects report period
-
-
-            // Calculate the total period unrealized gain
-            if (this.startPos > 0) {
-                startCumUnrealGain = this.startValue - startLongBasis;
-            } else if (this.startPos < 0) {
-                startCumUnrealGain = this.startValue - startShortBasis;
-            }
-
-            if (this.endPos > 0) {
-                endCumUnrealizedGain = this.endValue - this.longBasis;
-            } else if (this.endPos < 0) {
-                endCumUnrealizedGain = this.endValue - this.shortBasis;
-            }
-            this.unrealizedGain = endCumUnrealizedGain - startCumUnrealGain;
-            this.totalGain = this.realizedGain + this.unrealizedGain;
-
-            // Get performance data--first Mod Dietz Returns
-
-            // Add the first value in return arrays (if startpos != 0)
-            if (this.startPos != 0) {
-                this.arMap.add(fromDateInt, -this.startValue);
-                this.mdMap.add(fromDateInt, 0L); // adds dummy value for mod-dietz
-            }
-            // add the last value in return arrays (if endpos != 0)
-            if (this.endPos != 0) {
-                this.arMap.add(toDateInt, this.endValue);
-                this.mdMap.add(toDateInt, 0L); // adds dummy value for mod-dietz
-            }
-
-            this.mdReturn = computeMDReturn(this.startValue, this.endValue, this.income,
-                    this.expense, this.mdMap);
-            // Now get annualized returns
-            this.annualPercentReturn = computeAnnualReturn(this.arMap, this.mdReturn);
-
-            // Remove start and end values from ar date map to enable aggregation
-            if (this.startPos != 0) {
-                this.arMap.add(fromDateInt, +this.startValue);
-            }
-            // Remove start and end values from date map for ease of aggregation
-            if (this.endPos != 0) {
-                this.arMap.add(toDateInt, -this.endValue);
-            }
-        }
+        // Do the calculations by running the extractors over the transactions in this account.
+        doCalculations(securityAccount);
+        // Distribute the values from extractors that return multiple values
+        explode("_Gains", "RealizedGain", "UnrealizedGain", "TotalGain");
     }
 
     @Override
-    public void addTo(SecurityReport securityReport) {
-        SecurityFromToReport securityFromToReport = (SecurityFromToReport) securityReport;
-
-        if (this.getSecurityAccountWrapper() != null) {
-            throw new UnsupportedOperationException("Illegal call to addTo method for SecurityReport");
-        }
-        //if CurrencyWrappers are the same then prices and positions can be
-        //added--if not, set prices and positions to zero
-        if (this.getCurrencyWrapper() != null
-                && securityFromToReport.getCurrencyWrapper() != null
-                && this.getCurrencyWrapper()
-                .equals(securityFromToReport.getCurrencyWrapper())) {
-            this.startPos += securityFromToReport.startPos;
-            this.endPos += securityFromToReport.endPos;
-            this.startPrice = securityFromToReport.startPrice;
-            this.endPrice = securityFromToReport.endPrice;
-
-        } else {
-            this.startPos = 0;
-            this.endPos = 0;
-            this.startPrice = 0;
-            this.endPrice = 0;
-        }
-
-        //populate other values from this SecurityReport
-        this.startValue += securityFromToReport.startValue;
-        this.endValue += securityFromToReport.endValue;
-        this.buy += securityFromToReport.buy;
-        this.sell += securityFromToReport.sell;
-        this.shortSell += securityFromToReport.shortSell;
-        this.coverShort += securityFromToReport.coverShort;
-        this.income += securityFromToReport.income;
-        this.expense += securityFromToReport.expense;
-        this.longBasis += securityFromToReport.longBasis;
-        this.shortBasis += securityFromToReport.shortBasis;
-        this.realizedGain += securityFromToReport.realizedGain;
-        this.unrealizedGain += securityFromToReport.unrealizedGain;
-        this.totalGain += securityFromToReport.totalGain;
-
-        this.arMap = this.arMap.combine(securityFromToReport.arMap, "add");
-        this.mdMap = this.mdMap.combine(securityFromToReport.mdMap, "add");
-        this.transMap = this.transMap.combine(securityFromToReport.transMap, "add");
-        //set returns to zero
-        this.mdReturn = 0;
-        this.annualPercentReturn = 0;
+    public CompositeReport getCompositeReport(AggregationController aggregationController, COMPOSITE_TYPE compType) {
+        return new CompositeReport(this, aggregationController, compType);
     }
 
     @Override
-    public void recomputeAggregateReturns() {
-        // get Mod-Dietz Returns
-        double mdReturnVal = computeMDReturn(startValue, endValue, income, expense, mdMap);
-
-        // SecurityFromToReport.mdReturn = thisReturn;
-        mdReturn = mdReturnVal;
-
-        // add start and end values to return date maps
-        if (startValue != 0) {
-            arMap.add(fromDateInt, -startValue);
-        }
-        if (endValue != 0) {
-            arMap.add(toDateInt, endValue);
-        }
-        // get annualized returns
-        annualPercentReturn = computeAnnualReturn(arMap, mdReturnVal);
+    public SecurityReport getAggregateSecurityReport() {
+        SecurityFromToReport aggregate = new SecurityFromToReport(null, getDateRange());
+        return initializeAggregateSecurityReport(aggregate);
     }
 
     @Override
-    public Object[] toTableRow() throws SecurityException,
-            IllegalArgumentException, NoSuchFieldException,
+    public void addTo(SecurityReport operand) {
+        super.addTo(operand);
+
+        addValue("Buy", operand, "Buy");
+        addValue("Sell", operand, "Sell");
+        addValue("ShortSell", operand, "ShortSell");
+        addValue("CoveredShort", operand, "CoveredShort");
+        addValue("Income", operand, "Income");
+        addValue("Expense", operand, "Expense");
+        addValue("LongBasis", operand, "LongBasis");
+        addValue("ShortBasis", operand, "ShortBasis");
+        addValue("RealizedGain", operand, "RealizedGain");
+        addValue("UnrealizedGain", operand, "UnrealizedGain");
+        addValue("TotalGain", operand, "TotalGain");
+    }
+
+    @Override
+    public Object[] toTableRow() throws SecurityException, IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {
         addLineBody();
         return super.getOutputLine().toArray();
     }
 
     @Override
-    public CompositeReport getCompositeReport(AggregationController aggregationController,
-                                              COMPOSITE_TYPE compType) {
-        return new CompositeReport(this, aggregationController, compType);
-    }
-
-    @Override
-    public SecurityReport getAggregateSecurityReport() {
-        SecurityFromToReport thisAggregate = new SecurityFromToReport(null, getDateRange());
-        //add report body values (except Returns)
-        thisAggregate.startPos = this.startPos;
-        thisAggregate.endPos = this.endPos;
-        thisAggregate.startPrice = this.startPrice;
-        thisAggregate.endPrice = this.endPrice;
-        thisAggregate.startValue = this.startValue;
-        thisAggregate.endValue = this.endValue;
-        thisAggregate.buy = this.buy;
-        thisAggregate.sell = this.sell;
-        thisAggregate.shortSell = this.shortSell;
-        thisAggregate.coverShort = this.coverShort;
-        thisAggregate.income = this.income;
-        thisAggregate.expense = this.expense;
-        thisAggregate.longBasis = this.longBasis;
-        thisAggregate.shortBasis = this.shortBasis;
-        thisAggregate.realizedGain = this.realizedGain;
-        thisAggregate.unrealizedGain = this.unrealizedGain;
-        thisAggregate.totalGain = this.totalGain;
-
-        thisAggregate.mdMap = this.mdMap;
-        thisAggregate.arMap = this.arMap;
-        thisAggregate.transMap = this.transMap;
-
-        //make aggregating classes the same except secAccountWrapper
-        thisAggregate.setInvestmentAccountWrapper(this.getInvestmentAccountWrapper());
-        thisAggregate.setSecurityAccountWrapper(null);
-        thisAggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
-        thisAggregate.setSecuritySubTypeWrapper(this.getSecuritySubTypeWrapper());
-        thisAggregate.setTradeable(this.getTradeable());
-        thisAggregate.setCurrencyWrapper(this.getCurrencyWrapper());
-
-        return thisAggregate;
-    }
-
-    @Override
-    public String getName() {
-        if (this.getSecurityAccountWrapper() == null) {
-            return "Null SecAccountWrapper";
-        } else {
-            return this.getInvestmentAccountWrapper().getName() + ": "
-                    + this.getSecurityAccountWrapper().getName();
-        }
-    }
-
-    @Override
     public void addLineBody() {
         ArrayList<Object> outputLine = super.getOutputLine();
-        outputLine.add(this.startPos);
-        outputLine.add(this.endPos);
-        outputLine.add(this.startPrice);
-        outputLine.add(this.endPrice);
-        outputLine.add(this.startValue);
-        outputLine.add(this.endValue);
-        outputLine.add(this.buy);
-        outputLine.add(this.sell);
-        outputLine.add(this.shortSell);
-        outputLine.add(this.coverShort);
-        outputLine.add(this.income);
-        outputLine.add(this.expense);
-        outputLine.add(this.longBasis);
-        outputLine.add(this.shortBasis);
-        outputLine.add(this.realizedGain);
-        outputLine.add(this.unrealizedGain);
-        outputLine.add(this.totalGain);
-        outputLine.add(this.mdReturn);
-        outputLine.add(this.annualPercentReturn);
+        outputLine.add((Long) simpleMetric.get("StartPosition").value / 10000.0);
+        outputLine.add((Long) simpleMetric.get("EndPosition").value / 10000.0);
+        outputLine.add((Long) simpleMetric.get("StartPrice").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("EndPrice").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("StartValue").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("EndValue").value / 100.0);
 
-    }
+        outputLine.add((Long) simpleMetric.get("Buy").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("Sell").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("ShortSell").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("CoveredShort").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("Income").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("Expense").value / 100.0);
 
-    public int getFromDateInt() {
-        return fromDateInt;
-    }
+        outputLine.add((Long) simpleMetric.get("LongBasis").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("ShortBasis").value / 100.0);
 
-    public int getToDateInt() {
-        return toDateInt;
-    }
+        outputLine.add((Long) simpleMetric.get("RealizedGain").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("UnrealizedGain").value / 100.0);
+        outputLine.add((Long) simpleMetric.get("TotalGain").value / 100.0);
 
-    public long getStartPos() {
-        return startPos;
-    }
-
-    public long getEndPos() {
-        return endPos;
-    }
-
-    public long getStartPrice() {
-        return startPrice;
-    }
-
-    public long getEndPrice() {
-        return endPrice;
-    }
-
-    public long getStartValue() {
-        return startValue;
-    }
-
-    public long getEndValue() {
-        return endValue;
-    }
-
-    public long getBuy() {
-        return buy;
-    }
-
-    public long getSell() {
-        return sell;
-    }
-
-    public long getShortSell() {
-        return shortSell;
-    }
-
-    public long getCoverShort() {
-        return coverShort;
-    }
-
-    public long getIncome() {
-        return income;
-    }
-
-    public long getExpense() {
-        return expense;
-    }
-
-    public long getLongBasis() {
-        return longBasis;
-    }
-
-    public long getShortBasis() {
-        return shortBasis;
-    }
-
-    public long getRealizedGain() {
-        return realizedGain;
-    }
-
-    public long getUnrealizedGain() {
-        return unrealizedGain;
-    }
-
-    public long getTotalGain() {
-        return totalGain;
-    }
-
-    public double getMdReturn() {
-        return mdReturn;
-    }
-
-    public double getAnnualPercentReturn() {
-        return annualPercentReturn;
-    }
-
-    public DateMap getArMap() {
-        return arMap;
-    }
-
-    public DateMap getMdMap() {
-        return mdMap;
-    }
-
-    public DateMap getTransMap() {
-        return transMap;
+        outputLine.add(returnsMetric.get("AllReturn").value);
+        outputLine.add(returnsMetric.get("AnnualReturn").value);
     }
 }

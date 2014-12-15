@@ -347,7 +347,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             this.lastDividendDateInt = -1; //dummy date
         }
 
-        void analyzeDividend(@NotNull TransactionValues transactionValues) {
+        public void analyzeDividend(@NotNull TransactionValues transactionValues) {
             if (transactionValues.getIncome() > 0) {
                 InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());
                 switch (transType) {

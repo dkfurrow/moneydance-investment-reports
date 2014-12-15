@@ -204,7 +204,7 @@ public class GoalSeek {
             log("goalSeekNewton");
         }
 
-        for (iterations = 0; iterations < 20; iterations++) {
+        for (iterations = 0; iterations < 100; iterations++) {
             double x1;
             double y0;
             double df0;
