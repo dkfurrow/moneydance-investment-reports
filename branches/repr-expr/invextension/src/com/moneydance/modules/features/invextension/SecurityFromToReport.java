@@ -31,7 +31,6 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -147,37 +146,29 @@ public class SecurityFromToReport extends SecurityReport {
     }
 
     @Override
-    public Object[] toTableRow() throws SecurityException, IllegalArgumentException, NoSuchFieldException,
-            IllegalAccessException {
-        addLineBody();
-        return super.getOutputLine().toArray();
-    }
+    public void recordMetrics() {
+        outputSimplePosition("StartPosition");
+        outputSimplePosition("EndPosition");
+        outputSimplePrice("StartPrice");
+        outputSimplePrice("EndPrice");
+        outputSimplePrice("StartValue");
+        outputSimplePrice("EndValue");
 
-    @Override
-    public void addLineBody() {
-        ArrayList<Object> outputLine = super.getOutputLine();
-        outputLine.add((Long) simpleMetric.get("StartPosition").value / 10000.0);
-        outputLine.add((Long) simpleMetric.get("EndPosition").value / 10000.0);
-        outputLine.add((Long) simpleMetric.get("StartPrice").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("EndPrice").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("StartValue").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("EndValue").value / 100.0);
+        outputSimplePrice("Buy");
+        outputSimplePrice("Sell");
+        outputSimplePrice("ShortSell");
+        outputSimplePrice("CoveredShort");
+        outputSimplePrice("Income");
+        outputSimplePrice("Expense");
 
-        outputLine.add((Long) simpleMetric.get("Buy").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("Sell").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("ShortSell").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("CoveredShort").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("Income").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("Expense").value / 100.0);
+        outputSimplePrice("LongBasis");
+        outputSimplePrice("ShortBasis");
 
-        outputLine.add((Long) simpleMetric.get("LongBasis").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("ShortBasis").value / 100.0);
+        outputSimplePrice("RealizedGain");
+        outputSimplePrice("UnrealizedGain");
+        outputSimplePrice("TotalGain");
 
-        outputLine.add((Long) simpleMetric.get("RealizedGain").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("UnrealizedGain").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("TotalGain").value / 100.0);
-
-        outputLine.add(returnsMetric.get("AllReturn").value);
-        outputLine.add(returnsMetric.get("AnnualReturn").value);
+        outputReturn("AllReturn");
+        outputReturn("AnnualReturn");
     }
 }

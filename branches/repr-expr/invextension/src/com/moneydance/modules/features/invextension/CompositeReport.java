@@ -309,16 +309,9 @@ public class CompositeReport
         if (controllerSecondAggregator instanceof Tradeable) {
             securityAccountWrapper.setName(secondAggregateName);//securityAccountStr = secondAggStrName;
         }
-        //can't have currency as second aggregate, so not included here
-        //add objects to output for first 5 columns
-        aggregateReport.getOutputLine().add(investmentAccountWrapper);
-        aggregateReport.getOutputLine().add(securityAccountWrapper);
-        aggregateReport.getOutputLine().add(securityTypeWrapper);
-        aggregateReport.getOutputLine().add(securitySubTypeWrapper);
-        aggregateReport.getOutputLine().add(currencyWrapper);
-        // add remainder of report (depending on type) and output
-        aggregateReport.addLineBody();
-        return aggregateReport.getOutputLine().toArray();
+
+        return aggregateReport.toTableRow(investmentAccountWrapper, securityAccountWrapper, securityTypeWrapper,
+                securitySubTypeWrapper, currencyWrapper);
 
     }
 

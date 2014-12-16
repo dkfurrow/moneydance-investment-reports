@@ -62,7 +62,7 @@ public class ExtractorBase<R> {
         previousTransaction = null;
 
         if (securityAccount == null) {
-            pXqScale = 10000;   // FIXME: this works when security quanity has 4 digits and currency has 2 digits
+            pXqScale = 10000;   // FIXME: this works when security quantity has 4 digits and currency has 2 digits
             qDpScale = 10000;
         } else {
             CurrencyWrapper securityCurrencyWrapper = securityAccount.getCurrencyWrapper();

@@ -29,6 +29,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.apps.md.model.CurrencyTable;
+import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
 import java.util.ArrayList;
@@ -44,13 +46,16 @@ import java.util.TreeMap;
  */
 public abstract class SecurityReport extends ComponentReport {
     private ArrayList<Object> outputLine = new ArrayList<>();
+    private double positionScale;
+    private double priceScale;
+
     private DateRange dateRange;
-    private SecurityAccountWrapper securityAccountWrapper;
-    private InvestmentAccountWrapper investmentAccountWrapper;
+    private SecurityAccountWrapper securityAccount;
+    private InvestmentAccountWrapper investmentAccount;
     private Tradeable tradeable;
-    private CurrencyWrapper currencyWrapper;
-    private SecurityTypeWrapper securityTypeWrapper;
-    private SecuritySubTypeWrapper securitySubTypeWrapper;
+    private CurrencyWrapper currency;
+    private SecurityTypeWrapper securityType;
+    private SecuritySubTypeWrapper securitySubType;
 
     protected class pair<V> {
         public V value;
@@ -70,37 +75,46 @@ public abstract class SecurityReport extends ComponentReport {
     // simple metrics)
 
     /**
-     * Generic constructor populates all members based on securityAccountWrapper
+     * Generic constructor populates all members based on securityAccount
      * or sets all to null
      *
-     * @param securityAccountWrapper input security account wrapper
+     * @param securityAccount input security account wrapper
      * @param dateRange              input date range
      */
-    public SecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
+    public SecurityReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
         this.dateRange = dateRange;
         simpleMetric = new TreeMap<>();
         multipleMetrics = new TreeMap<>();
         returnsMetric = new TreeMap<>();
 
-        if (securityAccountWrapper != null) {
-            this.securityAccountWrapper = securityAccountWrapper;
-            this.investmentAccountWrapper = securityAccountWrapper.getInvAcctWrapper();
-            this.tradeable = securityAccountWrapper.getTradeable();
-            this.currencyWrapper = securityAccountWrapper.getCurrencyWrapper();
-            this.securityTypeWrapper = securityAccountWrapper.getSecurityTypeWrapper();
-            this.securitySubTypeWrapper = securityAccountWrapper.getSecuritySubTypeWrapper();
-            outputLine.add(investmentAccountWrapper);
-            outputLine.add(securityAccountWrapper);
-            outputLine.add(securityTypeWrapper);
-            outputLine.add(securitySubTypeWrapper);
-            outputLine.add(currencyWrapper);
+        if (securityAccount != null) {
+            this.securityAccount = securityAccount;
+            this.investmentAccount = securityAccount.getInvAcctWrapper();
+            this.tradeable = securityAccount.getTradeable();
+            this.currency = securityAccount.getCurrencyWrapper();
+            this.securityType = securityAccount.getSecurityTypeWrapper();
+            this.securitySubType = securityAccount.getSecuritySubTypeWrapper();
+
+            CurrencyType securityCurrency = currency.getCurrencyType();
+            int securityDecimalPlaces = securityCurrency.getDecimalPlaces();
+
+            CurrencyTable currencyTable = securityCurrency.getTable();
+            CurrencyType baseCurrency = currencyTable.getBaseType();
+            int cashDecimalPlaces = baseCurrency.getDecimalPlaces();
+
+            positionScale = Math.pow(10.0, securityDecimalPlaces);
+            priceScale = Math.pow(10.0, cashDecimalPlaces);
+
         } else {
-            this.securityAccountWrapper = null;
-            this.investmentAccountWrapper = null;
+            this.securityAccount = null;
+            this.investmentAccount = null;
             this.tradeable = null;
-            this.currencyWrapper = null;
-            this.securityTypeWrapper = null;
-            this.securitySubTypeWrapper = null;
+            this.currency = null;
+            this.securityType = null;
+            this.securitySubType = null;
+
+            positionScale = 10000.0;
+            priceScale = 100.0;
         }
     }
 
@@ -153,13 +167,12 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     public void addTo(SecurityReport operand) {
-        assert securityAccountWrapper == null;
-        assert this.getDateRange().equals(operand.getDateRange());
+        assert securityAccount == null;
+        assert getDateRange().equals(operand.getDateRange());
 
         // Fold in financial data from operand into this report
 
-        if (this.getCurrencyWrapper() != null && operand.getCurrencyWrapper() != null
-                && this.getCurrencyWrapper().equals(operand.getCurrencyWrapper())) {
+        if (currency != null && operand.currency != null && currency.equals(operand.currency)) {
             assert simpleMetric.get("StartPrice").value.equals(operand.simpleMetric.get("StartPrice").value);
             assert simpleMetric.get("EndPrice").value.equals(operand.simpleMetric.get("EndPrice").value);
             addValue("StartPosition", operand, "StartPosition");
@@ -208,13 +221,13 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     protected SecurityReport initializeAggregateSecurityReport(SecurityReport aggregate) {
-        // make aggregating classes the same except secAccountWrapper
-        aggregate.setInvestmentAccountWrapper(this.getInvestmentAccountWrapper());
-        aggregate.securityAccountWrapper = null;
-        aggregate.setSecurityTypeWrapper(this.getSecurityTypeWrapper());
-        aggregate.setSecuritySubTypeWrapper(this.getSecuritySubTypeWrapper());
-        aggregate.setTradeable(this.getTradeable());
-        aggregate.setCurrencyWrapper(this.getCurrencyWrapper());
+        // Make aggregating object the same except secAccountWrapper
+        aggregate.investmentAccount = investmentAccount;
+        aggregate.securityAccount = null;
+        aggregate.securityType = securityType;
+        aggregate.securitySubType = securitySubType;
+        aggregate.tradeable = tradeable;
+        aggregate.currency = currency;
 
         // Copy values
         aggregate.addTo(this);
@@ -232,15 +245,15 @@ public abstract class SecurityReport extends ComponentReport {
 
     public Aggregator getAggregator(Aggregator aggregator) {
         if (aggregator instanceof InvestmentAccountWrapper) {
-            return this.investmentAccountWrapper;
+            return investmentAccount;
         } else if (aggregator instanceof SecurityTypeWrapper) {
-            return this.securityTypeWrapper;
+            return securityType;
         } else if (aggregator instanceof SecuritySubTypeWrapper) {
-            return this.securitySubTypeWrapper;
+            return securitySubType;
         } else if (aggregator instanceof Tradeable) {
-            return this.tradeable;
+            return tradeable;
         } else if (aggregator instanceof CurrencyWrapper) {
-            return this.currencyWrapper;
+            return currency;
         } else if (aggregator instanceof AllAggregate) {
             return AllAggregate.getInstance();
         } else {
@@ -258,14 +271,46 @@ public abstract class SecurityReport extends ComponentReport {
     public abstract CompositeReport getCompositeReport(AggregationController aggregationController,
                                                        COMPOSITE_TYPE compType);
 
-
-    public ArrayList<Object> getOutputLine() {
-        return outputLine;
-    }
-
     public abstract SecurityReport getAggregateSecurityReport();
 
-    public abstract void addLineBody();
+    @Override
+    public Object[] toTableRow() throws SecurityException, IllegalArgumentException,
+            NoSuchFieldException, IllegalAccessException {
+        return toTableRow(investmentAccount, securityAccount, securityType, securitySubType, currency);
+    }
+
+    public Object[] toTableRow(InvestmentAccountWrapper investmentAccount, SecurityAccountWrapper securityAccount,
+                               SecurityTypeWrapper securityType, SecuritySubTypeWrapper securitySubType,
+                               CurrencyWrapper currency) throws SecurityException, IllegalArgumentException,
+            NoSuchFieldException, IllegalAccessException {
+        assert securityAccount != null;
+
+        outputLine.add(investmentAccount);
+        outputLine.add(securityAccount);
+        outputLine.add(securityType);
+        outputLine.add(securitySubType);
+        outputLine.add(currency);
+        recordMetrics();
+        return outputLine.toArray();
+    }
+
+    protected abstract void recordMetrics();
+
+    protected void outputSimplePrice(String name) {
+        outputLine.add((Long) simpleMetric.get(name).value / priceScale);
+    }
+
+    protected void outputSimplePosition(String name) {
+        outputLine.add((Long) simpleMetric.get(name).value / positionScale);
+    }
+
+    protected void outputSimpleValue(String name) {
+        outputLine.add(simpleMetric.get(name).value);
+    }
+
+    protected void outputReturn(String name) {
+        outputLine.add(returnsMetric.get(name).value);
+    }
 
     public Tradeable getTradeable() {
         return tradeable;
@@ -276,36 +321,36 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     public CurrencyWrapper getCurrencyWrapper() {
-        return currencyWrapper;
+        return currency;
     }
 
     public void setCurrencyWrapper(CurrencyWrapper currencyWrapper) {
-        this.currencyWrapper = currencyWrapper;
+        this.currency = currencyWrapper;
     }
 
     public SecurityTypeWrapper getSecurityTypeWrapper() {
-        return securityTypeWrapper;
+        return securityType;
     }
 
     public void setSecurityTypeWrapper(SecurityTypeWrapper securityTypeWrapper) {
-        this.securityTypeWrapper = securityTypeWrapper;
+        this.securityType = securityTypeWrapper;
     }
 
     public SecuritySubTypeWrapper getSecuritySubTypeWrapper() {
-        return securitySubTypeWrapper;
+        return securitySubType;
     }
 
     public void setSecuritySubTypeWrapper(
             SecuritySubTypeWrapper securitySubTypeWrapper) {
-        this.securitySubTypeWrapper = securitySubTypeWrapper;
+        this.securitySubType = securitySubTypeWrapper;
     }
 
     public InvestmentAccountWrapper getInvestmentAccountWrapper() {
-        return investmentAccountWrapper;
+        return investmentAccount;
     }
 
     public void setInvestmentAccountWrapper(InvestmentAccountWrapper investmentAccountWrapper) {
-        this.investmentAccountWrapper = investmentAccountWrapper;
+        this.investmentAccount = investmentAccountWrapper;
     }
 
     public DateRange getDateRange() {

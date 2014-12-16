@@ -31,7 +31,6 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -196,45 +195,37 @@ public class SecuritySnapshotReport extends SecurityReport {
     }
 
     @Override
-    public Object[] toTableRow() throws SecurityException, IllegalArgumentException,
-            NoSuchFieldException, IllegalAccessException {
-        addLineBody();
-        return super.getOutputLine().toArray();
-    }
+    public void recordMetrics() {
+        outputSimplePrice("EndPrice");
+        outputSimplePosition("EndPosition");
+        outputSimplePrice("EndValue");
 
-    @Override
-    public void addLineBody() {
-        ArrayList<Object> outputLine = super.getOutputLine();
-        outputLine.add((Long) simpleMetric.get("EndPrice").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("EndPosition").value / 10000.0);
-        outputLine.add((Long) simpleMetric.get("EndValue").value / 100.0);
+        outputSimplePrice("AbsPriceChange");
+        outputSimplePrice("AbsValueChange");
+        outputSimpleValue("PctPriceChange");
 
-        outputLine.add((Long) simpleMetric.get("AbsPriceChange").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("AbsValueChange").value / 100.0);
-        outputLine.add(simpleMetric.get("PctPriceChange").value);
+        outputReturn("DayReturn");
+        outputReturn("WeekReturn");
+        outputReturn("MonthReturn");
+        outputReturn("3MonthReturn");
+        outputReturn("YTDReturn");
+        outputReturn("YearReturn");
+        outputReturn("3YearReturn");
 
-        outputLine.add(returnsMetric.get("DayReturn").value);
-        outputLine.add(returnsMetric.get("WeekReturn").value);
-        outputLine.add(returnsMetric.get("MonthReturn").value);
-        outputLine.add(returnsMetric.get("3MonthReturn").value);
-        outputLine.add(returnsMetric.get("YTDReturn").value);
-        outputLine.add(returnsMetric.get("YearReturn").value);
-        outputLine.add(returnsMetric.get("3YearReturn").value);
+        outputReturn("AllReturn");
+        outputReturn("AnnualReturn");
 
-        outputLine.add(returnsMetric.get("AllReturn").value);
-        outputLine.add(returnsMetric.get("AnnualReturn").value);
+        outputSimplePrice("LongBasis");
+        outputSimplePrice("ShortBasis");
 
-        outputLine.add((Long) simpleMetric.get("LongBasis").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("ShortBasis").value / 100.0);
+        outputSimplePrice("Income");
+        outputSimplePrice("AnnualizedDividend");
+        outputSimpleValue("DividendYield");
+        outputSimpleValue("YieldOnBasis");
 
-        outputLine.add((Long) simpleMetric.get("Income").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("AnnualizedDividend").value / 100.0);
-        outputLine.add(simpleMetric.get("DividendYield").value);
-        outputLine.add(simpleMetric.get("YieldOnBasis").value);
-
-        outputLine.add((Long) simpleMetric.get("RealizedGain").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("UnrealizedGain").value / 100.0);
-        outputLine.add((Long) simpleMetric.get("TotalGain").value / 100.0);
+        outputSimplePrice("RealizedGain");
+        outputSimplePrice("UnrealizedGain");
+        outputSimplePrice("TotalGain");
     }
 }
 
