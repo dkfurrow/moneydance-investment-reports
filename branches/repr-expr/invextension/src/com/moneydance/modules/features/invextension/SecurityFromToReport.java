@@ -59,14 +59,12 @@ public class SecurityFromToReport extends SecurityReport {
         ExtractorStartPrice eStartPrice = new ExtractorStartPrice(securityAccount, fromDateInt, toDateInt);
         ExtractorStartPosition eStartPosition = new ExtractorStartPosition(securityAccount, fromDateInt, toDateInt);
         ExtractorStartValue eStartValue = new ExtractorStartValue(securityAccount, fromDateInt, toDateInt);
-        ExtractorStartLongBasis eLongBasis = new ExtractorStartLongBasis(securityAccount, fromDateInt, toDateInt);
-        ExtractorStartShortBasis eShortBasis = new ExtractorStartShortBasis(securityAccount, fromDateInt, toDateInt);
 
         ExtractorEndPrice eEndPrice = new ExtractorEndPrice(securityAccount, fromDateInt, toDateInt);
         ExtractorEndPosition eEndPosition = new ExtractorEndPosition(securityAccount, fromDateInt, toDateInt);
         ExtractorEndValue eEndValue = new ExtractorEndValue(securityAccount, fromDateInt, toDateInt);
-        ExtractorLongBasis eStartLongBasis = new ExtractorLongBasis(securityAccount, fromDateInt, toDateInt);
-        ExtractorShortBasis eStartShortBasis = new ExtractorShortBasis(securityAccount, fromDateInt, toDateInt);
+        ExtractorShortBasis eShortBasis = new ExtractorShortBasis(securityAccount, fromDateInt, toDateInt);
+        ExtractorLongBasis eLongBasis = new ExtractorLongBasis(securityAccount, fromDateInt, toDateInt);
 
         ExtractorBuy eBuys = new ExtractorBuy(securityAccount, fromDateInt, toDateInt);
         ExtractorCoveredShort eCoverShorts = new ExtractorCoveredShort(securityAccount, fromDateInt, toDateInt);
@@ -76,45 +74,44 @@ public class SecurityFromToReport extends SecurityReport {
         ExtractorShortSell eShortSells = new ExtractorShortSell(securityAccount, fromDateInt, toDateInt);
 
         // Put them into a table under the appropriate names
-        simpleMetric.put("StartPrice", new pair<Number>(0L, eStartPrice));
-        simpleMetric.put("StartPosition", new pair<Number>(0L, eStartPosition));
-        simpleMetric.put("StartValue", new pair<Number>(0L, eStartValue));
-        simpleMetric.put("StartLongBasis", new pair<Number>(0L, eStartLongBasis));
-        simpleMetric.put("StartShortBasis", new pair<Number>(0L, eStartShortBasis));
+        simpleMetric.put(SMStartPrice, new MetricEntry<Number>(0L, eStartPrice));
+        simpleMetric.put(SMStartPosition, new MetricEntry<Number>(0L, eStartPosition));
+        simpleMetric.put(SMStartValue, new MetricEntry<Number>(0L, eStartValue));
 
-        simpleMetric.put("EndPrice", new pair<Number>(0L, eEndPrice));
-        simpleMetric.put("EndPosition", new pair<Number>(0L, eEndPosition));
-        simpleMetric.put("EndValue", new pair<Number>(0L, eEndValue));
-        simpleMetric.put("LongBasis", new pair<Number>(0L, eLongBasis));
-        simpleMetric.put("ShortBasis", new pair<Number>(0L, eShortBasis));
+        simpleMetric.put(SMEndPrice, new MetricEntry<Number>(0L, eEndPrice));
+        simpleMetric.put(SMEndPosition, new MetricEntry<Number>(0L, eEndPosition));
+        simpleMetric.put(SMEndValue, new MetricEntry<Number>(0L, eEndValue));
 
-        simpleMetric.put("Buy", new pair<Number>(0L, eBuys));
-        simpleMetric.put("CoveredShort", new pair<Number>(0L, eCoverShorts));
-        simpleMetric.put("Expense", new pair<Number>(0L, eExpense));
-        simpleMetric.put("Income", new pair<Number>(0L, eIncome));
-        simpleMetric.put("Sell", new pair<Number>(0L, eSells));
-        simpleMetric.put("ShortSell", new pair<Number>(0L, eShortSells));
+        simpleMetric.put(SMLongBasis, new MetricEntry<Number>(0L, eLongBasis));
+        simpleMetric.put(SMShortBasis, new MetricEntry<Number>(0L, eShortBasis));
 
-        simpleMetric.put("RealizedGain", new pair<Number>(0L, null));
-        simpleMetric.put("UnrealizedGain", new pair<Number>(0L, null));
-        simpleMetric.put("TotalGain", new pair<Number>(0L, null));
+        simpleMetric.put(SMBuy, new MetricEntry<Number>(0L, eBuys));
+        simpleMetric.put(SMCoveredShort, new MetricEntry<Number>(0L, eCoverShorts));
+        simpleMetric.put(SMExpense, new MetricEntry<Number>(0L, eExpense));
+        simpleMetric.put(SMIncome, new MetricEntry<Number>(0L, eIncome));
+        simpleMetric.put(SMSell, new MetricEntry<Number>(0L, eSells));
+        simpleMetric.put(SMShortSell, new MetricEntry<Number>(0L, eShortSells));
+
+        simpleMetric.put(SMRealizedGain, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMUnrealizedGain, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMTotalGain, new MetricEntry<Number>(0L, null));
 
         // These extractors return multiple values, which are exploded into values in the normal metrics
-        ExtractorGains eGains = new ExtractorGains(securityAccount, fromDateInt, toDateInt);              // x 3
+        ExtractorGains eGains = new ExtractorGainsFT(securityAccount, fromDateInt, toDateInt);              // x 3
 
-        multipleMetrics.put("_Gains", new pair<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
+        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations. Cannot point to same as above, since they have state.
         ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, toDateInt);
         ExtractorAnnualReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, fromDateInt, toDateInt);
 
-        returnsMetric.put("AllReturn", new pair<>(0.0, aggregatedAllReturn));
-        returnsMetric.put("AnnualReturn", new pair<>(0.0, aggregatedAnnualReturn));
+        returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
+        returnsMetric.put(RMAnnualReturn, new MetricEntry<>(0.0, aggregatedAnnualReturn));
 
         // Do the calculations by running the extractors over the transactions in this account.
         doCalculations(securityAccount);
         // Distribute the values from extractors that return multiple values
-        explode("_Gains", "RealizedGain", "UnrealizedGain", "TotalGain");
+        explode(MMGains, SMRealizedGain, SMUnrealizedGain, SMTotalGain);
     }
 
     @Override
@@ -132,43 +129,43 @@ public class SecurityFromToReport extends SecurityReport {
     public void addTo(SecurityReport operand) {
         super.addTo(operand);
 
-        addValue("Buy", operand, "Buy");
-        addValue("Sell", operand, "Sell");
-        addValue("ShortSell", operand, "ShortSell");
-        addValue("CoveredShort", operand, "CoveredShort");
-        addValue("Income", operand, "Income");
-        addValue("Expense", operand, "Expense");
-        addValue("LongBasis", operand, "LongBasis");
-        addValue("ShortBasis", operand, "ShortBasis");
-        addValue("RealizedGain", operand, "RealizedGain");
-        addValue("UnrealizedGain", operand, "UnrealizedGain");
-        addValue("TotalGain", operand, "TotalGain");
+        addValue(SMBuy, operand);
+        addValue(SMSell, operand);
+        addValue(SMShortSell, operand);
+        addValue(SMCoveredShort, operand);
+        addValue(SMIncome, operand);
+        addValue(SMExpense, operand);
+        addValue(SMLongBasis, operand);
+        addValue(SMShortBasis, operand);
+        addValue(SMRealizedGain, operand);
+        addValue(SMUnrealizedGain, operand);
+        addValue(SMTotalGain, operand);
     }
 
     @Override
     public void recordMetrics() {
-        outputSimplePosition("StartPosition");
-        outputSimplePosition("EndPosition");
-        outputSimplePrice("StartPrice");
-        outputSimplePrice("EndPrice");
-        outputSimplePrice("StartValue");
-        outputSimplePrice("EndValue");
+        outputSimplePosition(SMStartPosition);
+        outputSimplePosition(SMEndPosition);
+        outputSimplePrice(SMStartPrice);
+        outputSimplePrice(SMEndPrice);
+        outputSimplePrice(SMStartValue);
+        outputSimplePrice(SMEndValue);
 
-        outputSimplePrice("Buy");
-        outputSimplePrice("Sell");
-        outputSimplePrice("ShortSell");
-        outputSimplePrice("CoveredShort");
-        outputSimplePrice("Income");
-        outputSimplePrice("Expense");
+        outputSimplePrice(SMBuy);
+        outputSimplePrice(SMSell);
+        outputSimplePrice(SMShortSell);
+        outputSimplePrice(SMCoveredShort);
+        outputSimplePrice(SMIncome);
+        outputSimplePrice(SMExpense);
 
-        outputSimplePrice("LongBasis");
-        outputSimplePrice("ShortBasis");
+        outputSimplePrice(SMLongBasis);
+        outputSimplePrice(SMShortBasis);
 
-        outputSimplePrice("RealizedGain");
-        outputSimplePrice("UnrealizedGain");
-        outputSimplePrice("TotalGain");
+        outputSimplePrice(SMRealizedGain);
+        outputSimplePrice(SMUnrealizedGain);
+        outputSimplePrice(SMTotalGain);
 
-        outputReturn("AllReturn");
-        outputReturn("AnnualReturn");
+        outputReturn(RMAllReturn);
+        outputReturn(RMAnnualReturn);
     }
 }

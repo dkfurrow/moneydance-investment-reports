@@ -37,12 +37,6 @@ public class ExtractorEndPosition extends ExtractorBase<Long> {
     }
 
     public Long FinancialResults(SecurityAccountWrapper securityAccount) {
-        if (lastTransactionWithinEndDate != null) {
-            return getSplitAdjustedPosition(securityAccount,
-                    lastTransactionWithinEndDate.getPosition(),
-                    lastTransactionWithinEndDate.getDateInt(),
-                    endDateInt);
-        }
-        return 0L;  // Default
+        return getEndPosition(securityAccount);
     }
 }

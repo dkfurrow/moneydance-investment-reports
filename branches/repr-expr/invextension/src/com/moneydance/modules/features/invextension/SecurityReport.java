@@ -57,22 +57,61 @@ public abstract class SecurityReport extends ComponentReport {
     private SecurityTypeWrapper securityType;
     private SecuritySubTypeWrapper securitySubType;
 
-    protected class pair<V> {
+    // For each metric, we have its current value and an extractor (which has its own state).
+    public class MetricEntry<V> {
         public V value;
         public ExtractorBase<?> extractor;
 
-        pair(V v, ExtractorBase<?> e) {
+        MetricEntry(V v, ExtractorBase<?> e) {
             value = v;
             extractor = e;
         }
     }
 
     // Map from simpleMetric name -> <value, extractor> pairs.
-    protected TreeMap<String, pair<Number>> simpleMetric;             // Simple calculations that do not depend on
+    protected TreeMap<String, MetricEntry<Number>> simpleMetric;             // Simple calculations that do not depend on
     // other calculations or return multiple values
-    protected TreeMap<String, pair<List<Number>>> multipleMetrics;    // Metrics that return multiple values
-    protected TreeMap<String, pair<Double>> returnsMetric;            // Metrics that perform return calculations (uses
+    protected TreeMap<String, MetricEntry<List<Number>>> multipleMetrics;    // Metrics that return multiple values
+    protected TreeMap<String, MetricEntry<Double>> returnsMetric;            // Metrics that perform return calculations (uses
     // simple metrics)
+
+    public static final String MMDividends = "_Dividends";
+    public static final String MMGains = "_Gains";
+    public static final String MMPriceChange = "_PriceChange";
+
+    public static final String RM3MonthReturn = "3MonthReturn";
+    public static final String RM3YearReturn = "3YearReturn";
+    public static final String RMAllReturn = "AllReturn";
+    public static final String RMAnnualReturn = "AnnualReturn";
+    public static final String RMDayReturn = "DayReturn";
+    public static final String RMMonthReturn = "MonthReturn";
+    public static final String RMWeekReturn = "WeekReturn";
+    public static final String RMYTDReturn = "YTDReturn";
+    public static final String RMYearReturn = "YearReturn";
+
+    public static final String SMAbsPriceChange = "AbsPriceChange";
+    public static final String SMAbsValueChange = "AbsValueChange";
+    public static final String SMAnnualizedDividend = "AnnualizedDividend";
+    public static final String SMBuy = "Buy";
+    public static final String SMCoveredShort = "CoveredShort";
+    public static final String SMDividendYield = "DividendYield";
+    public static final String SMEndPosition = "EndPosition";
+    public static final String SMEndPrice = "EndPrice";
+    public static final String SMEndValue = "EndValue";
+    public static final String SMExpense = "Expense";
+    public static final String SMIncome = "Income";
+    public static final String SMLongBasis = "LongBasis";
+    public static final String SMPctPriceChange = "PctPriceChange";
+    public static final String SMRealizedGain = "RealizedGain";
+    public static final String SMSell = "Sell";
+    public static final String SMShortBasis = "ShortBasis";
+    public static final String SMShortSell = "ShortSell";
+    public static final String SMStartPosition = "StartPosition";
+    public static final String SMStartPrice = "StartPrice";
+    public static final String SMStartValue = "StartValue";
+    public static final String SMTotalGain = "TotalGain";
+    public static final String SMUnrealizedGain = "UnrealizedGain";
+    public static final String SMYieldOnBasis = "YieldOnBasis";
 
     /**
      * Generic constructor populates all members based on securityAccount
@@ -121,35 +160,35 @@ public abstract class SecurityReport extends ComponentReport {
     protected void doCalculations(SecurityAccountWrapper securityAccount) {
         if (securityAccount != null) {
             for (TransactionValues transaction : securityAccount.getTransactionValues()) {
-                for (pair<Number> p : simpleMetric.values()) {
+                for (MetricEntry<Number> p : simpleMetric.values()) {
                     if (p.extractor != null) {
                         p.extractor.NextTransaction(transaction, securityAccount);
                     }
                 }
-                for (pair<List<Number>> p : multipleMetrics.values()) {
+                for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
                     if (p.extractor != null) {
                         p.extractor.NextTransaction(transaction, securityAccount);
                     }
                 }
-                for (pair<Double> p : returnsMetric.values()) {
+                for (MetricEntry<Double> p : returnsMetric.values()) {
                     if (p.extractor != null) {
                         p.extractor.NextTransaction(transaction, securityAccount);
                     }
                 }
             }
 
-            for (pair<Number> p : simpleMetric.values()) {
+            for (MetricEntry<Number> p : simpleMetric.values()) {
                 if (p.extractor != null) {
                     p.value = (Number) p.extractor.FinancialResults(securityAccount);
                 }
             }
-            for (pair<List<Number>> p : multipleMetrics.values()) {
+            for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
                 if (p.extractor != null) {
                     // Java compiler warning: unchecked cast -- Java type system can't handle this
                     p.value = (List<Number>) p.extractor.FinancialResults(securityAccount);
                 }
             }
-            for (pair<Double> p : returnsMetric.values()) {
+            for (MetricEntry<Double> p : returnsMetric.values()) {
                 if (p.extractor != null) {
                     p.value = (Double) p.extractor.FinancialResults(securityAccount);
                 }
@@ -171,40 +210,39 @@ public abstract class SecurityReport extends ComponentReport {
         assert getDateRange().equals(operand.getDateRange());
 
         // Fold in financial data from operand into this report
-
         if (currency != null && operand.currency != null && currency.equals(operand.currency)) {
-            assert simpleMetric.get("StartPrice").value.equals(operand.simpleMetric.get("StartPrice").value);
-            assert simpleMetric.get("EndPrice").value.equals(operand.simpleMetric.get("EndPrice").value);
-            addValue("StartPosition", operand, "StartPosition");
-            addValue("EndPosition", operand, "EndPosition");
+            assignValue(SMStartPrice, operand);
+            assignValue(SMEndPrice, operand);
+            addValue(SMStartPosition, operand);
+            addValue(SMEndPosition, operand);
 
         } else {
             // Different securities do not have a consolidated price or position
-            simpleMetric.get("StartPrice").value = 0L;
-            simpleMetric.get("StartPosition").value = 0L;
-            simpleMetric.get("EndPrice").value = 0L;
-            simpleMetric.get("EndPosition").value = 0L;
+            simpleMetric.get(SMStartPrice).value = 0L;
+            simpleMetric.get(SMStartPosition).value = 0L;
+            simpleMetric.get(SMEndPrice).value = 0L;
+            simpleMetric.get(SMEndPosition).value = 0L;
         }
 
         // Combine basic metrics
-        addValue("StartValue", operand, "StartValue");
-        addValue("EndValue", operand, "EndValue");
+        addValue(SMStartValue, operand);
+        addValue(SMEndValue, operand);
 
         // Now can recompute returns.
         combineReturns(operand);
     }
 
-    protected void assignValue(String key1, SecurityReport operand, String key2) {
-        pair<Number> entry = simpleMetric.get(key1);
-        pair<Number> operandEntry = operand.simpleMetric.get(key2);
+    protected void assignValue(String key, SecurityReport operand) {
+        MetricEntry<Number> entry = simpleMetric.get(key);
+        MetricEntry<Number> operandEntry = operand.simpleMetric.get(key);
         if (entry != null && operandEntry != null) {
             entry.value = operandEntry.value;
         }
     }
 
-    protected void addValue(String key1, SecurityReport operand, String key2) {
-        pair<Number> entry = simpleMetric.get(key1);
-        pair<Number> operandEntry = operand.simpleMetric.get(key2);
+    protected void addValue(String key, SecurityReport operand) {
+        MetricEntry<Number> entry = simpleMetric.get(key);
+        MetricEntry<Number> operandEntry = operand.simpleMetric.get(key);
         if (entry != null && operandEntry != null) {
             entry.value = (Long) entry.value + (Long) operandEntry.value;
         }
@@ -212,7 +250,7 @@ public abstract class SecurityReport extends ComponentReport {
 
     protected void combineReturns(SecurityReport operand) {
         for (String name : returnsMetric.keySet()) {
-            pair<Double> p = returnsMetric.get(name);
+            MetricEntry<Double> p = returnsMetric.get(name);
             assert p != null;
             if (p.extractor != null) {
                 p.value = (Double) p.extractor.CombineFinancialResults(operand.returnsMetric.get(name).extractor);
@@ -312,6 +350,14 @@ public abstract class SecurityReport extends ComponentReport {
         outputLine.add(returnsMetric.get(name).value);
     }
 
+    public String getName() {
+        if (securityAccount == null) {
+            return "Null SecAccountWrapper";
+        } else {
+            return investmentAccount.getName() + ": " + securityAccount.getName();
+        }
+    }
+
     public Tradeable getTradeable() {
         return tradeable;
     }
@@ -330,10 +376,6 @@ public abstract class SecurityReport extends ComponentReport {
 
     public SecurityTypeWrapper getSecurityTypeWrapper() {
         return securityType;
-    }
-
-    public void setSecurityTypeWrapper(SecurityTypeWrapper securityTypeWrapper) {
-        this.securityType = securityTypeWrapper;
     }
 
     public SecuritySubTypeWrapper getSecuritySubTypeWrapper() {
@@ -355,6 +397,18 @@ public abstract class SecurityReport extends ComponentReport {
 
     public DateRange getDateRange() {
         return dateRange;
+    }
+
+    public Number getSimpleMetric(String name) {
+        return simpleMetric.get(name).value;
+    }
+
+    public Double getReturnMetric(String name) {
+        return returnsMetric.get(name).value;
+    }
+
+    public int getReturnMetricStartDateInt(String name) {
+        return returnsMetric.get(name).extractor.startDateInt;
     }
 }
 

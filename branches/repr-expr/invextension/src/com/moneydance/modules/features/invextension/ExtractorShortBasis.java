@@ -40,6 +40,9 @@ public class ExtractorShortBasis extends ExtractorBase<Long> {
         if (lastTransactionWithinEndDate != null) {
             return lastTransactionWithinEndDate.getShortBasis();  // FixMe: stage2: do calculation here, not in TransactionValues
         }
+        if (lastTransactionBeforeStartDate != null) {   // Use start value if no transactions in range
+            return lastTransactionBeforeStartDate.getShortBasis();
+        }
         return 0L;  // Default
     }
 }

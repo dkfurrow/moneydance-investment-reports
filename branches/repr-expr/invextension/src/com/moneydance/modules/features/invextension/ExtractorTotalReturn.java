@@ -29,19 +29,24 @@
 package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by larus on 11/27/14.
  */
 public class ExtractorTotalReturn extends ExtractorBase<Double> {
+    // Invextension computes MD returns from first->last transaction in date range if the start and end
+    // positions are zero. Makes more sense to compute over entire date range, but this flag exists for
+    // compatibility. (Also using the entire date range eliminates the need to save the transactions in
+    // this extractor -- but not AnnualReturn -- since the intermediate results can be added together.)
+    private final boolean computeMDReturnOverEntireDateRange = false;
+
     protected ArrayList<TransactionValues> selectedTransactions;
     protected double mdReturn = 0;
+    protected long startPosition = 0;
     protected long startValue = 0;
+    protected long endPosition = 0;
     protected long endValue = 0;
-    private long income = 0;
-    private long expenses = 0;
-    private long weightedCF = 0;
-    private long sumCF = 0;
 
     public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt) {
         super(secAccountWrapper, startDateInt, endDateInt);
@@ -63,78 +68,65 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     }
 
     public Double FinancialResults(SecurityAccountWrapper securityAccount) {
-        if (selectedTransactions.size() > 0) {
-            long startPosition = getStartPosition(securityAccount);
-            long startPrice = securityAccount.getPrice(startDateInt);
-            startValue = qXp(startPosition, startPrice);
-            long endPosition = getEndPosition(securityAccount);
-            long endPrice = securityAccount.getPrice(endDateInt);
-            endValue = qXp(endPosition, endPrice);
+        startPosition = getStartPosition(securityAccount);
+        long startPrice = securityAccount.getPrice(startDateInt);
+        startValue = qXp(startPosition, startPrice);
+        endPosition = getEndPosition(securityAccount);
+        long endPrice = securityAccount.getPrice(endDateInt);
+        endValue = qXp(endPosition, endPrice);
 
-            int intervalDays = DateUtils.getDaysBetween(startDateInt, endDateInt);
-
-            income = 0;
-            expenses = 0;
-            weightedCF = 0;
-            sumCF = 0;
-            for (TransactionValues transaction : selectedTransactions) {
-                long cashFlow = -(transaction.getBuy() + transaction.getSell()
-                        + transaction.getShortSell() + transaction.getCoverShort() + transaction.getCommission());
-                income += transaction.getIncome();
-                expenses += transaction.getExpense();
-                int transactionDays = DateUtils.getDaysBetween(startDateInt, transaction.getDateInt());
-                double transactionFraction = ((double) (intervalDays - transactionDays)) / intervalDays;
-                weightedCF += Math.round(transactionFraction * cashFlow);
-                sumCF += cashFlow;
-            }
-
-            mdReturn = computeMDReturn(startValue, endValue, income, expenses, weightedCF, sumCF);
-            return mdReturn;
-        }
-
-        return 0.0;
+        mdReturn = computeMDReturn();
+        return mdReturn;
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
     public Double CombineFinancialResults(ExtractorBase<?> op) {
         ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
 
-        startValue += operand.startValue;
-        endValue += operand.endValue;
-        income += operand.income;
-        expenses += operand.expenses;
-        weightedCF += operand.weightedCF;
-        sumCF += operand.sumCF;
+        selectedTransactions.addAll(operand.selectedTransactions);
+        Collections.sort(selectedTransactions);    // Reorder transactions sum from different securities
 
-        mdReturn = computeMDReturn(startValue, endValue, income, expenses, weightedCF, sumCF);
+        startPosition += operand.startPosition;
+        startValue += operand.startValue;
+        endPosition += operand.endPosition;
+        endValue += operand.endValue;
+
+        mdReturn = computeMDReturn();
         return mdReturn;
     }
 
-    protected long getStartPosition(SecurityAccountWrapper securityAccount) {
-        if (lastTransactionBeforeStartDate != null) {
-            return getSplitAdjustedPosition(securityAccount,
-                    lastTransactionBeforeStartDate.getPosition(),
-                    lastTransactionBeforeStartDate.getDateInt(),
-                    startDateInt);
-        }
-        return 0L;
-    }
-
-    protected long getEndPosition(SecurityAccountWrapper securityAccount) {
-        if (lastTransactionWithinEndDate != null) {
-            return getSplitAdjustedPosition(securityAccount,
-                    lastTransactionWithinEndDate.getPosition(),
-                    lastTransactionWithinEndDate.getDateInt(),
-                    endDateInt);
-        }
-        return 0;
-    }
-
-
     // Compute Modified Dietz return
-    protected double computeMDReturn(long startValue, long endValue, long income, long expense, long weightedCF, long sumCF) {
+    protected double computeMDReturn() {
+        long income = 0;
+        long expenses = 0;
+        long weightedCF = 0;
+        long sumCF = 0;
+
+        if (selectedTransactions.size() > 0) {
+            int firstDateInt = selectedTransactions.get(0).getDateInt();
+            if (computeMDReturnOverEntireDateRange || startPosition != 0) {
+                firstDateInt = startDateInt;
+            }
+            int lastDateInt = selectedTransactions.get(selectedTransactions.size() - 1).getDateInt();
+            if (computeMDReturnOverEntireDateRange || endPosition != 0) {
+                lastDateInt = endDateInt;
+            }
+            int intervalDays = DateUtils.getDaysBetween(firstDateInt, lastDateInt);
+
+            for (TransactionValues transaction : selectedTransactions) {
+                long cashFlow = -(transaction.getBuy() + transaction.getSell()
+                        + transaction.getShortSell() + transaction.getCoverShort() + transaction.getCommission());
+                income += transaction.getIncome();
+                expenses += transaction.getExpense();
+                int transactionDays = DateUtils.getDaysBetween(firstDateInt, transaction.getDateInt());
+                double transactionFraction = ((double) (intervalDays - transactionDays)) / intervalDays;
+                weightedCF += Math.round(transactionFraction * cashFlow);
+                sumCF += cashFlow;
+            }
+        }
+
         if ((startValue + weightedCF) != 0) {
-            return ((double) ((endValue + income + expense) - startValue - sumCF)) / (startValue + weightedCF);
+            return ((double) ((endValue + income + expenses) - startValue - sumCF)) / (startValue + weightedCF);
         }
 
         return 0.0; // Default

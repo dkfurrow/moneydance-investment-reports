@@ -427,7 +427,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
         this.position = this.secQuantity + prevPos;
         this.longBasis = Math.max(this.position, 0) / 100;
-        this.shortBasis = Math.min(this.position, 0) / 100;;
+        this.shortBasis = Math.min(this.position, 0) / 100;
         // OpenValue
         this.openValue = this.position * this.mktPrice / 10000;
         //mkt price is always 1, so no realized/unrealized gains
@@ -629,8 +629,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
     public String[] listInfo() {
         ArrayList<String> txnInfo = new ArrayList<>();
         InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
-        txnInfo.add(referenceAccount.getParentAccount()
-                .getAccountName());
+        txnInfo.add(referenceAccount.getParentAccount().getAccountName());
         txnInfo.add(referenceAccount.getAccountName());
         txnInfo.add(securityAccountWrapper.getCurrencyWrapper().getTicker() == null ? "NoTicker" : securityAccountWrapper.getCurrencyWrapper().getTicker());
         txnInfo.add(securityAccountWrapper.getDivFrequency().toString());
@@ -638,26 +637,26 @@ public class TransactionValues implements Comparable<TransactionValues> {
         txnInfo.add(DateUtils.convertToShort(dateInt));
         txnInfo.add(transType.toString());
         txnInfo.add(desc);
-        txnInfo.add(Long.toString(buy));
-        txnInfo.add(Long.toString(sell));
-        txnInfo.add(Long.toString(shortSell));
-        txnInfo.add(Long.toString(coverShort));
-        txnInfo.add(Long.toString(commission));
-        txnInfo.add(Long.toString(income));
-        txnInfo.add(Long.toString(expense));
-        txnInfo.add(Long.toString(transfer));
-        txnInfo.add(Long.toString(secQuantity));
-        txnInfo.add(Long.toString(mktPrice));
-        txnInfo.add(Long.toString(position));
-        txnInfo.add(Long.toString(longBasis));
-        txnInfo.add(Long.toString(shortBasis));
-        txnInfo.add(Long.toString(openValue));
-        txnInfo.add(Long.toString(cumUnrealizedGain));
-        txnInfo.add(Long.toString(perUnrealizedGain));
-        txnInfo.add(Long.toString(perRealizedGain));
-        txnInfo.add(Long.toString(perIncomeExpense));
-        txnInfo.add(Long.toString(perTotalGain));
-        txnInfo.add(Long.toString(cumTotalGain));
+        txnInfo.add(Double.toString(buy / 100.0));
+        txnInfo.add(Double.toString(sell / 100.0));
+        txnInfo.add(Double.toString(shortSell / 100.0));
+        txnInfo.add(Double.toString(coverShort / 100.0));
+        txnInfo.add(Double.toString(commission / 100.0));
+        txnInfo.add(Double.toString(income / 100.0));
+        txnInfo.add(Double.toString(expense / 100.0));
+        txnInfo.add(Double.toString(transfer / 100.0));
+        txnInfo.add(Double.toString(secQuantity / 10000.0));
+        txnInfo.add(Double.toString(mktPrice / 100.0));
+        txnInfo.add(Double.toString(position / 10000.0));
+        txnInfo.add(Double.toString(longBasis / 100.0));
+        txnInfo.add(Double.toString(shortBasis / 100.0));
+        txnInfo.add(Double.toString(openValue / 100.0));
+        txnInfo.add(Double.toString(cumUnrealizedGain / 100.0));
+        txnInfo.add(Double.toString(perUnrealizedGain / 100.0));
+        txnInfo.add(Double.toString(perRealizedGain / 100.0));
+        txnInfo.add(Double.toString(perIncomeExpense / 100.0));
+        txnInfo.add(Double.toString(perTotalGain / 100.0));
+        txnInfo.add(Double.toString(cumTotalGain / 100.0));
         return txnInfo.toArray(new String[txnInfo.size()]);
     }
 

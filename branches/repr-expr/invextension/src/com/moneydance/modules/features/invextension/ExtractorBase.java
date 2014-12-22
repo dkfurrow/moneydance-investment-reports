@@ -40,6 +40,7 @@ public class ExtractorBase<R> {
     protected int endDateInt;
 
     protected TransactionValues lastTransactionBeforeStartDate;
+    protected TransactionValues lastTransactionBeforeEqualStartDate;
     protected TransactionValues lastTransactionWithinEndDate;
     private TransactionValues previousTransaction;
 
@@ -59,7 +60,6 @@ public class ExtractorBase<R> {
         this.endDateInt = endDateInt;
 
         lastTransactionBeforeStartDate = null;
-        previousTransaction = null;
 
         if (securityAccount == null) {
             pXqScale = 10000;   // FIXME: this works when security quantity has 4 digits and currency has 2 digits
@@ -74,18 +74,9 @@ public class ExtractorBase<R> {
             //int cashDecimalPlaces = baseCurrency.getDecimalPlaces();
             int cashDecimalPlaces = 2;  // No need to compute: it cancels out of scale factors to produce currency result
 
-            pXqScale = power10(cashDecimalPlaces + securityDecimalPlaces - cashDecimalPlaces);
-            qDpScale = power10(securityDecimalPlaces - cashDecimalPlaces + cashDecimalPlaces);  // 1/pDqScale to avoid fraction
+            pXqScale = (long) Math.pow(10.0, cashDecimalPlaces + securityDecimalPlaces - cashDecimalPlaces);
+            qDpScale = (long) Math.pow(10.0, securityDecimalPlaces - cashDecimalPlaces + cashDecimalPlaces);  // 1/pDqScale to avoid fraction
         }
-    }
-
-    /*
-     * <p>Change the starting date for subsequent calculations.</p>
-     *
-     * @param newStartDateInt new start date
-     */
-    public void setStartDateInt(int newStartDateInt) {
-        this.startDateInt = newStartDateInt;
     }
 
     /* <p>Processes the next transaction in sequence of transactions.</p>
@@ -97,11 +88,14 @@ public class ExtractorBase<R> {
      */
     public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
         int transactionDateInt = transaction.getDateInt();
-        assert previousTransaction != null && previousTransaction.getDateInt() <= transactionDateInt;
 
         if (transactionDateInt < startDateInt) {
             lastTransactionBeforeStartDate = transaction;
+            lastTransactionBeforeEqualStartDate = transaction;
         } else if (transactionDateInt <= endDateInt) {
+            if (transactionDateInt == startDateInt) {
+                lastTransactionBeforeEqualStartDate = transaction;
+            }
             lastTransactionWithinEndDate = transaction;
         }
         return true;
@@ -130,6 +124,31 @@ public class ExtractorBase<R> {
     //
     // Internal methods.
     //
+    protected long getStartPosition(SecurityAccountWrapper securityAccount) {
+        if (lastTransactionBeforeEqualStartDate != null) {
+            return getSplitAdjustedPosition(securityAccount,
+                    lastTransactionBeforeEqualStartDate.getPosition(),
+                    lastTransactionBeforeEqualStartDate.getDateInt(),
+                    startDateInt);
+        }
+        return 0;
+    }
+
+    protected long getEndPosition(SecurityAccountWrapper securityAccount) {
+        if (lastTransactionWithinEndDate != null) {
+            return getSplitAdjustedPosition(securityAccount,
+                    lastTransactionWithinEndDate.getPosition(),
+                    lastTransactionWithinEndDate.getDateInt(),
+                    endDateInt);
+        } else if (lastTransactionBeforeStartDate != null) {
+            return getSplitAdjustedPosition(securityAccount,
+                    lastTransactionBeforeStartDate.getPosition(),
+                    lastTransactionBeforeStartDate.getDateInt(),
+                    endDateInt);
+        }
+        return 0;
+    }
+
     protected long getSplitAdjustedPosition(SecurityAccountWrapper securityAccount,
                                             long referencePosition, int referenceDateInt, int currentDateInt) {
         CurrencyWrapper currencyWrapper = securityAccount.getCurrencyWrapper();
@@ -162,13 +181,5 @@ public class ExtractorBase<R> {
      */
     protected long pDq(long price, long quantity) {
         return (price * qDpScale / quantity);
-    }
-
-    private long power10(int n) {
-        int result = 1;
-        for (int i = 0; i < n; i++) {
-            result *= 10;
-        }
-        return result;
     }
 }

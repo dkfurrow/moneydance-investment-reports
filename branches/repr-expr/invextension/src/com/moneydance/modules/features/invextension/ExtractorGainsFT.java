@@ -34,46 +34,49 @@ import java.util.List;
 /**
  * Created by larus on 11/28/14.
  */
-public class ExtractorGains extends ExtractorBase<List<Long>> {
-    protected long realizedGain;
-
-    public ExtractorGains(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
+public class ExtractorGainsFT extends ExtractorGains {
+    public ExtractorGainsFT(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt);
-
-        realizedGain = 0;
-    }
-
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        if (!super.NextTransaction(transaction, securityAccount)) {
-            return false;
-        }
-
-        int transactionDateInt = transaction.getDateInt();
-        if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
-            realizedGain += transaction.getPerRealizedGain();
-        }
-
-        return true;
     }
 
     public List<Long> FinancialResults(SecurityAccountWrapper securityAccount) {  // RealizedGain, UnrealizedGain, TotalGain
-        if (lastTransactionWithinEndDate != null) {
-            long unrealizedGain = 0;
-            long endPosition = getEndPosition(securityAccount);
-            long lastPrice = securityAccount.getPrice(endDateInt);
-            long endValue = qXp(endPosition, lastPrice);
+        long startUnrealizedGain = 0;
+        long endUnrealizedGain = 0;
 
-            if (endPosition > 0) {
-                unrealizedGain = endValue - lastTransactionWithinEndDate.getLongBasis();
-            } else if (endPosition < 0) {
-                unrealizedGain = endValue - lastTransactionWithinEndDate.getShortBasis();
+        long startPosition = 0;
+        if (lastTransactionBeforeStartDate != null) {
+            startPosition = getStartPosition(securityAccount);
+            long startPrice = securityAccount.getPrice(startDateInt);
+            long startValue = qXp(startPosition, startPrice);
+
+            if (startPosition > 0) {
+                startUnrealizedGain = startValue - lastTransactionBeforeStartDate.getLongBasis();
+            } else if (startPosition < 0) {
+                startUnrealizedGain = startValue - lastTransactionBeforeStartDate.getShortBasis();
             }
-
-            long totalGain = realizedGain + unrealizedGain;
-
-            return Arrays.asList(realizedGain, unrealizedGain, totalGain);
         }
 
-        return Arrays.asList(0L, 0L, 0L);  // Default
+        if (lastTransactionWithinEndDate != null) {
+            long endPosition = getEndPosition(securityAccount);
+            long endValue = qXp(endPosition, securityAccount.getPrice(endDateInt));
+            if (endPosition > 0) {
+                endUnrealizedGain = endValue - lastTransactionWithinEndDate.getLongBasis();
+            } else if (endPosition < 0) {
+                endUnrealizedGain = endValue - lastTransactionWithinEndDate.getShortBasis();
+            }
+        } else {
+            long endPosition = startPosition;
+            long endValue = qXp(endPosition, securityAccount.getPrice(endDateInt));
+            if (endPosition > 0) {
+                endUnrealizedGain = endValue - lastTransactionBeforeStartDate.getLongBasis();
+            } else if (endPosition < 0) {
+                endUnrealizedGain = endValue - lastTransactionBeforeStartDate.getShortBasis();
+            }
+        }
+
+        long unrealizedGain = endUnrealizedGain - startUnrealizedGain;
+        long totalGain = realizedGain + unrealizedGain;
+
+        return Arrays.asList(realizedGain, unrealizedGain, totalGain);
     }
 }

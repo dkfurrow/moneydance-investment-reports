@@ -39,21 +39,15 @@ public class ExtractorPriceChanges extends ExtractorBase<List<Number>> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public List<Number> FinancialResults(SecurityAccountWrapper securityAccount) {  // AbsolutePriceChange, AbsoluteValueChange, PercentPriceChange
-        if (lastTransactionBeforeStartDate != null) {
-            int prevToSnapDateInt = DateUtils.getPrevBusinessDay(endDateInt);
-            long prevPrice = securityAccount.getPrice(prevToSnapDateInt);
-            long lastPrice = securityAccount.getPrice(endDateInt);
-            long endPosition = getSplitAdjustedPosition(securityAccount,
-                    lastTransactionBeforeStartDate.getPosition(),
-                    lastTransactionBeforeStartDate.getDateInt(),
-                    endDateInt);
-            long absolutePriceChange = lastPrice - prevPrice;
-            long absoluteValueChange = qXp(endPosition, absolutePriceChange);
-            double percentPriceChange = (prevPrice != 0) ? ((double) lastPrice) / prevPrice - 1.0 : 0;
+    public List<Number> FinancialResults(SecurityAccountWrapper securityAccount) {  // PriceChange, ValueChange, PercentPriceChange
+        int prevToSnapDateInt = DateUtils.getPrevBusinessDay(endDateInt);
+        long prevPrice = securityAccount.getPrice(prevToSnapDateInt);
+        long lastPrice = securityAccount.getPrice(endDateInt);
+        long endPosition = getEndPosition(securityAccount);
+        long priceChange = lastPrice - prevPrice;
+        long valueChange = qXp(endPosition, priceChange);
+        double percentPriceChange = (prevPrice != 0) ? ((double) lastPrice) / prevPrice - 1.0 : 0;
 
-            return Arrays.asList((Number) absolutePriceChange, absoluteValueChange, percentPriceChange);
-        }
-        return Arrays.asList((Number) 0L, 0L, 0.0);   // default
+        return Arrays.asList((Number) priceChange, valueChange, percentPriceChange);
     }
 }

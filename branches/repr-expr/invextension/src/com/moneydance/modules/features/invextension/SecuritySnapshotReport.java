@@ -51,7 +51,7 @@ public class SecuritySnapshotReport extends SecurityReport {
     public SecuritySnapshotReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
         super(securityAccount, dateRange);
 
-        int fromDateInt = dateRange.getFromDateInt();
+        int fromDateInt = 19700101; // Earliest possible date
         int snapDateInt = dateRange.getSnapDateInt();
 
         // Dates for return calculations
@@ -77,38 +77,38 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorIncome eIncome = new ExtractorIncome(securityAccount, fromDateInt, snapDateInt);
 
         // Put them into a table under the appropriate names
-        simpleMetric.put("StartPrice", new pair<Number>(0L, eStartPrice));
-        simpleMetric.put("StartPosition", new pair<Number>(0L, eStartPosition));
-        simpleMetric.put("StartValue", new pair<Number>(0L, eStartValue));
+        simpleMetric.put(SMStartPrice, new MetricEntry<Number>(0L, eStartPrice));
+        simpleMetric.put(SMStartPosition, new MetricEntry<Number>(0L, eStartPosition));
+        simpleMetric.put(SMStartValue, new MetricEntry<Number>(0L, eStartValue));
 
-        simpleMetric.put("EndPrice", new pair<Number>(0L, eEndPrice));
-        simpleMetric.put("EndPosition", new pair<Number>(0L, eEndPosition));
-        simpleMetric.put("EndValue", new pair<Number>(0L, eEndValue));
+        simpleMetric.put(SMEndPrice, new MetricEntry<Number>(0L, eEndPrice));
+        simpleMetric.put(SMEndPosition, new MetricEntry<Number>(0L, eEndPosition));
+        simpleMetric.put(SMEndValue, new MetricEntry<Number>(0L, eEndValue));
 
-        simpleMetric.put("AbsPriceChange", new pair<Number>(0L, null));
-        simpleMetric.put("AbsValueChange", new pair<Number>(0L, null));
-        simpleMetric.put("PctPriceChange", new pair<Number>(0.0, null));
+        simpleMetric.put(SMAbsPriceChange, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMAbsValueChange, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMPctPriceChange, new MetricEntry<Number>(0.0, null));
 
-        simpleMetric.put("LongBasis", new pair<Number>(0L, eLongBasis));
-        simpleMetric.put("ShortBasis", new pair<Number>(0L, eShortBasis));
+        simpleMetric.put(SMLongBasis, new MetricEntry<Number>(0L, eLongBasis));
+        simpleMetric.put(SMShortBasis, new MetricEntry<Number>(0L, eShortBasis));
 
-        simpleMetric.put("Income", new pair<Number>(0L, eIncome));
-        simpleMetric.put("AnnualizedDividend", new pair<Number>(0L, null));
-        simpleMetric.put("DividendYield", new pair<Number>(0.0, null));
-        simpleMetric.put("YieldOnBasis", new pair<Number>(0.0, null));
+        simpleMetric.put(SMIncome, new MetricEntry<Number>(0L, eIncome));
+        simpleMetric.put(SMAnnualizedDividend, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMDividendYield, new MetricEntry<Number>(0.0, null));
+        simpleMetric.put(SMYieldOnBasis, new MetricEntry<Number>(0.0, null));
 
-        simpleMetric.put("RealizedGain", new pair<Number>(0L, null));
-        simpleMetric.put("UnrealizedGain", new pair<Number>(0L, null));
-        simpleMetric.put("TotalGain", new pair<Number>(0L, null));
+        simpleMetric.put(SMRealizedGain, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMUnrealizedGain, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMTotalGain, new MetricEntry<Number>(0L, null));
 
         // These extractors return multiple values, which are exploded into values in the normal metrics
         ExtractorPriceChanges ePriceChange = new ExtractorPriceChanges(securityAccount, fromDateInt, snapDateInt);  // x 3
         ExtractorDividends eDividends = new ExtractorDividends(securityAccount, fromDateInt, snapDateInt);      // x 3
         ExtractorGains eGains = new ExtractorGains(securityAccount, fromDateInt, snapDateInt);              // x 3
 
-        multipleMetrics.put("_PriceChange", new pair<>(Arrays.asList((Number) 0L, 0L, 0.0), ePriceChange));
-        multipleMetrics.put("_Dividends", new pair<>(Arrays.asList((Number) 0L, 0.0, 0.0), eDividends));
-        multipleMetrics.put("_Gains", new pair<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
+        multipleMetrics.put(MMPriceChange, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0.0), ePriceChange));
+        multipleMetrics.put(MMDividends, new MetricEntry<>(Arrays.asList((Number) 0L, 0.0, 0.0), eDividends));
+        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations. Cannot point to same as above, since they have state.
         ExtractorTotalReturn aggregatedDayReturn = new ExtractorTotalReturn(securityAccount, prevDayFromDateInt, snapDateInt);
@@ -121,22 +121,22 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, snapDateInt);
         ExtractorTotalReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, fromDateInt, snapDateInt);
 
-        returnsMetric.put("DayReturn", new pair<>(0.0, aggregatedDayReturn));
-        returnsMetric.put("WeekReturn", new pair<>(0.0, aggregatedWeekReturn));
-        returnsMetric.put("MonthReturn", new pair<>(0.0, aggregatedMonthReturn));
-        returnsMetric.put("3MonthReturn", new pair<>(0.0, aggregated3MonthReturn));
-        returnsMetric.put("YTDReturn", new pair<>(0.0, aggregatedYTDReturn));
-        returnsMetric.put("YearReturn", new pair<>(0.0, aggregatedYearReturn));
-        returnsMetric.put("3YearReturn", new pair<>(0.0, aggregated3YearReturn));
-        returnsMetric.put("AllReturn", new pair<>(0.0, aggregatedAllReturn));
-        returnsMetric.put("AnnualReturn", new pair<>(0.0, aggregatedAnnualReturn));
+        returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
+        returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));
+        returnsMetric.put(RMMonthReturn, new MetricEntry<>(0.0, aggregatedMonthReturn));
+        returnsMetric.put(RM3MonthReturn, new MetricEntry<>(0.0, aggregated3MonthReturn));
+        returnsMetric.put(RMYTDReturn, new MetricEntry<>(0.0, aggregatedYTDReturn));
+        returnsMetric.put(RMYearReturn, new MetricEntry<>(0.0, aggregatedYearReturn));
+        returnsMetric.put(RM3YearReturn, new MetricEntry<>(0.0, aggregated3YearReturn));
+        returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
+        returnsMetric.put(RMAnnualReturn, new MetricEntry<>(0.0, aggregatedAnnualReturn));
 
         // Do the calculations by running the extractors over the transactions in this account.
         doCalculations(securityAccount);
         // Distribute the values from extractors that return multiple values
-        explode("_PriceChange", "AbsPriceChange", "AbsValueChange", "PctPriceChange");
-        explode("_Dividends", "AnnualizedDividend", "DividendYield", "YieldOnBasis");
-        explode("_Gains", "RealizedGain", "UnrealizedGain", "TotalGain");
+        explode(MMPriceChange, SMAbsPriceChange, SMAbsValueChange, SMPctPriceChange);
+        explode(MMDividends, SMAnnualizedDividend, SMDividendYield, SMYieldOnBasis);
+        explode(MMGains, SMRealizedGain, SMUnrealizedGain, SMTotalGain);
     }
 
     @Override
@@ -155,15 +155,15 @@ public class SecuritySnapshotReport extends SecurityReport {
         super.addTo(operand);
 
         // Combine basic metrics
-        simpleMetric.get("AbsPriceChange").value = 0L;
-        simpleMetric.get("PctPriceChange").value = 0.0;
-        addValue("AbsValueChange", operand, "AbsValueChange");
-        addValue("LongBasis", operand, "LongBasis");
-        addValue("ShortBasis", operand, "ShortBasis");
-        addValue("Income", operand, "Income");
-        addValue("RealizedGain", operand, "RealizedGain");
-        addValue("UnrealizedGain", operand, "UnrealizedGain");
-        addValue("TotalGain", operand, "TotalGain");
+        simpleMetric.get(SMAbsPriceChange).value = 0L;
+        simpleMetric.get(SMPctPriceChange).value = 0.0;
+        addValue(SMAbsValueChange, operand);
+        addValue(SMLongBasis, operand);
+        addValue(SMShortBasis, operand);
+        addValue(SMIncome, operand);
+        addValue(SMRealizedGain, operand);
+        addValue(SMUnrealizedGain, operand);
+        addValue(SMTotalGain, operand);
 
         // Recompute dividend yields
         combineDividends(operand);
@@ -175,19 +175,19 @@ public class SecuritySnapshotReport extends SecurityReport {
      * @param operand security snapshot to be combined
      */
     private void combineDividends(SecurityReport operand) {
-        if (simpleMetric.get("AnnualizedDividend").value == 0
-                && operand.simpleMetric.get("AnnualizedDividend").value != 0) {
+        if ((Long) simpleMetric.get(SMAnnualizedDividend).value == 0
+                && (Long) operand.simpleMetric.get(SMAnnualizedDividend).value != 0) {
             //take operand values
-            assignValue("AnnualizedDividend", operand, "AnnualizedDividend");
-            assignValue("DividendYield", operand, "DividendYield");
-            assignValue("YieldOnBasis", operand, "YieldOnBasis");
-        } else if (simpleMetric.get("AnnualizedDividend").value != 0
-                && operand.simpleMetric.get("AnnualizedDividend").value != 0) {
+            assignValue(SMAnnualizedDividend, operand);
+            assignValue(SMDividendYield, operand);
+            assignValue(SMYieldOnBasis, operand);
+        } else if ((Long) simpleMetric.get(SMAnnualizedDividend).value != 0
+                && (Long) operand.simpleMetric.get(SMAnnualizedDividend).value != 0) {
             // both valid, add
-            addValue("AnnualizedDividend", operand, "AnnualizedDividend");
-            double annualizedDividend = simpleMetric.get("AnnualizedDividend").value.doubleValue();
-            simpleMetric.get("DividendYield").value = annualizedDividend / (Long) simpleMetric.get("EndValue").value;
-            simpleMetric.get("YieldOnBasis").value = annualizedDividend / (Long) simpleMetric.get("LongBasis").value;
+            addValue(SMAnnualizedDividend, operand);
+            double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
+            simpleMetric.get(SMDividendYield).value = annualizedDividend / (Long) simpleMetric.get(SMEndValue).value;
+            simpleMetric.get(SMYieldOnBasis).value = annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value;
         }
         // if both are zero, ignore and return
         // if operand is zero, then ignore and return
@@ -196,36 +196,36 @@ public class SecuritySnapshotReport extends SecurityReport {
 
     @Override
     public void recordMetrics() {
-        outputSimplePrice("EndPrice");
-        outputSimplePosition("EndPosition");
-        outputSimplePrice("EndValue");
+        outputSimplePrice(SMEndPrice);
+        outputSimplePosition(SMEndPosition);
+        outputSimplePrice(SMEndValue);
 
-        outputSimplePrice("AbsPriceChange");
-        outputSimplePrice("AbsValueChange");
-        outputSimpleValue("PctPriceChange");
+        outputSimplePrice(SMAbsPriceChange);
+        outputSimplePrice(SMAbsValueChange);
+        outputSimpleValue(SMPctPriceChange);
 
-        outputReturn("DayReturn");
-        outputReturn("WeekReturn");
-        outputReturn("MonthReturn");
-        outputReturn("3MonthReturn");
-        outputReturn("YTDReturn");
-        outputReturn("YearReturn");
-        outputReturn("3YearReturn");
+        outputReturn(RMDayReturn);
+        outputReturn(RMWeekReturn);
+        outputReturn(RMMonthReturn);
+        outputReturn(RM3MonthReturn);
+        outputReturn(RMYTDReturn);
+        outputReturn(RMYearReturn);
+        outputReturn(RM3YearReturn);
 
-        outputReturn("AllReturn");
-        outputReturn("AnnualReturn");
+        outputReturn(RMAllReturn);
+        outputReturn(RMAnnualReturn);
 
-        outputSimplePrice("LongBasis");
-        outputSimplePrice("ShortBasis");
+        outputSimplePrice(SMLongBasis);
+        outputSimplePrice(SMShortBasis);
 
-        outputSimplePrice("Income");
-        outputSimplePrice("AnnualizedDividend");
-        outputSimpleValue("DividendYield");
-        outputSimpleValue("YieldOnBasis");
+        outputSimplePrice(SMIncome);
+        outputSimplePrice(SMAnnualizedDividend);
+        outputSimpleValue(SMDividendYield);
+        outputSimpleValue(SMYieldOnBasis);
 
-        outputSimplePrice("RealizedGain");
-        outputSimplePrice("UnrealizedGain");
-        outputSimplePrice("TotalGain");
+        outputSimplePrice(SMRealizedGain);
+        outputSimplePrice(SMUnrealizedGain);
+        outputSimplePrice(SMTotalGain);
     }
 }
 

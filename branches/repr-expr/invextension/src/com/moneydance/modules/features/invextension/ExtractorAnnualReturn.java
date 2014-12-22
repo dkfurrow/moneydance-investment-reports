@@ -28,8 +28,6 @@
 
 package com.moneydance.modules.features.invextension;
 
-import java.util.Collections;
-
 /**
  * Created by larus on 11/27/14.
  */
@@ -55,52 +53,49 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
         ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
         super.CombineFinancialResults(operand);
 
-        selectedTransactions.addAll(operand.selectedTransactions);
-        Collections.sort(selectedTransactions);    // Reorder transactions sum from different securities
-
         return computeFinancialResults();
     }
 
     private Double computeFinancialResults() {
-        if (selectedTransactions.size() > 0) {
-            int numPeriods = selectedTransactions.size();
-            double[] returns = new double[numPeriods + 2];
-            double[] excelDates = new double[numPeriods + 2];
+        int numPeriods = selectedTransactions.size();
+        double[] returns = new double[numPeriods + 2];
+        double[] excelDates = new double[numPeriods + 2];
+        int next = 0;
 
-            int next = 0;
-            if (startValue != 0) {
-                excelDates[next] = DateUtils.getExcelDateValue(startDateInt);
-                returns[next] = (double) -startValue;
+        if (startPosition != 0 && startValue != 0) {
+            excelDates[next] = DateUtils.getExcelDateValue(startDateInt);
+            returns[next] = (double) -startValue;
+            next++;
+        }
+        for (TransactionValues transaction : selectedTransactions) {
+            double totalFlows = (double) (transaction.getBuy() + transaction.getSell()
+                    + transaction.getShortSell() + transaction.getCoverShort()
+                    + transaction.getCommission() + transaction.getIncome()
+                    + transaction.getExpense());
+            if (totalFlows != 0.0) {
+                double flowDate = DateUtils.getExcelDateValue(transaction.getDateInt());
+                excelDates[next] = flowDate;
+                returns[next] = totalFlows;
                 next++;
             }
-            for (TransactionValues transaction : selectedTransactions) {
-                double totalFlows = (double) (transaction.getBuy() + transaction.getSell()
-                        + transaction.getShortSell() + transaction.getCoverShort()
-                        + transaction.getCommission() + transaction.getIncome()
-                        + transaction.getExpense());
-                if (totalFlows != 0.0) {
-                    excelDates[next] = DateUtils.getExcelDateValue(transaction.getDateInt());
-                    returns[next] = totalFlows;
-                    next++;
-                }
-            }
-            if (endValue != 0) {
-                excelDates[next] = DateUtils.getExcelDateValue(endDateInt);
-                returns[next] = (double) endValue;
-                next++;
-            }
+        }
+        if (endPosition != 0 && endValue != 0) {
+            excelDates[next] = DateUtils.getExcelDateValue(endDateInt);
+            returns[next] = (double) endValue;
+            next++;
+        }
 
-            if (next != 0) {
-                double totYrs = (excelDates[next - 1] - excelDates[0]) / 365;
-                if (totYrs != 0) {
-                    // Need to supply guess to return algorithm, so use modified dietz
-                    // return divided by number of years (have to add 1 because of returns
-                    // algorithm). Must be greater than zero, so we'll start with 10%, unless MD is greater.
-                    double guess = 1.1; //Math.max((1 + mdReturn / totYrs), 1 + 0.1 / totYrs);
+        if (next != 0) {
+            double totYrs = (excelDates[next - 1] - excelDates[0]) / 365;
+            if (totYrs != 0) {
+                // Need to supply guess to return algorithm, so use modified dietz
+                // return divided by number of years (have to add 1 because of returns
+                // algorithm). Must be greater than zero, so we'll start with 10%, unless MD is greater.
+                double guess = Math.max((1 + mdReturn / totYrs), 0.01);
 
-                    XIRRData thisData = new XIRRData(next, guess, returns, excelDates);
-                    return XIRR.xirr(thisData);
-                }
+                XIRRData thisData = new XIRRData(next, guess, returns, excelDates);
+                double ret = XIRR.xirr(thisData);
+                return ret;
             }
         }
 

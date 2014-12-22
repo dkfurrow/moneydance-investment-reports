@@ -38,10 +38,7 @@ public class ExtractorStartValue extends ExtractorBase<Long> {
 
     public Long FinancialResults(SecurityAccountWrapper securityAccount) {
         if (lastTransactionBeforeStartDate != null) {
-            long startPosition = getSplitAdjustedPosition(securityAccount,
-                    lastTransactionBeforeStartDate.getPosition(),
-                    lastTransactionBeforeStartDate.getDateInt(),
-                    startDateInt);
+            long startPosition = getStartPosition(securityAccount);
             long startPrice = securityAccount.getPrice(startDateInt);
             return qXp(startPosition, startPrice);
         }

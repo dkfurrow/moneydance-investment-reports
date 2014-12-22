@@ -28,13 +28,12 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.*;
+import com.moneydance.apps.md.model.RootAccount;
 
 import java.io.File;
-import java.util.*;
+import java.util.GregorianCalendar;
 
 public class GenericTestMethods {
-
     public static final File mdTestFile = new File("./resources/testMD02.md");
     public static final boolean rptOutputSingle = true;
     private static final int fromDateInt = 20090601;
@@ -57,8 +56,7 @@ public class GenericTestMethods {
 //	testCompareSpec();
 //	listTransWithTransUtil(currentInfo);
         verifyAggregateByCurrencyReport(currentInfo);
-        System.out.println("DataFile Path: "
-                + root.getDataFile().getParentFile().getAbsolutePath());
+        System.out.println("DataFile Path: " + root.getDataFile().getParentFile().getAbsolutePath());
         long sampleDateValue = DateUtils.getExcelDateValue(20100208);
         System.out.println("Sample Date Value" + sampleDateValue);
         GregorianCalendar gc = new GregorianCalendar(1900, 1, 1);
@@ -70,7 +68,7 @@ public class GenericTestMethods {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void verifyAggregateByCurrencyReport(BulkSecInfo currentInfo)
             throws Exception {
-        int numFrozenColumns = 5; //irrelevant for purposes of test
+/*        int numFrozenColumns = 5; //irrelevant for purposes of test
         boolean closedPosHidden = true; //irrelevant for purposes of test
         AggregationController aggregationController = AggregationController.TICKER;
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
@@ -126,72 +124,9 @@ public class GenericTestMethods {
         System.out
                 .println(testMDReturn == reportMDReturn ? "Passed" : "Failed");
         System.out.println("Test Leafs: " + testLeafCount);
-        System.out.println("Report Leafs: " + reportLeafCount);
-
+        System.out.println("Report Leafs: " + reportLeafCount);*/
     }
 
-    @SuppressWarnings("unused")
-    public static void listTransactionCounts(BulkSecInfo currentInfo) {
-        TreeSet<Account> allAccts = BulkSecInfo.getSelectedSubAccounts(
-                currentInfo.getRoot(), Account.ACCOUNT_TYPE_INVESTMENT,
-                Account.ACCOUNT_TYPE_SECURITY);
-        TransactionSet transSet = currentInfo.getRoot().getTransactionSet();
-        for (Account account : allAccts) {
-            TxnSet txnSet = transSet.getTransactionsForAccount(account);
-            System.out.println("Parent Acct: "
-                    + account.getParentAccount().getAccountName()
-                    + " Account: " + account.getAccountName() + " Size: "
-                    + txnSet.getSize());
-
-        }
-
-    }
-
-    @SuppressWarnings("unused")
-    private static void listBaseCurrency(BulkSecInfo currentInfo) {
-        CurrencyType baseCur = currentInfo.getRoot().getCurrencyType();
-        System.out.println("Root Account Currency Name: " + baseCur.getName());
-        HashSet<InvestmentAccountWrapper> investmentAccountWrappers = currentInfo.getInvestmentWrappers();
-
-        for (InvestmentAccountWrapper investmentAccountWrapper : investmentAccountWrappers) {
-            Account investmentAccount = investmentAccountWrapper.getInvestmentAccount();
-            System.out.println(investmentAccount.getAccountName() + " has Currency: "
-                    + investmentAccount.getCurrencyType().getName());
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static void listCreateDatesANDInitBals(BulkSecInfo currentInfo) {
-        HashMap<Account, Long> initBals = new HashMap<>();
-        HashMap<Account, Integer> createDates = new HashMap<>();
-        HashSet<InvestmentAccountWrapper> theseInvs = currentInfo
-                .getInvestmentWrappers();
-        for (InvestmentAccountWrapper investmentAccountWrapper : theseInvs) {
-            InvestmentAccount invAcct = (InvestmentAccount) investmentAccountWrapper
-                    .getInvestmentAccount();
-            initBals.put(invAcct, Long.valueOf(invAcct.getStartBalance()));
-            createDates.put(invAcct, invAcct.getCreationDateInt());
-        }
-        System.out
-                .println("\nAccounts with Creation Dates and Initial Balances Follow");
-        for (Account acct : createDates.keySet()) {
-            System.out.println(acct.getAccountName() + ": Create Date -- "
-                    + DateUtils.convertToShort(createDates.get(acct))
-                    + " Init Bal -- " + initBals.get(acct));
-
-        }
-
-    }
-
-    @SuppressWarnings("unused")
-    public static void writeCurrenciesToFile(BulkSecInfo currentInfo) {
-        ArrayList<String[]> secPricesReport = BulkSecInfo
-                .ListAllCurrenciesInfo(currentInfo.getCurrencyWrappers());
-        File secPricesReportFile = new File("E:\\Temp\\secPricesReport.csv");
-        IOUtils.writeArrayListToCSV(BulkSecInfo.listCurrencySnapshotHeader(),
-                secPricesReport, secPricesReportFile);
-        System.out.println("Done Writing Currencies");
-    }
 
 //    private static void listInvSecmap(BulkSecInfo currentInfo) throws Exception {
 //	HashSet<InvestmentAccountWrapper> theseInvs = currentInfo.invs;
@@ -223,57 +158,4 @@ public class GenericTestMethods {
 //	}
 //
 //    }
-
-    @SuppressWarnings("unused")
-    public static String getAcctInfo(Account acct) {
-
-        return ("Account Name: " + acct.getAccountName() + " AcctNum: " + acct
-                .getAccountNum());
-    }
-
-    @SuppressWarnings("unused")
-    public static void listTransInfo(BulkSecInfo currentInfo) throws Exception {
-        ArrayList<String[]> transActivityReport
-                = currentInfo.listAllTransValues(currentInfo.getInvestmentWrappers());
-        File transActivityReportFile = new File("E:\\Temp"
-                + "\\transActivityReport1.csv");
-        IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
-                transActivityReport, transActivityReportFile);
-        System.out.println("Done Writing TransValuesMap");
-    }
-
-    public static int compareToSpecChar(LinkedList<Character> startChars,
-                                        String o1, String o2) {
-
-        char o11 = o1.charAt(0);
-        char o21 = o2.charAt(0);
-        if (startChars.contains(o11) && startChars.contains(o21)) {
-            int indDiff = startChars.indexOf(o11) - startChars.indexOf(o21);
-            if (indDiff == 0) {
-                // either they start with the same char, in which case compare
-                return o1.compareTo(o2);
-            } else { // return difference in indices
-                return indDiff;
-            }
-        } else if (startChars.contains(o11) && !startChars.contains(o21)) {
-            return 1; // first String has special character
-        } else if (!startChars.contains(o11) && startChars.contains(o21)) {
-            return -1; // second string has special character
-        } else {// neither first letter is special character
-            return o1.compareTo(o2);
-
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static void testCompareSpec() {
-        LinkedList<Character> startChars = new LinkedList<>();
-        startChars.add("-".charAt(0));
-        startChars.add("~".charAt(0));
-        for (Character character : startChars) {
-            System.out.println(character);
-        }
-        System.out.println(compareToSpecChar(startChars, "cat", "-Cat"));
-    }
-
 }

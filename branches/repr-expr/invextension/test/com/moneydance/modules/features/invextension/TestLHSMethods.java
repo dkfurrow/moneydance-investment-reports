@@ -59,12 +59,9 @@ class TestLHSMethods {
         } else {
             throw new Exception("Wrong number of parameters");
         }
-
     }
 
     public static void main(String[] args) {
-
-
         try {
             TestLHSMethods testMethod = new TestLHSMethods(testModelHeader);
             //testMethod.moveCol("EndValue", true);
@@ -95,43 +92,45 @@ class TestLHSMethods {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-
-
     }
 
     public void restoreHidden(String inString) throws Exception {
         int indexOf = hiddenCols.indexOf(inString);
-        if (indexOf == -1) throw new ViewCreateException("restore string not found in hidden columns");
+        if (indexOf == -1) {
+            throw new ViewCreateException("restore string not found in hidden columns");
+        }
         hiddenCols.remove(indexOf);
         viewedFields.addLast(inString);
-
     }
 
     public void hideColumn(String inString) throws Exception {
         int indexOf = viewedFields.indexOf(inString);
-        if (indexOf == -1) throw new ViewCreateException("hide string not found in view header");
+        if (indexOf == -1) {
+            throw new ViewCreateException("hide string not found in view header");
+        }
         viewedFields.remove(indexOf);
         hiddenCols.add(0, inString);
     }
 
     public void moveCol(String inString, boolean up) throws Exception {
-
         int indexOf = viewedFields.indexOf(inString);
         if (indexOf == -1) throw new ViewCreateException("move string not found in view header");
         if (indexOf != viewedFields.lastIndexOf(inString))
             throw new ViewCreateException("move string found more than once in view header");
 
         if (up) {
-            if (indexOf == 0) throw new ViewCreateException("Cannot Move Up--Already in First Place");
+            if (indexOf == 0) {
+                throw new ViewCreateException("Cannot Move Up--Already in First Place");
+            }
             viewedFields.add(indexOf - 1, inString);
             viewedFields.remove(indexOf + 1);
         } else {
-            if (indexOf == viewedFields.size() - 1)
+            if (indexOf == viewedFields.size() - 1) {
                 throw new ViewCreateException("Cannot Move Down--Already in Last Place");
+            }
             viewedFields.add(indexOf + 2, inString);
             viewedFields.remove(indexOf);
         }
-
     }
 
     class ViewCreateException extends Exception {
@@ -142,7 +141,5 @@ class TestLHSMethods {
         public ViewCreateException(String message) {
             super(message);
         }
-
     }
-
 }

@@ -79,20 +79,18 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
                     basisReferenceTransaction.getPosition(),
                     basisReferenceTransaction.getDateInt(), endDateInt);
             long annualizedDivTotal = getAnnualizedDividend(securityAccount);
-            long endPosition = getSplitAdjustedPosition(securityAccount,
-                    lastTransactionWithinEndDate.getPosition(),
-                    lastTransactionWithinEndDate.getDateInt(),
-                    endDateInt);
+            long endPosition = getEndPosition(securityAccount);
             long lastPrice = securityAccount.getPrice(endDateInt);
             long longBasis = lastTransactionWithinEndDate.getLongBasis();
-            long annualizedDivPerShare = (splitAdjustReferencePos > 0 && endPosition > 0) ?
-                    pDq(annualizedDivTotal, splitAdjustReferencePos) : 0;
-            long annualizedDividend = qXp(endPosition, annualizedDivPerShare);
-            double dividendYield = (lastPrice != 0 && annualizedDivPerShare != 0) ?
-                    ((double) annualizedDivPerShare) / lastPrice : 0.0;
-            double yieldOnBasis = (longBasis > 0 && annualizedDivPerShare != 0) ?
-                    annualizedDividend / longBasis : 0.0;
-            return Arrays.asList((Number) annualizedDividend, dividendYield, yieldOnBasis);
+
+            if (splitAdjustReferencePos > 0 && endPosition > 0) {
+                double positionRatio = (double) endPosition / (double) splitAdjustReferencePos;
+                long annualizedDividend = Math.round(positionRatio * annualizedDivTotal);
+                long annualizedDivPerShare = pDq(annualizedDivTotal, splitAdjustReferencePos);
+                double dividendYield = (double) annualizedDivPerShare / lastPrice;
+                double yieldOnBasis = (longBasis > 0) ? annualizedDividend / longBasis : 0.0;
+                return Arrays.asList((Number) annualizedDividend, dividendYield, yieldOnBasis);
+            }
         }
 
         return Arrays.asList((Number) 0L, 0.0, 0.0);    // Default
