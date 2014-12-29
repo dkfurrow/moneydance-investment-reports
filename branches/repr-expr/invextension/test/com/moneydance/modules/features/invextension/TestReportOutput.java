@@ -48,7 +48,7 @@ public class TestReportOutput extends JFrame {
     private static String testFileStr = "./resources/testMD02.moneydance/root.mdinternal";
     private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
     private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
-    public static final File mdTestFile = new File(testFileStr);
+    public static final File mdTestFile = new File(testFileStr1);
 
     public static void main(String[] args) throws Exception {
 
