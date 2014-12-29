@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="5 seconds">
+<build time="9 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.7 in: C:\Program Files (x86)\Java\jdk1.7.0_65\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.ComponentHelper]]></message>
-	<message priority="debug"><![CDATA[Setting ro project property: ant.file -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml]]></message>
+	<message priority="debug"><![CDATA[Setting ro project property: ant.file -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.file.type -> file]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.projectHelper]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.parsing.context]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.targets]]></message>
-	<message priority="debug"><![CDATA[parsing buildfile E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml with URI = file:/E:/DKF/COMPUTER/IntelliJWorkspace/invextension-local/src/build.xml]]></message>
+	<message priority="debug"><![CDATA[parsing buildfile E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml with URI = file:/E:/DKF/COMPUTER/IntelliJWorkspace/invextension-googlecode/src/build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.name -> invextension]]></message>
 	<message priority="debug"><![CDATA[Adding reference: invextension]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.default-target -> all]]></message>
-	<message priority="debug"><![CDATA[Setting ro project property: ant.file.invextension -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml]]></message>
+	<message priority="debug"><![CDATA[Setting ro project property: ant.file.invextension -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.file.type.invextension -> file]]></message>
-	<message priority="debug"><![CDATA[Project base dir set to: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src]]></message>
+	<message priority="debug"><![CDATA[Project base dir set to: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src]]></message>
 	<message priority="debug"><![CDATA[ +Target: ]]></message>
 	<message priority="debug"><![CDATA[ +Target: init]]></message>
 	<message priority="debug"><![CDATA[ +Target: invextension]]></message>
@@ -26,183 +26,184 @@
 	<message priority="debug"><![CDATA[Adding reference: ant.LocalProperties]]></message>
 	<message priority="debug"><![CDATA[parsing buildfile jar:file:/C:/Program%20Files%20(x86)/Ant/apache-ant-1.9.3/lib/ant.jar!/org/apache/tools/ant/antlib.xml with URI = jar:file:/C:/Program%20Files%20(x86)/Ant/apache-ant-1.9.3/lib/ant.jar!/org/apache/tools/ant/antlib.xml from a zip file]]></message>
 	<message priority="debug"><![CDATA[Setting project property: version -> 2.2]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:7: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:7: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: src -> .]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:8: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:8: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: build -> ../classes]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:9: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:9: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: lib -> ../lib]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:10: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:10: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: privkeyfile -> ./priv_key]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:11: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:11: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: pubkeyfile -> ./pub_key]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:12: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:12: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: privkeyid -> 99]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:13: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:13: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: build.compiler -> modern]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:15: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:15: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: build.compiler.fulldepend -> true]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:17: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:17: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: dist -> ../dist]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:18: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:18: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: tmp -> ../tmp]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:19: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:19: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: debug -> on]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:20: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:20: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: optimize -> off]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:21: " name="property" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:21: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Adding reference: classpath]]></message>
-	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:23: " name="path" time="0 seconds" />
+	<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:23: " name="path" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting ro project property: ant.project.invoked-targets -> all]]></message>
 	<message priority="debug"><![CDATA[Attempting to create object of type org.apache.tools.ant.helper.DefaultExecutor]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.executor]]></message>
 	<message priority="debug"><![CDATA[Build sequence for target(s) `all' is [init, invextension, all]]]></message>
 	<message priority="debug"><![CDATA[Complete build sequence is [init, invextension, all, genkeys, ]]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes with patternSet{ includes: [**/*] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\dist with patternSet{ includes: [**/*] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes with patternSet{ includes: [**/*] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\dist with patternSet{ includes: [**/*] excludes: [] }]]></message>
 	<target name="init" time="0 seconds">
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:33: " name="delete" time="0 seconds">
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\AggregationController.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\Aggregator.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\AllAggregate.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\BulkSecInfo$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\BulkSecInfo$2.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\BulkSecInfo$3.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\BulkSecInfo.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\CategoryMap.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ComponentReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\CompositeReport$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\CompositeReport$COMPOSITE_TYPE.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\CompositeReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\CurrencyWrapper.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateMap.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRange$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRange$DATE_RULE.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRange$REF_DATE.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRange.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$BoxFocusListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldDocumentListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldFocusListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$Focus.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel$ItemChangeListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateRangePanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\DateUtils.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GainsAverageCalc.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GainsCalc.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GainsLotMatchCalc.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GoalSeek.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GoalSeekData.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GoalSeekFunction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\GoalSeekStatus.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\HelpFileDisplay$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\HelpFileDisplay$FileResources.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\HelpFileDisplay.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\IOUtils.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\LogController$CustomXMLFormatter.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\LogController.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\Main.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\Prefs.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfig$FrameInfo.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfig.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$AccountCellRenderer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$RemoveAccountsListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$ResetListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$AddFieldsListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveDownListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveUpListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$RemoveFieldsListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$ResetListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlFrame.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$MDFileLoader.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportExecutor.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportOptionsPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame$TestWindowListener.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportControlPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportSaveControlFrame.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\ReportSaveControlPanel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityAccountEditorForm.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$DIV_FREQUENCY.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$DividendFrequencyAnalyzer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityFromToReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport$AnnualDividendCalculator.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecuritySubTypeWrapper.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\SecurityTypeWrapper.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalFromToReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReport$ReportTableModel.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputFrame$OutputFrameWindowAdapter.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputFrame.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$2.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader$Arrow.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ColSizeOption.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ColType.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$MultiLineHeaderRenderer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$NumberTableCellRenderer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ObjectTableCellRenderer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$PercentTableCellRenderer.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$2.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$3.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$4.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$5.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$6.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$7.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollableSelectFirstColumnCellAction.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TotalSnapshotReport.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\Tradeable.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TransactionValues$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TransactionValues$2.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TransactionValues$InitialTransactionException.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TransactionValues$SplitValues.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\TransactionValues.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\XIRR.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\XIRRData.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension\XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features\invextension]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules\features]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance\modules]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com\moneydance]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes\com]]></message>
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:33: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\AggregationController.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\Aggregator.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\AllAggregate.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\BulkSecInfo$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\BulkSecInfo$2.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\BulkSecInfo$3.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\BulkSecInfo.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\CategoryMap.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ComponentReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\CompositeReport$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\CompositeReport$COMPOSITE_TYPE.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\CompositeReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\CurrencyWrapper.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateMap.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRange$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRange$DATE_RULE.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRange$REF_DATE.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRange.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$BoxFocusListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldDocumentListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldFocusListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$Focus.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel$ItemChangeListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateRangePanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\DateUtils.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GainsAverageCalc.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GainsCalc.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GainsLotMatchCalc.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GoalSeek.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GoalSeekData.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GoalSeekFunction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\GoalSeekStatus.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\HelpFileDisplay$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\HelpFileDisplay$FileResources.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\HelpFileDisplay.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\IOUtils.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\LogController$CustomXMLFormatter.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\LogController.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\Main.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\Prefs.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfig$FrameInfo.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfig.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$AccountCellRenderer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$RemoveAccountsListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$RemoveHideOnHomePageAccountListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$ResetListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$AddFieldsListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveDownListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveUpListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$RemoveFieldsListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$ResetListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlFrame.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$MDFileLoader.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportExecutor.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportOptionsPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame$TestWindowListener.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportControlPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportSaveControlFrame.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\ReportSaveControlPanel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityAccountEditorForm.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$DIV_FREQUENCY.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper$DividendFrequencyAnalyzer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityAccountWrapper.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityFromToReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport$AnnualDividendCalculator.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecuritySnapshotReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecuritySubTypeWrapper.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\SecurityTypeWrapper.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalFromToReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReport$ReportTableModel.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputFrame$OutputFrameWindowAdapter.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputFrame.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$2.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader$Arrow.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ColSizeOption.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ColType.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$MultiLineHeaderRenderer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$NumberTableCellRenderer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ObjectTableCellRenderer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$PercentTableCellRenderer.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$2.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$3.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$4.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$5.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$6.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$7.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollableSelectFirstColumnCellAction.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalReportOutputPane.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TotalSnapshotReport.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\Tradeable.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TransactionValues$1.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TransactionValues$2.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TransactionValues$InitialTransactionException.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TransactionValues$SplitValues.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\TransactionValues.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\XIRR.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\XIRRData.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension\XIRRNPV.class]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features\invextension]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules\features]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance\modules]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com\moneydance]]></message>
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes\com]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:36: " name="delete" time="0 seconds">
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\dist\invextension.mxt]]></message>
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:36: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\dist\invextension.mxt]]></message>
 		</task>
 	</target>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg, com/moneydance/modules/features/invextension/InvestmentReportsHelp.html] excludes: [] }]]></message>
-	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg, com/moneydance/modules/features/invextension/InvestmentReportsHelp.html] excludes: [] }]]></message>
+	<message priority="debug"><![CDATA[fileset: Setup scanner in dir E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
 	<message priority="debug"><![CDATA[force loading com.moneydance.admin.KeyAdmin]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.admin.KeyAdmin]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/admin/KeyAdmin.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/admin/KeyAdmin.class]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Object loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.SecretKeyCallback]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.SecretKeyCallback loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileOutputStream loaded from parent loader (parentFirst)]]></message>
@@ -215,15 +216,15 @@
 	<message priority="debug"><![CDATA[Class java.lang.Exception loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.File loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.admin.KeyAdmin$4]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/admin/KeyAdmin$4.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/admin/KeyAdmin$4.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.admin.KeyAdmin$4 loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamTable]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StreamTable.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StreamTable.class]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamObject]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StreamObject.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StreamObject.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamObject loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.DeepClone]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/DeepClone.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/DeepClone.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.DeepClone loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamTable loaded from ant loader]]></message>
@@ -232,11 +233,11 @@
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Vector loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamVector]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StreamVector.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StreamVector.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamVector loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.PrintStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StringEncodingException]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StringEncodingException.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StringEncodingException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StringEncodingException loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
@@ -246,12 +247,12 @@
 	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamUtil]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StreamUtil.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StreamUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.EOFException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuffer loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
@@ -268,7 +269,7 @@
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StringUtils]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/util/StringUtils.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StringUtils loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Stack loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.Format loaded from parent loader (parentFirst)]]></message>
@@ -285,40 +286,40 @@
 	<message priority="debug"><![CDATA[Class javax.crypto.SecretKeyFactory loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.Cipher loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.DSAPrivateKeyImpl]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/security/DSAPrivateKeyImpl.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/security/DSAPrivateKeyImpl.class]]></message>
 	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAPrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.DSAPrivateKeyImpl loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.DSAParamsImpl]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar com/moneydance/security/DSAParamsImpl.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar com/moneydance/security/DSAParamsImpl.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.DSAParamsImpl loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.MDException loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.ByteArrayInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.FeatureModuleContext]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.FeatureModuleContext loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuilder loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipFile loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="5 seconds">
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:42: " name="mkdir" time="0 seconds">
-			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\dist because it already exists.]]></message>
+	<target name="invextension" time="8 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:42: " name="mkdir" time="0 seconds">
+			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\dist because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:43: " name="mkdir" time="0 seconds">
-			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes because it already exists.]]></message>
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:43: " name="mkdir" time="0 seconds">
+			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:47: " name="javac" time="1 second">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:47: " name="javac" time="1 second">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AggregationController.java added as com\moneydance\modules\features\invextension\AggregationController.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Aggregator.java added as com\moneydance\modules\features\invextension\Aggregator.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AllAggregate.java added as com\moneydance\modules\features\invextension\AllAggregate.class doesn't exist.]]></message>
@@ -341,7 +342,7 @@
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\HelpFileDisplay.java added as com\moneydance\modules\features\invextension\HelpFileDisplay.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\IOUtils.java added as com\moneydance\modules\features\invextension\IOUtils.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java added as com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\InvestmentReportsHelp.html skipped - don't know how to handle it]]></message>
+			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\InvestmentReportsHelp.html skipped - don't know how to handle it]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\LogController.java added as com\moneydance\modules\features\invextension\LogController.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Main.java added as com\moneydance\modules\features\invextension\Main.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Prefs.java added as com\moneydance\modules\features\invextension\Prefs.class doesn't exist.]]></message>
@@ -369,17 +370,17 @@
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRR.java added as com\moneydance\modules\features\invextension\XIRR.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRData.java added as com\moneydance\modules\features\invextension\XIRRData.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRNPV.java added as com\moneydance\modules\features\invextension\XIRRNPV.class doesn't exist.]]></message>
-			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\icon.gif skipped - don't know how to handle it]]></message>
-			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\meta_info.dict skipped - don't know how to handle it]]></message>
-			<message priority="info"><![CDATA[Compiling 49 source files to E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes]]></message>
+			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\icon.gif skipped - don't know how to handle it]]></message>
+			<message priority="debug"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\meta_info.dict skipped - don't know how to handle it]]></message>
+			<message priority="info"><![CDATA[Compiling 49 source files to E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes]]></message>
 			<message priority="debug"><![CDATA[Using modern compiler]]></message>
 			<message priority="debug"><![CDATA[Compilation arguments:
 '-d'
-'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes'
+'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes'
 '-classpath'
-'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\classes;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\extadmin.jar;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\moneydance.jar;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\lib\annotations.jar'
+'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\classes;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\extadmin.jar;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\moneydance.jar;E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\lib\annotations.jar'
 '-sourcepath'
-'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src'
+'E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src'
 '-target'
 '1.7'
 '-g'
@@ -388,58 +389,58 @@
 The ' characters around the executable and arguments are
 not part of the command.]]></message>
 			<message priority="debug"><![CDATA[Files to be compiled:
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\AggregationController.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\Aggregator.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\AllAggregate.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\CategoryMap.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ComponentReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\CompositeReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\CurrencyWrapper.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\DateMap.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\DateRange.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\DateRangePanel.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\DateUtils.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GainsAverageCalc.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GainsCalc.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GoalSeek.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GoalSeekData.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GoalSeekFunction.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\GoalSeekStatus.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\HelpFileDisplay.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\IOUtils.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\LogController.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\Main.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\Prefs.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportConfig.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportControlFrame.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportControlPanel.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportSaveControlFrame.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\ReportSaveControlPanel.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecurityAccountEditorForm.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecurityFromToReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecurityReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecuritySubTypeWrapper.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\SecurityTypeWrapper.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TotalFromToReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TotalReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TotalReportOutputFrame.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TotalSnapshotReport.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\Tradeable.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\TransactionValues.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\XIRR.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\XIRRData.java
-    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\AggregationController.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\Aggregator.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\AllAggregate.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\CategoryMap.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ComponentReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\CompositeReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\CurrencyWrapper.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\DateMap.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\DateRange.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\DateRangePanel.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\DateUtils.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GainsAverageCalc.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GainsCalc.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GoalSeek.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GoalSeekData.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GoalSeekFunction.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\GoalSeekStatus.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\HelpFileDisplay.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\IOUtils.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\LogController.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\Main.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\Prefs.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportConfig.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportControlFrame.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportControlPanel.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportSaveControlFrame.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\ReportSaveControlPanel.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecurityAccountEditorForm.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecurityFromToReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecurityReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecuritySubTypeWrapper.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\SecurityTypeWrapper.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TotalFromToReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TotalReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TotalReportOutputFrame.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TotalSnapshotReport.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\Tradeable.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\TransactionValues.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\XIRR.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\XIRRData.java
+    E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:52: " name="jar" time="0 seconds">
-			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\dist\invextension.mxt]]></message>
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:52: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\dist\invextension.mxt]]></message>
 			<message priority="debug"><![CDATA[adding directory META-INF/]]></message>
 			<message priority="debug"><![CDATA[adding entry META-INF/MANIFEST.MF]]></message>
 			<message priority="debug"><![CDATA[adding directory com/]]></message>
@@ -496,6 +497,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfig.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$AccountCellRenderer.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$RemoveAccountsListener.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$RemoveHideOnHomePageAccountListener.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$ResetListener.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$AddFieldsListener.class]]></message>
@@ -573,9 +575,9 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
-Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:52: ]]></message>
+Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:52: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-local\src\build.xml:64: " name="java" time="3 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-googlecode\src\build.xml:64: " name="java" time="6 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -646,6 +648,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfig.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$AccountCellRenderer.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$RemoveAccountsListener.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$RemoveHideOnHomePageAccountListener.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$ResetListener.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$AddFieldsListener.class]]></message>
@@ -722,7 +725,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 17099 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 17269 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />
