@@ -31,7 +31,12 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
-              <option name="trunkUrl" value="" />
+              <option name="branchUrls">
+                <list>
+                  <option value="https://moneydance-investment-reports.googlecode.com/svn/branches/repr-expr/invextension/src/com/moneydance/modules/features/invextension" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://moneydance-investment-reports.googlecode.com/svn/trunk/invextension/src/com/moneydance/modules/features/invextension" />
             </SvnBranchConfiguration>
           </value>
         </entry>
@@ -40,4 +45,3 @@
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
 </project>
-
