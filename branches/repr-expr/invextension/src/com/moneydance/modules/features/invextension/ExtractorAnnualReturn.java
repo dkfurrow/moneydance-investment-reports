@@ -123,7 +123,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
             }
         }
 
-        int numPeriods = i;
+        int numPeriods = (numReturns == 0) ? 0 : i + 1;
         double[] returns = new double[numPeriods + 2];
         double[] excelDates = new double[numPeriods + 2];
         int next = 0;
@@ -156,7 +156,8 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
                 double guess = Math.max((1 + mdReturn / totYrs), 0.01);
 
                 XIRRData thisData = new XIRRData(next, guess, returns, excelDates);
-                return XIRR.xirr(thisData);
+                double xirr = XIRR.xirr(thisData);
+                return xirr;
             }
         }
 
