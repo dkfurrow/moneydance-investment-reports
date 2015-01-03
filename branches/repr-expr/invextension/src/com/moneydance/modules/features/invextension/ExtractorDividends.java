@@ -54,12 +54,11 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
         lastTransactionBasis = null;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        if (!super.NextTransaction(transaction, securityAccount)) {
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.NextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
-        int transactionDateInt = transaction.getDateInt();
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             InvestTxnType transType = TxnUtil.getInvestTxnType(transaction.getParentTxn());
             updateBasisTransactions(transaction);
@@ -71,7 +70,7 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
     }
 
     public List<Number> FinancialResults(SecurityAccountWrapper securityAccount) {    // AnnualizedDividend, DividendYield, YieldOnBasis
-        if (firstTransactionBasis != null && lastTransactionWithinEndDate != null) {
+        if (firstTransactionBasis != null && lastTransactionWithinDateRange != null) {
             // reference transaction is last transaction older than MINIMUM_EX_DIV_DAYS
             // allows for situations where dividends are immediately reinvested
             TransactionValues basisReferenceTransaction = firstTransactionBasis;
@@ -81,7 +80,7 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
             long annualizedDivTotal = getAnnualizedDividend(securityAccount);
             long endPosition = getEndPosition(securityAccount);
             long lastPrice = securityAccount.getPrice(endDateInt);
-            long longBasis = lastTransactionWithinEndDate.getLongBasis();
+            long longBasis = lastTransactionWithinDateRange.getLongBasis();
 
             if (splitAdjustReferencePos > 0 && endPosition > 0) {
                 double positionRatio = (double) endPosition / (double) splitAdjustReferencePos;

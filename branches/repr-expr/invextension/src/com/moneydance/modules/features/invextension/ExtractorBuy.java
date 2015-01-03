@@ -41,9 +41,7 @@ public class ExtractorBuy extends ExtractorBase<Long> {
         buys = 0;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        int transactionDateInt = transaction.getDateInt();
-
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             // Add the cumulative values (note buys are defined by change in long basis -- commission is included).
             buys += transaction.getBuy() == 0 ? 0

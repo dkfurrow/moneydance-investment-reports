@@ -43,12 +43,11 @@ public class ExtractorGains extends ExtractorBase<List<Long>> {
         realizedGain = 0;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        if (!super.NextTransaction(transaction, securityAccount)) {
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.NextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
-        int transactionDateInt = transaction.getDateInt();
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             realizedGain += transaction.getPerRealizedGain();
         }
@@ -57,16 +56,16 @@ public class ExtractorGains extends ExtractorBase<List<Long>> {
     }
 
     public List<Long> FinancialResults(SecurityAccountWrapper securityAccount) {  // RealizedGain, UnrealizedGain, TotalGain
-        if (lastTransactionWithinEndDate != null) {
+        if (lastTransactionWithinDateRange != null) {
             long unrealizedGain = 0;
             long endPosition = getEndPosition(securityAccount);
             long lastPrice = securityAccount.getPrice(endDateInt);
             long endValue = qXp(endPosition, lastPrice);
 
             if (endPosition > 0) {
-                unrealizedGain = endValue - lastTransactionWithinEndDate.getLongBasis();
+                unrealizedGain = endValue - lastTransactionWithinDateRange.getLongBasis();
             } else if (endPosition < 0) {
-                unrealizedGain = endValue - lastTransactionWithinEndDate.getShortBasis();
+                unrealizedGain = endValue - lastTransactionWithinDateRange.getShortBasis();
             }
 
             long totalGain = realizedGain + unrealizedGain;

@@ -28,36 +28,102 @@
 
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+
 /**
  * Created by larus on 11/27/14.
  */
+@SuppressWarnings("ALL")
 public class ExtractorAnnualReturn extends ExtractorTotalReturn {
-    // Annual return:
+    private class dateValuePair implements Comparable<dateValuePair> {
+        public final int date;
+        public long value;
+
+        public dateValuePair(int d, long v) {
+            date = d;
+            value = v;
+        }
+
+        public int compareTo(@NotNull dateValuePair operand) {
+            return date - operand.date;
+        }
+    }
+
+    private ArrayList<dateValuePair> nonZeroReturns;
+    private LinkedList<ArrayList<dateValuePair>> aggregatedReturns;
+    private int aggregatedReturnsSize;
 
     public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt);
+
+        nonZeroReturns = new ArrayList<>();
+        aggregatedReturns = new LinkedList<>();
+        aggregatedReturnsSize = 0;
+        aggregatedReturns.add(nonZeroReturns);
     }
 
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        return super.NextTransaction(transaction, securityAccount);
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.NextTransaction(transaction, transactionDateInt)) {
+            return false;
+        }
+
+        if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
+            long totalFlows = transaction.getTotalFlows();
+            if (totalFlows != 0) {
+                nonZeroReturns.add(new dateValuePair(transactionDateInt, totalFlows));
+            }
+        }
+
+        return true;
     }
 
     public Double FinancialResults(SecurityAccountWrapper securityAccount) {
-        super.FinancialResults(securityAccount);
+        double mdReturn = super.FinancialResults(securityAccount);
 
-        return computeFinancialResults();
+        return computeFinancialResults(mdReturn);
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
-    public Double CombineFinancialResults(ExtractorBase<?> op) {
-        ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
-        super.CombineFinancialResults(operand);
+    public void AggregateFinancialResults(ExtractorBase<?> op) {
+        ExtractorAnnualReturn operand = (ExtractorAnnualReturn) op;
+        super.AggregateFinancialResults(operand);
 
-        return computeFinancialResults();
+        aggregatedReturns.add(operand.nonZeroReturns);
+        aggregatedReturnsSize += operand.nonZeroReturns.size();
     }
 
-    private Double computeFinancialResults() {
-        int numPeriods = selectedTransactions.size();
+    public Double ComputeAggregatedFinancialResults() {
+        double mdReturn = super.ComputeAggregatedFinancialResults();
+
+        return computeFinancialResults(mdReturn);
+    }
+
+    private Double computeFinancialResults(double mdReturn) {
+        ArrayList<dateValuePair> allReturns = new ArrayList<>(aggregatedReturnsSize);
+        for (ArrayList<dateValuePair> r : aggregatedReturns) {
+            allReturns.addAll(r);
+        }
+        Collections.sort(allReturns);
+        // Collapse returns on same date to single entry to speed computation
+        int numReturns = allReturns.size();
+        int i = 0;
+        int j = 1;
+        for (; i < numReturns && j < numReturns; i++, j++) {
+            assert i < j;
+            for (; j < numReturns && allReturns.get(i) == allReturns.get(j); j++) {
+                allReturns.get(i).value += allReturns.get(j).value;
+            }
+            assert (j >= numReturns) || allReturns.get(i) != allReturns.get(j);
+            if (j < numReturns) {
+                allReturns.set(i + 1, allReturns.get(j));
+            }
+        }
+
+        int numPeriods = i;
         double[] returns = new double[numPeriods + 2];
         double[] excelDates = new double[numPeriods + 2];
         int next = 0;
@@ -67,18 +133,14 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
             returns[next] = (double) -startValue;
             next++;
         }
-        for (TransactionValues transaction : selectedTransactions) {
-            double totalFlows = (double) (transaction.getBuy() + transaction.getSell()
-                    + transaction.getShortSell() + transaction.getCoverShort()
-                    + transaction.getCommission() + transaction.getIncome()
-                    + transaction.getExpense());
-            if (totalFlows != 0.0) {
-                double flowDate = DateUtils.getExcelDateValue(transaction.getDateInt());
-                excelDates[next] = flowDate;
-                returns[next] = totalFlows;
-                next++;
-            }
+
+        for (i = 0; i < numPeriods; i++) {
+            dateValuePair dv = allReturns.get(i);
+            excelDates[next] = DateUtils.getExcelDateValue(dv.date);
+            returns[next] = (double) dv.value;
+            next++;
         }
+
         if (endPosition != 0 && endValue != 0) {
             excelDates[next] = DateUtils.getExcelDateValue(endDateInt);
             returns[next] = (double) endValue;
@@ -94,8 +156,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
                 double guess = Math.max((1 + mdReturn / totYrs), 0.01);
 
                 XIRRData thisData = new XIRRData(next, guess, returns, excelDates);
-                double ret = XIRR.xirr(thisData);
-                return ret;
+                return XIRR.xirr(thisData);
             }
         }
 

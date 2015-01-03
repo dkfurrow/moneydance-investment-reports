@@ -45,11 +45,11 @@ import java.util.TreeMap;
  * @author Dale Furrow
  */
 public abstract class SecurityReport extends ComponentReport {
-    private ArrayList<Object> outputLine = new ArrayList<>();
-    private double positionScale;
-    private double priceScale;
+    private final ArrayList<Object> outputLine = new ArrayList<>();
+    private final double positionScale;
+    private final double priceScale;
 
-    private DateRange dateRange;
+    private final DateRange dateRange;
     private SecurityAccountWrapper securityAccount;
     private InvestmentAccountWrapper investmentAccount;
     private Tradeable tradeable;
@@ -60,7 +60,7 @@ public abstract class SecurityReport extends ComponentReport {
     // For each metric, we have its current value and an extractor (which has its own state).
     public class MetricEntry<V> {
         public V value;
-        public ExtractorBase<?> extractor;
+        public final ExtractorBase<?> extractor;
 
         MetricEntry(V v, ExtractorBase<?> e) {
             value = v;
@@ -69,10 +69,10 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     // Map from simpleMetric name -> <value, extractor> pairs.
-    protected TreeMap<String, MetricEntry<Number>> simpleMetric;             // Simple calculations that do not depend on
+    protected final TreeMap<String, MetricEntry<Number>> simpleMetric;             // Simple calculations that do not depend on
     // other calculations or return multiple values
-    protected TreeMap<String, MetricEntry<List<Number>>> multipleMetrics;    // Metrics that return multiple values
-    protected TreeMap<String, MetricEntry<Double>> returnsMetric;            // Metrics that perform return calculations (uses
+    protected final TreeMap<String, MetricEntry<List<Number>>> multipleMetrics;    // Metrics that return multiple values
+    protected final TreeMap<String, MetricEntry<Double>> returnsMetric;            // Metrics that perform return calculations (uses
     // simple metrics)
 
     public static final String MMDividends = "_Dividends";
@@ -160,19 +160,20 @@ public abstract class SecurityReport extends ComponentReport {
     protected void doCalculations(SecurityAccountWrapper securityAccount) {
         if (securityAccount != null) {
             for (TransactionValues transaction : securityAccount.getTransactionValues()) {
+                int transactionDateInt = transaction.getDateInt();  // CSE across loops and method invocations
                 for (MetricEntry<Number> p : simpleMetric.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, securityAccount);
+                        p.extractor.NextTransaction(transaction, transactionDateInt);
                     }
                 }
                 for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, securityAccount);
+                        p.extractor.NextTransaction(transaction, transactionDateInt);
                     }
                 }
                 for (MetricEntry<Double> p : returnsMetric.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, securityAccount);
+                        p.extractor.NextTransaction(transaction, transactionDateInt);
                     }
                 }
             }
@@ -248,12 +249,12 @@ public abstract class SecurityReport extends ComponentReport {
         }
     }
 
-    protected void combineReturns(SecurityReport operand) {
+    private void combineReturns(SecurityReport operand) {
         for (String name : returnsMetric.keySet()) {
             MetricEntry<Double> p = returnsMetric.get(name);
             assert p != null;
             if (p.extractor != null) {
-                p.value = (Double) p.extractor.CombineFinancialResults(operand.returnsMetric.get(name).extractor);
+                p.extractor.AggregateFinancialResults(operand.returnsMetric.get(name).extractor);
             }
         }
     }
@@ -319,8 +320,7 @@ public abstract class SecurityReport extends ComponentReport {
 
     public Object[] toTableRow(InvestmentAccountWrapper investmentAccount, SecurityAccountWrapper securityAccount,
                                SecurityTypeWrapper securityType, SecuritySubTypeWrapper securitySubType,
-                               CurrencyWrapper currency) throws SecurityException, IllegalArgumentException,
-            NoSuchFieldException, IllegalAccessException {
+                               CurrencyWrapper currency) throws SecurityException, IllegalArgumentException {
         assert securityAccount != null;
 
         outputLine.add(investmentAccount);
@@ -347,7 +347,9 @@ public abstract class SecurityReport extends ComponentReport {
     }
 
     protected void outputReturn(String name) {
-        outputLine.add(returnsMetric.get(name).value);
+        MetricEntry<Double> entry = returnsMetric.get(name);
+        entry.value = (Double) entry.extractor.ComputeAggregatedFinancialResults();
+        outputLine.add(entry.value);
     }
 
     public String getName() {

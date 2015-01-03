@@ -41,11 +41,10 @@ public class ExtractorBase<R> {
 
     protected TransactionValues lastTransactionBeforeStartDate;
     protected TransactionValues lastTransactionBeforeEqualStartDate;
-    protected TransactionValues lastTransactionWithinEndDate;
-    private TransactionValues previousTransaction;
+    protected TransactionValues lastTransactionWithinDateRange;
 
-    protected long pXqScale;
-    protected long qDpScale;    // 1/pDqScale to avoid fraction => multiply, not divide
+    private final long pXqScale;
+    private final long qDpScale;    // 1/pDqScale to avoid fraction => multiply, not divide
 
     /*
      * <p>Constructor</p>
@@ -82,13 +81,11 @@ public class ExtractorBase<R> {
     /* <p>Processes the next transaction in sequence of transactions.</p>
      *
      * @param transaction Sequence of transactions in non-decreasing time order.
-     * @param transactionIndex Index of next transition to process in this sequence.
+     * @param transactionDateInt Date of transition.
      *
      * @return true if transaction is processed, and false if error occurs.
      */
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
-        int transactionDateInt = transaction.getDateInt();
-
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (transactionDateInt < startDateInt) {
             lastTransactionBeforeStartDate = transaction;
             lastTransactionBeforeEqualStartDate = transaction;
@@ -96,7 +93,7 @@ public class ExtractorBase<R> {
             if (transactionDateInt == startDateInt) {
                 lastTransactionBeforeEqualStartDate = transaction;
             }
-            lastTransactionWithinEndDate = transaction;
+            lastTransactionWithinDateRange = transaction;
         }
         return true;
     }
@@ -111,13 +108,24 @@ public class ExtractorBase<R> {
         throw new UnsupportedOperationException();
     }
 
-    /* <p>Combine the financial results from two extractors into this extractor.</p>
+    /* <p>Aggregate the financial datea from an extractor in this extractor. The financial results
+     * for the aggregated data is not computed until ComputeAggregatedFinancialResults is invoked. </p>
      *
-     * @param operand Another extractors whose metric is combine into this one. The argument is not modified.
+     * @param operand Another extractors whose metric is aggregated into this one. The argument is not modified.
      *
      * @return None.
      */
-    public R CombineFinancialResults(ExtractorBase<?> operand) {
+    public void AggregateFinancialResults(ExtractorBase<?> operand) {
+        throw new UnsupportedOperationException();
+    }
+
+    /* <p>Compute the financial results from previously aggregated extractors.</p>
+    *
+    * @param None.
+    *
+    * @return Result of aggregating results.
+    */
+    public R ComputeAggregatedFinancialResults() {
         throw new UnsupportedOperationException();
     }
 
@@ -135,10 +143,10 @@ public class ExtractorBase<R> {
     }
 
     protected long getEndPosition(SecurityAccountWrapper securityAccount) {
-        if (lastTransactionWithinEndDate != null) {
+        if (lastTransactionWithinDateRange != null) {
             return getSplitAdjustedPosition(securityAccount,
-                    lastTransactionWithinEndDate.getPosition(),
-                    lastTransactionWithinEndDate.getDateInt(),
+                    lastTransactionWithinDateRange.getPosition(),
+                    lastTransactionWithinDateRange.getDateInt(),
                     endDateInt);
         } else if (lastTransactionBeforeStartDate != null) {
             return getSplitAdjustedPosition(securityAccount,

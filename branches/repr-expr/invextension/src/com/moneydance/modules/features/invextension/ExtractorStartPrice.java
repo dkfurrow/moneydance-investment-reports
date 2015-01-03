@@ -37,7 +37,7 @@ public class ExtractorStartPrice extends ExtractorBase<Long> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public boolean NextTransaction(TransactionValues transaction, SecurityAccountWrapper securityAccount) {
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
         return true;
     }
 

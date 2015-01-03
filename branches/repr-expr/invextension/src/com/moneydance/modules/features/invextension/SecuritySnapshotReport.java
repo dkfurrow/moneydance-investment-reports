@@ -31,6 +31,7 @@ package com.moneydance.modules.features.invextension;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -62,6 +63,14 @@ public class SecuritySnapshotReport extends SecurityReport {
         int ytdFromDateInt = DateUtils.getStartYear(snapDateInt);
         int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -12));
         int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -36));
+
+        int allDateInt = snapDateInt;
+        if (securityAccount != null) {
+            ArrayList<TransactionValues> transSet = securityAccount.getTransactionValues();
+            if (!transSet.isEmpty()) {
+                allDateInt = transSet.get(0).getDateInt();
+            }
+        }
 
         // Extractors for metrics
         ExtractorStartPrice eStartPrice = new ExtractorStartPrice(securityAccount, fromDateInt, snapDateInt);
@@ -118,8 +127,8 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorTotalReturn aggregatedYTDReturn = new ExtractorTotalReturn(securityAccount, ytdFromDateInt, snapDateInt);
         ExtractorTotalReturn aggregatedYearReturn = new ExtractorTotalReturn(securityAccount, oneYearFromDateInt, snapDateInt);
         ExtractorTotalReturn aggregated3YearReturn = new ExtractorTotalReturn(securityAccount, threeYearFromDateInt, snapDateInt);
-        ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, snapDateInt);
-        ExtractorTotalReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, fromDateInt, snapDateInt);
+        ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, allDateInt, snapDateInt);
+        ExtractorTotalReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, allDateInt, snapDateInt);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));
