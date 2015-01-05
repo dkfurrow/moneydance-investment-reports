@@ -72,6 +72,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public TotalReportOutputPane(TotalReport totalReport) throws NoSuchFieldException, IllegalAccessException {
         super();
+        setVisible(false);
         this.totalReport = totalReport;
         this.model = totalReport.getReportTableModel();
         this.reportConfig = totalReport.getReportConfig();
@@ -165,6 +166,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 new ScrollableSelectFirstColumnCellAction());
         setAction(lockedTable, "selectLastColumn",
                 new LockedTableSelectLastColumnCellAction());
+        setVisible(true);
     }
 
     public static Integer maxInt(Integer... values) {
