@@ -27,6 +27,8 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import javafx.util.Pair;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,14 +40,14 @@ import java.util.*;
  * @since 1.0
  */
 public final class DateUtils {
-    static final long MillisPerDay = (24 * 60 * 60 * 1000);
+    private static final long MillisPerDay = (24 * 60 * 60 * 1000);
     private static final GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 31);
-    // private static Log log = LogFactory.getLog(MDBusinessDayUtil.class);
     private static final transient Map<Integer, List<Date>> computedDates = new HashMap<>();
 
     private DateUtils() {
-
     }
+
+    private static HashMap<Integer, Boolean> ibdMemo = new HashMap<>();
 
     /*
      * This method will calculate the next business day after the one input.
@@ -56,7 +58,10 @@ public final class DateUtils {
      * President's Day Memorial Day Independence Day Labor Day Columbus Day
      * Veterans Day Thanksgiving Day Christmas Day Good Friday
      */
-    public static boolean isBusinessDay(int dateIntToCheck) {
+    private static boolean isBusinessDay(int dateIntToCheck) {
+        Boolean result = ibdMemo.get(dateIntToCheck);
+        if (result != null) return result;
+
         Date dateToCheck = convertToDate(dateIntToCheck);
         // Setup the calendar to have the start date truncated
         Calendar baseCal = Calendar.getInstance();
@@ -78,12 +83,11 @@ public final class DateUtils {
 
         // Determine if the date is on a weekend.
         int dayOfWeek = baseCal.get(Calendar.DAY_OF_WEEK);
-        boolean onWeekend = dayOfWeek == Calendar.SATURDAY
-                || dayOfWeek == Calendar.SUNDAY;
+        boolean onWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
 
-        // If it's on a holiday, increment and test again
-        // If it's on a weekend, increment necessary amount and test again
-        return !(offlimitDates.contains(dateToCheck) || onWeekend);
+        result = !(offlimitDates.contains(dateToCheck) || onWeekend);
+        ibdMemo.put(dateIntToCheck, result);
+        return result;
     }
 
     /**
@@ -115,16 +119,18 @@ public final class DateUtils {
         }
     }
 
-    public static int getPrevBusinessDay(int startDateInt) {
-        // Increment the Date object by a Day and clear out hour/min/sec
-        // information
+    private static HashMap<Integer, Integer> gpbdMemo = new HashMap<>();
 
-        // int prevDayInt =
-        // convertToDateInt(DateUtils.truncate(addDays(startDate, -1),
-        // Calendar.DATE));
+    public static int getPrevBusinessDay(int startDateInt) {
+        Integer result = gpbdMemo.get(startDateInt);
+        if (result != null) {
+            return result;
+        }
+
         int prevDayInt = addDaysInt(startDateInt, -1);
         // If tomorrow is a valid business day, return it
         if (isBusinessDay(prevDayInt)) {
+            gpbdMemo.put(startDateInt, prevDayInt);
             return prevDayInt;
         } // Else we recursively call our function until we find one.
         else {
@@ -132,46 +138,77 @@ public final class DateUtils {
         }
     }
 
-    public static int getLatestBusinessDay(int startDateInt) {
-        // Increment the Date object by a Day and clear out hour/min/sec
-        // information
+    private static HashMap<Integer, Integer> glbdMemo = new HashMap<>();
 
-        // int prevDayInt =
-        // convertToDateInt(DateUtils.truncate(addDays(startDate, -1),
-        // Calendar.DATE));
-        int prevDayInt = addDaysInt(startDateInt, -1);
-        // If tomorrow is a valid business day, return it
+    public static int getLatestBusinessDay(int startDateInt) {
+        Integer result = glbdMemo.get(startDateInt);
+        if (result != null) {
+            return result;
+        }
+
+        // If today is a valid business day, return it
         if (isBusinessDay(startDateInt)) {
+            glbdMemo.put(startDateInt, startDateInt);
             return startDateInt;
         } // Else we recursively call our function until we find one.
         else {
+            int prevDayInt = addDaysInt(startDateInt, -1);
             return getLatestBusinessDay(prevDayInt);
         }
     }
 
+    private static HashMap<Integer, Integer> gsyMemo = new HashMap<>();
+
     public static int getStartYear(int startDateInt) {
+        Integer result = gsyMemo.get(startDateInt);
+        if (result != null) {
+            return result;
+        }
+
         Calendar tempCal = GregorianCalendar.getInstance();
         tempCal.setTime(convertToDate(startDateInt));
         int tempYear = tempCal.get(Calendar.YEAR) * 10000 + 101;
-        return getPrevBusinessDay(tempYear);
+        result = getPrevBusinessDay(tempYear);
+        gsyMemo.put(startDateInt, result);
+        return result;
     }
 
+    private static HashMap<Integer, Integer> gsmMemo = new HashMap<>();
+
     public static int getStartMonth(int startDateInt) {
+        Integer result = gsmMemo.get(startDateInt);
+        if (result != null) {
+            return result;
+        }
+
         Calendar tempCal = GregorianCalendar.getInstance();
         tempCal.setTime(convertToDate(startDateInt));
         int tempYear = tempCal.get(Calendar.YEAR) * 10000 + (tempCal.get(Calendar.MONTH) + 1) * 100 + 1;
-        return getPrevBusinessDay(tempYear);
+
+        result = getPrevBusinessDay(tempYear);
+        gsmMemo.put(startDateInt, result);
+        return result;
     }
+
+    private static HashMap<Integer, Integer> gsqMemo = new HashMap<>();
+    private static int[] quarterStarts = {1, 1, 1, 3, 3, 3, 6, 6, 6, 9, 9, 9};
 
     public static int getStartQuarter(int startDateInt) {
-        int[] quarterStarts = {1, 1, 1, 3, 3, 3, 6, 6, 6, 9, 9, 9};
+        Integer result = gsqMemo.get(startDateInt);
+        if (result != null) {
+            return result;
+        }
+
         Calendar tempCal = GregorianCalendar.getInstance();
         tempCal.setTime(convertToDate(startDateInt));
-        int tempYear = tempCal.get(Calendar.YEAR) * 10000 +
-                quarterStarts[tempCal.get(Calendar.MONTH)] * 100 + 1;
-        return getPrevBusinessDay(tempYear);
+        int tempYear = tempCal.get(Calendar.YEAR) * 10000 + quarterStarts[tempCal.get(Calendar.MONTH)] * 100 + 1;
+
+        result = getPrevBusinessDay(tempYear);
+        gsqMemo.put(startDateInt, result);
+        return result;
     }
 
+    // No need to memoize, as this method is only invoked once per year.
     /*
      * Based on a year, this will compute the actual dates of
      *
@@ -204,33 +241,27 @@ public final class DateUtils {
 
         // Now deal with floating holidays.
         // Martin Luther King Day
-        offlimitDates.add(calculateFloatingHoliday(3, Calendar.MONDAY, year,
-                Calendar.JANUARY));
+        offlimitDates.add(calculateFloatingHoliday(3, Calendar.MONDAY, year, Calendar.JANUARY));
 
         // Presidents Day
-        offlimitDates.add(calculateFloatingHoliday(3, Calendar.MONDAY, year,
-                Calendar.FEBRUARY));
+        offlimitDates.add(calculateFloatingHoliday(3, Calendar.MONDAY, year, Calendar.FEBRUARY));
 
         // Memorial Day
-        offlimitDates.add(calculateFloatingHoliday(0, Calendar.MONDAY, year,
-                Calendar.MAY));
+        offlimitDates.add(calculateFloatingHoliday(0, Calendar.MONDAY, year, Calendar.MAY));
 
         // Labor Day
-        offlimitDates.add(calculateFloatingHoliday(1, Calendar.MONDAY, year,
-                Calendar.SEPTEMBER));
+        offlimitDates.add(calculateFloatingHoliday(1, Calendar.MONDAY, year, Calendar.SEPTEMBER));
 
         // Columbus Day -- not NYSE Holiday
         // offlimitDates.add(calculateFloatingHoliday(2, Calendar.MONDAY, year,
         // Calendar.OCTOBER));
 
         // Thanksgiving Day and Thanksgiving Friday -- Friday not NYSE Holiday
-        Date thanksgiving = calculateFloatingHoliday(4, Calendar.THURSDAY,
-                year, Calendar.NOVEMBER);
+        Date thanksgiving = calculateFloatingHoliday(4, Calendar.THURSDAY, year, Calendar.NOVEMBER);
         offlimitDates.add(thanksgiving);
-        // offlimitDates.add(addDays(thanksgiving, 1));// --Friday not NYSE
-        // Holiday
+        // Friday after Thanksgiving is not NYSE Holiday
 
-        // add Good Friday
+        // Good Friday
         Date goodFriday = GoodFridayObserved(year);
         offlimitDates.add(goodFriday);
 
@@ -278,8 +309,7 @@ public final class DateUtils {
 
         // return new Date(nYear, nGoodFridayMonth, nGoodFridayDay); // old date
         // format
-        return new GregorianCalendar(nYear, nGoodFridayMonth, nGoodFridayDay)
-                .getTime();
+        return new GregorianCalendar(nYear, nGoodFridayMonth, nGoodFridayDay).getTime();
     }
 
     private static Date EasterSunday(int nYear) {
@@ -304,7 +334,7 @@ public final class DateUtils {
 	 * p=(h+l-7*m+114)%31 Easter Date=p+1 (date in Easter Month)
 	 *
 	 * Note: Integer truncation is already factored into the calculations.
-	 * Using higher percision variables will cause inaccurate calculations.
+	 * Using higher precision variables will cause inaccurate calculations.
 	 */
 
         int nA;
@@ -349,7 +379,7 @@ public final class DateUtils {
         // Date in Easter Month.
         nEasterDay = nP + 1;
 
-        // Uncorrect for our earlier correction.
+        // Un-correct our earlier correction.
         nYear -= 1900;
 
         // Populate the date object...
@@ -362,12 +392,12 @@ public final class DateUtils {
     /**
      * This method will take in the various parameters and return a Date object
      * that represents that value.
-     * <p/>
+     *
      * Ex. To get Martin Luther Kings BDay, which is the 3rd Monday of January,
-     * the method call woudl be:
-     * <p/>
+     * the method call would be:
+     *
      * calculateFloatingHoliday(3, Calendar.MONDAY, year, Calendar.JANUARY);
-     * <p/>
+     *
      * Reference material can be found at:
      * http://michaelthompson.org/technikos/holidays.php#MemorialDay
      *
@@ -423,10 +453,10 @@ public final class DateUtils {
     }
 
     /**
-     * Private method simply adds
+     * Add given number of days to a date.
      *
-     * @param dateToAdd   input date
-     * @param numberOfDay number of days to add
+     * @param dateToAdd  The date
+     * @param numberOfDay The number of days to add
      * @return new date
      */
     private static Date addDays(Date dateToAdd, int numberOfDay) {
@@ -439,24 +469,46 @@ public final class DateUtils {
         return tempCal.getTime();
     }
 
-    public static int addDaysInt(int dateIntToAdd, int numberOfDay) {
-        if (dateIntToAdd == 0) throw new IllegalArgumentException("Date can't be zero!");
-        Calendar tempCal = Calendar.getInstance();
+    private static HashMap<Pair<Integer, Integer>, Integer> adiMemo = new HashMap<>();
 
+    public static int addDaysInt(int dateIntToAdd, int numberOfDays) {
+        if (dateIntToAdd == 0) throw new IllegalArgumentException("Date can't be zero!");
+
+        Pair<Integer, Integer> p = new Pair<>(dateIntToAdd, numberOfDays);
+        Integer result = adiMemo.get(p);
+        if (result != null) {
+            return result;
+        }
+
+        Calendar tempCal = Calendar.getInstance();
         tempCal.setTime(convertToDate(dateIntToAdd));
-        tempCal.add(Calendar.DATE, numberOfDay);
-        return convertToDateInt(tempCal.getTime());
+        tempCal.add(Calendar.DATE, numberOfDays);
+
+        result = convertToDateInt(tempCal.getTime());
+        adiMemo.put(p, result);
+        return result;
     }
+
+    private static HashMap<Pair<Integer, Integer>, Integer> admMemo = new HashMap<>();
 
     public static int addMonthsInt(int dateIntToAdd, int numberOfMonths) {
         if (dateIntToAdd == 0) {
             throw new IllegalArgumentException("Date can't be zero!");
         }
-        Calendar tempCal = Calendar.getInstance();
 
+        Pair<Integer, Integer> p = new Pair<>(dateIntToAdd, numberOfMonths);
+        Integer result = admMemo.get(p);
+        if (result != null) {
+            return result;
+        }
+
+        Calendar tempCal = Calendar.getInstance();
         tempCal.setTime(convertToDate(dateIntToAdd));
         tempCal.add(Calendar.MONTH, numberOfMonths);
-        return convertToDateInt(tempCal.getTime());
+
+        result = convertToDateInt(tempCal.getTime());
+        admMemo.put(p, result);
+        return result;
     }
 
     /**
@@ -467,8 +519,7 @@ public final class DateUtils {
      */
     public static Date convertToDate(int dateInt) {
         @SuppressWarnings("deprecation")
-        Date nd = new Date(dateInt / 10000 - 1900, (dateInt / 100) % 100 - 1,
-                dateInt % 100);
+        Date nd = new Date(dateInt / 10000 - 1900, (dateInt / 100) % 100 - 1, dateInt % 100);
 
         return nd;
     }
@@ -481,28 +532,35 @@ public final class DateUtils {
      */
     public static int convertToDateInt(Date thisDate) {
         @SuppressWarnings("deprecation")
-        int nd = (thisDate.getYear() + 1900) * 10000
-                + (thisDate.getMonth() + 1) * 100 + thisDate.getDate();
+        int nd = (thisDate.getYear() + 1900) * 10000 + (thisDate.getMonth() + 1) * 100 + thisDate.getDate();
 
         return nd;
     }
 
     public static String convertToShort(int dateInt) {
         Date date = convertToDate(dateInt);
-        SimpleDateFormat sdf = new SimpleDateFormat(
-                DateRangePanel.DATE_PATTERN, Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(DateRangePanel.DATE_PATTERN, Locale.getDefault());
         return sdf.format(date);
     }
+
+    private static HashMap<Integer, Calendar> ctcMemo = new HashMap<>();
 
     /**
      * converts dateInt to Calendar
      *
-     * @param thisDateInt date int to convert
+     * @param dateInt date int to convert
      * @return calendar value
      */
-    public static Calendar convertToCal(int thisDateInt) {
+    private static Calendar convertToCal(int dateInt) {
+        Calendar result = ctcMemo.get(dateInt);
+        if (result != null) {
+            return result;
+        }
+
         Calendar gc = new GregorianCalendar();
-        gc.setTime(convertToDate(thisDateInt));
+        gc.setTime(convertToDate(dateInt));
+
+        ctcMemo.put(dateInt, gc);
         return gc;
     }
 
@@ -517,26 +575,27 @@ public final class DateUtils {
         Calendar di1 = convertToCal(dateInt1);
         Calendar di2 = convertToCal(dateInt2);
 
-        return Math.round(Math.abs(di1.getTimeInMillis() - di2.getTimeInMillis())
-                / (float) MillisPerDay);
+        return Math.round(Math.abs(di1.getTimeInMillis() - di2.getTimeInMillis()) / (float) MillisPerDay);
     }
+
+    private static HashMap<Integer, Long> gedvMemo = new HashMap<>();
 
     /**
      * converts dateInt to excel date
      *
-     * @param dateInt
-     * dateInt to be converted
-     * @return exceldate (days from 1/1/1900)
+     * @param dateInt dateInt to be converted
+     * @return excel date (days from 1/1/1900)
      */
-
-    /**
-     *
-     */
-
-
     public static long getExcelDateValue(int dateInt) {
+        Long result = gedvMemo.get(dateInt);
+        if (result != null) {
+            return result;
+        }
+
         int dateStartInt = convertToDateInt(dateStart.getTime());
         int daysBetwInt = getDaysBetween(dateStartInt, dateInt);
+
+        gedvMemo.put(dateInt, (long) daysBetwInt);
         return daysBetwInt;
     }
 
@@ -550,5 +609,4 @@ public final class DateUtils {
         int dateIntNow = convertToDateInt(now);
         return getPrevBusinessDay(dateIntNow);
     }
-
 }
