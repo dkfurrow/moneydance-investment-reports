@@ -187,6 +187,15 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     }
 
+    public String getFullName(){
+        if (securityAccount != null) {
+            return securityAccount.getParentAccount().getAccountName() + ":" +
+                    securityAccount.getAccountName().trim();
+        } else {
+            return this.name;
+        }
+    }
+
     public void setName(String name) {
         this.name = name;
     }

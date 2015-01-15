@@ -1,6 +1,6 @@
 /*
- * TestReportOutput.java
- * Copyright (c) 2014, Dale K. Furrow
+ * TestReportStability.java
+ * Copyright (c) 2015, Dale K. Furrow
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,51 +28,70 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.apps.md.controller.io.FileUtils;
+import com.moneydance.apps.md.model.RootAccount;
+
 import javax.swing.*;
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
 
 @SuppressWarnings("unused")
-public class TestReportOutput extends JFrame {
+public class TestReportStability extends JFrame {
 
     public static final DateRange testDateRange = new DateRange(20090601, 20100601, 20100601);
     public static final File testFile = new File("E:\\Temp\\testFile.csv");
     private static final long serialVersionUID = -2315625753772573103L;
     private static final int fromDateInt = 20090601;
     private static final int toDateInt = 20100601;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+    private static final DecimalFormat decFormat = new DecimalFormat("#.000");
+    private static final String startTime = "startTime";
+    private static final String tab = "\t";
     /**
      *
      */
     //
     //
     private static String testFileStr = "./resources/testMD02.moneydance/root.mdinternal";
+    public static final File mdTestFile = new File(testFileStr);
     private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
     private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
-    public static final File mdTestFile = new File(testFileStr);
+    private static LinkedHashMap<String, Date> recordTimes = new LinkedHashMap<>();
 
     public static void main(String[] args) throws Exception {
-
-        ReportControlFrame frame = new ReportControlFrame(mdTestFile);
-
-
+        System.out.println("Security" + tab + "TR All" + tab + "Ann Ret All");
+        for(int i = 0; i < 49; i++){
+            runReportFromFile();
+        }
     }
 
-    @SuppressWarnings("unused")
-    public static StringBuffer writeObjectToStringBuffer(Object[][] object) {
-        StringBuffer outBuffer = new StringBuffer();
-        for (Object[] objects : object) {
-            for (int j = 0; j < objects.length; j++) {
-                Object element = objects[j] == null ? "*NULL*" : objects[j];
-                if (j == objects.length - 1) {
-                    outBuffer.append(element.toString()).append("\r\n");
-                } else {
-                    outBuffer.append(element.toString()).append(",");
-                }
+    private static void runReportFromFile() throws Exception {
+        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
+        reportConfig.setDateRange(testDateRange);
+        TotalReport report = new TotalSnapshotReport(reportConfig);
+        report.calcReport(currentInfo);
+        Object[][] reportObject = report.getReportTable();
+        printTotalAndAnnualReturnAll(reportObject, "StockBrokerage1:Aeropostale");
+    }
+
+
+    public static void printTotalAndAnnualReturnAll(Object[][] inputObject, String acctName) {
+
+        StringBuffer sb = new StringBuffer();
+
+        for (Object[] objs : inputObject) {
+            SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) objs[1];
+            if (securityAccountWrapper.getFullName().equals(acctName)) {
+                System.out.println(securityAccountWrapper.getFullName() + tab + objs[18].toString()
+                        + tab + objs[19].toString());
             }
         }
-        return outBuffer;
-
     }
-
 
 }

@@ -28,23 +28,47 @@
 
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 /**
  * Created by larus on 11/27/14.
  */
 @SuppressWarnings("ALL")
 public class ExtractorTotalReturn extends ExtractorBase<Double> {
-    private long income;
-    private long expenses;
-    private long unnormalizedWeightedCF;
-    private long sumCF;
+
+    protected ArrayList<DateValuePair> nonZeroBuySellPairs;
+    protected LinkedList<ArrayList<DateValuePair>> aggregatedBuySellPairs;
+    protected ArrayList<DateValuePair> nonZeroIncExpPairs;
+    protected LinkedList<ArrayList<DateValuePair>> aggregatedIncExpPairs;
+
+
+    private long sumBuySell;
+    private long sumIncExp;
 
     protected long startPosition = 0;
     protected long startValue = 0;
     protected long endPosition = 0;
     protected long endValue = 0;
 
-    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt) {
+    private boolean forceEndDate = false;
+
+    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
+                                boolean forceEndDate) {
         super(secAccountWrapper, startDateInt, endDateInt);
+        this.forceEndDate = forceEndDate;
+        nonZeroBuySellPairs = new ArrayList<>();
+        aggregatedBuySellPairs = new LinkedList<>();
+        aggregatedBuySellPairs.add(nonZeroBuySellPairs);
+
+        nonZeroIncExpPairs = new ArrayList<>();
+        aggregatedIncExpPairs = new LinkedList<>();
+        aggregatedIncExpPairs.add(nonZeroIncExpPairs);
+
     }
 
     public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
@@ -52,13 +76,13 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
             return false;
         }
 
-        if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
-            income += transaction.getIncome();
-            expenses += transaction.getExpense();
-            int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
-            long cashFlow = transaction.getBuySellFlows();
-            unnormalizedWeightedCF += weightedDays * cashFlow;
-            sumCF += cashFlow;
+        if (startDateInt <= transactionDateInt && transactionDateInt <= endDateInt) {
+            long incExpFlows = transaction.getIncome() + transaction.getExpense();
+            long buySellFlows = transaction.getBuySellFlows();
+            if(incExpFlows != 0) nonZeroIncExpPairs.add(new DateValuePair(transactionDateInt, incExpFlows));
+            if(buySellFlows != 0) nonZeroBuySellPairs.add(new DateValuePair(transactionDateInt, buySellFlows));
+            sumIncExp += incExpFlows;
+            sumBuySell += buySellFlows;
         }
 
         return true;
@@ -87,10 +111,11 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         endPosition += operand.endPosition;
         endValue += operand.endValue;
 
-        income += operand.income;
-        expenses += operand.expenses;
-        unnormalizedWeightedCF += operand.unnormalizedWeightedCF;
-        sumCF += operand.sumCF;
+        sumIncExp += operand.sumIncExp;
+        sumBuySell += operand.sumBuySell;
+        aggregatedIncExpPairs.add(operand.nonZeroIncExpPairs);
+        aggregatedBuySellPairs.add(operand.nonZeroBuySellPairs);
+
     }
 
     public Double ComputeAggregatedFinancialResults() {
@@ -100,15 +125,68 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     // Compute Modified Dietz return
     private double computeMDReturn() {
         // Return is not defined over an interval in which the underlying security(s) are not held
-        if (startPosition != 0 && endPosition != 0) {
-            int intervalDays = DateUtils.getDaysBetween(startDateInt, endDateInt);
-            long weightedCF = Math.round(unnormalizedWeightedCF / (double) intervalDays);
-
+        // with the exception of life-to-date
+        if ((startPosition != 0 && endPosition != 0) || (forceEndDate && aggregatedBuySellPairs.size() > 0)) {
+            long weightedCF = getWeightedBuySellCashFlows();
             if ((startValue + weightedCF) != 0) {
-                return ((double) ((endValue + income + expenses) - startValue - sumCF)) / (startValue + weightedCF);
+                return ((double) ((endValue + sumIncExp) - startValue - sumBuySell)) /
+                        ((double) (startValue + weightedCF));
             }
         }
 
-        return 0.0; // Default
+        return Double.NaN; // Default
+    }
+
+    private long getWeightedBuySellCashFlows(){
+
+        ArrayList<DateValuePair> dateValuePairs = collapseAggregatedBuySellPairs();
+        if(dateValuePairs.size() == 0) return 0;
+        int endCalcPeriod = (forceEndDate && endPosition == 0) ?
+                dateValuePairs.get(dateValuePairs.size() -1).date : endDateInt;
+        long unnormalizedWeightedCF = 0;
+        int intervalDays = DateUtils.getDaysBetween(startDateInt, endCalcPeriod);
+        for (DateValuePair dateValuePair : dateValuePairs){
+            int weightedDays = DateUtils.getDaysBetween(dateValuePair.date, endCalcPeriod);
+            unnormalizedWeightedCF += weightedDays * dateValuePair.value;
+        }
+        return Math.round(unnormalizedWeightedCF / (double) intervalDays);
+    }
+
+    protected ArrayList<DateValuePair> collapseAggregatedBuySellPairs(){
+        ArrayList<DateValuePair> buySellPairs = new ArrayList<>();
+        for (ArrayList<DateValuePair> r : aggregatedBuySellPairs) {
+            buySellPairs.addAll(r);
+        }
+        Collections.sort(buySellPairs);
+        // Collapse returns on same date to single entry to speed computation
+        int numReturns = buySellPairs.size();
+        int i = 0;
+        Iterator<DateValuePair> iterator = buySellPairs.iterator();
+        if(iterator.hasNext()) iterator.next();
+        while(iterator.hasNext()){
+            DateValuePair dateValuePair = iterator.next();
+            if(dateValuePair.compareTo(buySellPairs.get(i)) == 0){
+                buySellPairs.get(i).value += dateValuePair.value;
+                iterator.remove();
+            } else {
+                i++;
+            }
+        }
+
+        return buySellPairs;
+    }
+
+    protected class DateValuePair implements Comparable<DateValuePair> {
+        public final int date;
+        public long value;
+
+        public DateValuePair(int d, long v) {
+            date = d;
+            value = v;
+        }
+
+        public int compareTo(@NotNull DateValuePair operand) {
+            return date - operand.date;
+        }
     }
 }
