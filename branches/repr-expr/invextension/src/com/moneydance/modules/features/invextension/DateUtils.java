@@ -27,7 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import javafx.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -40,6 +40,20 @@ import java.util.*;
  * @since 1.0
  */
 public final class DateUtils {
+    private static class intPair implements Comparable<intPair> {
+        public int v1;
+        public int v2;
+
+        public intPair(int a1, int a2) {
+            v1 = a1;
+            v2 = a2;
+        }
+
+        public int compareTo(@NotNull intPair operand) {
+            return this.v1 == operand.v1 ? this.v2 - operand.v2 : this.v1 - operand.v1;
+        }
+    }
+
     private static final long MillisPerDay = (24 * 60 * 60 * 1000);
     private static final GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 31);
     private static final transient Map<Integer, List<Date>> computedDates = new HashMap<>();
@@ -469,12 +483,12 @@ public final class DateUtils {
         return tempCal.getTime();
     }
 
-    private static HashMap<Pair<Integer, Integer>, Integer> adiMemo = new HashMap<>();
+    private static HashMap<intPair, Integer> adiMemo = new HashMap<>();
 
     public static int addDaysInt(int dateIntToAdd, int numberOfDays) {
         if (dateIntToAdd == 0) throw new IllegalArgumentException("Date can't be zero!");
 
-        Pair<Integer, Integer> p = new Pair<>(dateIntToAdd, numberOfDays);
+        intPair p = new intPair(dateIntToAdd, numberOfDays);
         Integer result = adiMemo.get(p);
         if (result != null) {
             return result;
@@ -489,14 +503,14 @@ public final class DateUtils {
         return result;
     }
 
-    private static HashMap<Pair<Integer, Integer>, Integer> admMemo = new HashMap<>();
+    private static HashMap<intPair, Integer> admMemo = new HashMap<>();
 
     public static int addMonthsInt(int dateIntToAdd, int numberOfMonths) {
         if (dateIntToAdd == 0) {
             throw new IllegalArgumentException("Date can't be zero!");
         }
 
-        Pair<Integer, Integer> p = new Pair<>(dateIntToAdd, numberOfMonths);
+        intPair p = new intPair(dateIntToAdd, numberOfMonths);
         Integer result = admMemo.get(p);
         if (result != null) {
             return result;
