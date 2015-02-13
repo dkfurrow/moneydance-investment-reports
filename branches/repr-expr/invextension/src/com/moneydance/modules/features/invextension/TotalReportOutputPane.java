@@ -414,7 +414,7 @@ public class TotalReportOutputPane extends JScrollPane {
         loc.x = loc.x + 75; // moved spawned window to right
         loc.y = loc.y + 75; // moved spawned window down
         frame.setLocation(loc);
-        frame.setVisible(true);
+        //frame.setVisible(true);
     }
 
     public void setSortedTableHeader() {

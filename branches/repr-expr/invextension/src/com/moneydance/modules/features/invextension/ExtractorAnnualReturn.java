@@ -28,25 +28,58 @@
 
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Created by larus on 11/27/14.
  */
 @SuppressWarnings("ALL")
 public class ExtractorAnnualReturn extends ExtractorTotalReturn {
+    private class dateValuePair implements Comparable<dateValuePair> {
+        public final int date;
+        public long value;
 
+        public dateValuePair(int d, long v) {
+            date = d;
+            value = v;
+        }
 
-
-    public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt, boolean lifeToDate) {
-        super(securityAccount, startDateInt, endDateInt, lifeToDate);
+        public int compareTo(@NotNull dateValuePair operand) {
+            return date - operand.date;
+        }
     }
 
-//    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
-//        return super.NextTransaction(transaction, transactionDateInt);
-//    }
+    private ArrayList<dateValuePair> nonZeroReturns;
+    private LinkedList<ArrayList<dateValuePair>> aggregatedReturns;
+    private int aggregatedReturnsSize;
+
+    public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
+        super(securityAccount, startDateInt, endDateInt);
+
+        nonZeroReturns = new ArrayList<>();
+        aggregatedReturns = new LinkedList<>();
+        aggregatedReturnsSize = 0;
+        aggregatedReturns.add(nonZeroReturns);
+    }
+
+    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.NextTransaction(transaction, transactionDateInt)) {
+            return false;
+        }
+
+        if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
+            long totalFlows = transaction.getTotalFlows();
+            if (totalFlows != 0) {
+                nonZeroReturns.add(new dateValuePair(transactionDateInt, totalFlows));
+            }
+        }
+
+        return true;
+    }
 
     public Double FinancialResults(SecurityAccountWrapper securityAccount) {
         double mdReturn = super.FinancialResults(securityAccount);
@@ -58,49 +91,39 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
     public void AggregateFinancialResults(ExtractorBase<?> op) {
         ExtractorAnnualReturn operand = (ExtractorAnnualReturn) op;
         super.AggregateFinancialResults(operand);
+
+        aggregatedReturns.add(operand.nonZeroReturns);
+        aggregatedReturnsSize += operand.nonZeroReturns.size();
     }
 
     public Double ComputeAggregatedFinancialResults() {
         double mdReturn = super.ComputeAggregatedFinancialResults();
 
-        return mdReturn == Double.NaN ? Double.NaN : computeFinancialResults(mdReturn);
-    }
-
-    protected ArrayList<DateValuePair> collapseAggregatedTotalFlows(){
-        ArrayList<DateValuePair> totalFlowPairs = new ArrayList<>();
-        for (ArrayList<DateValuePair> r : aggregatedBuySellPairs) {
-            totalFlowPairs.addAll(r);
-        }
-        // reverse sign for annual returns convention
-        for(DateValuePair dateValuePair : totalFlowPairs){
-            dateValuePair.value *= -1;
-        }
-        for (ArrayList<DateValuePair> r : aggregatedIncExpPairs) {
-            totalFlowPairs.addAll(r);
-        }
-        Collections.sort(totalFlowPairs);
-        // Collapse returns on same date to single entry to speed computation
-        int numReturns = totalFlowPairs.size();
-        int i = 0;
-        Iterator<DateValuePair> iterator = totalFlowPairs.iterator();
-        if(iterator.hasNext()) iterator.next();
-        while(iterator.hasNext()){
-            DateValuePair dateValuePair = iterator.next();
-            if(dateValuePair.compareTo(totalFlowPairs.get(i)) == 0){
-                totalFlowPairs.get(i).value += dateValuePair.value;
-                iterator.remove();
-            } else {
-                i++;
-            }
-        }
-
-        return totalFlowPairs;
+        return computeFinancialResults(mdReturn);
     }
 
     private Double computeFinancialResults(double mdReturn) {
-        ArrayList<DateValuePair> aggregatedTotalFlows = collapseAggregatedTotalFlows();
+        ArrayList<dateValuePair> allReturns = new ArrayList<>(aggregatedReturnsSize);
+        for (ArrayList<dateValuePair> r : aggregatedReturns) {
+            allReturns.addAll(r);
+        }
+        Collections.sort(allReturns);
+        // Collapse returns on same date to single entry to speed computation
+        int numReturns = allReturns.size();
+        int i = 0;
+        int j = 1;
+        for (; i < numReturns && j < numReturns; i++, j++) {
+            assert i < j;
+            for (; j < numReturns && allReturns.get(i) == allReturns.get(j); j++) {
+                allReturns.get(i).value += allReturns.get(j).value;
+            }
+            assert (j >= numReturns) || allReturns.get(i) != allReturns.get(j);
+            if (j < numReturns) {
+                allReturns.set(i + 1, allReturns.get(j));
+            }
+        }
 
-        int numPeriods = aggregatedTotalFlows.size();
+        int numPeriods = (numReturns == 0) ? 0 : i + 1;
         double[] returns = new double[numPeriods + 2];
         double[] excelDates = new double[numPeriods + 2];
         int next = 0;
@@ -111,8 +134,8 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
             next++;
         }
 
-        for (int i = 0; i < numPeriods; i++) {
-            DateValuePair dv = aggregatedTotalFlows.get(i);
+        for (i = 0; i < numPeriods; i++) {
+            dateValuePair dv = allReturns.get(i);
             excelDates[next] = DateUtils.getExcelDateValue(dv.date);
             returns[next] = (double) dv.value;
             next++;

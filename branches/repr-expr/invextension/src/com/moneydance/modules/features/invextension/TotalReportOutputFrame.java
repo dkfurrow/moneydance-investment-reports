@@ -138,9 +138,10 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     }
 
     public void showFrame() {
-        this.setVisible(true);
+        this.setVisible(false);
         this.totalReportOutputPane.sortRows();
         totalReportOutputPane.setFrozenColumns(reportConfig.getNumFrozenColumns()); //behavior doesn't work if placed before setVisible
+        this.setVisible(true);
     }
 
     public void setFrameInfo() {

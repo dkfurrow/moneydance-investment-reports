@@ -133,10 +133,10 @@ public class ExtractorBase<R> {
     // Internal methods.
     //
     protected long getStartPosition(SecurityAccountWrapper securityAccount) {
-        if (lastTransactionBeforeStartDate != null) {
+        if (lastTransactionBeforeEqualStartDate != null) {
             return getSplitAdjustedPosition(securityAccount,
-                    lastTransactionBeforeStartDate.getPosition(),
-                    lastTransactionBeforeStartDate.getDateInt(),
+                    lastTransactionBeforeEqualStartDate.getPosition(),
+                    lastTransactionBeforeEqualStartDate.getDateInt(),
                     startDateInt);
         }
         return 0;
