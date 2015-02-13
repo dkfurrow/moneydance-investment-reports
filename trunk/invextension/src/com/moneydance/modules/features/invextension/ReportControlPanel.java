@@ -939,6 +939,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             }
             //Now Run Reports...
             if (logLevel != Level.SEVERE && currentInfo != null) {
+                long startTime = System.currentTimeMillis();
                 try {
                     if (snapReportComboBox.getSelectedIndex() != 0) {
                         TotalReport report = new TotalSnapshotReport(reportConfig);
@@ -973,6 +974,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                     LogController.logException(e, "Error on running reports: ");
                     publish(showErrorMessage("Error--Could not run reports!"));
                 }
+
+                long endTime = System.currentTimeMillis();
+                System.out.println("Report generated in " + (endTime - startTime) + " milliseconds");
             } else {
                 publish(showErrorMessage("Error--Reports not run! "));
             }
