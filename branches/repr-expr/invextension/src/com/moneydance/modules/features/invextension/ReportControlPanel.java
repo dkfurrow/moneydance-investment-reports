@@ -456,6 +456,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         Prefs.REPORT_PREFS.putBoolean(Prefs.RUN_SECURITIES_PRICES,
                 secPricesCheckbox.isSelected());
         folderPanel.savePreferences();
+        reportConfig.saveReportConfig();
     }
 
     public void setDownloadPreferences(){

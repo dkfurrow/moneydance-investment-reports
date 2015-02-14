@@ -85,12 +85,13 @@ public class LogController {
         LogController.getInstance().getLogger().log(Level.SEVERE, msg, e);
     }
 
-    public static void stopLogging(){
-        Handler handler = LogController.getInstance().fileHandler;
-        handler.close();
-        LogController.getInstance().getLogger().removeHandler(handler);
-        LogController.getInstance().getLogger().setUseParentHandlers(false);
-
+    public static void stopLogging() {
+        Handler fileHandler = LogController.getInstance().fileHandler;
+        if (fileHandler != null) {
+            fileHandler.close();
+            LogController.getInstance().getLogger().removeHandler(fileHandler);
+            LogController.getInstance().getLogger().setUseParentHandlers(false);
+        }
     }
 
     class CustomXMLFormatter extends XMLFormatter{
