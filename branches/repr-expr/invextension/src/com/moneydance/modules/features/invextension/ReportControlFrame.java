@@ -87,6 +87,7 @@ public class ReportControlFrame
 
     private void populateReportFrame() {
         reportControlPanel.setOpaque(true);
+        this.setVisible(false);
         this.setContentPane(reportControlPanel);
         this.pack();
         // Change default behavior (hide a JFrame on close) to act like a Frame (actually close).

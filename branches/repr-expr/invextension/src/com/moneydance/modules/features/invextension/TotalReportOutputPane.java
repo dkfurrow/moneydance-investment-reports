@@ -197,7 +197,9 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public static String getDisplayValueFromObject(Object o) throws Exception {
         String outputName;
-        if (o instanceof InvestmentAccountWrapper) {
+        if (o instanceof Number) {
+            outputName = o.toString();
+        } else if (o instanceof InvestmentAccountWrapper) {
             outputName = ((InvestmentAccountWrapper) o).getName();
         } else if (o instanceof SecurityAccountWrapper) {
             outputName = ((SecurityAccountWrapper) o).getName();
@@ -207,8 +209,6 @@ public class TotalReportOutputPane extends JScrollPane {
             outputName = ((SecuritySubTypeWrapper) o).getName();
         } else if (o instanceof CurrencyWrapper) {
             outputName = ((CurrencyWrapper) o).getTicker();
-        } else if (o instanceof Number) {
-            outputName = o.toString();
         } else {
             throw new Exception("invalid attempt to get name from object");
         }
@@ -572,13 +572,19 @@ public class TotalReportOutputPane extends JScrollPane {
     public static class NumberTableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = -1219099935272135292L;
 
-        int minDecPlaces;
-        int maxDecPlaces;
+        private int minDecPlaces;
+        private int maxDecPlaces;
+
+        private DecimalFormat integerFormat = new DecimalFormat("#,###;(#,###)");
+        private DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
 
         public NumberTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
             this.minDecPlaces = minDecPlaces;
             this.maxDecPlaces = maxDecPlaces;
+
+            doubleFormat.setMinimumFractionDigits(minDecPlaces);
+            doubleFormat.setMaximumFractionDigits(maxDecPlaces);
         }
 
         @Override
@@ -588,46 +594,36 @@ public class TotalReportOutputPane extends JScrollPane {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
 
-            if (value instanceof Integer) {// set Integers to Right
-                DecimalFormat numberFormat = new DecimalFormat(
-                        "#,###;(#,###)");
+            if (value instanceof Integer) { // set Integers to Right
                 Integer i = (Integer) value;
+                String text = integerFormat.format(i);
+
                 JLabel renderedLabel2 = (JLabel) cell;
                 renderedLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-                String text = numberFormat.format(i);
                 renderedLabel2.setText(text);
-                renderedLabel2.setForeground(i < 0 ? Color.RED
-                        : Color.BLACK);
-            }
-            if (value instanceof Double) {// set Integers to Right
+                renderedLabel2.setForeground(i < 0 ? Color.RED : Color.BLACK);
+            } else if (value instanceof Double) {
                 Double d = (Double) value;
-                DecimalFormat numberFormat = new DecimalFormat(
-                        "#,##0;(#,##0)");
-                numberFormat.setMinimumFractionDigits(minDecPlaces);
-                numberFormat.setMaximumFractionDigits(maxDecPlaces);
-
-                JLabel renderedLabel = (JLabel) cell;
-                renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
-                        : SwingConstants.RIGHT);
                 String text;
-                if (d.equals(Double.NaN)) {
+                if (d.isNaN()) {
                     text = "";
                 } else if (d == 0.0) {
                     text = "-";
                 } else {
-                    text = numberFormat.format(d);
+                    text = doubleFormat.format(d);
                 }
+                
+                JLabel renderedLabel = (JLabel) cell;
+                renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
+                        : SwingConstants.RIGHT);
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED
-                        : Color.BLACK);
+                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
     }
 
     static class ObjectTableCellRenderer extends DefaultTableCellRenderer {
-
-
         private static final long serialVersionUID = -7152447480811826901L;
 
         public ObjectTableCellRenderer() {
@@ -644,7 +640,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 cell = super.getTableCellRendererComponent(table,
                         objectName, isSelected, hasFocus, row, column);
 
-                if (objectName != null) {// set Integers to Right
+                if (objectName != null) {
                     JLabel renderedLabel = (JLabel) cell;
                     renderedLabel.setHorizontalAlignment(SwingConstants.LEFT);
                     renderedLabel.setForeground(Color.BLACK);
@@ -664,13 +660,18 @@ public class TotalReportOutputPane extends JScrollPane {
 
     static class PercentTableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 8743892160294317814L;
-        int minDecPlaces;
-        int maxDecPlaces;
+        private int minDecPlaces;
+        private int maxDecPlaces;
+
+        private DecimalFormat pctFormat = new DecimalFormat("#.#%");
 
         public PercentTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
             this.minDecPlaces = minDecPlaces;
             this.maxDecPlaces = maxDecPlaces;
+
+            pctFormat.setMinimumFractionDigits(minDecPlaces);
+            pctFormat.setMaximumFractionDigits(maxDecPlaces);
         }
 
         @Override
@@ -678,17 +679,14 @@ public class TotalReportOutputPane extends JScrollPane {
                                                        boolean hasFocus, int row, int column) {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
-            if (value instanceof Double) {// set Integers to Right
-                DecimalFormat pctFormat = new DecimalFormat("#.#%");
-                pctFormat.setMinimumFractionDigits(minDecPlaces);
-                pctFormat.setMaximumFractionDigits(maxDecPlaces);
+            if (value instanceof Double) {
                 Double d = (Double) value;
+                String text = d.isNaN() ? "" : pctFormat.format(d);
+
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                String text = d.equals(Double.NaN) ? "" : pctFormat.format(d);
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED
-                        : Color.BLACK);
+                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
@@ -937,9 +935,15 @@ public class TotalReportOutputPane extends JScrollPane {
 
     class FormattedTable extends JTable {
 
-
         private static final long serialVersionUID = -3558604379360713628L;
         private LinkedList<Integer> viewHeader;
+
+        private TableCellRenderer double0Render = new NumberTableCellRenderer(0, 0);
+        private TableCellRenderer double2Render = new NumberTableCellRenderer(2, 2);
+        private TableCellRenderer double3Render = new NumberTableCellRenderer(3, 3);
+        private TableCellRenderer percent1Render = new PercentTableCellRenderer(1, 1);
+        private TableCellRenderer defaultRender = new ObjectTableCellRenderer();
+
 
         private FormattedTable(TableModel model, ColType[] colFormats,
                                LinkedList<Integer> viewHeader) {
@@ -949,20 +953,26 @@ public class TotalReportOutputPane extends JScrollPane {
             for (int i = 0; i < colFormats.length; i++) {
                 ColType colType = colFormats[i];
                 tableColumn = this.getColumnModel().getColumn(i);
-                if (colType == ColType.DOUBLE0) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(0,
-                            0));
-                } else if (colType == ColType.DOUBLE2) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(2,
-                            2));
-                } else if (colType == ColType.DOUBLE3) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(3,
-                            3));
-                } else if (colType == ColType.PERCENT1) {
-                    tableColumn.setCellRenderer(new PercentTableCellRenderer(1,
-                            1));
-                } else {
-                    tableColumn.setCellRenderer(new ObjectTableCellRenderer());
+                switch (colType) {
+                    case DOUBLE0:
+                        tableColumn.setCellRenderer(double0Render);
+                        break;
+
+                    case DOUBLE2:
+                        tableColumn.setCellRenderer(double2Render);
+                        break;
+
+                    case DOUBLE3:
+                        tableColumn.setCellRenderer(double3Render);
+                        break;
+
+                    case PERCENT1:
+                        tableColumn.setCellRenderer(percent1Render);
+                        break;
+
+                    default:
+                        tableColumn.setCellRenderer(defaultRender);
+                        break;
                 }
             }
             setColumnOrder(this, viewHeader);
@@ -978,15 +988,14 @@ public class TotalReportOutputPane extends JScrollPane {
         public TotalReport.ReportTableModel getReportTableModel() {
             return model;
         }
+
         public LinkedList<Integer> getViewHeader(){ return viewHeader;}
 
 
         @Override
-        public Component prepareRenderer(TableCellRenderer renderer, int row,
-                                         int column) {
+        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
             Component c = super.prepareRenderer(renderer, row, column);
-            // Color row based on a cell value--overrides TableCellRenders in
-            // Constructor
+            // Color row based on a cell value--overrides TableCellRenders in constructor
             try {
                 if (!isRowSelected(row)) {
                     c.setBackground(getBackground());
@@ -996,8 +1005,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                     String aggType1 = getDisplayValueFromObject(aggObj1);
                     String aggType2 = getDisplayValueFromObject(aggObj2);
-                    Double endPos = (Double) getModel().getValueAt(modelRow,
-                            closedPosColumn);
+                    Double endPos = (Double) getModel().getValueAt(modelRow, closedPosColumn);
                     String typeAggregateEnd = "-ALL";
                     String nameAggregateEnd = " ";
 
@@ -1042,15 +1050,11 @@ public class TotalReportOutputPane extends JScrollPane {
                             SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
                         }
 
-
                     }
                 }
-
             }
 
         }
-
-
     }
 
     private class RowSortGui extends JPanel {
@@ -1190,8 +1194,7 @@ public class TotalReportOutputPane extends JScrollPane {
             JLabel newLabel = new JLabel(value.toString());
             newLabel.setHorizontalTextPosition(JLabel.LEFT);
             newLabel.setForeground(Color.red);
-            newLabel.setBackground(setSortColor(sortPriority)); // doesn't
-            // appear
+            newLabel.setBackground(setSortColor(sortPriority)); // doesn't appear
 
             newLabel.setToolTipText("Sort Priority: " + sortPriority
                     + " Order: " + (descending ? "Descending" : "Ascending"));
