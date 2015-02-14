@@ -203,14 +203,14 @@ public class ReportConfigFieldChooserPanel extends JPanel {
             int[] indices = viewedFieldsList.getSelectedIndices();
             if (indices.length > 0) {
                 viewedFieldsListModel.removeRange(indices[0], indices[indices.length - 1]);
-                int sizeRemaining = viewedFieldsListModel.getSize();
+                int sizeRemaining = viewedFieldsListModel.size();
 
                 if (sizeRemaining == 0) { //Nobody's left, disable firing.
                     removeButton.setEnabled(false);
 
                 } else { //Select an index.
                     int index = indices[indices.length - 1];
-                    if (index == viewedFieldsListModel.getSize()) {
+                    if (index == viewedFieldsListModel.size()) {
                         //removed item in last position
                         index -= indices.length;
                     }
