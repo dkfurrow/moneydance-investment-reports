@@ -572,16 +572,11 @@ public class TotalReportOutputPane extends JScrollPane {
     public static class NumberTableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = -1219099935272135292L;
 
-        private int minDecPlaces;
-        private int maxDecPlaces;
-
         private DecimalFormat integerFormat = new DecimalFormat("#,###;(#,###)");
         private DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
 
         public NumberTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
-            this.minDecPlaces = minDecPlaces;
-            this.maxDecPlaces = maxDecPlaces;
 
             doubleFormat.setMinimumFractionDigits(minDecPlaces);
             doubleFormat.setMaximumFractionDigits(maxDecPlaces);
@@ -605,7 +600,7 @@ public class TotalReportOutputPane extends JScrollPane {
             } else if (value instanceof Double) {
                 Double d = (Double) value;
                 String text;
-                if (d.isNaN()) {
+                if (d.isNaN() || d.equals(SecurityReport.UndefinedReturn)) {
                     text = "";
                 } else if (d == 0.0) {
                     text = "-";
@@ -660,15 +655,11 @@ public class TotalReportOutputPane extends JScrollPane {
 
     static class PercentTableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 8743892160294317814L;
-        private int minDecPlaces;
-        private int maxDecPlaces;
 
         private DecimalFormat pctFormat = new DecimalFormat("#.#%");
 
         public PercentTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
-            this.minDecPlaces = minDecPlaces;
-            this.maxDecPlaces = maxDecPlaces;
 
             pctFormat.setMinimumFractionDigits(minDecPlaces);
             pctFormat.setMaximumFractionDigits(maxDecPlaces);
@@ -681,7 +672,7 @@ public class TotalReportOutputPane extends JScrollPane {
                     value, isSelected, hasFocus, row, column);
             if (value instanceof Double) {
                 Double d = (Double) value;
-                String text = d.isNaN() ? "" : pctFormat.format(d);
+                String text = d.isNaN() || d.equals(SecurityReport.UndefinedReturn) ? "" : pctFormat.format(d);
 
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(SwingConstants.RIGHT);

@@ -33,6 +33,8 @@ package com.moneydance.modules.features.invextension;
  */
 @SuppressWarnings("ALL")
 public class ExtractorTotalReturn extends ExtractorBase<Double> {
+    private boolean zeroInitialPositionOK;
+    
     private long income;
     private long expenses;
     private long unnormalizedWeightedCF;
@@ -43,8 +45,10 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     protected long endPosition = 0;
     protected long endValue = 0;
 
-    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt) {
+    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
+                                boolean zeroInitialPositionAllowed) {
         super(secAccountWrapper, startDateInt, endDateInt);
+        zeroInitialPositionOK = zeroInitialPositionAllowed;
     }
 
     public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
@@ -100,7 +104,7 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     // Compute Modified Dietz return
     private double computeMDReturn() {
         // Return is not defined over an interval in which the underlying security(s) are not held
-        if (startPosition != 0 && endPosition != 0) {
+        if ((startPosition != 0 || zeroInitialPositionOK) && endPosition != 0) {
             int intervalDays = DateUtils.getDaysBetween(startDateInt, endDateInt);
             long weightedCF = Math.round(unnormalizedWeightedCF / (double) intervalDays);
 
@@ -109,6 +113,6 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
             }
         }
 
-        return 0.0; // Default
+        return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
     }
 }

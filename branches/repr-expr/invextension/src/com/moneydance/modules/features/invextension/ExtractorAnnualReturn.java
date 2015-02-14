@@ -58,7 +58,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
     private int aggregatedReturnsSize;
 
     public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
-        super(securityAccount, startDateInt, endDateInt);
+        super(securityAccount, startDateInt, endDateInt, true);
 
         nonZeroReturns = new ArrayList<>();
         aggregatedReturns = new LinkedList<>();
@@ -150,10 +150,14 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
         if (next != 0) {
             double totYrs = (excelDates[next - 1] - excelDates[0]) / 365;
             if (totYrs != 0) {
-                // Need to supply guess to return algorithm, so use modified dietz
-                // return divided by number of years (have to add 1 because of returns
-                // algorithm). Must be greater than zero, so we'll start with 10%, unless MD is greater.
-                double guess = Math.max((1 + mdReturn / totYrs), 0.01);
+                double guess = 0.10;
+                // Need to supply guess to return algorithm, so use modified dietz return divided by number of years.
+                // (Must add 1 because of returns algorithm).
+                // Return must be greater than zero, so we'll start with 10%, unless MD is greater.
+                // Also use 10% if MD return is undefined.
+                if (mdReturn != SecurityReport.UndefinedReturn) {
+                    guess = Math.max((1 + mdReturn / totYrs), 0.01);
+                }
 
                 XIRRData thisData = new XIRRData(next, guess, returns, excelDates);
                 double xirr = XIRR.xirr(thisData);
@@ -161,6 +165,6 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
             }
         }
 
-        return 0.0; // Default
+        return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
     }
 }

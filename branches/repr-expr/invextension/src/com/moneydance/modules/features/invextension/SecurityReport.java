@@ -72,8 +72,8 @@ public abstract class SecurityReport extends ComponentReport {
     protected final TreeMap<String, MetricEntry<Number>> simpleMetric;             // Simple calculations that do not depend on
     // other calculations or return multiple values
     protected final TreeMap<String, MetricEntry<List<Number>>> multipleMetrics;    // Metrics that return multiple values
-    protected final TreeMap<String, MetricEntry<Double>> returnsMetric;            // Metrics that perform return calculations (uses
-    // simple metrics)
+    protected final TreeMap<String, MetricEntry<Double>> returnsMetric;            // Metrics that perform return calculations
+    // (uses simple metrics)
 
     public static final String MMDividends = "_Dividends";
     public static final String MMGains = "_Gains";
@@ -112,6 +112,9 @@ public abstract class SecurityReport extends ComponentReport {
     public static final String SMTotalGain = "TotalGain";
     public static final String SMUnrealizedGain = "UnrealizedGain";
     public static final String SMYieldOnBasis = "YieldOnBasis";
+
+    // Sentinel value indicating that return calculation cannot be performed over a given interval.
+    public static final Double UndefinedReturn = Double.MAX_VALUE;
 
     /**
      * Generic constructor populates all members based on securityAccount

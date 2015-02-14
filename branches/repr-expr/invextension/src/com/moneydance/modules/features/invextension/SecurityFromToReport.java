@@ -102,7 +102,7 @@ public class SecurityFromToReport extends SecurityReport {
         multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations.
-        ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, toDateInt);
+        ExtractorTotalReturn aggregatedAllReturn = new ExtractorTotalReturn(securityAccount, fromDateInt, toDateInt, true);
         ExtractorAnnualReturn aggregatedAnnualReturn = new ExtractorAnnualReturn(securityAccount, fromDateInt, toDateInt);
 
         returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
