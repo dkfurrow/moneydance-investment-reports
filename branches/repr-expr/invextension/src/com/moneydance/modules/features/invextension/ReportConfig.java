@@ -276,10 +276,8 @@ public class ReportConfig {
 
 
     @SuppressWarnings("unchecked")
-    public static LinkedList<String> getModelHeader(
-            Class<? extends TotalReport> totalReportSubClass)
-            throws SecurityException, NoSuchFieldException,
-            IllegalArgumentException, IllegalAccessException {
+    public static LinkedList<String> getModelHeader(Class<? extends TotalReport> totalReportSubClass)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field modelHeader = totalReportSubClass.getDeclaredField("MODEL_HEADER");
         return (LinkedList<String>) modelHeader.get(LinkedList.class);
     }
@@ -295,7 +293,11 @@ public class ReportConfig {
         String[] viewHeaderStr = prefString.split(",");
         Integer[] viewHeaderInt = new Integer[viewHeaderStr.length];
         for (int i = 0; i < viewHeaderStr.length; i++) {
-            viewHeaderInt[i] = Integer.parseInt(viewHeaderStr[i]);
+            try {
+                viewHeaderInt[i] = Integer.parseInt(viewHeaderStr[i]);
+            } catch (NumberFormatException e) {
+                return new LinkedList<>();  // Empty list
+            }
         }
         return new LinkedList<>(Arrays.asList(viewHeaderInt));
     }

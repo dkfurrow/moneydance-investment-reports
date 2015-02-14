@@ -100,7 +100,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
     ReportOptionsPanel reportOptionsPanel = new ReportOptionsPanel();
     private DateRangePanel dateRangePanel;
-    private ReportConfigFieldChooserPanel fieldChooserPanel;
+    private reportConfigFieldChooserPanel fieldChooserPanel;
     private ReportConfigAccountChooserPanel accountChooserPanel;
     private FolderPanel folderPanel = new FolderPanel();
     private ReportConfig reportConfig;
@@ -196,7 +196,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         JPanel buttonPanel = new JPanel();
 
         JPanel mainReportPanel = new JPanel();
-        fieldChooserPanel = new ReportConfigFieldChooserPanel(this);
+        fieldChooserPanel = new reportConfigFieldChooserPanel(this);
         accountChooserPanel = new ReportConfigAccountChooserPanel(this);
 
 

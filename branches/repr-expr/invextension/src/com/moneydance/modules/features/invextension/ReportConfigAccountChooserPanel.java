@@ -289,20 +289,16 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     private class addAccountsListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int[] indices = availableAccountsList.getSelectedIndices();
-            addAccountRange(indices);
+
+            for (int i = indices.length - 1; 0 <= i; i--) {
+                moveFromAvailableToIncluded(indices[i]);
+            }
+
+            if (reportControlPanel != null) {
+                updateReportConfig();
+            }
         }
     }
-
-    private void addAccountRange(int[] indices) {
-        for (int i = indices.length - 1; 0 <= i; i--) {
-            moveFromAvailableToIncluded(indices[i]);
-        }
-
-        if (reportControlPanel != null) {
-            updateReportConfig();
-        }
-    }
-
 
     private class resetListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
