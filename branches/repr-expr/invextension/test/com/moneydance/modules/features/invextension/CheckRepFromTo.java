@@ -52,7 +52,7 @@ public class CheckRepFromTo {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
         TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
         fromToReport.calcReport(currentInfo);
         ArrayList<ComponentReport> componentReports = fromToReport.getReports();

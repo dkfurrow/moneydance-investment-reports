@@ -206,7 +206,7 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
         TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
         fromToReport.calcReport(currentInfo);
         Object[][] ftObj = fromToReport.getReportTable();
@@ -239,7 +239,7 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
         TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
         snapshotReport.calcReport(currentInfo);
         Object[][] snapObj = snapshotReport.getReportTable();
@@ -270,7 +270,7 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
         TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
         snapshotReport.calcReport(currentInfo);
         Object[][] snapValues = snapshotReport.getReportTable();
@@ -293,7 +293,7 @@ public class ReportProdTest {
             reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                     true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                     ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
-                    ReportConfig.getDefaultExcludedAccounts(), dateRange);
+                    ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
             TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
             fromToReport.calcReport(currentInfo);
             Object[][] ftValues = fromToReport.getReportTable();

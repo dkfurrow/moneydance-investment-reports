@@ -66,7 +66,7 @@ public class TestReportOutput2 {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(),  dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
         report = new TotalSnapshotReport(reportConfig);
         report.calcReport(currentInfo);
 

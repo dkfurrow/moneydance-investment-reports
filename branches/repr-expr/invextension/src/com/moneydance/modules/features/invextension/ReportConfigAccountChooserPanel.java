@@ -44,7 +44,7 @@ import java.util.LinkedHashSet;
 import java.util.TreeSet;
 
 /**
- * Field chooser panel to control the order and identity of fields to be inclouded
+ * Field chooser panel to control the order and identity of fields to be included
  * in a given report
  */
 public class ReportConfigAccountChooserPanel extends JPanel {
@@ -54,26 +54,20 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     private ReportControlPanel reportControlPanel;
 
     //JLists
-    private DefaultListModel<Account> availableAccountsListModel = new DefaultListModel<>();
-    private JList<Account> availableAccountsList = new JList<>(availableAccountsListModel);
-    private JScrollPane availableAccountPane = new JScrollPane(availableAccountsList);
-    private DefaultListModel<Account> includedAccountsListModel = new DefaultListModel<>();
-    private JList<Account> includedAccountsList = new JList<>(includedAccountsListModel);
-    private JScrollPane includedAccountsPane = new JScrollPane(includedAccountsList);
-    private JCheckBox removeHideOnHomepageAccountsBox = new JCheckBox("<HTML>Remove accounts with<br>" +
+    private final DefaultListModel<Account> availableAccountsListModel = new DefaultListModel<>();
+    private final JList<Account> availableAccountsList = new JList<>(availableAccountsListModel);
+    private final JScrollPane availableAccountPane = new JScrollPane(availableAccountsList);
+    private final DefaultListModel<Account> includedAccountsListModel = new DefaultListModel<>();
+    private final JList<Account> includedAccountsList = new JList<>(includedAccountsListModel);
+    private final JScrollPane includedAccountsPane = new JScrollPane(includedAccountsList);
+    private final JCheckBox removeHideOnHomepageAccountsBox = new JCheckBox("<HTML>Remove accounts with<br>" +
             "'Hide on Home Page' set</HTML>", false);
 
-    //buttons
-    private JButton removeButton = new JButton("<<-Remove Accounts");
-    private JButton addButton = new JButton("Add Accounts->>");
-    private JButton resetButton = new JButton("Reset");
-
-
-    public ReportConfigAccountChooserPanel() throws NoSuchFieldException, IllegalAccessException {
+    private ReportConfigAccountChooserPanel() {
         initComponents();
     }
 
-    public ReportConfigAccountChooserPanel(ReportControlPanel reportControlPanel) throws NoSuchFieldException, IllegalAccessException {
+    public ReportConfigAccountChooserPanel(ReportControlPanel reportControlPanel) {
         this.reportControlPanel = reportControlPanel;
         initComponents();
 
@@ -92,13 +86,18 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         ReportControlPanel.TestFrame frame = new ReportControlPanel.TestFrame(testPanel);
     }
 
-    private void initComponents() throws IllegalAccessException {
+    private void initComponents() {
+        //buttons
+        JButton removeButton = new JButton("<<-Remove Accounts");
+        JButton addButton = new JButton("Add Accounts->>");
+        JButton resetButton = new JButton("Reset");
+
         //subPanels
         JPanel availableAccountsPanel = new JPanel();
         JPanel accountControlPanel = new JPanel();
         JPanel accountsIncludedPanel = new JPanel();
 
-        String[] titles = {"Available Accounts", "Add/Remove", "Accounts in Report"};
+        String[] titles = {"Available Accounts", "Actions", "Accounts in Report"};
         JPanel[] panels = {availableAccountsPanel, accountControlPanel, accountsIncludedPanel};
         for (int i = 0; i < panels.length; i++) {
             TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
@@ -141,7 +140,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         resetButton.addActionListener(new resetListener());
         removeHideOnHomepageAccountsBox.addActionListener(new removeHideOnHomePageAccountListener());
 
-        // renderers
+        // renders
         availableAccountsList.setCellRenderer(new AccountCellRenderer());
         includedAccountsList.setCellRenderer(new AccountCellRenderer());
 
@@ -236,7 +235,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         model.addElement(acct); // At end
     }
 
-    public void updateReportConfig() {
+    private void updateReportConfig() {
         HashSet<Integer> excludedAccountNums = new HashSet<>();
         HashSet<Account> excludedAccounts = getExcludedAccountSet();
 
@@ -247,7 +246,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         reportControlPanel.getReportConfig().setExcludedAccountNums(excludedAccountNums);
     }
 
-    public LinkedHashSet<Account> getExcludedAccountSet() {
+    private LinkedHashSet<Account> getExcludedAccountSet() {
         LinkedHashSet<Account> includedAccountSet = new LinkedHashSet<>();
 
         for (int i = 0; i < includedAccountsListModel.size(); i++) {

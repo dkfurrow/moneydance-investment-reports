@@ -59,6 +59,7 @@ public class Prefs {
     static final String CLOSED_POS_HIDDEN = "CLOSED_POS_HIDDEN";
     static final String VIEWHEADER = "VIEWHEADER";
     static final String EXCLUDEDACCOUNTNUMS = "EXCLUDEDACCOUNTNUMS";
+    static final String INVESTMENTEXPENSENUMS = "INVESTMENTEXPENSENUMS";
     static final String DATERANGE = "DATERANGE";
     static final String ISSTANDARD = "ISSTANDARD";
     static final String FRAMEINFO = "FRAMEINFO";

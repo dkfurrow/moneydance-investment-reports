@@ -41,6 +41,7 @@ import java.util.Vector;
 public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
     private SecurityAccount securityAccount;
     private CurrencyWrapper currencyWrapper;
+    private ReportConfig reportConfig;
     private Tradeable tradeable;
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
@@ -51,9 +52,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     private DIV_FREQUENCY divFrequency = DIV_FREQUENCY.UNKNOWN;
 
     public SecurityAccountWrapper(@NotNull SecurityAccount secAcct,
-                                  @NotNull InvestmentAccountWrapper invAcct) throws Exception {
+                                  @NotNull InvestmentAccountWrapper invAcct,
+                                  ReportConfig reportConfig) throws Exception {
         this.securityAccount = secAcct;
         this.invAcctWrapper = invAcct;
+        this.reportConfig = reportConfig;
         this.transValuesList = new ArrayList<>();
         this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct.getCurrencyType()
                 .getID());
@@ -114,7 +117,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         Collections.sort(assocTrans, BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
-                    thisAccount, this, transValuesSet, this.getBulkSecInfo());
+                    thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig.getInvestmentExpenseNums());
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
             transValuesSet.add(transValuesToAdd);
             if (thisAccount instanceof SecurityAccount)

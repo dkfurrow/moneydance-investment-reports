@@ -48,19 +48,19 @@ public class ReportConfigFieldChooserPanel extends JPanel {
     private LinkedList<String> orderedHeadersFromModel;
 
     //JLists
-    private DefaultListModel<String> modelHeaderListModel = new DefaultListModel<>();
-    private JList<String> modelHeaderList = new JList<>(modelHeaderListModel);
-    private JScrollPane modelHeaderPane = new JScrollPane(modelHeaderList);
-    private DefaultListModel<String> viewedFieldsListModel = new DefaultListModel<>();
-    private JList<String> viewedFieldsList = new JList<>(viewedFieldsListModel);
-    private JScrollPane viewedFieldsPane = new JScrollPane(viewedFieldsList);
+    private final DefaultListModel<String> modelHeaderListModel = new DefaultListModel<>();
+    private final JList<String> modelHeaderList = new JList<>(modelHeaderListModel);
+    private final JScrollPane modelHeaderPane = new JScrollPane(modelHeaderList);
+    private final DefaultListModel<String> viewedFieldsListModel = new DefaultListModel<>();
+    private final JList<String> viewedFieldsList = new JList<>(viewedFieldsListModel);
+    private final JScrollPane viewedFieldsPane = new JScrollPane(viewedFieldsList);
 
     //buttons
-    private JButton addButton = new JButton("Add Fields->>");
-    private JButton removeButton = new JButton("<<-Remove Fields");
-    private JButton moveUpButton = new JButton("Move Fields Up \u2191");
-    private JButton moveDownButton = new JButton("Move Fields Down \u2193");
-    private JButton resetButton = new JButton("Reset");
+    private final JButton addButton = new JButton("Add Fields->>");
+    private final JButton removeButton = new JButton("<<-Remove Fields");
+    private final JButton moveUpButton = new JButton("Move Fields Up \u2191");
+    private final JButton moveDownButton = new JButton("Move Fields Down \u2193");
+    private final JButton resetButton = new JButton("Reset");
 
     private ReportConfigFieldChooserPanel(ReportConfig reportConfig) throws NoSuchFieldException,
             IllegalAccessException {
@@ -88,7 +88,7 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         JPanel fieldControlPanel = new JPanel();
         JPanel viewedFieldsPanel = new JPanel();
 
-        String[] titles = {"Available Fields", "Add/Remove/Up/Down", "Viewed Fields"};
+        String[] titles = {"Available Fields", "Actions", "Viewed Fields"};
         JPanel[] panels = {availableFieldsPanel, fieldControlPanel, viewedFieldsPanel};
         for (int i = 0; i < panels.length; i++) {
             TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
@@ -160,8 +160,7 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         }
     }
 
-    public void populateFieldChooser(ReportConfig reportConfig) throws NoSuchFieldException,
-            IllegalAccessException {
+    public void populateFieldChooser(ReportConfig reportConfig) {
         modelHeaderListModel.removeAllElements();
         viewedFieldsListModel.removeAllElements();
 
@@ -173,7 +172,7 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         viewedFieldsPane.setPreferredSize(dimension);
     }
 
-    public void updateReportConfig() {
+    private void updateReportConfig() {
         LinkedList<Integer> thisViewHeader = new LinkedList<>();
         try {
             for (int i = 0; i < viewedFieldsListModel.size(); i++) {

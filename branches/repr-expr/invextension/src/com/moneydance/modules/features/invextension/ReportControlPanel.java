@@ -102,6 +102,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private DateRangePanel dateRangePanel;
     private ReportConfigFieldChooserPanel fieldChooserPanel;
     private ReportConfigAccountChooserPanel accountChooserPanel;
+    private ReportConfigInvestExpenseChooserPanel investmentExpenseChooserPanel;
     private FolderPanel folderPanel = new FolderPanel();
     private ReportConfig reportConfig;
 
@@ -198,12 +199,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         JPanel mainReportPanel = new JPanel();
         fieldChooserPanel = new ReportConfigFieldChooserPanel(this);
         accountChooserPanel = new ReportConfigAccountChooserPanel(this);
-
+        investmentExpenseChooserPanel = new ReportConfigInvestExpenseChooserPanel(this);
 
         JTabbedPane reportTabbedPane = new JTabbedPane();
-        reportTabbedPane.addTab("Main Report Options", null, mainReportPanel, "Choose main options");
-        reportTabbedPane.addTab("Field Chooser", null, fieldChooserPanel, "Choose Display Fields");
-        reportTabbedPane.addTab("Account Chooser", null, accountChooserPanel, "Choose Accounts to Run");
+        reportTabbedPane.addTab("Report Options", null, mainReportPanel, "Main Options");
+        reportTabbedPane.addTab("Report Fields", null, fieldChooserPanel, "Choose Fields to Display");
+        reportTabbedPane.addTab("Accounts", null, accountChooserPanel, "Choose Accounts to Run");
+        reportTabbedPane.addTab("Investment Expenses", null, investmentExpenseChooserPanel, "Identify Investment Expenses");
 
 
         // Set all panel borders the same
@@ -317,6 +319,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         setReportConfigInGUI();
         if(root != null) {
             accountChooserPanel.populateBothAccountLists(reportConfig);
+            investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
             folderPanel.setOutputDirectory();
         }
 
@@ -471,7 +474,10 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         reportOptionsPanel.setReportConfigInOptionsPanel();
         dateRangePanel.populateDateRangePanel(reportConfig.getDateRange());
         fieldChooserPanel.populateFieldChooser(reportConfig);
-        if(root != null) accountChooserPanel.populateBothAccountLists(reportConfig);
+        if (root != null) {
+            accountChooserPanel.populateBothAccountLists(reportConfig);
+            investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
+        }
     }
 
     public String showErrorMessage(String message) {
@@ -709,6 +715,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 root = FileUtils.readAccountsFromFile(mdFile, null);
                 folderPanel.setOutputDirectory();
                 accountChooserPanel.populateBothAccountLists(reportConfig);
+                investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
                 publish(mdFile.getParentFile().getName() + " Loaded! Choose Report to run.");
             } catch (Exception e) {
                 publish("Error! " + mdFile.getParentFile().getName() + " not loaded!");

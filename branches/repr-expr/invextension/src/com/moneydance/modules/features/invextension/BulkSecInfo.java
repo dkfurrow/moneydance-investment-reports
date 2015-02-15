@@ -424,8 +424,7 @@ public class BulkSecInfo {
         for (Account selectedSubAccount : selectedSubAccounts) {
             InvestmentAccount invAcct = (InvestmentAccount) selectedSubAccount;
             //Load investment account into Wrapper Class
-            InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(
-                    invAcct, this);
+            InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(invAcct, this, reportConfig);
             invAcctWrappers.add(invAcctWrapper);
         } // end Investment Accounts Loop
         return invAcctWrappers;
