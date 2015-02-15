@@ -34,18 +34,19 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.prefs.BackingStoreException;
 
 /**
- * Field chooser panel to control the order and identity of fields to be inclouded
+ * Field chooser panel to control the order and identity of fields to be included
  * in a given report
  */
 public class ReportConfigFieldChooserPanel extends JPanel {
 
     private static final long serialVersionUID = -8990699863699414946L;
     private ReportControlPanel reportControlPanel;
+    private LinkedList<String> orderedHeadersFromModel;
+
     //JLists
     private DefaultListModel<String> modelHeaderListModel = new DefaultListModel<>();
     private JList<String> modelHeaderList = new JList<>(modelHeaderListModel);
@@ -61,19 +62,13 @@ public class ReportConfigFieldChooserPanel extends JPanel {
     private JButton moveDownButton = new JButton("Move Fields Down \u2193");
     private JButton resetButton = new JButton("Reset");
 
-    //listeners
-
-
-    public ReportConfigFieldChooserPanel() throws NoSuchFieldException, IllegalAccessException {
-        initComponents(null);
-    }
-
-    public ReportConfigFieldChooserPanel(ReportConfig reportConfig) throws NoSuchFieldException,
+    private ReportConfigFieldChooserPanel(ReportConfig reportConfig) throws NoSuchFieldException,
             IllegalAccessException {
         initComponents(reportConfig);
     }
 
-    public ReportConfigFieldChooserPanel(ReportControlPanel reportControlPanel) throws NoSuchFieldException, IllegalAccessException {
+    public ReportConfigFieldChooserPanel(ReportControlPanel reportControlPanel) throws NoSuchFieldException,
+            IllegalAccessException {
         this.reportControlPanel = reportControlPanel;
         initComponents(reportControlPanel.getReportConfig());
 
@@ -103,13 +98,16 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         }
         //available fields
         if (reportConfig != null) {
-            populateModelHeaderList(reportConfig);
-            populateViewedFieldsList(reportConfig);
+            orderedHeadersFromModel = ReportConfig.getModelHeader(reportConfig.getReportClass());
+            populateFieldChooser(reportConfig);
         }
 
         //model header
+        modelHeaderPane.setPreferredSize(new Dimension(260, 500));
         availableFieldsPanel.add(modelHeaderPane);
+        viewedFieldsPane.setPreferredSize(new Dimension(260, 500));
         viewedFieldsPanel.add(viewedFieldsPane);
+
         //button panel
 //        fieldControlPanel.add(Box.createHorizontalStrut(3));
         fieldControlPanel.setLayout(new GridLayout(5, 1));
@@ -142,29 +140,23 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         moveUpButton.addActionListener(new MoveUpListener());
         moveDownButton.addActionListener(new MoveDownListener());
         resetButton.addActionListener(new ResetListener());
-
-
-
-
     }
 
-    private void populateModelHeaderList(ReportConfig reportConfig) throws NoSuchFieldException,
-            IllegalAccessException {
-        LinkedList<String> classModelHeader = ReportConfig.getModelHeader(reportConfig.getReportClass());
-        for (int i = 0; i < classModelHeader.size(); i++) {
-            modelHeaderListModel.add(i, classModelHeader.get(i));
+    private void populateModelHeaderList(ReportConfig reportConfig) {
+        for (int i = 0; i < orderedHeadersFromModel.size(); i++) {
+            String header = orderedHeadersFromModel.get(i);
+            if (!reportConfig.getViewHeader().contains(i)) {
+                modelHeaderListModel.addElement(header);
+            }
         }
     }
 
-    private void populateViewedFieldsList(ReportConfig reportConfig) throws NoSuchFieldException,
-            IllegalAccessException {
-        LinkedList<String> classModelHeader = ReportConfig.getModelHeader(reportConfig.getReportClass());
-        LinkedList<Integer> reportViewHeader = reportConfig.getViewHeader();
-
-        for (int i = 0; i < reportViewHeader.size(); i++) {
-            int index = reportViewHeader.get(i);
-            String field = classModelHeader.get(index);
-            viewedFieldsListModel.add(i, field);
+    private void populateViewedFieldsList(ReportConfig reportConfig) {
+        for (int i = 0; i < orderedHeadersFromModel.size(); i++) {
+            String header = orderedHeadersFromModel.get(i);
+            if (reportConfig.getViewHeader().contains(i)) {
+                viewedFieldsListModel.addElement(header);
+            }
         }
     }
 
@@ -172,9 +164,10 @@ public class ReportConfigFieldChooserPanel extends JPanel {
             IllegalAccessException {
         modelHeaderListModel.removeAllElements();
         viewedFieldsListModel.removeAllElements();
+
         populateModelHeaderList(reportConfig);
         populateViewedFieldsList(reportConfig);
-        //sizing
+
         Dimension dimension = reportControlPanel.getRelatedDimension(modelHeaderPane);
         modelHeaderPane.setPreferredSize(dimension);
         viewedFieldsPane.setPreferredSize(dimension);
@@ -182,65 +175,71 @@ public class ReportConfigFieldChooserPanel extends JPanel {
 
     public void updateReportConfig() {
         LinkedList<Integer> thisViewHeader = new LinkedList<>();
-        for (int i = 0; i < viewedFieldsListModel.size(); i++) {
-            int thisIndex = modelHeaderListModel.indexOf(viewedFieldsListModel.get(i));
-            thisViewHeader.add(thisIndex);
-        }
-        reportControlPanel.getReportConfig().setViewHeader(thisViewHeader);
-    }
-
-    public LinkedHashSet<String> getCurrentFieldsSet() {
-        LinkedHashSet<String> currentFieldsSet = new LinkedHashSet<>();
-        for (int i = 0; i < viewedFieldsListModel.size(); i++) {
-            currentFieldsSet.add(viewedFieldsListModel.get(i));
-        }
-        return currentFieldsSet;
-    }
-
-    class RemoveFieldsListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-
-            int[] indices = viewedFieldsList.getSelectedIndices();
-            if (indices.length > 0) {
-                viewedFieldsListModel.removeRange(indices[0], indices[indices.length - 1]);
-                int sizeRemaining = viewedFieldsListModel.size();
-
-                if (sizeRemaining == 0) { //Nobody's left, disable firing.
-                    removeButton.setEnabled(false);
-
-                } else { //Select an index.
-                    int index = indices[indices.length - 1];
-                    if (index == viewedFieldsListModel.size()) {
-                        //removed item in last position
-                        index -= indices.length;
-                    }
-                    viewedFieldsList.setSelectedIndex(index);
-                    viewedFieldsList.ensureIndexIsVisible(index);
-                }
+        try {
+            for (int i = 0; i < viewedFieldsListModel.size(); i++) {
+                int fieldIndex = orderedHeadersFromModel.indexOf(viewedFieldsListModel.get(i));
+                thisViewHeader.add(fieldIndex);
             }
-            if(ReportConfigFieldChooserPanel.this.reportControlPanel != null) updateReportConfig();
+            reportControlPanel.getReportConfig().setViewHeader(thisViewHeader);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    class AddFieldsListener implements ActionListener {
+    private void moveToViewedBottom(int fromPosition) {
+        String header = modelHeaderListModel.remove(fromPosition);
+        viewedFieldsListModel.addElement(header);   // At end
+    }
+
+    private void moveToViewOrdered(int fromPosition) {
+        String header = modelHeaderListModel.remove(fromPosition);
+        int toPosition = orderedHeadersFromModel.indexOf(header);
+        viewedFieldsListModel.add(toPosition, header);
+    }
+
+    private void moveFromViewed(int fromPosition) {
+        String header = viewedFieldsListModel.remove(fromPosition);
+        insertInAlphabeticalOrder(modelHeaderListModel, header);
+    }
+
+    private void insertInAlphabeticalOrder(DefaultListModel<String> model, String header) {
+        for (int i = 0; i < model.size(); i++) {
+            if (header.compareTo(model.get(i)) < 0) {
+                model.insertElementAt(header, i);
+                return;
+            }
+        }
+        model.addElement(header); // At end
+    }
+
+    private class RemoveFieldsListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            int[] indices = viewedFieldsList.getSelectedIndices();
+            for (int i = indices.length - 1; 0 <= i; i--) {
+                moveFromViewed(indices[i]);
+            }
+
+            int sizeRemaining = viewedFieldsListModel.size();
+            if (sizeRemaining == 0) { //Nobody's left, disable firing.
+                removeButton.setEnabled(false);
+            }
+
+            if (reportControlPanel != null) updateReportConfig();
+        }
+    }
+
+    private class AddFieldsListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int[] indices = modelHeaderList.getSelectedIndices();
-            int modelHeaderSize = modelHeaderListModel.size();
-
-            if (indices.length > 0) {
-                LinkedHashSet<String> currentFieldsSet = getCurrentFieldsSet();
-                for (int index : indices) {
-                    String tmp = modelHeaderListModel.get(index);
-                    if (currentFieldsSet.size() < modelHeaderSize && currentFieldsSet.add(tmp)) {
-                        viewedFieldsListModel.addElement(tmp);
-                    }
-                }
+            for (int i = indices.length - 1; 0 <= i; i--) {
+                moveToViewedBottom(indices[i]);
             }
-            if(ReportConfigFieldChooserPanel.this.reportControlPanel != null) updateReportConfig();
+
+            if (reportControlPanel != null) updateReportConfig();
         }
     }
 
-    class MoveUpListener implements ActionListener {
+    private class MoveUpListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
             int[] indices = viewedFieldsList.getSelectedIndices();
@@ -254,11 +253,12 @@ public class ReportConfigFieldChooserPanel extends JPanel {
                 }
                 viewedFieldsList.setSelectedIndices(newIndices);
             }
-            if(ReportConfigFieldChooserPanel.this.reportControlPanel != null) updateReportConfig();
+
+            if (reportControlPanel != null) updateReportConfig();
         }
     }
 
-    class MoveDownListener implements ActionListener {
+    private class MoveDownListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
             int[] indices = viewedFieldsList.getSelectedIndices();
@@ -272,21 +272,20 @@ public class ReportConfigFieldChooserPanel extends JPanel {
                 }
                 viewedFieldsList.setSelectedIndices(newIndices);
             }
-            if(ReportConfigFieldChooserPanel.this.reportControlPanel != null) updateReportConfig();
+
+            if (reportControlPanel != null) updateReportConfig();
         }
     }
 
-    class ResetListener implements ActionListener {
+    private class ResetListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            viewedFieldsListModel.removeAllElements();
-            for (int i = 0; i < modelHeaderListModel.size(); i++) {
-                String field = modelHeaderListModel.get(i);
-                viewedFieldsListModel.addElement(field);
+            for (int i = modelHeaderListModel.size() - 1; 0 <= i; i--) {
+                moveToViewOrdered(i);
             }
-            if(ReportConfigFieldChooserPanel.this.reportControlPanel != null) updateReportConfig();
+
+            if (reportControlPanel != null) updateReportConfig();
         }
     }
-
 
 }
 
