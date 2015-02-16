@@ -71,7 +71,9 @@ public class BulkSecInfoTest {
      */
     public static BulkSecInfo getBaseSecurityInfoAvgCost() throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-        return new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
+        reportConfig.setAllExpenseAccountsToInvestment(root);
+        return new BulkSecInfo(root, reportConfig);
     }
 
     /**
@@ -83,6 +85,7 @@ public class BulkSecInfoTest {
     public static BulkSecInfo getBaseSecurityInfoLotMatch() throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
+        reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setUseAverageCostBasis(false);
         return new BulkSecInfo(root, reportConfig);
     }

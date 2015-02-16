@@ -936,9 +936,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 case MISCEXP: // misc income and expense
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
-                            if (isInvestmentExpense(thisSplit)) {
-                                this.splitExpense = amountLong;
-                            }
+                            this.splitExpense = amountLong;
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
                             this.splitIncome = amountLong;

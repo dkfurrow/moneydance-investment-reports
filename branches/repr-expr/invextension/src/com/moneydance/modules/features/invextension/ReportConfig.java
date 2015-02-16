@@ -29,15 +29,15 @@
 package com.moneydance.modules.features.invextension;
 
 
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.RootAccount;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -282,7 +282,7 @@ public class ReportConfig {
         return new HashSet<>();
     }
 
-    public static HashSet<Integer> getInvestmentExpenseAccounts() {
+    public static HashSet<Integer> getDefaultInvestmentExpenseAccounts() {
         return new HashSet<>();
     }
 
@@ -618,6 +618,18 @@ public class ReportConfig {
         thisReportPrefs.put(Prefs.DATERANGE, dateRange.toString());
         thisReportPrefs.putBoolean(Prefs.ISSTANDARD, isDefaultConfig);
         thisReportPrefs.put(Prefs.FRAMEINFO, frameInfo.writeFrameInfoForPrefs());
+    }
+
+    public void setAllExpenseAccountsToInvestment(RootAccount root) {
+        if (root != null) {
+            TreeSet<Account> expenseAccounts = BulkSecInfo.getSelectedSubAccounts(root,
+                    Account.ACCOUNT_TYPE_EXPENSE);
+            HashSet<Integer> acctNums = new HashSet<>();
+            for (Account acct : expenseAccounts) {
+                acctNums.add(acct.getAccountNum());
+            }
+            this.investmentExpenseNums = acctNums;
+        }
     }
 
     /**

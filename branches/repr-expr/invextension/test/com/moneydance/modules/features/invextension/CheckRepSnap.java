@@ -52,7 +52,7 @@ public class CheckRepSnap {
         ReportConfig reportConfig = new ReportConfig(TotalSnapshotReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getInvestmentExpenseAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
         TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
         snapshotReport.calcReport(BulkSecInfoTest.getBaseSecurityInfoAvgCost());
         ArrayList<ComponentReport> componentReports = snapshotReport
