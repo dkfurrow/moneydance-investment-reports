@@ -198,7 +198,7 @@ public class TotalReportOutputPane extends JScrollPane {
     public static String getDisplayValueFromObject(Object o) throws Exception {
         String outputName;
         if (o instanceof Number) {
-            outputName = o.equals(Double.MAX_VALUE) ? "" :o.toString();
+            outputName = o.equals(SecurityReport.UndefinedReturn) ? "" : o.toString();
         } else if (o instanceof InvestmentAccountWrapper) {
             outputName = ((InvestmentAccountWrapper) o).getName();
         } else if (o instanceof SecurityAccountWrapper) {
