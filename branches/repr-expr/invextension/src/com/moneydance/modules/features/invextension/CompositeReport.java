@@ -279,11 +279,11 @@ public class CompositeReport
         }
 
         //generate dummy aggregator objects
-        InvestmentAccountWrapper investmentAccountWrapper = new InvestmentAccountWrapper("Null");
-        SecurityAccountWrapper securityAccountWrapper = new SecurityAccountWrapper("Null");
-        SecurityTypeWrapper securityTypeWrapper = new SecurityTypeWrapper("Null");
-        SecuritySubTypeWrapper securitySubTypeWrapper = new SecuritySubTypeWrapper("Null");
-        CurrencyWrapper currencyWrapper = new CurrencyWrapper("Null");
+        InvestmentAccountWrapper investmentAccountWrapper = new InvestmentAccountWrapper("");
+        SecurityAccountWrapper securityAccountWrapper = new SecurityAccountWrapper("");
+        SecurityTypeWrapper securityTypeWrapper = new SecurityTypeWrapper("");
+        SecuritySubTypeWrapper securitySubTypeWrapper = new SecuritySubTypeWrapper("");
+        CurrencyWrapper currencyWrapper = new CurrencyWrapper("");
 
         Aggregator controllerFirstAggregator = aggregationController.getFirstAggregator();
         //sets name for first aggregator
