@@ -93,15 +93,16 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private JButton saveCustomReportsButton = new javax.swing.JButton("Save Custom Report");
     private JButton removeCustomReportButton = new JButton("Remove Custom Report");
     private JButton showHelpFileButton = new JButton("Help");
-    JButton removeAllCustomReportsButton = new JButton("Remove All Custom Reports and Reset");
+    private JButton removeAllCustomReportsButton = new JButton("Remove All Custom Reports and Reset");
 
 
     private JTextArea reportStatusText = new javax.swing.JTextArea();
     private JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
-    ReportOptionsPanel reportOptionsPanel = new ReportOptionsPanel();
+    private ReportOptionsPanel reportOptionsPanel = new ReportOptionsPanel();
     private DateRangePanel dateRangePanel;
     private ReportConfigFieldChooserPanel fieldChooserPanel;
     private ReportConfigAccountChooserPanel accountChooserPanel;
+    private ReportConfigInvestIncomeChooserPanel investmentIncomeChooserPanel;
     private ReportConfigInvestExpenseChooserPanel investmentExpenseChooserPanel;
     private FolderPanel folderPanel = new FolderPanel();
     private ReportConfig reportConfig;
@@ -131,7 +132,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         return new StringBuffer(sw.toString());
     }
 
-    public static File getOutputFile(String fileName) {
+    private static File getOutputFile(String fileName) {
         return new File(outputDirectory, fileName);
     }
 
@@ -147,7 +148,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
 
-    public static void setPanelTitle(JPanel panel, String title){
+    private static void setPanelTitle(JPanel panel, String title) {
         TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
         Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         titledBorder.setTitleColor(new Color(100, 100, 100));
@@ -199,12 +200,14 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         JPanel mainReportPanel = new JPanel();
         fieldChooserPanel = new ReportConfigFieldChooserPanel(this);
         accountChooserPanel = new ReportConfigAccountChooserPanel(this);
+        investmentIncomeChooserPanel = new ReportConfigInvestIncomeChooserPanel(this);
         investmentExpenseChooserPanel = new ReportConfigInvestExpenseChooserPanel(this);
 
         JTabbedPane reportTabbedPane = new JTabbedPane();
         reportTabbedPane.addTab("Report Options", null, mainReportPanel, "Main Options");
         reportTabbedPane.addTab("Report Fields", null, fieldChooserPanel, "Choose Fields to Display");
         reportTabbedPane.addTab("Accounts", null, accountChooserPanel, "Choose Accounts to Run");
+        reportTabbedPane.addTab("Investment Income", null, investmentIncomeChooserPanel, "Identify Investment Income");
         reportTabbedPane.addTab("Investment Expenses", null, investmentExpenseChooserPanel, "Identify Investment Expenses");
 
 
@@ -319,6 +322,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         setReportConfigInGUI();
         if(root != null) {
             accountChooserPanel.populateBothAccountLists(reportConfig);
+            investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
             investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
             folderPanel.setOutputDirectory();
         }
@@ -476,6 +480,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         fieldChooserPanel.populateFieldChooser(reportConfig);
         if (root != null) {
             accountChooserPanel.populateBothAccountLists(reportConfig);
+            investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
             investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
         }
     }
@@ -715,6 +720,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 root = FileUtils.readAccountsFromFile(mdFile, null);
                 folderPanel.setOutputDirectory();
                 accountChooserPanel.populateBothAccountLists(reportConfig);
+                investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
                 investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
                 publish(mdFile.getParentFile().getName() + " Loaded! Choose Report to run.");
             } catch (Exception e) {
@@ -825,7 +831,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         // GUI Fields
         public JComboBox<String> costBasisOptionsComboBox = new JComboBox<>(costBasisOptionStrings);
 
-        public AggregationController aggregationController;
         public JCheckBox aggregateSingleCheckBox = new JCheckBox("Show Aggregates for Single " +
                 "Security", false);
         public JLabel numFrozenColumnsLabel = new JLabel("Number of Frozen Display Columns");
@@ -914,12 +919,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             aggregateSingleCheckBox.setSelected(reportConfig.isOutputSingle());
             numFrozenColumnsComboBox.setSelectedItem(reportConfig.getNumFrozenColumns());
             hideClosedPosCheckBox.setSelected(reportConfig.isClosedPosHidden());
-        }
-
-
-
-        public AggregationController getAggregationController() {
-            return aggregationController;
         }
     }
 

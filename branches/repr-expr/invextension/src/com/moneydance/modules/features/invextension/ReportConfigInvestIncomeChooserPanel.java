@@ -34,15 +34,15 @@ import com.moneydance.apps.md.model.RootAccount;
 import java.util.*;
 
 /**
- * Field chooser panel to identify which expenses are investment expenses.
+ * Field chooser panel to identify which income is investment income.
  */
-public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPanelBase<Account> {
+public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPanelBase<Account> {
 
-    public ReportConfigInvestExpenseChooserPanel(ReportControlPanel reportControlPanel) {
-        super(reportControlPanel, "<<-Remove Expense", "Add Expense->>", "Reset", "Expenses", "Actions", "Investment Expenses");
+    public ReportConfigInvestIncomeChooserPanel(ReportControlPanel reportControlPanel) {
+        super(reportControlPanel, "<<-Remove Income", "Add Income->>", "Reset", "Income", "Actions", "Investment Income");
     }
 
-    public void populateBothExpenseLists(ReportConfig reportConfig) {
+    public void populateBothIncomeLists(ReportConfig reportConfig) {
         populateBothLists(reportConfig);
     }
 
@@ -50,12 +50,12 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
     void populateLeftList(ReportConfig reportConfig) {
         RootAccount root = reportControlPanel.getRoot();
         if (root != null) {
-            TreeSet<Account> expenseAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_EXPENSE);
-            ArrayList<Account> sortedExpenseAccounts = new ArrayList<>();
-            sortedExpenseAccounts.addAll(expenseAccounts);
-            Collections.sort(sortedExpenseAccounts, new compareAccountNames());
+            TreeSet<Account> incomeAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INCOME);
+            ArrayList<Account> sortedIncomeAccounts = new ArrayList<>();
+            sortedIncomeAccounts.addAll(incomeAccounts);
+            Collections.sort(sortedIncomeAccounts, new compareAccountNames());
 
-            for (Account acct : sortedExpenseAccounts) {
+            for (Account acct : sortedIncomeAccounts) {
                 leftListModel.addElement(acct);
             }
         }
@@ -76,17 +76,17 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
 
     @Override
     void populateRightList(ReportConfig reportConfig) {
-        HashSet<Integer> investmentExpenses = reportConfig.getInvestmentExpenseNums(); // Account numbers
+        HashSet<Integer> investmentIncome = reportConfig.getInvestmentIncomeNums(); // Account numbers
 
-        for (int expenseAccountNumber : investmentExpenses) {
-            int index = findPossibleExpenseByAccountNum(expenseAccountNumber);
+        for (int incomeAccountNumber : investmentIncome) {
+            int index = findPossibleIncomeByAccountNum(incomeAccountNumber);
             if (index != -1) {
                 moveFromLeftToRight(index);
             }
         }
     }
 
-    private int findPossibleExpenseByAccountNum(int accountNum) {
+    private int findPossibleIncomeByAccountNum(int accountNum) {
         for (int i = 0; i < leftListModel.size(); i++) {
             Account acct = leftListModel.get(i);
             if (acct.getAccountNum() == accountNum) {
@@ -98,14 +98,14 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
 
     @Override
     void updateReportConfig() {
-        HashSet<Integer> investmentExpenseNums = new HashSet<>();
+        HashSet<Integer> investmentIncomeNums = new HashSet<>();
 
         for (int i = 0; i < rightListModel.size(); i++) {
             Account acct = rightListModel.get(i);
-            investmentExpenseNums.add(acct.getAccountNum());
+            investmentIncomeNums.add(acct.getAccountNum());
         }
 
-        reportControlPanel.getReportConfig().setInvestmentExpenseNums(investmentExpenseNums);
+        reportControlPanel.getReportConfig().setInvestmentIncomeNums(investmentIncomeNums);
     }
 }
 

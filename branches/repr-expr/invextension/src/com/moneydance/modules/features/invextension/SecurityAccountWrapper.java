@@ -117,7 +117,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         Collections.sort(assocTrans, BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
-                    thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig.getInvestmentExpenseNums());
+                    thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig);
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
             transValuesSet.add(transValuesToAdd);
             if (thisAccount instanceof SecurityAccount)
@@ -350,7 +350,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
      */
     class DividendFrequencyAnalyzer {
         public static final int MINIMUM_EX_DIV_DAYS = 21;
-        public static final int DIV_FREQENCY_INCREMENT = 60; // approx. two-month period
+        public static final int DIV_FREQUENCY_INCREMENT = 60; // approx. two-month period
         boolean dividendDetermined;
         int lastDividendDateInt;
 
@@ -377,12 +377,12 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                             } else {//dividend frequency is annual unless we observe more frequent distributions
                                 if (daysBetweenDivs <= MINIMUM_EX_DIV_DAYS) return; //ignore--probable correction of
                                 // previous transaction
-                                if (daysBetweenDivs > MINIMUM_EX_DIV_DAYS && daysBetweenDivs < DIV_FREQENCY_INCREMENT) {
+                                if (daysBetweenDivs > MINIMUM_EX_DIV_DAYS && daysBetweenDivs < DIV_FREQUENCY_INCREMENT) {
                                     setDivFrequency(DIV_FREQUENCY.MONTHLY);
-                                } else if (daysBetweenDivs >= DIV_FREQENCY_INCREMENT && daysBetweenDivs < DIV_FREQENCY_INCREMENT * 2) {
+                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT && daysBetweenDivs < DIV_FREQUENCY_INCREMENT * 2) {
                                     setDivFrequency(DIV_FREQUENCY.QUARTERLY);
-                                } else if (daysBetweenDivs >= DIV_FREQENCY_INCREMENT * 2 && daysBetweenDivs <
-                                        DIV_FREQENCY_INCREMENT * 4) {
+                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT * 2 && daysBetweenDivs <
+                                        DIV_FREQUENCY_INCREMENT * 4) {
                                     setDivFrequency(DIV_FREQUENCY.BIANNUAL);
                                 } else {
                                     // else dividend frequency still assumed to be annual

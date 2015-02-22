@@ -60,6 +60,7 @@ public class Prefs {
     static final String VIEWHEADER = "VIEWHEADER";
     static final String EXCLUDEDACCOUNTNUMS = "EXCLUDEDACCOUNTNUMS";
     static final String INVESTMENTEXPENSENUMS = "INVESTMENTEXPENSENUMS";
+    static final String INVESTMENTINCOMENUMS = "INVESTMENTINCOMENUMS";
     static final String DATERANGE = "DATERANGE";
     static final String ISSTANDARD = "ISSTANDARD";
     static final String FRAMEINFO = "FRAMEINFO";

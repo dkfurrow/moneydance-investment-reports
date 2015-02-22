@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.logging.Level;
 
 /**
@@ -44,10 +43,10 @@ import java.util.logging.Level;
  * @since 1.0
  */
 public class TransactionValues implements Comparable<TransactionValues> {
-    private HashSet<Integer> investmentExpenseAccountNums;
+    private ReportConfig reportConfig;
     
     // cumulative total gain after completion of transaction
-    public long cumTotalGain;
+    private long cumTotalGain;
     private ParentTxn parentTxn; // parentTxn account
     // reference account (to determine correct sign for transfers)
     private Account referenceAccount;
@@ -128,7 +127,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public TransactionValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
             throws Exception {
-        this.investmentExpenseAccountNums = null;   // Not used
+        this.reportConfig = null;   // Not used
         
         // copy base values from Security Transaction
         String memo = "Inserted for Initial Balance: "
@@ -178,10 +177,10 @@ public class TransactionValues implements Comparable<TransactionValues> {
     public TransactionValues(ParentTxn thisParentTxn, Account referenceAccount,
                              SecurityAccountWrapper securityAccountWrapper,
                              ArrayList<TransactionValues> prevTransLines, BulkSecInfo currentInfo,
-                             HashSet<Integer> investmentExpenseAccountNums) throws Exception {
-        this.investmentExpenseAccountNums = investmentExpenseAccountNums;
+                             ReportConfig reportConfig) throws Exception {
+        this.reportConfig = reportConfig;
 
-        //intitalize values
+        //initialize values
         this.parentTxn = thisParentTxn;
         this.referenceAccount = referenceAccount;
         this.securityAccountWrapper = securityAccountWrapper;
@@ -339,7 +338,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public TransactionValues(TransactionValues transactionValues, TransactionValues prevTransValues,
                              InvestmentAccountWrapper invAcctWrapper) throws Exception {
-        this.investmentExpenseAccountNums = null;    // not used
+        this.reportConfig = null;    // not used
 
         // copy base values from Security Transaction
         this.parentTxn = transactionValues.parentTxn;
@@ -428,7 +427,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
             case DIVIDEND_REINVEST:
                 // All cash quantities stay zero (combined transactions have no
                 // net effect on cash
-                this.buy = this.buy;
                 break;
 
         }
@@ -811,7 +809,12 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             this.splitCommission = amountLong;
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            this.splitIncome = amountLong;
+                            if (isInvestmentIncome(thisSplit)) {
+                                this.splitIncome = amountLong;
+                            } else {
+                                this.splitTransfer = split.getAccount() == accountRef
+                                        ? -amountLong : amountLong;
+                            }
                             break;
                         default:
                             this.splitTransfer = split.getAccount() == accountRef
@@ -819,8 +822,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             break;
                     }
                     break;
-                case SELL:// consists of sell, commission, and (potentially)
-                    // transfer
+                case SELL:// consists of sell, commission, and (potentially) transfer
                 case SELL_XFER: // no net cash effect (transfer offsets sell)
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_SECURITY:
@@ -831,7 +833,12 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             this.splitCommission = amountLong;
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            this.splitIncome = amountLong;
+                            if (isInvestmentIncome(thisSplit)) {
+                                this.splitIncome = amountLong;
+                            } else {
+                                this.splitTransfer = split.getAccount() == accountRef
+                                        ? -amountLong : amountLong;
+                            }
                             break;
                         default:
                             this.splitTransfer = split.getAccount() == accountRef
@@ -856,7 +863,15 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             break;
                         case Account.ACCOUNT_TYPE_INCOME: // Only count if parentTxn is investment
                             if (parentAcctType == Account.ACCOUNT_TYPE_INVESTMENT) {
-                                this.splitIncome = amountLong;
+                                if (isInvestmentIncome(thisSplit)) {
+                                    this.splitIncome = amountLong;
+                                } else {
+                                    if (split.getAccount() == accountRef) {
+                                        this.splitTransfer = -amountLong;
+                                    } else {
+                                        this.splitTransfer = amountLong;
+                                    }
+                                }                                
                             }
                             break;
                         // next cases cover transfer between Assets/Investments, Bank.
@@ -881,7 +896,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             }
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            this.splitIncome = amountLong;
+                            if (isInvestmentIncome(thisSplit)) {
+                                this.splitIncome = amountLong;
+                            }
                             break;
                         default:
                             this.splitTransfer = split.getAccount() == accountRef ?
@@ -925,7 +942,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             }
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            this.splitIncome = amountLong;
+                            if (isInvestmentIncome(thisSplit)) {
+                                this.splitIncome = amountLong;
+                            }
                             break;
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.splitBuy = amountLong; // provides for return of capital
@@ -966,7 +985,11 @@ public class TransactionValues implements Comparable<TransactionValues> {
     } // end splitValues subClass
 
     private boolean isInvestmentExpense(SplitTxn split) {
-        return investmentExpenseAccountNums.contains(split.getAccount().getAccountNum());
+        return reportConfig.getInvestmentExpenseNums().contains(split.getAccount().getAccountNum());
+    }
+
+    private boolean isInvestmentIncome(SplitTxn split) {
+        return reportConfig.getInvestmentIncomeNums().contains(split.getAccount().getAccountNum());
     }
 } // end TransactionValues Class
 
