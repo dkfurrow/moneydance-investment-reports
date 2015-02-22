@@ -206,7 +206,8 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
+                ReportConfig.getDefaultInvestmentIncomeAccounts(),  dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
         TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
         fromToReport.calcReport(currentInfo);
@@ -240,7 +241,8 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
+                ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
         TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
         snapshotReport.calcReport(currentInfo);
@@ -272,7 +274,10 @@ public class ReportProdTest {
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                 true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
+                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
+                ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
+        reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
+        reportConfig.setAllIncomeAccountsToInvestment(currentInfo.getRoot());
         TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
         snapshotReport.calcReport(currentInfo);
         Object[][] snapValues = snapshotReport.getReportTable();
@@ -295,7 +300,8 @@ public class ReportProdTest {
             reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
                     true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                     ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
-                    ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
+                    ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
+                    ReportConfig.getDefaultInvestmentIncomeAccounts(),dateRange);
             TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
             fromToReport.calcReport(currentInfo);
             Object[][] ftValues = fromToReport.getReportTable();

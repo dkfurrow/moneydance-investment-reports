@@ -43,54 +43,37 @@ public class TestReportOutput2 {
     public static final boolean closedPosHidden = true; //Irrelevant for testing purposes
     public static final String reportName = "TestName"; //Irrelevant for testing purposes
     //
-    private static final int fromDateInt = 20090601;
-    private static final int toDateInt = 20100601;
-    public static final DateRange dateRange = new DateRange(fromDateInt, toDateInt, toDateInt);
+    public static final DateRange testDateRange = new DateRange(20090601, 20100601, 20100601);
+
 
     //
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
         BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-        ArrayList<String[]> transActivityReport = currentInfo
-                .listAllTransValues(currentInfo.getInvestmentWrappers());
-        File transActivityReportFile = new File("E:\\Temp"
-                + "\\transActivityReport.csv");
-        IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
-                transActivityReport, transActivityReportFile);
-
-        TotalReport report;
-
-        AggregationController aggregationController = AggregationController.INVACCT;
-        boolean rptOutputSingle = false;
-        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
-                ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
-                ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(), dateRange);
-        report = new TotalSnapshotReport(reportConfig);
+//        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "StandardFTTest");
+        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
+        reportConfig.setDateRange(testDateRange);
+        reportConfig.setAllExpenseAccountsToInvestment(root);
+        reportConfig.setAllIncomeAccountsToInvestment(root);
+        System.out.println(reportConfig.toString());
+        TotalReport report = new TotalFromToReport(reportConfig);
         report.calcReport(currentInfo);
+        report.displayReport();
 
-        printReport(report, 0, 4);
 
 
     }
 
 
-    private static void printReport(TotalReport report, int firstSort, int secondSort)
+    private static void printReport(Object[][] report)
             throws NoSuchFieldException, IllegalAccessException {
-        System.out.println("report size" + report.getReports().size());
-        System.out.println("Object Length" + report.getReportTable().length);
 
-        Object[][] reportTable = report.getReportTable();
-        System.out.println("Report Table Length: " + reportTable.length);
-        System.out.println("Report Table Width: " + reportTable[0].length);
-        TotalReport.ReportTableModel model = new TotalReport.ReportTableModel(reportTable,
-                report.getModelHeader());
-        StringBuffer outBuffer = writeObjectToStringBuffer(reportTable);
+        StringBuffer outBuffer = writeObjectToStringBuffer(report);
         IOUtils.writeResultsToFile(outBuffer, testFile);
         System.out.println("Finished!");
 
-        TotalReportOutputPane.createAndShowTable(report);
+
     }
 
 

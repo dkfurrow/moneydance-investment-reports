@@ -72,24 +72,29 @@ public class TestReportStability extends JFrame {
     private static void runReportFromFile() throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
         BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
+        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setDateRange(testDateRange);
-        TotalReport report = new TotalSnapshotReport(reportConfig);
+        reportConfig.setAllExpenseAccountsToInvestment(root);
+        reportConfig.setAllIncomeAccountsToInvestment(root);
+//        System.out.println(reportConfig.toString());
+        TotalReport report = new TotalFromToReport(reportConfig);
         report.calcReport(currentInfo);
         Object[][] reportObject = report.getReportTable();
-        printTotalAndAnnualReturnAll(reportObject, "StockBrokerage1:Aeropostale");
+        printTotalAndAnnualReturnAll(reportObject);
     }
 
 
-    public static void printTotalAndAnnualReturnAll(Object[][] inputObject, String acctName) {
+    public static void printTotalAndAnnualReturnAll(Object[][] inputObject) {
 
         StringBuffer sb = new StringBuffer();
 
         for (Object[] objs : inputObject) {
+            InvestmentAccountWrapper investmentAccountWrapper = (InvestmentAccountWrapper) objs[0];
             SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) objs[1];
-            if (securityAccountWrapper.getFullName().equals(acctName)) {
-                System.out.println(securityAccountWrapper.getFullName() + tab + objs[18].toString()
-                        + tab + objs[19].toString());
+            if (investmentAccountWrapper.getName().trim().equals("StockBrokerage1") &&
+                    securityAccountWrapper.getName().trim().equals("Securities/CASH-ALL")) {
+                System.out.println("Final: " + investmentAccountWrapper.getName() + ":" + securityAccountWrapper.getName() + tab + objs[22].toString()
+                        + tab + objs[23].toString());
             }
         }
     }

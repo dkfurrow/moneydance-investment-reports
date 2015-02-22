@@ -641,7 +641,7 @@ public class ReportConfig {
             for (Account acct : accounts) {
                 acctNums.add(acct.getAccountNum());
             }
-            this.investmentExpenseNums = acctNums;
+            this.investmentIncomeNums = acctNums;
         }
     }
 
