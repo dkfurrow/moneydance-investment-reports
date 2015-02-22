@@ -43,7 +43,6 @@ import java.util.logging.Level;
  * @since 1.0
  */
 public class TransactionValues implements Comparable<TransactionValues> {
-    private ReportConfig reportConfig;
     
     // cumulative total gain after completion of transaction
     private long cumTotalGain;
@@ -127,8 +126,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public TransactionValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
             throws Exception {
-        this.reportConfig = null;   // Not used
-        
         // copy base values from Security Transaction
         String memo = "Inserted for Initial Balance: "
                 + invAcctWrapper.getInvestmentAccount().getAccountName();
@@ -178,7 +175,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
                              SecurityAccountWrapper securityAccountWrapper,
                              ArrayList<TransactionValues> prevTransLines, BulkSecInfo currentInfo,
                              ReportConfig reportConfig) throws Exception {
-        this.reportConfig = reportConfig;
 
         //initialize values
         this.parentTxn = thisParentTxn;
@@ -338,8 +334,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public TransactionValues(TransactionValues transactionValues, TransactionValues prevTransValues,
                              InvestmentAccountWrapper invAcctWrapper) throws Exception {
-        this.reportConfig = null;    // not used
-
         // copy base values from Security Transaction
         this.parentTxn = transactionValues.parentTxn;
         this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccount();
@@ -985,11 +979,11 @@ public class TransactionValues implements Comparable<TransactionValues> {
     } // end splitValues subClass
 
     private boolean isInvestmentExpense(SplitTxn split) {
-        return reportConfig.getInvestmentExpenseNums().contains(split.getAccount().getAccountNum());
+        return BulkSecInfo.getReportConfig().getInvestmentExpenseNums().contains(split.getAccount().getAccountNum());
     }
 
     private boolean isInvestmentIncome(SplitTxn split) {
-        return reportConfig.getInvestmentIncomeNums().contains(split.getAccount().getAccountNum());
+        return BulkSecInfo.getReportConfig().getInvestmentIncomeNums().contains(split.getAccount().getAccountNum());
     }
 } // end TransactionValues Class
 

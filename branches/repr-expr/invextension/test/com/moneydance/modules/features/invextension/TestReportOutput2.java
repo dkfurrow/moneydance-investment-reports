@@ -50,7 +50,7 @@ public class TestReportOutput2 {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+
 //        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "StandardFTTest");
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setDateRange(testDateRange);
@@ -58,6 +58,7 @@ public class TestReportOutput2 {
         reportConfig.setAllIncomeAccountsToInvestment(root);
         System.out.println(reportConfig.toString());
         TotalReport report = new TotalFromToReport(reportConfig);
+        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
         report.calcReport(currentInfo);
         report.displayReport();
 

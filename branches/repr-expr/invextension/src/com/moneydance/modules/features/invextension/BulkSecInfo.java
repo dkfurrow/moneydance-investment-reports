@@ -125,11 +125,14 @@ public class BulkSecInfo {
     private RootAccount root;
     /* GainsCalc Type */
     private GainsCalc gainsCalc;
+    /* ReportConfig from panel or from test code */
+    private static ReportConfig reportConfig;
     /* HashSet of InvestmentAccount Wrappers */
     private HashSet<InvestmentAccountWrapper> investmentWrappers;
 
     public BulkSecInfo(RootAccount root, ReportConfig reportConfig) throws Exception {
         this.root = root;
+        BulkSecInfo.reportConfig = reportConfig;
         this.gainsCalc = reportConfig.useAverageCostBasis ? new GainsAverageCalc() : new GainsLotMatchCalc();
         nextAcctNumber = this.root.getHighestAccountNum() + 1;
         transactionSet = this.root.getTransactionSet();
@@ -156,6 +159,8 @@ public class BulkSecInfo {
     public static void setNextTxnNumber(long nextTxnNumber) {
         BulkSecInfo.nextTxnNumber = nextTxnNumber;
     }
+
+    public static ReportConfig getReportConfig() { return BulkSecInfo.reportConfig;}
 
     /**
      * loads selected accounts into HashSet
