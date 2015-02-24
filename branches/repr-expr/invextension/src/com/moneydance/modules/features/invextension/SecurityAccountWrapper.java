@@ -228,6 +228,33 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     }
 
+    // Return the date of the last transaction in the interval startDate .. endDate if the
+    // position is closed by that transaction. Otherwise, return endDate.
+    //
+    public int latestDatePositionIsClosed(int startDateInt, int endDateInt) {
+        int i = 0;
+        for (i = 0; i < transValuesList.size(); i++) {
+            if (transValuesList.get(i).getDateInt() > endDateInt) {
+                break;
+            }
+        }
+
+        if (i == 0) {
+            return endDateInt;  // No transactions
+        } else {
+            TransactionValues trans = transValuesList.get(i - 1);
+            if (trans.getPosition() != 0) {
+                return endDateInt;  // Open position
+            } else {
+                if (trans.getDateInt() > startDateInt) {
+                    return trans.getDateInt();  // Yeah: transaction closes position
+                } else {
+                    return endDateInt;  // Transactions are before startDate
+                }
+            }
+        }
+    }
+    
     @Override
     public int compareTo(@NotNull SecurityAccountWrapper o) {
         return BulkSecInfo.acctComp.compare(this.securityAccount, o.securityAccount);

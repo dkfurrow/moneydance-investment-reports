@@ -134,10 +134,13 @@ public class SecuritySnapshotReport extends SecurityReport {
                 = new ExtractorTotalReturn(securityAccount, oneYearFromDateInt, snapDateInt, false);
         ExtractorTotalReturn aggregated3YearReturn
                 = new ExtractorTotalReturn(securityAccount, threeYearFromDateInt, snapDateInt, false);
+
+        int allEndDateInt = securityAccount == null ? snapDateInt
+                : securityAccount.latestDatePositionIsClosed(fromDateInt, snapDateInt);
         ExtractorTotalReturn aggregatedAllReturn
-                = new ExtractorTotalReturn(securityAccount, allDateInt, snapDateInt, true);
+                = new ExtractorTotalReturn(securityAccount, allDateInt, allEndDateInt, true);
         ExtractorTotalReturn aggregatedAnnualReturn
-                = new ExtractorAnnualReturn(securityAccount, allDateInt, snapDateInt);
+                = new ExtractorAnnualReturn(securityAccount, allDateInt, allEndDateInt);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));

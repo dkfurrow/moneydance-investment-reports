@@ -33,7 +33,7 @@ package com.moneydance.modules.features.invextension;
  */
 @SuppressWarnings("ALL")
 public class ExtractorTotalReturn extends ExtractorBase<Double> {
-    private boolean zeroInitialPositionOK;
+    private boolean computingAllReturns;
     
     private long income;
     private long expenses;
@@ -46,9 +46,9 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     protected long endValue = 0;
 
     public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                boolean zeroInitialPositionAllowed) {
+                                boolean computingAllReturns) {
         super(secAccountWrapper, startDateInt, endDateInt);
-        zeroInitialPositionOK = zeroInitialPositionAllowed;
+        this.computingAllReturns = computingAllReturns;
     }
 
     public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
@@ -75,8 +75,8 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         endPosition = getEndPosition(securityAccount);
         long endPrice = securityAccount.getPrice(endDateInt);
         endValue = qXp(endPosition, endPrice);
-        // No need to compute returns until displayed
-        return SecurityReport.UndefinedReturn;
+        
+        return computeMDReturn();
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
@@ -104,7 +104,7 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     // Compute Modified Dietz return
     private double computeMDReturn() {
         // Return is not defined over an interval in which the underlying security(s) are not held
-        if ((startPosition != 0 || zeroInitialPositionOK) && endPosition != 0) {
+        if (computingAllReturns || (startPosition != 0 && endPosition != 0)) {
             int intervalDays = DateUtils.getDaysBetween(startDateInt, endDateInt);
             long weightedCF = Math.round(unnormalizedWeightedCF / (double) intervalDays);
 
