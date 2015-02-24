@@ -82,9 +82,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
     }
 
     public Double FinancialResults(SecurityAccountWrapper securityAccount) {
-        double mdReturn = super.FinancialResults(securityAccount);
-
-        return computeFinancialResults(mdReturn);
+        return super.FinancialResults(securityAccount);
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.

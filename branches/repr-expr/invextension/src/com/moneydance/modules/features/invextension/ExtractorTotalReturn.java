@@ -75,8 +75,8 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         endPosition = getEndPosition(securityAccount);
         long endPrice = securityAccount.getPrice(endDateInt);
         endValue = qXp(endPosition, endPrice);
-
-        return computeMDReturn();
+        // No need to compute returns until displayed
+        return SecurityReport.UndefinedReturn;
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
