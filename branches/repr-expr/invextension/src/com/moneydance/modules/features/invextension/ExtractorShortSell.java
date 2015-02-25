@@ -40,7 +40,7 @@ public class ExtractorShortSell extends ExtractorBase<Long> {
         shortSell = 0;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             // Add the cumulative values (note sells are defined by change in long basis -- commission is included).
             shortSell += transaction.getShortSell() == 0 ? 0
@@ -50,7 +50,7 @@ public class ExtractorShortSell extends ExtractorBase<Long> {
         return true;
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         return shortSell;
     }
 }

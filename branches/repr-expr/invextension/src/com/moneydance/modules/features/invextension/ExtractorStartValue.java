@@ -36,7 +36,7 @@ public class ExtractorStartValue extends ExtractorBase<Long> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         if (lastTransactionBeforeStartDate != null) {
             long startPosition = getStartPosition(securityAccount);
             long startPrice = securityAccount.getPrice(startDateInt);

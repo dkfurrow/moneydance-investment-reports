@@ -54,8 +54,8 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
         lastTransactionBasis = null;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
-        if (!super.NextTransaction(transaction, transactionDateInt)) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
@@ -69,7 +69,7 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
         return true;
     }
 
-    public List<Number> FinancialResults(SecurityAccountWrapper securityAccount) {    // AnnualizedDividend, DividendYield, YieldOnBasis
+    public List<Number> getResult() {    // AnnualizedDividend, DividendYield, YieldOnBasis
         if (firstTransactionBasis != null && lastTransactionWithinDateRange != null) {
             // reference transaction is last transaction older than MINIMUM_EX_DIV_DAYS
             // allows for situations where dividends are immediately reinvested

@@ -45,14 +45,17 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     protected long endPosition = 0;
     protected long endValue = 0;
 
+    private boolean resultCurrent = false;
+    private double result = 0;
+
     public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
                                 boolean computingAllReturns) {
         super(secAccountWrapper, startDateInt, endDateInt);
         this.computingAllReturns = computingAllReturns;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
-        if (!super.NextTransaction(transaction, transactionDateInt)) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
@@ -68,19 +71,27 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         return true;
     }
 
-    public Double FinancialResults(SecurityAccountWrapper securityAccount) {
-        startPosition = getStartPosition(securityAccount);
-        long startPrice = securityAccount.getPrice(startDateInt);
-        startValue = qXp(startPosition, startPrice);
-        endPosition = getEndPosition(securityAccount);
-        long endPrice = securityAccount.getPrice(endDateInt);
-        endValue = qXp(endPosition, endPrice);
-        
-        return computeMDReturn();
+    public Double getResult() {
+        if (!resultCurrent) {
+            if (securityAccount != null) {
+                // Not aggregate account
+                startPosition = getStartPosition(securityAccount);
+                long startPrice = securityAccount.getPrice(startDateInt);
+                startValue = qXp(startPosition, startPrice);
+                endPosition = getEndPosition(securityAccount);
+                long endPrice = securityAccount.getPrice(endDateInt);
+                endValue = qXp(endPosition, endPrice);
+            }
+
+            result = computeMDReturn();
+            resultCurrent = true;
+        }
+
+        return result;
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
-    public void AggregateFinancialResults(ExtractorBase<?> op) {
+    public void aggregateResults(ExtractorBase<?> op) {
         ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
 
         startDateInt = Math.min(startDateInt, operand.startDateInt);
@@ -95,10 +106,8 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         expenses += operand.expenses;
         unnormalizedWeightedCF += operand.unnormalizedWeightedCF;
         sumCF += operand.sumCF;
-    }
 
-    public Double ComputeAggregatedFinancialResults() {
-        return computeMDReturn();
+        resultCurrent = false;
     }
 
     // Compute Modified Dietz return

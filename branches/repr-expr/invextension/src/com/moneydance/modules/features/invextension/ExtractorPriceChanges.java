@@ -39,7 +39,7 @@ public class ExtractorPriceChanges extends ExtractorBase<List<Number>> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public List<Number> FinancialResults(SecurityAccountWrapper securityAccount) {  // PriceChange, ValueChange, PercentPriceChange
+    public List<Number> getResult() {  // PriceChange, ValueChange, PercentPriceChange
         int prevToSnapDateInt = DateUtils.getPrevBusinessDay(endDateInt);
         long prevPrice = securityAccount.getPrice(prevToSnapDateInt);
         long lastPrice = securityAccount.getPrice(endDateInt);

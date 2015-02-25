@@ -36,7 +36,7 @@ public class ExtractorEndValue extends ExtractorBase<Long> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         long endPosition = getEndPosition(securityAccount);
         long endPrice = securityAccount.getPrice(endDateInt);
         return qXp(endPosition, endPrice);

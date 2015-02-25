@@ -36,6 +36,8 @@ import com.moneydance.apps.md.model.CurrencyType;
  * an account to compute and return a financial metric.
  */
 public class ExtractorBase<R> {
+    protected SecurityAccountWrapper securityAccount;
+    
     protected int startDateInt;
     protected int endDateInt;
 
@@ -51,10 +53,11 @@ public class ExtractorBase<R> {
      *
      * @param secAccountWrapper The security account being scanned.
      * @param dateRange Time interval of transactions to be used to compute results.
-     * NB NextTransaction sees all transactions, even those outside the date range.
+     * NB processNextTransaction sees all transactions, even those outside the date range.
      *
      */
     ExtractorBase(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
+        this.securityAccount = securityAccount;
         this.startDateInt = startDateInt;
         this.endDateInt = endDateInt;
 
@@ -85,7 +88,7 @@ public class ExtractorBase<R> {
      *
      * @return true if transaction is processed, and false if error occurs.
      */
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (transactionDateInt < startDateInt) {
             lastTransactionBeforeStartDate = transaction;
             lastTransactionBeforeEqualStartDate = transaction;
@@ -104,28 +107,18 @@ public class ExtractorBase<R> {
      *
      * @return Result up to current point in scan.
      */
-    public R FinancialResults(SecurityAccountWrapper securityAccount) {
+    public R getResult() {
         throw new UnsupportedOperationException();
     }
 
-    /* <p>Aggregate the financial datea from an extractor in this extractor. The financial results
+    /* <p>Aggregate the financial data from an extractor in this extractor. The financial results
      * for the aggregated data is not computed until ComputeAggregatedFinancialResults is invoked. </p>
      *
      * @param operand Another extractors whose metric is aggregated into this one. The argument is not modified.
      *
      * @return None.
      */
-    public void AggregateFinancialResults(ExtractorBase<?> operand) {
-        throw new UnsupportedOperationException();
-    }
-
-    /* <p>Compute the financial results from previously aggregated extractors.</p>
-    *
-    * @param None.
-    *
-    * @return Result of aggregating results.
-    */
-    public R ComputeAggregatedFinancialResults() {
+    public void aggregateResults(ExtractorBase<?> operand) {
         throw new UnsupportedOperationException();
     }
 

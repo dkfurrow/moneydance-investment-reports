@@ -40,7 +40,7 @@ public class ExtractorExpense extends ExtractorBase<Long> {
         expense = 0;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             expense += transaction.getExpense();
         }
@@ -48,7 +48,7 @@ public class ExtractorExpense extends ExtractorBase<Long> {
         return true;
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         return expense;
     }
 }

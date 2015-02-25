@@ -43,8 +43,8 @@ public class ExtractorGains extends ExtractorBase<List<Long>> {
         realizedGain = 0;
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
-        if (!super.NextTransaction(transaction, transactionDateInt)) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
@@ -55,7 +55,7 @@ public class ExtractorGains extends ExtractorBase<List<Long>> {
         return true;
     }
 
-    public List<Long> FinancialResults(SecurityAccountWrapper securityAccount) {  // RealizedGain, UnrealizedGain, TotalGain
+    public List<Long> getResult() {  // RealizedGain, UnrealizedGain, TotalGain
         if (lastTransactionWithinDateRange != null) {
             long unrealizedGain = 0;
             long endPosition = getEndPosition(securityAccount);

@@ -36,7 +36,7 @@ public class ExtractorEndPosition extends ExtractorBase<Long> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         return getEndPosition(securityAccount);
     }
 }

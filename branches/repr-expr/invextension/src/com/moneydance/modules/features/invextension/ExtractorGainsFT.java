@@ -39,7 +39,7 @@ public class ExtractorGainsFT extends ExtractorGains {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public List<Long> FinancialResults(SecurityAccountWrapper securityAccount) {  // RealizedGain, UnrealizedGain, TotalGain
+    public List<Long> getResult() {  // RealizedGain, UnrealizedGain, TotalGain
         long startUnrealizedGain = 0;
         long endUnrealizedGain = 0;
 

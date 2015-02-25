@@ -36,7 +36,7 @@ public class ExtractorShortBasis extends ExtractorBase<Long> {
         super(securityAccount, startDateInt, endDateInt);
     }
 
-    public Long FinancialResults(SecurityAccountWrapper securityAccount) {
+    public Long getResult() {
         if (lastTransactionWithinDateRange != null) {
             return lastTransactionWithinDateRange.getShortBasis();  // FixMe: stage2: do calculation here, not in TransactionValues
         }

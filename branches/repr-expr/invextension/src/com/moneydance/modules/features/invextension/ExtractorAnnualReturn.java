@@ -39,23 +39,13 @@ import java.util.LinkedList;
  */
 @SuppressWarnings("ALL")
 public class ExtractorAnnualReturn extends ExtractorTotalReturn {
-    private class dateValuePair implements Comparable<dateValuePair> {
-        public final int date;
-        public long value;
-
-        public dateValuePair(int d, long v) {
-            date = d;
-            value = v;
-        }
-
-        public int compareTo(@NotNull dateValuePair operand) {
-            return date - operand.date;
-        }
-    }
-
     private ArrayList<dateValuePair> nonZeroReturns;
     private LinkedList<ArrayList<dateValuePair>> aggregatedReturns;
     private int aggregatedReturnsSize;
+
+    private boolean resultCurrent = false;
+    private double result = 0;
+
 
     public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt, true);
@@ -66,8 +56,8 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
         aggregatedReturns.add(nonZeroReturns);
     }
 
-    public boolean NextTransaction(TransactionValues transaction, int transactionDateInt) {
-        if (!super.NextTransaction(transaction, transactionDateInt)) {
+    public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
+        if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
         }
 
@@ -81,25 +71,24 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
         return true;
     }
 
-    public Double FinancialResults(SecurityAccountWrapper securityAccount) {
-        double mdReturn = super.FinancialResults(securityAccount);
+    public Double getResult() {
+        if (!resultCurrent) {
+            double mdReturn = super.getResult();
 
-        return computeFinancialResults(mdReturn);
+            result = computeFinancialResults(mdReturn);
+            resultCurrent = true;
+        }
+        return result;
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
-    public void AggregateFinancialResults(ExtractorBase<?> op) {
+    public void aggregateResults(ExtractorBase<?> op) {
         ExtractorAnnualReturn operand = (ExtractorAnnualReturn) op;
-        super.AggregateFinancialResults(operand);
+        super.aggregateResults(operand);
 
         aggregatedReturns.add(operand.nonZeroReturns);
         aggregatedReturnsSize += operand.nonZeroReturns.size();
-    }
-
-    public Double ComputeAggregatedFinancialResults() {
-        double mdReturn = super.ComputeAggregatedFinancialResults();
-
-        return computeFinancialResults(mdReturn);
+        resultCurrent = false;
     }
 
     private Double computeFinancialResults(double mdReturn) {
@@ -166,5 +155,19 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
         }
 
         return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
+    }
+
+    private class dateValuePair implements Comparable<dateValuePair> {
+        public final int date;
+        public long value;
+
+        public dateValuePair(int d, long v) {
+            date = d;
+            value = v;
+        }
+
+        public int compareTo(@NotNull dateValuePair operand) {
+            return date - operand.date;
+        }
     }
 }

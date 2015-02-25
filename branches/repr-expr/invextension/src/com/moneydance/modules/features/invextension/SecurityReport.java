@@ -166,35 +166,35 @@ public abstract class SecurityReport extends ComponentReport {
                 int transactionDateInt = transaction.getDateInt();  // CSE across loops and method invocations
                 for (MetricEntry<Number> p : simpleMetric.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, transactionDateInt);
+                        p.extractor.processNextTransaction(transaction, transactionDateInt);
                     }
                 }
                 for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, transactionDateInt);
+                        p.extractor.processNextTransaction(transaction, transactionDateInt);
                     }
                 }
                 for (MetricEntry<Double> p : returnsMetric.values()) {
                     if (p.extractor != null) {
-                        p.extractor.NextTransaction(transaction, transactionDateInt);
+                        p.extractor.processNextTransaction(transaction, transactionDateInt);
                     }
                 }
             }
 
             for (MetricEntry<Number> p : simpleMetric.values()) {
                 if (p.extractor != null) {
-                    p.value = (Number) p.extractor.FinancialResults(securityAccount);
+                    p.value = (Number) p.extractor.getResult();
                 }
             }
             for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
                 if (p.extractor != null) {
                     // Java compiler warning: unchecked cast -- Java type system can't handle this
-                    p.value = (List<Number>) p.extractor.FinancialResults(securityAccount);
+                    p.value = (List<Number>) p.extractor.getResult();
                 }
             }
             for (MetricEntry<Double> p : returnsMetric.values()) {
                 if (p.extractor != null) {
-                    p.value = (Double) p.extractor.FinancialResults(securityAccount);
+                    p.value = (Double) p.extractor.getResult();
                 }
             }
         }
@@ -257,7 +257,7 @@ public abstract class SecurityReport extends ComponentReport {
             MetricEntry<Double> p = returnsMetric.get(name);
             assert p != null;
             if (p.extractor != null) {
-                p.extractor.AggregateFinancialResults(operand.returnsMetric.get(name).extractor);
+                p.extractor.aggregateResults(operand.returnsMetric.get(name).extractor);
             }
         }
     }
@@ -351,7 +351,7 @@ public abstract class SecurityReport extends ComponentReport {
 
     protected void outputReturn(String name) {
         MetricEntry<Double> entry = returnsMetric.get(name);
-        entry.value = (Double) entry.extractor.ComputeAggregatedFinancialResults();
+        entry.value = (Double) entry.extractor.getResult(); // Force calculation if aggregate
         outputLine.add(entry.value);
     }
 
