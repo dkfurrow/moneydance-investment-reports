@@ -34,6 +34,8 @@ package com.moneydance.modules.features.invextension;
 @SuppressWarnings("ALL")
 public class ExtractorTotalReturn extends ExtractorBase<Double> {
     private boolean computingAllReturns;
+
+    private TransactionValues firstTransaction = null;
     
     private long income;
     private long expenses;
@@ -45,6 +47,12 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     protected long endPosition = 0;
     protected long endValue = 0;
 
+    // Returns are not defined over an range in which the underlying security is not held, except for the
+    // all returns and annual returns calculations, where we use the largest interval that the position is
+    // open in the original range.
+    private int intervalStartDateInt;
+    private int intervaleEndDateInt;
+
     private boolean resultCurrent = false;
     private double result = 0;
 
@@ -52,6 +60,13 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
                                 boolean computingAllReturns) {
         super(secAccountWrapper, startDateInt, endDateInt);
         this.computingAllReturns = computingAllReturns;
+        if (secAccountWrapper == null && computingAllReturns) {
+            intervalStartDateInt = Integer.MAX_VALUE;
+            intervaleEndDateInt = Integer.MIN_VALUE;
+        } else {
+            intervalStartDateInt = startDateInt;
+            intervaleEndDateInt = endDateInt;
+        }
     }
 
     public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
@@ -60,6 +75,9 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
         }
 
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
+            if (firstTransaction == null) {
+                firstTransaction = transaction;
+            }
             income += transaction.getIncome();
             expenses += transaction.getExpense();
             int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
@@ -81,6 +99,13 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
                 endPosition = getEndPosition(securityAccount);
                 long endPrice = securityAccount.getPrice(endDateInt);
                 endValue = qXp(endPosition, endPrice);
+
+                if (computingAllReturns && startPosition == 0 && firstTransaction != null) {
+                    intervalStartDateInt = firstTransaction.getDateInt();
+                }
+                if (computingAllReturns && endPosition == 0 && lastTransactionWithinDateRange != null) {
+                    intervaleEndDateInt = lastTransactionWithinDateRange.getDateInt();
+                }
             }
 
             result = computeMDReturn();
@@ -94,8 +119,12 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     public void aggregateResults(ExtractorBase<?> op) {
         ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
 
-        startDateInt = Math.min(startDateInt, operand.startDateInt);
-        endDateInt = Math.max(endDateInt, operand.endDateInt);
+        if (operand.firstTransaction != null) {
+            intervalStartDateInt = Math.min(intervalStartDateInt, operand.intervalStartDateInt);
+        }
+        if (operand.lastTransactionWithinDateRange != null) {
+            intervaleEndDateInt = Math.max(intervaleEndDateInt, operand.intervaleEndDateInt);
+        }
 
         startPosition += operand.startPosition;
         startValue += operand.startValue;
@@ -112,9 +141,8 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
 
     // Compute Modified Dietz return
     private double computeMDReturn() {
-        // Return is not defined over an interval in which the underlying security(s) are not held
         if (computingAllReturns || (startPosition != 0 && endPosition != 0)) {
-            int intervalDays = DateUtils.getDaysBetween(startDateInt, endDateInt);
+            int intervalDays = DateUtils.getDaysBetween(intervalStartDateInt, intervaleEndDateInt);
             long weightedCF = Math.round(unnormalizedWeightedCF / (double) intervalDays);
 
             if ((startValue + weightedCF) != 0) {

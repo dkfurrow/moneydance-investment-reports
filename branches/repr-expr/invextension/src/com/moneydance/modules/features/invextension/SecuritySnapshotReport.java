@@ -64,14 +64,6 @@ public class SecuritySnapshotReport extends SecurityReport {
         int oneYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -12));
         int threeYearFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(snapDateInt, -36));
 
-        int allDateInt = snapDateInt;
-        if (securityAccount != null) {
-            ArrayList<TransactionValues> transSet = securityAccount.getTransactionValues();
-            if (!transSet.isEmpty()) {
-                allDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
-            }
-        }
-
         // Extractors for metrics
         ExtractorStartPrice eStartPrice = new ExtractorStartPrice(securityAccount, fromDateInt, snapDateInt);
         ExtractorStartPosition eStartPosition = new ExtractorStartPosition(securityAccount, fromDateInt, snapDateInt);
@@ -135,12 +127,17 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorTotalReturn aggregated3YearReturn
                 = new ExtractorTotalReturn(securityAccount, threeYearFromDateInt, snapDateInt, false);
 
-        int allEndDateInt = securityAccount == null ? snapDateInt
-                : securityAccount.latestDatePositionIsClosed(fromDateInt, snapDateInt);
+        int allDateInt = snapDateInt;
+        if (securityAccount != null) {
+            ArrayList<TransactionValues> transSet = securityAccount.getTransactionValues();
+            if (!transSet.isEmpty()) {
+                allDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
+            }
+        }
         ExtractorTotalReturn aggregatedAllReturn
-                = new ExtractorTotalReturn(securityAccount, allDateInt, allEndDateInt, true);
+                = new ExtractorTotalReturn(securityAccount, allDateInt, snapDateInt, true);
         ExtractorTotalReturn aggregatedAnnualReturn
-                = new ExtractorAnnualReturn(securityAccount, allDateInt, allEndDateInt);
+                = new ExtractorAnnualReturn(securityAccount, allDateInt, snapDateInt);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));
