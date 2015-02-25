@@ -32,13 +32,12 @@ import com.moneydance.apps.md.controller.io.FileUtils;
 import com.moneydance.apps.md.model.RootAccount;
 
 import java.io.File;
-import java.util.ArrayList;
 
 
 @SuppressWarnings("unused")
 public class TestReportOutput2 {
     public static final File mdTestFile = new File("./resources/testMD02.md");
-    public static final File testFile = new File("E:\\Temp\\testFile.csv");
+    public static final File testFile = new File("./resources/testFile.csv");
     public static final int numFrozenColumns = 5; //Irrelevant for testing purposes
     public static final boolean closedPosHidden = true; //Irrelevant for testing purposes
     public static final String reportName = "TestName"; //Irrelevant for testing purposes

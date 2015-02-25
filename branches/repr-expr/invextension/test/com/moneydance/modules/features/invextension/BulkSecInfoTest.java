@@ -73,6 +73,7 @@ public class BulkSecInfoTest {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
+        reportConfig.setAllIncomeAccountsToInvestment(root);
         return new BulkSecInfo(root, reportConfig);
     }
 
@@ -86,6 +87,7 @@ public class BulkSecInfoTest {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
+        reportConfig.setAllIncomeAccountsToInvestment(root);
         reportConfig.setUseAverageCostBasis(false);
         return new BulkSecInfo(root, reportConfig);
     }
