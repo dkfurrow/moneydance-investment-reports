@@ -227,33 +227,6 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         }
 
     }
-
-    // Return the date of the last transaction in the interval startDate .. endDate if the
-    // position is closed by that transaction. Otherwise, return endDate.
-    //
-    public int latestDatePositionIsClosed(int startDateInt, int endDateInt) {
-        int i = 0;
-        for (i = 0; i < transValuesList.size(); i++) {
-            if (transValuesList.get(i).getDateInt() > endDateInt) {
-                break;
-            }
-        }
-
-        if (i == 0) {
-            return endDateInt;  // No transactions
-        } else {
-            TransactionValues trans = transValuesList.get(i - 1);
-            if (trans.getPosition() != 0) {
-                return endDateInt;  // Open position
-            } else {
-                if (trans.getDateInt() > startDateInt) {
-                    return trans.getDateInt();  // Yeah: transaction closes position
-                } else {
-                    return endDateInt;  // Transactions are before startDate
-                }
-            }
-        }
-    }
     
     @Override
     public int compareTo(@NotNull SecurityAccountWrapper o) {
@@ -266,65 +239,6 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     public void setTransValuesList(@Nullable ArrayList<TransactionValues> transValuesList) {
         this.transValuesList = transValuesList;
-    }
-
-    @NotNull
-    public ArrayList<TransactionValues> getFromToSubset(@NotNull ArrayList<Integer> fromToIndices) {
-        if (!fromToIndices.isEmpty()) {
-            return (new ArrayList<>(transValuesList.subList(fromToIndices.get(0),
-                    fromToIndices.get(1) + 1)));//To index is exclusive per List interface
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    @NotNull
-    public ArrayList<Integer> getFromToIndices(@NotNull DateRange dateRange) {
-        ArrayList<Integer> outputList = new ArrayList<>();
-        int fromElement = binarySearch(dateRange.getFromDateInt(), true);
-        if (fromElement != -1) {
-            int toElement = binarySearchRecursive(dateRange.getToDateInt(), fromElement,
-                    this.getTransactionValues().size() - 1, false);
-            if (toElement != -1) {
-                outputList.add(fromElement);
-                outputList.add(toElement);
-            }
-        }
-        return outputList;
-    }
-
-    public int binarySearch(int searchDateInt, boolean getFromDate) {
-        return binarySearchRecursive(searchDateInt, 0, this.getTransactionValues().size() - 1, getFromDate);
-    }
-
-    public int binarySearchRecursive(int searchDateInt, int left, int right, boolean getFromDate) {
-        if (left > right || getTransactionValues().isEmpty()) return -1;
-        int leftDateInt = getTransactionValues().get(left).getDateInt();
-        int rightDateInt = getTransactionValues().get(right).getDateInt();
-        if (getFromDate) {//check endpoints of list
-            if (searchDateInt < leftDateInt) return left;
-            if (searchDateInt >= rightDateInt) return -1;
-        } else {
-            if (searchDateInt >= rightDateInt) return right;
-            if (searchDateInt < leftDateInt) return -1;
-        }
-        //"middle" defined so that 2 element-set returns correct side
-        int middle = getFromDate ? Math.max((left + right) / 2, 1) : (left + right) / 2;
-        int middleDateInt = getTransactionValues().get(middle).getDateInt();
-        if (getFromDate) { //get "from" element
-            int leftOfMiddleDateInt = getTransactionValues().get(middle - 1).getDateInt();
-            if (searchDateInt < middleDateInt && searchDateInt >= leftOfMiddleDateInt) return middle;
-            else if (searchDateInt < leftOfMiddleDateInt) return binarySearchRecursive(searchDateInt, left, middle - 1,
-                    getFromDate); //search left side
-            else return binarySearchRecursive(searchDateInt, middle + 1, right, getFromDate);
-        } else { //get "to" element
-            int rightOfMiddleDateInt = getTransactionValues().get(middle + 1).getDateInt();
-            if (searchDateInt >= middleDateInt && searchDateInt < rightOfMiddleDateInt) return middle;
-            else if (searchDateInt >= rightOfMiddleDateInt)
-                return binarySearchRecursive(searchDateInt, middle + 1, right,
-                        getFromDate);//search right side
-            else return binarySearchRecursive(searchDateInt, left, middle - 1, getFromDate);
-        }
     }
 
     public SecurityType getSecurityType() {
