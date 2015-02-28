@@ -1017,6 +1017,8 @@ public class TotalReportOutputPane extends JScrollPane {
                     } else {
                         c.setForeground(c.getForeground());
                     }
+                } else {
+                    c.setBackground(new Color(255, 255, 153));  // Light yellow
                 }
             } catch (Exception e) {
                 LogController.logException(e, "Error on Report Output Pane: ");
