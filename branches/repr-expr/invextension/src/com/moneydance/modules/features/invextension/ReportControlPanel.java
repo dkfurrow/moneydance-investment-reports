@@ -69,8 +69,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private static final String SET_AGGREGATOR = "setAggregator";
     private static final String SET_OUTPUT_SINGLE = "setOutputSingle";
     private static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
-
     private static final String HIDE_CLOSED_POSITIONS = "hideClosedPositions";
+    private static final String USE_ORDINARY_RETURN = "useOrdinaryReturn";
 
     private static File outputDirectory;
     private static Level logLevel = Level.INFO;
@@ -556,6 +556,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             case HIDE_CLOSED_POSITIONS:
                 reportConfig.setClosedPosHidden(reportOptionsPanel.hideClosedPosCheckBox.isSelected());
                 break;
+            case USE_ORDINARY_RETURN:
+                reportConfig.setUseOrdinaryReturn(reportOptionsPanel.useOrdinaryReturnCheckBox.isSelected());
+                break;
             case SHOW_HELP_FILE:
                 HelpFileDisplay.showHelpFile(this.getLocationOnScreen());
                 break;
@@ -836,6 +839,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         public JLabel numFrozenColumnsLabel = new JLabel("Number of Frozen Display Columns");
         public JComboBox<Integer> numFrozenColumnsComboBox = new JComboBox<>(numFrozenColumnsOptions);
         public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Positions with Zero Value", true);
+        public JCheckBox useOrdinaryReturnCheckBox = new JCheckBox("Use Ordinary Return Calculation", false);
 
 
 
@@ -847,6 +851,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             aggregateSingleCheckBox.setActionCommand(SET_OUTPUT_SINGLE);
             numFrozenColumnsComboBox.setActionCommand(SET_FROZEN_COLUMNS);
             hideClosedPosCheckBox.setActionCommand(HIDE_CLOSED_POSITIONS);
+            useOrdinaryReturnCheckBox.setActionCommand(USE_ORDINARY_RETURN);
             // add action listeners
             resetReportOptions.addActionListener(ReportControlPanel.this);
             aggregationOptionsComboBox.addActionListener(ReportControlPanel.this);
@@ -854,6 +859,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             aggregateSingleCheckBox.addActionListener(ReportControlPanel.this);
             numFrozenColumnsComboBox.addActionListener(ReportControlPanel.this);
             hideClosedPosCheckBox.addActionListener(ReportControlPanel.this);
+            useOrdinaryReturnCheckBox.addActionListener(ReportControlPanel.this);
 
             //initialize sub-panels
             JPanel topPanel = new JPanel();
@@ -881,6 +887,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             c.gridx = 1;
             c.gridy++;
             topPanel.add(hideClosedPosCheckBox, c);
+            c.gridx = 1;
+            c.gridy++;
+            topPanel.add(useOrdinaryReturnCheckBox, c);
             c.gridx = 0;
             c.gridy++;
             topPanel.add(numFrozenColumnsLabel, c);
@@ -911,14 +920,16 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             aggregateSingleCheckBox.setSelected(false);
             numFrozenColumnsComboBox.setSelectedItem(5);
             hideClosedPosCheckBox.setSelected(true);
+            useOrdinaryReturnCheckBox.setSelected(false);
         }
 
         public void setReportConfigInOptionsPanel() {
             aggregationOptionsComboBox.setSelectedItem(reportConfig.getAggregationController());
-            costBasisOptionsComboBox.setSelectedIndex(reportConfig.useAverageCostBasis ? 0 : 1);
+            costBasisOptionsComboBox.setSelectedIndex(reportConfig.useAverageCostBasis() ? 0 : 1);
             aggregateSingleCheckBox.setSelected(reportConfig.isOutputSingle());
             numFrozenColumnsComboBox.setSelectedItem(reportConfig.getNumFrozenColumns());
             hideClosedPosCheckBox.setSelected(reportConfig.isClosedPosHidden());
+            useOrdinaryReturnCheckBox.setSelected(reportConfig.useOrdinaryReturn());
         }
     }
 

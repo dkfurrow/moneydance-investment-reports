@@ -50,7 +50,7 @@ public class CheckRepFromTo {
         AggregationController aggregationController = AggregationController.INVACCT;
         boolean rptOutputSingle = false;
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(),dateRange);

@@ -156,7 +156,7 @@ public class ReportSaveControlPanel extends JPanel implements ActionListener {
                 if(errorNoName) errorMessage += errorNoNameMsg;
                 JOptionPane.showMessageDialog(reportSaveControlFrame, errorMessage);
             } else {
-                reportConfig.setStandardConfig(false);
+                reportConfig.setIsDefaultConfig(false);
                 reportConfig.setReportName(reportNameInput);
                 reportConfig.saveReportConfig();
                 reportControlFrame.getReportControlPanel().setNewReportName(reportNameInput);

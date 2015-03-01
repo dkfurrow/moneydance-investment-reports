@@ -133,7 +133,7 @@ public class BulkSecInfo {
     public BulkSecInfo(RootAccount root, ReportConfig reportConfig) throws Exception {
         this.root = root;
         BulkSecInfo.reportConfig = reportConfig;
-        this.gainsCalc = reportConfig.useAverageCostBasis ? new GainsAverageCalc() : new GainsLotMatchCalc();
+        this.gainsCalc = reportConfig.useAverageCostBasis() ? new GainsAverageCalc() : new GainsLotMatchCalc();
         nextAcctNumber = this.root.getHighestAccountNum() + 1;
         transactionSet = this.root.getTransactionSet();
         securityTransactionValues = new HashMap<>();

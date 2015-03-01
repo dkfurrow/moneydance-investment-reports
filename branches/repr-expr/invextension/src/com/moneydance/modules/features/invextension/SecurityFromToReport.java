@@ -49,8 +49,8 @@ public class SecurityFromToReport extends SecurityReport {
      * @param securityAccount reference account
      * @param dateRange       date range
      */
-    public SecurityFromToReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
-        super(securityAccount, dateRange);
+    public SecurityFromToReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount, DateRange dateRange) {
+        super(reportConfig, securityAccount, dateRange);
 
         int fromDateInt = dateRange.getFromDateInt();
         int toDateInt = dateRange.getToDateInt();
@@ -102,10 +102,10 @@ public class SecurityFromToReport extends SecurityReport {
         multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations.
-        ExtractorTotalReturn aggregatedAllReturn
-                = new ExtractorTotalReturn(securityAccount, fromDateInt, toDateInt, true);
-        ExtractorAnnualReturn aggregatedAnnualReturn
-                = new ExtractorAnnualReturn(securityAccount, fromDateInt, toDateInt);
+        ExtractorReturnBase aggregatedAllReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt, true);
+        ExtractorIRR aggregatedAnnualReturn
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt);
 
         returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
         returnsMetric.put(RMAnnualReturn, new MetricEntry<>(0.0, aggregatedAnnualReturn));
@@ -123,7 +123,7 @@ public class SecurityFromToReport extends SecurityReport {
 
     @Override
     public SecurityReport getAggregateSecurityReport() {
-        SecurityFromToReport aggregate = new SecurityFromToReport(null, getDateRange());
+        SecurityFromToReport aggregate = new SecurityFromToReport(reportConfig, null, getDateRange());
         return initializeAggregateSecurityReport(aggregate);
     }
 

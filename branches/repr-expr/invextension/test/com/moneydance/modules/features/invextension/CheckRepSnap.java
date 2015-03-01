@@ -50,7 +50,7 @@ public class CheckRepSnap {
         boolean closedPosHidden = true;
 
         ReportConfig reportConfig = new ReportConfig(TotalSnapshotReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);

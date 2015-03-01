@@ -49,6 +49,7 @@ public abstract class SecurityReport extends ComponentReport {
     private final double positionScale;
     private final double priceScale;
 
+    protected ReportConfig reportConfig;
     private final DateRange dateRange;
     private SecurityAccountWrapper securityAccount;
     private InvestmentAccountWrapper investmentAccount;
@@ -56,17 +57,6 @@ public abstract class SecurityReport extends ComponentReport {
     private CurrencyWrapper currency;
     private SecurityTypeWrapper securityType;
     private SecuritySubTypeWrapper securitySubType;
-
-    // For each metric, we have its current value and an extractor (which has its own state).
-    public class MetricEntry<V> {
-        public V value;
-        public final ExtractorBase<?> extractor;
-
-        MetricEntry(V v, ExtractorBase<?> e) {
-            value = v;
-            extractor = e;
-        }
-    }
 
     // Map from simpleMetric name -> <value, extractor> pairs.
     protected final TreeMap<String, MetricEntry<Number>> simpleMetric;             // Simple calculations that do not depend on
@@ -123,7 +113,8 @@ public abstract class SecurityReport extends ComponentReport {
      * @param securityAccount input security account wrapper
      * @param dateRange              input date range
      */
-    public SecurityReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
+    public SecurityReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount, DateRange dateRange) {
+        this.reportConfig = reportConfig;
         this.dateRange = dateRange;
         simpleMetric = new TreeMap<>();
         multipleMetrics = new TreeMap<>();
@@ -414,6 +405,18 @@ public abstract class SecurityReport extends ComponentReport {
 
     public int getReturnMetricStartDateInt(String name) {
         return returnsMetric.get(name).extractor.startDateInt;
+    }
+
+
+    // For each metric, we have its current value and an extractor (which has its own state).
+    public class MetricEntry<V> {
+        public V value;
+        public final ExtractorBase<?> extractor;
+
+        MetricEntry(V v, ExtractorBase<?> e) {
+            value = v;
+            extractor = e;
+        }
     }
 }
 

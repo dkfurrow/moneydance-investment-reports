@@ -36,9 +36,11 @@ import java.util.LinkedList;
 
 /**
  * Created by larus on 11/27/14.
+ *
+ * Compute the IRR for an investment.
  */
 @SuppressWarnings("ALL")
-public class ExtractorAnnualReturn extends ExtractorTotalReturn {
+public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     private ArrayList<dateValuePair> nonZeroReturns;
     private LinkedList<ArrayList<dateValuePair>> aggregatedReturns;
     private int aggregatedReturnsSize;
@@ -47,7 +49,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
     private double result = 0;
 
 
-    public ExtractorAnnualReturn(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
+    public ExtractorIRR(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt, true);
 
         nonZeroReturns = new ArrayList<>();
@@ -83,7 +85,7 @@ public class ExtractorAnnualReturn extends ExtractorTotalReturn {
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
     public void aggregateResults(ExtractorBase<?> op) {
-        ExtractorAnnualReturn operand = (ExtractorAnnualReturn) op;
+        ExtractorIRR operand = (ExtractorIRR) op;
         super.aggregateResults(operand);
 
         aggregatedReturns.add(operand.nonZeroReturns);

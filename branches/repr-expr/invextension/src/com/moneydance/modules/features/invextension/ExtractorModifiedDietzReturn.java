@@ -30,9 +30,11 @@ package com.moneydance.modules.features.invextension;
 
 /**
  * Created by larus on 11/27/14.
+ *
+ * Compute Modified-Dietz return calculation for an investment over a given time interval.
  */
 @SuppressWarnings("ALL")
-public class ExtractorTotalReturn extends ExtractorBase<Double> {
+public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     private boolean computingAllReturns;
 
     private TransactionValues firstTransaction = null;
@@ -56,9 +58,9 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
     private boolean resultCurrent = false;
     private double result = 0;
 
-    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                boolean computingAllReturns) {
-        super(secAccountWrapper, startDateInt, endDateInt);
+    public ExtractorModifiedDietzReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
+                                        boolean computingAllReturns) {
+        super(secAccountWrapper, startDateInt, endDateInt, computingAllReturns);
         this.computingAllReturns = computingAllReturns;
         if (secAccountWrapper == null && computingAllReturns) {
             intervalStartDateInt = Integer.MAX_VALUE;
@@ -117,7 +119,7 @@ public class ExtractorTotalReturn extends ExtractorBase<Double> {
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
     public void aggregateResults(ExtractorBase<?> op) {
-        ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
+        ExtractorModifiedDietzReturn operand = (ExtractorModifiedDietzReturn) op;
 
         if (operand.firstTransaction != null) {
             intervalStartDateInt = Math.min(intervalStartDateInt, operand.intervalStartDateInt);

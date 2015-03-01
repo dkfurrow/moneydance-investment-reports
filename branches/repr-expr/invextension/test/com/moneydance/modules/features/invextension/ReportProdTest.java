@@ -204,7 +204,7 @@ public class ReportProdTest {
         boolean errorFound;
         AggregationController aggregationController = AggregationController.INVACCT;
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(),  dateRange);
@@ -239,7 +239,7 @@ public class ReportProdTest {
         boolean errorFound;
         AggregationController aggregationController = AggregationController.INVACCT;
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
@@ -272,7 +272,7 @@ public class ReportProdTest {
 
         AggregationController aggregationController = AggregationController.INVACCT;
         ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                 ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER),
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
@@ -298,7 +298,7 @@ public class ReportProdTest {
             int dateInt = retDateMap.get(retCat);
             thisDateRange.setFromDateInt(dateInt);
             reportConfig = new ReportConfig(TotalFromToReport.class, "Test Report",
-                    true, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
+                    true, false, aggregationController, rptOutputSingle, numFrozenColumns, closedPosHidden,
                     ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
                     ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                     ReportConfig.getDefaultInvestmentIncomeAccounts(),dateRange);

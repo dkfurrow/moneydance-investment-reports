@@ -45,28 +45,30 @@ import java.util.prefs.Preferences;
  * Controller for Report Configuration Options
  */
 public class ReportConfig {
-    Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
-    Class<? extends TotalReport> reportClass;
-    String reportTypeName;
-    String reportName;
-    boolean useAverageCostBasis;
-    AggregationController aggregationController;
-    boolean outputSingle;
-    int numFrozenColumns;
-    boolean closedPosHidden;
-    LinkedList<Integer> viewHeader;
+    private Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
+    private Class<? extends TotalReport> reportClass;
+    private String reportTypeName;
+    private String reportName;
+    private boolean useAverageCostBasis;
+    private boolean useOrdinaryReturn;
+    private AggregationController aggregationController;
+    private boolean outputSingle;
+    private int numFrozenColumns;
+    private boolean closedPosHidden;
+    private LinkedList<Integer> viewHeader;
     private HashSet<Integer> excludedAccountNums;
     private HashSet<Integer> investmentExpenseNums;
     private HashSet<Integer> investmentIncomeNums;
-    DateRange dateRange;
-    boolean isDefaultConfig = false;
-    FrameInfo frameInfo;
+    private DateRange dateRange;
+    private boolean isDefaultConfig = false;
+    private FrameInfo frameInfo;
 
     public ReportConfig() {
         this.reportClass = null;
         this.reportTypeName = "select any report";
         this.reportName = "select any report";
         this.useAverageCostBasis = true;
+        this.useOrdinaryReturn = true;
         this.aggregationController = null;
         this.outputSingle = false;
         this.numFrozenColumns = 0;
@@ -86,7 +88,8 @@ public class ReportConfig {
      *
      * @param reportClass           input Report Class
      * @param reportName            test report name
-     * @param useAverageCostBasis            test report name
+     * @param useAverageCostBasis   test report name
+     * @param useOrdinaryReturn    test report name                              
      * @param aggregationController test aggregation controller
      * @param outputSingle          irrelevant for testing
      * @param numFrozenColumns      irrelevant for testing
@@ -98,15 +101,17 @@ public class ReportConfig {
      * @throws IllegalAccessException
      */
     public ReportConfig(Class<? extends TotalReport> reportClass, String reportName, boolean useAverageCostBasis,
-                        AggregationController aggregationController, boolean outputSingle, int numFrozenColumns,
-                        boolean closedPosHidden, LinkedList<Integer> viewHeader, HashSet<Integer> excludedAccountNums,
-                        HashSet<Integer> investmentExpenseNums, HashSet<Integer> investmentIncomeNums, DateRange dateRange)
+                        boolean useOrdinaryReturn, AggregationController aggregationController, boolean outputSingle,
+                        int numFrozenColumns, boolean closedPosHidden, LinkedList<Integer> viewHeader,
+                        HashSet<Integer> excludedAccountNums, HashSet<Integer> investmentExpenseNums,
+                        HashSet<Integer> investmentIncomeNums, DateRange dateRange)
             throws NoSuchFieldException, IllegalAccessException {
 
         this.reportClass = reportClass;
         this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
         this.reportName = reportName;
         this.useAverageCostBasis = useAverageCostBasis;
+        this.useOrdinaryReturn = useOrdinaryReturn;
         this.aggregationController = aggregationController;
         this.outputSingle = outputSingle;
         this.numFrozenColumns = numFrozenColumns;
@@ -140,8 +145,8 @@ public class ReportConfig {
         ReportConfig standardConfig = getStandardReportConfig(reportClass); //used to populate defaults if pref not found
         this.reportClass = reportClass;
         this.reportName = reportName;
-        this.useAverageCostBasis = thisReportPrefs.getBoolean(Prefs.USE_AVERAGE_COST_BASIS,
-                standardConfig.useAverageCostBasis());
+        this.useAverageCostBasis = thisReportPrefs.getBoolean(Prefs.USE_AVERAGE_COST_BASIS, standardConfig.useAverageCostBasis());
+        this.useOrdinaryReturn = thisReportPrefs.getBoolean(Prefs.USE_ORDINARY_RETURN, standardConfig.useOrdinaryReturn());
         this.aggregationController = getAggregationControllerFromPrefs(thisReportPrefs);
         this.outputSingle = thisReportPrefs.getBoolean(Prefs.OUTPUT_SINGLE, standardConfig.isOutputSingle());
         this.numFrozenColumns = thisReportPrefs.getInt(Prefs.NUM_FROZEN_COLUMNS, standardConfig.getNumFrozenColumns());
@@ -238,10 +243,10 @@ public class ReportConfig {
         HashSet<Integer> excludedAccountNums = new HashSet<>();
         HashSet<Integer> investmentExpenseNums = new HashSet<>();
         HashSet<Integer> investmentIncomeNums = new HashSet<>();
-        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true,
+        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true, false,
                 defaultAggregationController, false, 5, true, viewHeader, excludedAccountNums,
                 investmentExpenseNums, investmentIncomeNums, defaultDateRange);
-        standardConfig.setStandardConfig(true);
+        standardConfig.setIsDefaultConfig(true);
         return standardConfig;
     }
 
@@ -437,10 +442,24 @@ public class ReportConfig {
         return isDefaultConfig;
     }
 
-    public boolean useAverageCostBasis() {return useAverageCostBasis;}
+    public void setIsDefaultConfig(boolean flag) {
+        this.isDefaultConfig = flag;
+    }
 
-    public void setStandardConfig(boolean defaultConfig) {
-        this.isDefaultConfig = defaultConfig;
+    public boolean useAverageCostBasis() {
+        return useAverageCostBasis;
+    }
+
+    public void setUseAverageCostBasis(boolean flag) {
+        this.useAverageCostBasis = flag;
+    }
+
+    public boolean useOrdinaryReturn() {
+        return useOrdinaryReturn;
+    }
+
+    public void setUseOrdinaryReturn(boolean flag) {
+        this.useOrdinaryReturn = flag;
     }
 
     public boolean isOutputSingle() {
@@ -450,8 +469,6 @@ public class ReportConfig {
     public void setOutputSingle(boolean outputSingle) {
         this.outputSingle = outputSingle;
     }
-
-    public void setUseAverageCostBasis(boolean useAverageCostBasis) {this.useAverageCostBasis = useAverageCostBasis;}
 
     public DateRange getDateRange() {
         return dateRange;
@@ -590,6 +607,7 @@ public class ReportConfig {
         return "Report Class: " + reportTypeName + nl
                 + "Report Name: " + this.reportName + nl
                 + "Average Cost: " + this.useAverageCostBasis + nl
+                + "Ordinary Return: " + this.useOrdinaryReturn + nl
                 + "Aggregation Mode: " + aggregationController.getDescription() + nl
                 + "Output Single? " + outputSingle + nl
                 + "Number Frozen Columns: " + numFrozenColumns + nl
@@ -610,6 +628,7 @@ public class ReportConfig {
         Preferences thisReportPrefs = prefs.node(reportTypeName).node(
                 (this.isDefaultConfig() ? this.reportName : this.reportName.trim()));
         thisReportPrefs.putBoolean(Prefs.USE_AVERAGE_COST_BASIS, useAverageCostBasis);
+        thisReportPrefs.putBoolean(Prefs.USE_ORDINARY_RETURN, useOrdinaryReturn);
         thisReportPrefs.put(Prefs.AGGREGATION_MODE, aggregationController.name());
         thisReportPrefs.putBoolean(Prefs.OUTPUT_SINGLE, outputSingle);
         thisReportPrefs.putInt(Prefs.NUM_FROZEN_COLUMNS, numFrozenColumns);

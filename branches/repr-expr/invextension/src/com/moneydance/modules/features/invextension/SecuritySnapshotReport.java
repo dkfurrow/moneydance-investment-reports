@@ -49,8 +49,8 @@ public class SecuritySnapshotReport extends SecurityReport {
      * @param securityAccount Security Account Wrapper
      * @param dateRange       input date range
      */
-    public SecuritySnapshotReport(SecurityAccountWrapper securityAccount, DateRange dateRange) {
-        super(securityAccount, dateRange);
+    public SecuritySnapshotReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount, DateRange dateRange) {
+        super(reportConfig, securityAccount, dateRange);
 
         int fromDateInt = 19700101; // Earliest possible date
         int snapDateInt = dateRange.getSnapDateInt();
@@ -112,32 +112,36 @@ public class SecuritySnapshotReport extends SecurityReport {
         multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations. Cannot point to same as above, since they have state.
-        ExtractorTotalReturn aggregatedDayReturn
-                = new ExtractorTotalReturn(securityAccount, prevDayFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregatedWeekReturn
-                = new ExtractorTotalReturn(securityAccount, weekFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregatedMonthReturn
-                = new ExtractorTotalReturn(securityAccount, MonthFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregated3MonthReturn
-                = new ExtractorTotalReturn(securityAccount, threeMonthFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregatedYTDReturn
-                = new ExtractorTotalReturn(securityAccount, ytdFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregatedYearReturn
-                = new ExtractorTotalReturn(securityAccount, oneYearFromDateInt, snapDateInt, false);
-        ExtractorTotalReturn aggregated3YearReturn
-                = new ExtractorTotalReturn(securityAccount, threeYearFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregatedDayReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, prevDayFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregatedWeekReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, weekFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregatedMonthReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, MonthFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregated3MonthReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeMonthFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregatedYTDReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, ytdFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregatedYearReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, oneYearFromDateInt, snapDateInt, false);
+        ExtractorReturnBase aggregated3YearReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeYearFromDateInt, snapDateInt, false);
 
         int allDateInt = snapDateInt;
         if (securityAccount != null) {
             ArrayList<TransactionValues> transSet = securityAccount.getTransactionValues();
             if (!transSet.isEmpty()) {
-                allDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
+                if (reportConfig.useOrdinaryReturn()) {
+                    allDateInt = transSet.get(0).getDateInt();
+                } else {
+                    allDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
+                }
             }
         }
-        ExtractorTotalReturn aggregatedAllReturn
-                = new ExtractorTotalReturn(securityAccount, allDateInt, snapDateInt, true);
-        ExtractorTotalReturn aggregatedAnnualReturn
-                = new ExtractorAnnualReturn(securityAccount, allDateInt, snapDateInt);
+        ExtractorReturnBase aggregatedAllReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, allDateInt, snapDateInt, true);
+        ExtractorReturnBase aggregatedAnnualReturn
+                = new ExtractorIRR(securityAccount, allDateInt, snapDateInt);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));
@@ -151,6 +155,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         // Do the calculations by running the extractors over the transactions in this account.
         doCalculations(securityAccount);
+
         // Distribute the values from extractors that return multiple values
         explode(MMPriceChange, SMAbsPriceChange, SMAbsValueChange, SMPctPriceChange);
         explode(MMDividends, SMAnnualizedDividend, SMDividendYield, SMYieldOnBasis);
@@ -164,7 +169,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 
     @Override
     public SecurityReport getAggregateSecurityReport() {
-        SecuritySnapshotReport aggregate = new SecuritySnapshotReport(null, getDateRange());
+        SecuritySnapshotReport aggregate = new SecuritySnapshotReport(reportConfig, null, getDateRange());
         return initializeAggregateSecurityReport(aggregate);
     }
 

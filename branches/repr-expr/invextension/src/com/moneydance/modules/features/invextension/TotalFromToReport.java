@@ -39,8 +39,7 @@ import java.util.LinkedList;
  *
  * @author Dale Furrow
  */
-public class TotalFromToReport
-        extends TotalReport {
+public class TotalFromToReport extends TotalReport {
 
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "StartPos", "EndPos", "Start\nPrice", "End\nPrice", "Start\nValue", "End\nValue", "Buy",
@@ -55,8 +54,12 @@ public class TotalFromToReport
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1};
 
+    private ReportConfig reportConfig;
+
     public TotalFromToReport(ReportConfig reportConfig) throws Exception {
         super(reportConfig, COL_TYPES, MODEL_HEADER);
+
+        this.reportConfig = reportConfig;
     }
 
     @Override
@@ -79,9 +82,8 @@ public class TotalFromToReport
     }
 
     @Override
-    public SecurityReport getLeafSecurityReport(
-            SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
-        return new SecurityFromToReport(securityAccountWrapper, dateRange);
+    public SecurityReport getLeafSecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
+        return new SecurityFromToReport(reportConfig, securityAccountWrapper, dateRange);
     }
 
 }
