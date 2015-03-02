@@ -723,6 +723,12 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 getCoverShort() + getCommission() + getIncome() + getExpense();
     }
 
+    public long getIncomeExpenseFlows() {
+        return getIncome() + getExpense();
+    }
+
+
+
     public long getBuy() {
         return buy;
     }

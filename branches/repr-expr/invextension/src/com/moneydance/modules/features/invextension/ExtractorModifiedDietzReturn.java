@@ -28,6 +28,9 @@
 
 package com.moneydance.modules.features.invextension;
 
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 /**
  * Created by larus on 11/27/14.
  *
@@ -35,14 +38,13 @@ package com.moneydance.modules.features.invextension;
  */
 @SuppressWarnings("ALL")
 public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
-    private boolean computingAllReturns;
+    private ReturnWindowType returnWindowType;
+    protected TreeSet<ReturnValueTuple> capitalValues;
 
     private TransactionValues firstTransaction = null;
-    
-    private long income;
-    private long expenses;
-    private long unnormalizedWeightedCF;
-    private long sumCF;
+
+    private long incomeExpenseScalar = 0;
+
 
     protected long startPosition = 0;
     protected long startValue = 0;
@@ -52,22 +54,36 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     // Returns are not defined over an range in which the underlying security is not held, except for the
     // all returns and annual returns calculations, where we use the largest interval that the position is
     // open in the original range.
-    private int intervalStartDateInt;
-    private int intervaleEndDateInt;
+
 
     private boolean resultCurrent = false;
     private double result = 0;
 
     public ExtractorModifiedDietzReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                        boolean computingAllReturns) {
-        super(secAccountWrapper, startDateInt, endDateInt, computingAllReturns);
-        this.computingAllReturns = computingAllReturns;
-        if (secAccountWrapper == null && computingAllReturns) {
-            intervalStartDateInt = Integer.MAX_VALUE;
-            intervaleEndDateInt = Integer.MIN_VALUE;
-        } else {
-            intervalStartDateInt = startDateInt;
-            intervaleEndDateInt = endDateInt;
+                                        ReturnWindowType returnWindowType) {
+        super(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
+        this.returnWindowType = returnWindowType;
+        capitalValues = new TreeSet<>();
+        switch (returnWindowType) {
+            case ALL:
+                if (secAccountWrapper == null) {
+                    this.startDateInt = Integer.MAX_VALUE;
+                    this.endDateInt = Integer.MIN_VALUE;
+                } else {
+                    ArrayList<TransactionValues> transSet = secAccountWrapper.getTransactionValues();
+                    if (!transSet.isEmpty()) {
+                        this.startDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
+                        this.endDateInt = endDateInt;
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            case ANY:
+            case DEFAULT:
+                this.startDateInt = startDateInt;
+                this.endDateInt = endDateInt;
+                break;
         }
     }
 
@@ -80,12 +96,11 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
             if (firstTransaction == null) {
                 firstTransaction = transaction;
             }
-            income += transaction.getIncome();
-            expenses += transaction.getExpense();
-            int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
+            incomeExpenseScalar += transaction.getIncomeExpenseFlows();
+//            int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
             long cashFlow = transaction.getBuySellFlows();
-            unnormalizedWeightedCF += weightedDays * cashFlow;
-            sumCF += cashFlow;
+            if(cashFlow != 0) capitalValues.add(new ReturnValueTuple(transactionDateInt,
+                    cashFlow, transaction.getTxnID()));
         }
 
         return true;
@@ -101,15 +116,29 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                 endPosition = getEndPosition(securityAccount);
                 long endPrice = securityAccount.getPrice(endDateInt);
                 endValue = qXp(endPosition, endPrice);
+                switch (returnWindowType){
+                    case DEFAULT:
+                        if(startValue == 0) return SecurityReport.UndefinedReturn;
+                        if(endValue == 0 && lastTransactionWithinDateRange != null){
+                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
+                        }
+                        break;
+                    case ANY:
+                        if(startValue == 0 && firstTransaction != null) {
+                            this.startDateInt = firstTransaction.getDateInt();
+                        }
+                        if(endValue == 0 && lastTransactionWithinDateRange != null){
+                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
+                        }
+                        break;
+                    case ALL:
+                        if(endValue == 0 && lastTransactionWithinDateRange != null){
+                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
+                        }
+                        break;
+                }
 
-                if (computingAllReturns && startPosition == 0 && firstTransaction != null) {
-                    intervalStartDateInt = firstTransaction.getDateInt();
-                }
-                if (computingAllReturns && endPosition == 0 && lastTransactionWithinDateRange != null) {
-                    intervaleEndDateInt = lastTransactionWithinDateRange.getDateInt();
-                }
             }
-
             result = computeMDReturn();
             resultCurrent = true;
         }
@@ -122,10 +151,10 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         ExtractorModifiedDietzReturn operand = (ExtractorModifiedDietzReturn) op;
 
         if (operand.firstTransaction != null) {
-            intervalStartDateInt = Math.min(intervalStartDateInt, operand.intervalStartDateInt);
+            this.startDateInt = Math.min(this.startDateInt, operand.startDateInt);
         }
         if (operand.lastTransactionWithinDateRange != null) {
-            intervaleEndDateInt = Math.max(intervaleEndDateInt, operand.intervaleEndDateInt);
+            this.endDateInt = Math.max(this.endDateInt, operand.endDateInt);
         }
 
         startPosition += operand.startPosition;
@@ -133,25 +162,50 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         endPosition += operand.endPosition;
         endValue += operand.endValue;
 
-        income += operand.income;
-        expenses += operand.expenses;
-        unnormalizedWeightedCF += operand.unnormalizedWeightedCF;
-        sumCF += operand.sumCF;
-
+        incomeExpenseScalar += operand.incomeExpenseScalar;
+        capitalValues.addAll(operand.capitalValues);
         resultCurrent = false;
     }
 
     // Compute Modified Dietz return
     private double computeMDReturn() {
-        if (computingAllReturns || (startPosition != 0 && endPosition != 0)) {
-            int intervalDays = DateUtils.getDaysBetween(intervalStartDateInt, intervaleEndDateInt);
-            long weightedCF = Math.round(unnormalizedWeightedCF / (double) intervalDays);
+        int intervalDays = 0;
+        double unnormalizedWeightedCF = 0.0;
+        double weightedCF = 0.0;
+        int weightedDays = 0;
+        long sumCF = 0;
 
-            if ((startValue + weightedCF) != 0) {
-                return ((double) ((endValue + income + expenses) - startValue - sumCF)) / (startValue + weightedCF);
-            }
+
+
+        intervalDays = DateUtils.getDaysBetween(this.startDateInt, this.endDateInt);
+        for(ReturnValueTuple returnValueTuple : collapseTotalReturnTuples()){
+            weightedDays = DateUtils.getDaysBetween(returnValueTuple.date, endDateInt);
+            unnormalizedWeightedCF += weightedDays * returnValueTuple.value;
+            sumCF += returnValueTuple.value;
         }
 
-        return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
+        if(intervalDays != 0){
+            weightedCF = unnormalizedWeightedCF / intervalDays;
+            return ((double) ((endValue + incomeExpenseScalar) - startValue - sumCF))
+                    / (startValue + weightedCF);
+        } else {
+            return SecurityReport.UndefinedReturn;
+        }
+    }
+
+    private ArrayList<ReturnValueTuple> collapseTotalReturnTuples(){
+        ArrayList<ReturnValueTuple> collapsedList = new ArrayList<>(capitalValues);
+        // Collapse returns on same date to single entry to speed computation
+        int numTuples = collapsedList.size();
+
+        for(int i = 0; i < numTuples; i++){
+            int j = i + 1;
+            while(j < numTuples && collapsedList.get(i).date == collapsedList.get(j).date){
+                collapsedList.get(i).value += collapsedList.get(j).value;
+                collapsedList.remove(j);
+                numTuples --;
+            }
+        }
+        return collapsedList;
     }
 }

@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.TreeSet;
 
 /**
  * Created by larus on 11/27/14.
@@ -41,21 +41,16 @@ import java.util.LinkedList;
  */
 @SuppressWarnings("ALL")
 public class ExtractorIRR extends ExtractorModifiedDietzReturn {
-    private ArrayList<dateValuePair> nonZeroReturns;
-    private LinkedList<ArrayList<dateValuePair>> aggregatedReturns;
-    private int aggregatedReturnsSize;
+    private TreeSet<ReturnValueTuple> incomeValues;
 
     private boolean resultCurrent = false;
     private double result = 0;
 
 
-    public ExtractorIRR(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
-        super(securityAccount, startDateInt, endDateInt, true);
+    public ExtractorIRR(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt, ReturnWindowType windowType) {
+        super(securityAccount, startDateInt, endDateInt, windowType);
+        incomeValues = new TreeSet<>();
 
-        nonZeroReturns = new ArrayList<>();
-        aggregatedReturns = new LinkedList<>();
-        aggregatedReturnsSize = 0;
-        aggregatedReturns.add(nonZeroReturns);
     }
 
     public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
@@ -64,9 +59,10 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         }
 
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
-            long totalFlows = transaction.getTotalFlows();
-            if (totalFlows != 0) {
-                nonZeroReturns.add(new dateValuePair(transactionDateInt, totalFlows));
+            long incomeFlows = transaction.getIncomeExpenseFlows();
+            if (incomeFlows != 0) {
+                incomeValues.add(new ReturnValueTuple(transactionDateInt, incomeFlows,
+                        transaction.getTxnID()));
             }
         }
 
@@ -87,52 +83,33 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     public void aggregateResults(ExtractorBase<?> op) {
         ExtractorIRR operand = (ExtractorIRR) op;
         super.aggregateResults(operand);
-
-        aggregatedReturns.add(operand.nonZeroReturns);
-        aggregatedReturnsSize += operand.nonZeroReturns.size();
+        incomeValues.addAll(operand.incomeValues);
         resultCurrent = false;
     }
 
     private Double computeFinancialResults(double mdReturn) {
-        ArrayList<dateValuePair> allReturns = new ArrayList<>(aggregatedReturnsSize);
-        for (ArrayList<dateValuePair> r : aggregatedReturns) {
-            allReturns.addAll(r);
-        }
-        Collections.sort(allReturns);
-        // Collapse returns on same date to single entry to speed computation
-        int numReturns = allReturns.size();
-        int i = 0;
-        int j = 1;
-        for (; i < numReturns && j < numReturns; i++, j++) {
-            assert i < j;
-            for (; j < numReturns && allReturns.get(i) == allReturns.get(j); j++) {
-                allReturns.get(i).value += allReturns.get(j).value;
-            }
-            assert (j >= numReturns) || allReturns.get(i) != allReturns.get(j);
-            if (j < numReturns) {
-                allReturns.set(i + 1, allReturns.get(j));
-            }
-        }
+        ArrayList<ReturnValueTuple> allTuples = collapseAnnualReturnTuples();
 
-        int numPeriods = (numReturns == 0) ? 0 : i + 1;
-        double[] returns = new double[numPeriods + 2];
-        double[] excelDates = new double[numPeriods + 2];
+        int outputArraySize = allTuples.size();
+        if(startValue != 0) outputArraySize ++;
+        if(endValue != 0) outputArraySize ++;
+        double[] returns = new double[outputArraySize];
+        double[] excelDates = new double[outputArraySize];
         int next = 0;
 
-        if (startPosition != 0 && startValue != 0) {
+        if (startValue != 0) {
             excelDates[next] = DateUtils.getExcelDateValue(startDateInt);
             returns[next] = (double) -startValue;
             next++;
         }
 
-        for (i = 0; i < numPeriods; i++) {
-            dateValuePair dv = allReturns.get(i);
-            excelDates[next] = DateUtils.getExcelDateValue(dv.date);
-            returns[next] = (double) dv.value;
+        for (ReturnValueTuple returnValueTuple : allTuples) {
+            excelDates[next] = DateUtils.getExcelDateValue(returnValueTuple.date);
+            returns[next] = (double) returnValueTuple.value;
             next++;
         }
 
-        if (endPosition != 0 && endValue != 0) {
+        if (endValue != 0) {
             excelDates[next] = DateUtils.getExcelDateValue(endDateInt);
             returns[next] = (double) endValue;
             next++;
@@ -157,6 +134,27 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         }
 
         return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
+    }
+
+    private ArrayList<ReturnValueTuple> collapseAnnualReturnTuples(){
+        ArrayList<ReturnValueTuple> collapsedList = new ArrayList<>(capitalValues);
+        for(ReturnValueTuple returnValueTuple : collapsedList){
+            returnValueTuple.value *= -1.0;
+        }
+        collapsedList.addAll(incomeValues);
+        Collections.sort(collapsedList);
+        // Collapse returns on same date to single entry to speed computation
+        int numTuples = collapsedList.size();
+
+        for(int i = 0; i < numTuples; i++){
+            int j = i + 1;
+            while(j < numTuples && collapsedList.get(i).date == collapsedList.get(j).date){
+                collapsedList.get(i).value += collapsedList.get(j).value;
+                collapsedList.remove(j);
+                numTuples --;
+            }
+        }
+        return collapsedList;
     }
 
     private class dateValuePair implements Comparable<dateValuePair> {

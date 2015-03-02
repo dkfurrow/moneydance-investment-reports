@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="3c2b6ea3-27ae-4a9f-b7d5-55b0d49873cc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/IncludeExcludeAccountsTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorIRR.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorIRR.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorOrdinaryReturn.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorOrdinaryReturn.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorReturnBase.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorReturnBase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java" afterPath="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="invextension-local.iws" />
@@ -73,172 +79,141 @@
     <favorites_list name="invextension-local" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="CompositeReport.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/CompositeReport.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="3410" max-vertical-offset="4998">
-                  <caret line="278" column="9" selection-start-line="278" selection-start-column="9" selection-end-line="278" selection-end-column="9" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="TotalReport.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReport.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1528" max-vertical-offset="5049">
-                  <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#0#12802#0" expanded="false" />
-                    <element signature="imports" expanded="false" />
-                    <element signature="e#4180#4181#0" expanded="false" />
-                    <element signature="e#4218#4219#0" expanded="false" />
-                    <element signature="e#4279#4280#0" expanded="false" />
-                    <element signature="e#4318#4319#0" expanded="false" />
-                    <element signature="e#4746#4747#0" expanded="false" />
-                    <element signature="e#4778#4779#0" expanded="false" />
-                    <element signature="e#7557#7558#0" expanded="false" />
-                    <element signature="e#7588#7589#0" expanded="false" />
-                    <element signature="e#7782#7783#0" expanded="false" />
-                    <element signature="e#7821#7822#0" expanded="false" />
-                    <element signature="e#7957#7958#0" expanded="false" />
-                    <element signature="e#7991#7992#0" expanded="false" />
-                    <element signature="e#8156#8157#0" expanded="false" />
-                    <element signature="e#8189#8190#0" expanded="false" />
-                    <element signature="e#11012#11013#0" expanded="false" />
-                    <element signature="e#11047#11048#0" expanded="false" />
-                    <element signature="e#11760#11761#0" expanded="false" />
-                    <element signature="e#11809#11810#0" expanded="false" />
-                    <element signature="e#11863#11864#0" expanded="false" />
-                    <element signature="e#11905#11906#0" expanded="false" />
-                    <element signature="e#11971#11972#0" expanded="false" />
-                    <element signature="e#12018#12019#0" expanded="false" />
-                    <element signature="e#12090#12091#0" expanded="false" />
-                    <element signature="e#12135#12136#0" expanded="false" />
-                    <element signature="e#12252#12253#0" expanded="false" />
-                    <element signature="e#12310#12311#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ComponentReport.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ComponentReport.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="595">
-                  <caret line="53" column="33" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
-                  <folding>
-                    <element signature="e#0#2412#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="SecurityReport.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="4405" max-vertical-offset="6783">
-                  <caret line="306" column="13" selection-start-line="306" selection-start-column="13" selection-end-line="306" selection-end-column="13" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="TestReportOutput2.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.44884488" vertical-offset="187" max-vertical-offset="1258">
-                  <caret line="56" column="60" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="60" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="IncludeExcludeAccountsTest.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/IncludeExcludeAccountsTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="346" max-vertical-offset="2142">
-                  <caret line="57" column="23" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
-                  <folding>
-                    <element signature="e#1891#1918#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="TestReportStability.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportStability.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="639" max-vertical-offset="1258">
-                  <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ExtractorBase.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBase.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1564" max-vertical-offset="2720">
-                  <caret line="120" column="13" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
-                  <folding>
-                    <element signature="e#0#8355#0" expanded="false" />
-                    <element signature="e#5198#5199#0" expanded="false" />
-                    <element signature="e#5255#5256#0" expanded="false" />
-                    <element signature="e#7899#7900#0" expanded="false" />
-                    <element signature="e#7949#7950#0" expanded="false" />
-                    <element signature="e#8299#8300#0" expanded="false" />
-                    <element signature="e#8351#8352#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="SecurityFromToReport.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1787" max-vertical-offset="2567">
-                  <caret line="147" column="26" selection-start-line="147" selection-start-column="26" selection-end-line="147" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#0#8358#0" expanded="false" />
-                    <element signature="imports" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="BulkSecInfoTest.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/BulkSecInfoTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.51473135" vertical-offset="3511" max-vertical-offset="5610">
-                  <caret line="250" column="86" selection-start-line="249" selection-start-column="8" selection-end-line="250" selection-end-column="86" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="TestReportStability.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportStability.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="346" max-vertical-offset="1258">
-                  <caret line="90" column="28" selection-start-line="90" selection-start-column="28" selection-end-line="90" selection-end-column="28" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="ExtractorOrdinaryReturn.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorOrdinaryReturn.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="833">
+              <caret line="39" column="55" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExtractorModifiedDietzReturn.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2373" max-vertical-offset="3247">
+              <caret line="200" column="30" selection-start-line="200" selection-start-column="30" selection-end-line="200" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SecurityReport.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2429" max-vertical-offset="6358">
+              <caret line="187" column="0" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExtractorBase.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1647" max-vertical-offset="2720">
+              <caret line="137" column="19" selection-start-line="137" selection-start-column="19" selection-end-line="137" selection-end-column="19" />
+              <folding>
+                <element signature="e#5198#5199#0" expanded="true" />
+                <element signature="e#5255#5256#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestReportOutput2.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="321" max-vertical-offset="1258">
+              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransactionValues.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="10637" max-vertical-offset="15504">
+              <caret line="726" column="15" selection-start-line="726" selection-start-column="15" selection-end-line="726" selection-end-column="15" />
+              <folding>
+                <element signature="e#26074#26101#0" expanded="true" />
+                <element signature="e#26183#26210#0" expanded="true" />
+                <element signature="e#26287#26314#0" expanded="true" />
+                <element signature="e#26466#26493#0" expanded="true" />
+                <element signature="e#26622#26649#0" expanded="true" />
+                <element signature="e#26718#26745#0" expanded="true" />
+                <element signature="e#26873#26900#0" expanded="true" />
+                <element signature="e#26973#27000#0" expanded="true" />
+                <element signature="e#27076#27103#0" expanded="true" />
+                <element signature="e#27266#27293#0" expanded="true" />
+                <element signature="e#27370#27397#0" expanded="true" />
+                <element signature="e#27484#27511#0" expanded="true" />
+                <element signature="e#31621#31622#0" expanded="true" />
+                <element signature="e#31670#31671#0" expanded="true" />
+                <element signature="e#31955#31956#0" expanded="true" />
+                <element signature="e#31984#31985#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExtractorIRR.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorIRR.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.6365105" vertical-offset="1931" max-vertical-offset="2550">
+              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExtractorReturnBase.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorReturnBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1700">
+              <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+              <folding>
+                <element signature="e#3095#3096#0" expanded="true" />
+                <element signature="e#3149#3150#0" expanded="true" />
+                <element signature="e#3191#3192#0" expanded="true" />
+                <element signature="e#3233#3234#0" expanded="true" />
+                <element signature="e#3287#3288#0" expanded="true" />
+                <element signature="e#3334#3335#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SecuritySnapshotReport.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1633" max-vertical-offset="4012">
+              <caret line="140" column="9" selection-start-line="140" selection-start-column="9" selection-end-line="140" selection-end-column="9" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SecurityFromToReport.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1151" max-vertical-offset="2567">
+              <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -259,8 +234,6 @@
         <option value="$PROJECT_DIR$/src/BUILD_ANT_LOCAL.bat" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReportOutputPane.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBase.java" />
-        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java" />
-        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java" />
         <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/CheckRepSnap.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportConfig.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ReportControlPanel.java" />
@@ -268,7 +241,6 @@
         <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportStability.java" />
         <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/ReportProdTest.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/BulkSecInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorTotalReturn.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TotalReport.java" />
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorAnnualReturn.java" />
@@ -276,6 +248,12 @@
         <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java" />
         <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/IncludeExcludeAccountsTest.java" />
         <option value="$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorReturnBase.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorIRR.java" />
+        <option value="$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.java" />
       </list>
     </option>
   </component>
@@ -336,6 +314,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -407,7 +386,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -479,138 +457,6 @@
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.moneydance.modules.features.invextension" />
     </key>
-  </component>
-  <component name="RestoreUpdateTree">
-    <UpdateInfo date="Moments ago" ActionInfo="_Update">
-      <UpdatedFiles>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated from server" />
-          <option name="myStatusName" value="Changed on server" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CHANGED_ON_SERVER" />
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Updated" />
-            <option name="myStatusName" value="Changed" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="UPDATED" />
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\test\com\moneydance\modules\features\invextension\ReportProdTest.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\test\com\moneydance\modules\features\invextension\CheckRepSnap.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\test\com\moneydance\modules\features\invextension\CheckRepFromTo.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalSnapshotReport.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReportConfig.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\BulkSecInfo.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalFromToReport.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\Prefs.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReportControlPanel.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecurityReport.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReportSaveControlPanel.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecurityFromToReport.java</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Created" />
-            <option name="myStatusName" value="Created" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="CREATED" />
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorReturnBase.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorIRR.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorModifiedDietzReturn.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorOrdinaryReturn.java</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Deleted" />
-            <option name="myStatusName" value="Deleted" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="true" />
-            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorAnnualReturn.java</PATH>
-            <PATH vcs="svn" revision="161">E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorTotalReturn.java</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Restored" />
-            <option name="myStatusName" value="Will be restored" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="RESTORED" />
-          </FILE-GROUP>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Modified" />
-          <option name="myStatusName" value="Modified" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MODIFIED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Skipped" />
-          <option name="myStatusName" value="Skipped" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SKIPPED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with conflicts" />
-          <option name="myStatusName" value="Will be merged with conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_CONFLICTS" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with tree conflicts" />
-          <option name="myStatusName" value="Merged with tree conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with property conflicts" />
-          <option name="myStatusName" value="Will be merged with property conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged" />
-          <option name="myStatusName" value="Will be merged" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Not in repository" />
-          <option name="myStatusName" value="Not in repository" />
-          <option name="mySupportsDeletion" value="true" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UNKNOWN" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally added" />
-          <option name="myStatusName" value="Locally added" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_ADDED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally removed" />
-          <option name="myStatusName" value="Locally removed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_REMOVED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Switched" />
-          <option name="myStatusName" value="Switched" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SWITCHED" />
-        </FILE-GROUP>
-      </UpdatedFiles>
-    </UpdateInfo>
   </component>
   <component name="RunManager" selected="Application.TestReportOutput2">
     <configuration default="false" name="CheckRepFromTo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -1422,13 +1268,8 @@
       <workItem from="1424795161729" duration="3380000" />
       <workItem from="1424812762386" duration="9061000" />
       <workItem from="1424876524950" duration="1406000" />
-      <workItem from="1425233262046" duration="6899000" />
-    </task>
-    <task id="LOCAL-00074" summary="Changed Reset Button on main page to reset date panel.  Changed path separator on log file">
-      <created>1413218743150</created>
-      <option name="number" value="00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1413218743150</updated>
+      <workItem from="1425233262046" duration="7791000" />
+      <workItem from="1425321053228" duration="15243000" />
     </task>
     <task id="LOCAL-00075" summary="Changed Reset Button on main page to reset date panel.  Changed path separator on log file">
       <created>1413220938618</created>
@@ -1718,11 +1559,17 @@
       <option name="project" value="LOCAL" />
       <updated>1424640532936</updated>
     </task>
-    <option name="localTasksCounter" value="123" />
+    <task id="LOCAL-00123" summary="Added IncludeExcludeAccountsTest to test suite, checks if cash balances tie regardless of user-input applicable income or expenses">
+      <created>1425240239676</created>
+      <option name="number" value="00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1425240239678</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="862834000" />
+    <option name="totallyTimeSpent" value="878969000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1746,7 +1593,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="18" y="0" width="2315" height="1170" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32338786" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916266" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1761,7 +1608,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36130306" sideWeight="0.49889135" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1556541" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1556541" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40375122" sideWeight="0.49756098" order="1" side_tool="false" content_ui="tabs" />
@@ -1825,7 +1672,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="Deleted unused classes in reportConfigControl family, as functions have been moved elsewhere" />
     <MESSAGE value="Removed menu item for helpfile, added button to get help" />
     <MESSAGE value="Removed menu item for helpfile, added button to get help file" />
     <MESSAGE value="Reset NumberCellRenderer, PercentCellRenderer to display &quot;&quot; when a Double.NaN is encountered" />
@@ -1850,7 +1696,8 @@
     <MESSAGE value="Working on tying out returns values.  Added TestStability class to test suite because receiving substantially different results from (apparently) identical test runs" />
     <MESSAGE value="modified TransactionValues to always assume expense for MISCEXP transaction type, modified copy to clipboard to account for Double.MAX values, other minor changes" />
     <MESSAGE value="moved ReportConfig reference for TransactionValues to a static instance in BulkSecInfo in order to fix test instantiation." />
-    <option name="LAST_COMMIT_MESSAGE" value="moved ReportConfig reference for TransactionValues to a static instance in BulkSecInfo in order to fix test instantiation." />
+    <MESSAGE value="Added IncludeExcludeAccountsTest to test suite, checks if cash balances tie regardless of user-input applicable income or expenses" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added IncludeExcludeAccountsTest to test suite, checks if cash balances tie regardless of user-input applicable income or expenses" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1861,11 +1708,17 @@
           <properties />
           <option name="timeStamp" value="337" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java</url>
+          <line>154</line>
+          <properties />
+          <option name="timeStamp" value="341" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="340" />
+      <option name="time" value="351" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JUnit">
@@ -1875,11 +1728,11 @@
         <watch expression="inputObject[i]" language="JAVA" custom="" />
       </configuration>
       <configuration name="Application">
-        <watch expression="inputObject" language="JAVA" custom="" />
-        <watch expression="reportConfig" language="JAVA" custom="" />
-        <watch expression="report" language="JAVA" custom="" />
-        <watch expression="countNum" language="JAVA" custom="" />
-        <watch expression="componentReport instanceof SecurityReport" language="JAVA" custom="" />
+        <watch expression="securityAccount.getFullName()" language="JAVA" custom="" />
+        <watch expression="returnsMetric" language="JAVA" custom="" />
+        <watch expression="capitalValues" language="JAVA" custom="" />
+        <watch expression="incomeValues" language="JAVA" custom="" />
+        <watch expression="collapsedList" language="JAVA" custom="" />
       </configuration>
     </watches-manager>
   </component>
@@ -1888,27 +1741,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorStartValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
-          <caret line="42" column="20" selection-start-line="42" selection-start-column="20" selection-end-line="42" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorStartPrice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
-          <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorStartPosition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
-          <caret line="39" column="22" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBuy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
@@ -2105,13 +1937,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="14360" max-vertical-offset="15368">
-          <caret line="955" column="34" selection-start-line="955" selection-start-column="34" selection-end-line="955" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorEndValue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
@@ -2130,13 +1955,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33279485" vertical-offset="2820" max-vertical-offset="4709">
           <caret line="215" column="19" selection-start-line="215" selection-start-column="19" selection-end-line="215" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2273" max-vertical-offset="3910">
-          <caret line="174" column="16" selection-start-line="174" selection-start-column="16" selection-end-line="174" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -2166,55 +1984,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3162" max-vertical-offset="21420">
           <caret line="225" column="23" selection-start-line="225" selection-start-column="23" selection-end-line="225" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#54875#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#16478#16479#0" expanded="false" />
-            <element signature="e#16513#16514#0" expanded="false" />
-            <element signature="e#27725#27726#0" expanded="false" />
-            <element signature="e#27756#27757#0" expanded="false" />
-            <element signature="e#30690#30691#0" expanded="false" />
-            <element signature="e#30721#30722#0" expanded="false" />
-            <element signature="e#31289#31290#0" expanded="false" />
-            <element signature="e#31320#31321#0" expanded="false" />
-            <element signature="e#37453#37454#0" expanded="false" />
-            <element signature="e#37507#37508#0" expanded="false" />
-            <element signature="e#41260#41261#0" expanded="false" />
-            <element signature="e#41296#41297#0" expanded="false" />
-            <element signature="e#46225#46226#0" expanded="false" />
-            <element signature="e#46285#46286#0" expanded="false" />
-            <element signature="e#52712#52713#0" expanded="false" />
-            <element signature="e#52755#52756#0" expanded="false" />
-            <element signature="e#52819#52820#0" expanded="false" />
-            <element signature="e#52862#52863#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1406" max-vertical-offset="2754">
-          <caret line="120" column="13" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#8355#0" expanded="false" />
-            <element signature="e#5198#5199#0" expanded="false" />
-            <element signature="e#5255#5256#0" expanded="false" />
-            <element signature="e#7899#7900#0" expanded="false" />
-            <element signature="e#7949#7950#0" expanded="false" />
-            <element signature="e#8299#8300#0" expanded="false" />
-            <element signature="e#8351#8352#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1787" max-vertical-offset="2567">
-          <caret line="147" column="26" selection-start-line="147" selection-start-column="26" selection-end-line="147" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#8358#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2222,9 +1991,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
           <caret line="53" column="33" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#2412#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2232,43 +1999,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1528" max-vertical-offset="5049">
           <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#12802#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#4180#4181#0" expanded="false" />
-            <element signature="e#4218#4219#0" expanded="false" />
-            <element signature="e#4279#4280#0" expanded="false" />
-            <element signature="e#4318#4319#0" expanded="false" />
-            <element signature="e#4746#4747#0" expanded="false" />
-            <element signature="e#4778#4779#0" expanded="false" />
-            <element signature="e#7557#7558#0" expanded="false" />
-            <element signature="e#7588#7589#0" expanded="false" />
-            <element signature="e#7782#7783#0" expanded="false" />
-            <element signature="e#7821#7822#0" expanded="false" />
-            <element signature="e#7957#7958#0" expanded="false" />
-            <element signature="e#7991#7992#0" expanded="false" />
-            <element signature="e#8156#8157#0" expanded="false" />
-            <element signature="e#8189#8190#0" expanded="false" />
-            <element signature="e#11012#11013#0" expanded="false" />
-            <element signature="e#11047#11048#0" expanded="false" />
-            <element signature="e#11760#11761#0" expanded="false" />
-            <element signature="e#11809#11810#0" expanded="false" />
-            <element signature="e#11863#11864#0" expanded="false" />
-            <element signature="e#11905#11906#0" expanded="false" />
-            <element signature="e#11971#11972#0" expanded="false" />
-            <element signature="e#12018#12019#0" expanded="false" />
-            <element signature="e#12090#12091#0" expanded="false" />
-            <element signature="e#12135#12136#0" expanded="false" />
-            <element signature="e#12252#12253#0" expanded="false" />
-            <element signature="e#12310#12311#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4405" max-vertical-offset="6783">
-          <caret line="306" column="13" selection-start-line="306" selection-start-column="13" selection-end-line="306" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -2281,20 +2011,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportStability.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="639" max-vertical-offset="1258">
-          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/BulkSecInfoTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51473135" vertical-offset="3511" max-vertical-offset="5610">
+        <state vertical-scroll-proportion="0.490099" vertical-offset="3511" max-vertical-offset="5610">
           <caret line="250" column="86" selection-start-line="249" selection-start-column="8" selection-end-line="250" selection-end-column="86" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2303,17 +2025,128 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="346" max-vertical-offset="2142">
           <caret line="57" column="23" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportStability.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="639" max-vertical-offset="1258">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/TransactionValues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="10637" max-vertical-offset="15504">
+          <caret line="726" column="15" selection-start-line="726" selection-start-column="15" selection-end-line="726" selection-end-column="15" />
           <folding>
-            <element signature="e#1891#1918#0" expanded="true" />
+            <element signature="e#26074#26101#0" expanded="true" />
+            <element signature="e#26183#26210#0" expanded="true" />
+            <element signature="e#26287#26314#0" expanded="true" />
+            <element signature="e#26466#26493#0" expanded="true" />
+            <element signature="e#26622#26649#0" expanded="true" />
+            <element signature="e#26718#26745#0" expanded="true" />
+            <element signature="e#26873#26900#0" expanded="true" />
+            <element signature="e#26973#27000#0" expanded="true" />
+            <element signature="e#27076#27103#0" expanded="true" />
+            <element signature="e#27266#27293#0" expanded="true" />
+            <element signature="e#27370#27397#0" expanded="true" />
+            <element signature="e#27484#27511#0" expanded="true" />
+            <element signature="e#31621#31622#0" expanded="true" />
+            <element signature="e#31670#31671#0" expanded="true" />
+            <element signature="e#31955#31956#0" expanded="true" />
+            <element signature="e#31984#31985#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorOrdinaryReturn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="833">
+          <caret line="39" column="55" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecuritySnapshotReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1633" max-vertical-offset="4012">
+          <caret line="140" column="9" selection-start-line="140" selection-start-column="9" selection-end-line="140" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityFromToReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1151" max-vertical-offset="2567">
+          <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1647" max-vertical-offset="2720">
+          <caret line="137" column="19" selection-start-line="137" selection-start-column="19" selection-end-line="137" selection-end-column="19" />
+          <folding>
+            <element signature="e#5198#5199#0" expanded="true" />
+            <element signature="e#5255#5256#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/SecurityReport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2429" max-vertical-offset="6358">
+          <caret line="187" column="0" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/com/moneydance/modules/features/invextension/TestReportOutput2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44884488" vertical-offset="187" max-vertical-offset="1258">
-          <caret line="56" column="60" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="321" max-vertical-offset="1258">
+          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2373" max-vertical-offset="3247">
+          <caret line="200" column="30" selection-start-line="200" selection-start-column="30" selection-end-line="200" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorReturnBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="658" max-vertical-offset="1700">
+          <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+          <folding>
+            <element signature="e#3095#3096#0" expanded="true" />
+            <element signature="e#3149#3150#0" expanded="true" />
+            <element signature="e#3191#3192#0" expanded="true" />
+            <element signature="e#3233#3234#0" expanded="true" />
+            <element signature="e#3287#3288#0" expanded="true" />
+            <element signature="e#3334#3335#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/moneydance/modules/features/invextension/ExtractorIRR.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.6365105" vertical-offset="1931" max-vertical-offset="2550">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

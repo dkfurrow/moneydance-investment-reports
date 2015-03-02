@@ -28,6 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by larus on 3/1/15.
  * <p/>
@@ -36,17 +38,83 @@ package com.moneydance.modules.features.invextension;
 @SuppressWarnings("ALL")
 public class ExtractorReturnBase extends ExtractorBase<Double> {
     public ExtractorReturnBase(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                               boolean computingAllReturns) {
+                               ReturnWindowType returnWindowType) {
         super(secAccountWrapper, startDateInt, endDateInt);
     }
 
     protected static ExtractorReturnBase factory(boolean useOrdinary,
                                                  SecurityAccountWrapper secAccountWrapper, int startDateInt,
-                                                 int endDateInt, boolean computingAllReturns) {
+                                                 int endDateInt, ReturnWindowType returnWindowType) {
         if (useOrdinary) {
-            return new ExtractorOrdinaryReturn(secAccountWrapper, startDateInt, endDateInt, computingAllReturns);
+            return new ExtractorOrdinaryReturn(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
         } else {
-            return new ExtractorModifiedDietzReturn(secAccountWrapper, startDateInt, endDateInt, computingAllReturns);
+            return new ExtractorModifiedDietzReturn(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
         }
     }
+
+    public enum ReturnWindowType {
+        DEFAULT("Requires NonZero Initial Position at Window Start"),
+        ALL("Adjust Start Date to Day Before First Transaction"),
+        ANY("Any open position between window start and window end");
+        private final String description;
+
+        ReturnWindowType(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        @Override
+        public String toString() {
+            return this.description;
+        }
+    }
+
+    protected class ReturnValueTuple implements Comparable<ExtractorReturnBase.ReturnValueTuple> {
+        public final int date;
+        public long value;
+        public  double txnId;
+
+        public ReturnValueTuple(int d, long v, double id) {
+            date = d;
+            value = v;
+            txnId = id;
+        }
+
+        public int compareTo(@NotNull ExtractorReturnBase.ReturnValueTuple operand) {
+            if(date!= operand.date) {
+                return date - operand.date;
+            } else {
+                return ((Double) (10.0 * (txnId - operand.txnId))).intValue();
+            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ExtractorReturnBase.ReturnValueTuple)) return false;
+
+            ExtractorReturnBase.ReturnValueTuple that = (ExtractorReturnBase.ReturnValueTuple) o;
+
+            if (date != that.date) return false;
+            if (Double.compare(that.txnId, txnId) != 0) return false;
+            if (value != that.value) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            result = date;
+            result = 31 * result + (int) (value ^ (value >>> 32));
+            temp = Double.doubleToLongBits(txnId);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            return result;
+        }
+    }
+
 }

@@ -30,6 +30,7 @@
 package com.moneydance.modules.features.invextension;
 
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
+import com.moneydance.modules.features.invextension.ExtractorReturnBase.ReturnWindowType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,19 +114,19 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         // Extractors for return calculations. Cannot point to same as above, since they have state.
         ExtractorReturnBase aggregatedDayReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, prevDayFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, prevDayFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregatedWeekReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, weekFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, weekFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregatedMonthReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, MonthFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, MonthFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregated3MonthReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeMonthFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeMonthFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregatedYTDReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, ytdFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, ytdFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregatedYearReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, oneYearFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, oneYearFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
         ExtractorReturnBase aggregated3YearReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeYearFromDateInt, snapDateInt, false);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, threeYearFromDateInt, snapDateInt, ReturnWindowType.DEFAULT);
 
         int allDateInt = snapDateInt;
         if (securityAccount != null) {
@@ -139,9 +140,9 @@ public class SecuritySnapshotReport extends SecurityReport {
             }
         }
         ExtractorReturnBase aggregatedAllReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, allDateInt, snapDateInt, true);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, allDateInt, snapDateInt, ReturnWindowType.ALL);
         ExtractorReturnBase aggregatedAnnualReturn
-                = new ExtractorIRR(securityAccount, allDateInt, snapDateInt);
+                = new ExtractorIRR(securityAccount, allDateInt, snapDateInt, ReturnWindowType.ALL);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));

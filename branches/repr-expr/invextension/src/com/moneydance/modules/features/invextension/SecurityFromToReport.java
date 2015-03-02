@@ -103,9 +103,9 @@ public class SecurityFromToReport extends SecurityReport {
 
         // Extractors for return calculations.
         ExtractorReturnBase aggregatedAllReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt, true);
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.ANY);
         ExtractorIRR aggregatedAnnualReturn
-                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt);
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.ANY);
 
         returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
         returnsMetric.put(RMAnnualReturn, new MetricEntry<>(0.0, aggregatedAnnualReturn));

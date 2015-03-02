@@ -37,7 +37,7 @@ public class ExtractorOrdinaryReturn extends ExtractorReturnBase {
     protected long endValue = 0;
 
     public ExtractorOrdinaryReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                   boolean computingAllReturns) {
+                                   ReturnWindowType computingAllReturns) {
         super(secAccountWrapper, startDateInt, endDateInt, computingAllReturns);
     }
 
