@@ -40,7 +40,7 @@ import java.util.TreeSet;
 @SuppressWarnings("ALL")
 public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     private ReturnWindowType returnWindowType;
-    protected TreeSet<ReturnValueTuple> capitalValues;
+    protected TreeSet<ReturnValueElement> capitalValues;
 
     private TransactionValues firstTransaction = null;
 
@@ -104,14 +104,14 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
             incomeExpenseScalar += transaction.getIncomeExpenseFlows();
 //            int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
             long cashFlow = transaction.getBuySellFlows();
-            if(cashFlow != 0) capitalValues.add(new ReturnValueTuple(transactionDateInt,
+            if(cashFlow != 0) capitalValues.add(new ReturnValueElement(transactionDateInt,
                     cashFlow, transaction.getTxnID()));
         }
 
         return true;
     }
 
-    public TreeSet<ReturnValueTuple> getCapitalValues() {
+    public TreeSet<ReturnValueElement> getCapitalValues() {
         return capitalValues;
     }
 
@@ -186,10 +186,10 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
 
 
         intervalDays = DateUtils.getDaysBetween(this.startDateInt, this.endDateInt);
-        for(ReturnValueTuple returnValueTuple : collapseTotalReturnTuples()){
-            weightedDays = DateUtils.getDaysBetween(returnValueTuple.date, endDateInt);
-            unnormalizedWeightedCF += weightedDays * returnValueTuple.value;
-            sumCF += returnValueTuple.value;
+        for(ReturnValueElement returnValueElement : collapseTotalReturnTuples()){
+            weightedDays = DateUtils.getDaysBetween(returnValueElement.date, endDateInt);
+            unnormalizedWeightedCF += weightedDays * returnValueElement.value;
+            sumCF += returnValueElement.value;
         }
 
         if(intervalDays != 0){
@@ -201,18 +201,18 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         }
     }
 
-    private LinkedList<ReturnValueTuple> collapseTotalReturnTuples(){
-        LinkedList<ReturnValueTuple> collapsedList = new LinkedList<>();
+    private LinkedList<ReturnValueElement> collapseTotalReturnTuples(){
+        LinkedList<ReturnValueElement> collapsedList = new LinkedList<>();
         // Collapse returns on same date to single entry to speed computation
-        for(ReturnValueTuple returnValueTuple : capitalValues){
+        for(ReturnValueElement returnValueElement : capitalValues){
             if(collapsedList.isEmpty()) {
-                collapsedList.add(returnValueTuple.clone());
+                collapsedList.add(returnValueElement.clone());
             } else {
-                ReturnValueTuple lastValue = collapsedList.peekLast();
-                if(lastValue.date == returnValueTuple.date){
-                    lastValue.value += returnValueTuple.value;
+                ReturnValueElement lastValue = collapsedList.peekLast();
+                if(lastValue.date == returnValueElement.date){
+                    lastValue.value += returnValueElement.value;
                 } else {
-                    collapsedList.add(returnValueTuple.clone());
+                    collapsedList.add(returnValueElement.clone());
                 }
             }
         }

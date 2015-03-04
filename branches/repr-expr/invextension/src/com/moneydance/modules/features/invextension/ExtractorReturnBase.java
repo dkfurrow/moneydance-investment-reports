@@ -72,31 +72,31 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
         }
     }
 
-    protected class ReturnValueTuple implements Comparable<ExtractorReturnBase.ReturnValueTuple> {
+    protected class ReturnValueElement implements Comparable<ReturnValueElement> {
         public final int date;
         public long value;
         public  double txnId;
 
-        public ReturnValueTuple(int d, long v, double id) {
+        public ReturnValueElement(int d, long v, double id) {
             date = d;
             value = v;
             txnId = id;
         }
 
-        public int compareTo(@NotNull ExtractorReturnBase.ReturnValueTuple operand) {
+        public int compareTo(@NotNull ReturnValueElement operand) {
             if(date!= operand.date) {
                 return date - operand.date;
             } else {
-                return ((Double) (10.0 * (txnId - operand.txnId))).intValue();
+                return (int) Math.round((txnId - operand.txnId) * 10.0);
             }
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof ExtractorReturnBase.ReturnValueTuple)) return false;
+            if (!(o instanceof ReturnValueElement)) return false;
 
-            ExtractorReturnBase.ReturnValueTuple that = (ExtractorReturnBase.ReturnValueTuple) o;
+            ReturnValueElement that = (ReturnValueElement) o;
 
             if (date != that.date) return false;
             if (Double.compare(that.txnId, txnId) != 0) return false;
@@ -116,8 +116,8 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
             return result;
         }
 
-        public ReturnValueTuple clone(){
-            return new ReturnValueTuple(this.date, this.value, this.txnId);
+        public ReturnValueElement clone(){
+            return new ReturnValueElement(this.date, this.value, this.txnId);
         }
 
     }

@@ -42,7 +42,7 @@ import java.util.TreeSet;
  */
 @SuppressWarnings("ALL")
 public class ExtractorIRR extends ExtractorModifiedDietzReturn {
-    private TreeSet<ReturnValueTuple> incomeValues;
+    private TreeSet<ReturnValueElement> incomeValues;
 
     private boolean resultCurrent = false;
     private double result = 0;
@@ -62,7 +62,7 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
             long incomeFlows = transaction.getIncomeExpenseFlows();
             if (incomeFlows != 0) {
-                incomeValues.add(new ReturnValueTuple(transactionDateInt, incomeFlows,
+                incomeValues.add(new ReturnValueElement(transactionDateInt, incomeFlows,
                         transaction.getTxnID()));
             }
         }
@@ -89,7 +89,7 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     }
 
     private Double computeFinancialResults(double mdReturn) {
-        LinkedList<ReturnValueTuple> allTuples = collapseAnnualReturnTuples();
+        LinkedList<ReturnValueElement> allTuples = collapseAnnualReturnTuples();
 
         int outputArraySize = allTuples.size();
         if(startValue != 0) outputArraySize ++;
@@ -104,9 +104,9 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
             next++;
         }
 
-        for (ReturnValueTuple returnValueTuple : allTuples) {
-            excelDates[next] = DateUtils.getExcelDateValue(returnValueTuple.date);
-            returns[next] = (double) returnValueTuple.value;
+        for (ReturnValueElement returnValueElement : allTuples) {
+            excelDates[next] = DateUtils.getExcelDateValue(returnValueElement.date);
+            returns[next] = (double) returnValueElement.value;
             next++;
         }
 
@@ -137,32 +137,32 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
     }
 
-    private LinkedList<ReturnValueTuple> collapseAnnualReturnTuples(){
-        ArrayList<ReturnValueTuple> startList = new ArrayList<>();
+    private LinkedList<ReturnValueElement> collapseAnnualReturnTuples(){
+        ArrayList<ReturnValueElement> startList = new ArrayList<>();
 
         // reverse sign to comport with annual returns calc
-        for(ReturnValueTuple returnValueTuple : capitalValues){
-            ReturnValueTuple newReturnValueTuple = returnValueTuple.clone();
-            newReturnValueTuple.value *= -1;
-            startList.add(newReturnValueTuple);
+        for(ReturnValueElement returnValueElement : capitalValues){
+            ReturnValueElement newReturnValueElement = returnValueElement.clone();
+            newReturnValueElement.value *= -1;
+            startList.add(newReturnValueElement);
         }
-        for(ReturnValueTuple returnValueTuple : incomeValues){
-            ReturnValueTuple newReturnValueTuple = returnValueTuple.clone();
-            startList.add(newReturnValueTuple);
+        for(ReturnValueElement returnValueElement : incomeValues){
+            ReturnValueElement newReturnValueElement = returnValueElement.clone();
+            startList.add(newReturnValueElement);
         }
 
         Collections.sort(startList);
-        LinkedList<ReturnValueTuple> collapsedList = new LinkedList<>();
+        LinkedList<ReturnValueElement> collapsedList = new LinkedList<>();
         // Collapse returns on same date to single entry to speed computation
-        for(ReturnValueTuple returnValueTuple : startList){
+        for(ReturnValueElement returnValueElement : startList){
             if(collapsedList.isEmpty()) {
-                collapsedList.add(returnValueTuple.clone());
+                collapsedList.add(returnValueElement.clone());
             } else {
-                ReturnValueTuple lastValue = collapsedList.peekLast();
-                if(lastValue.date == returnValueTuple.date){
-                    lastValue.value += returnValueTuple.value;
+                ReturnValueElement lastValue = collapsedList.peekLast();
+                if(lastValue.date == returnValueElement.date){
+                    lastValue.value += returnValueElement.value;
                 } else {
-                    collapsedList.add(returnValueTuple.clone());
+                    collapsedList.add(returnValueElement.clone());
                 }
             }
         }
