@@ -342,6 +342,9 @@ public abstract class SecurityReport extends ComponentReport {
 
     protected void outputReturn(String name) {
         MetricEntry<Double> entry = returnsMetric.get(name);
+        if(securityAccount == null && investmentAccount != null && investmentAccount.getName().equals("StockBrokerage2")){
+            int i = 1; //TODO: Remove after debug
+        }
         entry.value = (Double) entry.extractor.getResult(); // Force calculation if aggregate
         outputLine.add(entry.value);
     }

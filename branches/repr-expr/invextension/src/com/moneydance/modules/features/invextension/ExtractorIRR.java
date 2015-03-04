@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.TreeSet;
 
 /**
@@ -88,7 +89,7 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     }
 
     private Double computeFinancialResults(double mdReturn) {
-        ArrayList<ReturnValueTuple> allTuples = collapseAnnualReturnTuples();
+        LinkedList<ReturnValueTuple> allTuples = collapseAnnualReturnTuples();
 
         int outputArraySize = allTuples.size();
         if(startValue != 0) outputArraySize ++;
@@ -136,22 +137,33 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
     }
 
-    private ArrayList<ReturnValueTuple> collapseAnnualReturnTuples(){
-        ArrayList<ReturnValueTuple> collapsedList = new ArrayList<>(capitalValues);
-        for(ReturnValueTuple returnValueTuple : collapsedList){
-            returnValueTuple.value *= -1.0;
-        }
-        collapsedList.addAll(incomeValues);
-        Collections.sort(collapsedList);
-        // Collapse returns on same date to single entry to speed computation
-        int numTuples = collapsedList.size();
+    private LinkedList<ReturnValueTuple> collapseAnnualReturnTuples(){
+        ArrayList<ReturnValueTuple> startList = new ArrayList<>();
 
-        for(int i = 0; i < numTuples; i++){
-            int j = i + 1;
-            while(j < numTuples && collapsedList.get(i).date == collapsedList.get(j).date){
-                collapsedList.get(i).value += collapsedList.get(j).value;
-                collapsedList.remove(j);
-                numTuples --;
+        // reverse sign to comport with annual returns calc
+        for(ReturnValueTuple returnValueTuple : capitalValues){
+            ReturnValueTuple newReturnValueTuple = returnValueTuple.clone();
+            newReturnValueTuple.value *= -1;
+            startList.add(newReturnValueTuple);
+        }
+        for(ReturnValueTuple returnValueTuple : incomeValues){
+            ReturnValueTuple newReturnValueTuple = returnValueTuple.clone();
+            startList.add(newReturnValueTuple);
+        }
+
+        Collections.sort(startList);
+        LinkedList<ReturnValueTuple> collapsedList = new LinkedList<>();
+        // Collapse returns on same date to single entry to speed computation
+        for(ReturnValueTuple returnValueTuple : startList){
+            if(collapsedList.isEmpty()) {
+                collapsedList.add(returnValueTuple.clone());
+            } else {
+                ReturnValueTuple lastValue = collapsedList.peekLast();
+                if(lastValue.date == returnValueTuple.date){
+                    lastValue.value += returnValueTuple.value;
+                } else {
+                    collapsedList.add(returnValueTuple.clone());
+                }
             }
         }
         return collapsedList;

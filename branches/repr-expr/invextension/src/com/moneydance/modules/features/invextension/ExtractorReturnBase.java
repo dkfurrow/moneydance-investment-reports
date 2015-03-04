@@ -115,6 +115,11 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
             result = 31 * result + (int) (temp ^ (temp >>> 32));
             return result;
         }
+
+        public ReturnValueTuple clone(){
+            return new ReturnValueTuple(this.date, this.value, this.txnId);
+        }
+
     }
 
 }

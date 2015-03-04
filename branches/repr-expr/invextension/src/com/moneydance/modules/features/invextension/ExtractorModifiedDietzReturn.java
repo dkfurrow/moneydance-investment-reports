@@ -29,6 +29,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.TreeSet;
 
 /**
@@ -87,6 +88,10 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         }
     }
 
+    public long getIncomeExpenseScalar() {
+        return incomeExpenseScalar;
+    }
+
     public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
@@ -106,6 +111,10 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         return true;
     }
 
+    public TreeSet<ReturnValueTuple> getCapitalValues() {
+        return capitalValues;
+    }
+
     public Double getResult() {
         if (!resultCurrent) {
             if (securityAccount != null) {
@@ -116,28 +125,27 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                 endPosition = getEndPosition(securityAccount);
                 long endPrice = securityAccount.getPrice(endDateInt);
                 endValue = qXp(endPosition, endPrice);
-                switch (returnWindowType){
-                    case DEFAULT:
-                        if(startValue == 0) return SecurityReport.UndefinedReturn;
-                        if(endValue == 0 && lastTransactionWithinDateRange != null){
-                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
-                        }
-                        break;
-                    case ANY:
-                        if(startValue == 0 && firstTransaction != null) {
-                            this.startDateInt = firstTransaction.getDateInt();
-                        }
-                        if(endValue == 0 && lastTransactionWithinDateRange != null){
-                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
-                        }
-                        break;
-                    case ALL:
-                        if(endValue == 0 && lastTransactionWithinDateRange != null){
-                            this.endDateInt = lastTransactionWithinDateRange.getDateInt();
-                        }
-                        break;
-                }
-
+            }
+            switch (returnWindowType){
+                case DEFAULT:
+                    if(startValue == 0) return SecurityReport.UndefinedReturn;
+                    if(endValue == 0 && !capitalValues.isEmpty()){
+                        this.endDateInt = capitalValues.last().date;
+                    }
+                    break;
+                case ANY:
+                    if(startValue == 0 && !capitalValues.isEmpty()) {
+                        this.startDateInt = capitalValues.first().date;
+                    }
+                    if(endValue == 0 && !capitalValues.isEmpty()){
+                        this.endDateInt = capitalValues.last().date;
+                    }
+                    break;
+                case ALL:
+                    if(endValue == 0 && !capitalValues.isEmpty()){
+                        this.endDateInt = capitalValues.last().date;
+                    }
+                    break;
             }
             result = computeMDReturn();
             resultCurrent = true;
@@ -193,17 +201,19 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         }
     }
 
-    private ArrayList<ReturnValueTuple> collapseTotalReturnTuples(){
-        ArrayList<ReturnValueTuple> collapsedList = new ArrayList<>(capitalValues);
+    private LinkedList<ReturnValueTuple> collapseTotalReturnTuples(){
+        LinkedList<ReturnValueTuple> collapsedList = new LinkedList<>();
         // Collapse returns on same date to single entry to speed computation
-        int numTuples = collapsedList.size();
-
-        for(int i = 0; i < numTuples; i++){
-            int j = i + 1;
-            while(j < numTuples && collapsedList.get(i).date == collapsedList.get(j).date){
-                collapsedList.get(i).value += collapsedList.get(j).value;
-                collapsedList.remove(j);
-                numTuples --;
+        for(ReturnValueTuple returnValueTuple : capitalValues){
+            if(collapsedList.isEmpty()) {
+                collapsedList.add(returnValueTuple.clone());
+            } else {
+                ReturnValueTuple lastValue = collapsedList.peekLast();
+                if(lastValue.date == returnValueTuple.date){
+                    lastValue.value += returnValueTuple.value;
+                } else {
+                    collapsedList.add(returnValueTuple.clone());
+                }
             }
         }
         return collapsedList;
