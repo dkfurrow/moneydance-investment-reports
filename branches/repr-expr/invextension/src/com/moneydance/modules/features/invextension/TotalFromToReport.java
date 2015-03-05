@@ -44,7 +44,7 @@ public class TotalFromToReport extends TotalReport {
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "StartPos", "EndPos", "Start\nPrice", "End\nPrice", "Start\nValue", "End\nValue", "Buy",
             "Sell", "Short\nSell", "Cover\nShort", "Income", "Expense", "Long\nBasis", "Short\nBasis", "Realized\nGain",
-            "Unrealized\nGain", "Period\nReturn", "Pct\nReturn", "Ann_Pct\nReturn"));
+            "Unrealized\nGain", "Period\nReturn", "TotPct\nReturn", "AnnPct\nReturn", "Stub-TotPct\nReturn", "Stub-AnnPct\nReturn"));
     public static String reportTypeName = "'From-To' Report";
     private static ColType[] COL_TYPES = new ColType[]{ColType.OBJECT,
             ColType.OBJECT, ColType.OBJECT, ColType.OBJECT, ColType.OBJECT,
@@ -52,7 +52,7 @@ public class TotalFromToReport extends TotalReport {
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
-            ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1};
+            ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1};
 
     private ReportConfig reportConfig;
 

@@ -82,6 +82,7 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                 break;
             case ANY:
             case DEFAULT:
+            case STUB:
                 this.startDateInt = startDateInt;
                 this.endDateInt = endDateInt;
                 break;
@@ -102,7 +103,6 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                 firstTransaction = transaction;
             }
             incomeExpenseScalar += transaction.getIncomeExpenseFlows();
-//            int weightedDays = DateUtils.getDaysBetween(transaction.getDateInt(), endDateInt);
             long cashFlow = transaction.getBuySellFlows();
             if(cashFlow != 0) capitalValues.add(new ReturnValueElement(transactionDateInt,
                     cashFlow, transaction.getTxnID()));
@@ -133,6 +133,14 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                         this.endDateInt = capitalValues.last().date;
                     }
                     break;
+                case STUB: //returns same as 'ANY' IFF DEFAULT returns undefined
+                    if(startValue != 0) return SecurityReport.UndefinedReturn;
+                    if(startValue == 0 && !capitalValues.isEmpty()) {
+                        this.startDateInt = capitalValues.first().date;
+                    }
+                    if(endValue == 0 && !capitalValues.isEmpty()){
+                        this.endDateInt = capitalValues.last().date;
+                    }
                 case ANY:
                     if(startValue == 0 && !capitalValues.isEmpty()) {
                         this.startDateInt = capitalValues.first().date;

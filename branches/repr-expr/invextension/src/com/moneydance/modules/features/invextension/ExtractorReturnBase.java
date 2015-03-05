@@ -53,9 +53,11 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
     }
 
     public enum ReturnWindowType {
-        DEFAULT("Requires NonZero Initial Position at Window Start"),
+        DEFAULT("Requires NonZero Initial Value at Window Start"),
         ALL("Adjust Start Date to Day Before First Transaction"),
-        ANY("Any open position between window start and window end");
+        ANY("Any open position between window start and window end"),
+        STUB("Returns 'ANY' only if Zero Initial Value at Window Start");
+
         private final String description;
 
         ReturnWindowType(String description) {

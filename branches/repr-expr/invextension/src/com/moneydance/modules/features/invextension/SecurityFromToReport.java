@@ -102,13 +102,22 @@ public class SecurityFromToReport extends SecurityReport {
         multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations.
-        ExtractorReturnBase aggregatedAllReturn
-                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.ANY);
-        ExtractorIRR aggregatedAnnualReturn
-                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.ANY);
+        ExtractorReturnBase aggregatedWindowTotalReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt,
+                ExtractorReturnBase.ReturnWindowType.DEFAULT);
+        ExtractorIRR aggregatedWindowAnnualReturn
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.DEFAULT);
+        ExtractorReturnBase aggregatedStubTotalReturn
+                = ExtractorReturnBase.factory(reportConfig.useOrdinaryReturn(), securityAccount, fromDateInt, toDateInt,
+                ExtractorReturnBase.ReturnWindowType.STUB);
+        ExtractorIRR aggregatedStubAnnualReturn
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.STUB);
 
-        returnsMetric.put(RMAllReturn, new MetricEntry<>(0.0, aggregatedAllReturn));
-        returnsMetric.put(RMAnnualReturn, new MetricEntry<>(0.0, aggregatedAnnualReturn));
+        returnsMetric.put(RMWindowTotalReturn, new MetricEntry<>(0.0, aggregatedWindowTotalReturn));
+        returnsMetric.put(RMWindowAnnualReturn, new MetricEntry<>(0.0, aggregatedWindowAnnualReturn));
+        returnsMetric.put(RMStubTotalReturn, new MetricEntry<>(0.0, aggregatedStubTotalReturn));
+        returnsMetric.put(RMStubAnnualReturn, new MetricEntry<>(0.0, aggregatedStubAnnualReturn));
+
 
         // Do the calculations by running the extractors over the transactions in this account.
         doCalculations(securityAccount);
@@ -167,7 +176,10 @@ public class SecurityFromToReport extends SecurityReport {
         outputSimplePrice(SMUnrealizedGain);
         outputSimplePrice(SMTotalGain);
 
-        outputReturn(RMAllReturn);
-        outputReturn(RMAnnualReturn);
+        outputReturn(RMWindowTotalReturn);
+        outputReturn(RMWindowAnnualReturn);
+        outputReturn(RMStubTotalReturn);
+        outputReturn(RMStubAnnualReturn);
+
     }
 }

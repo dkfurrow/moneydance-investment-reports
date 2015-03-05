@@ -79,6 +79,12 @@ public abstract class SecurityReport extends ComponentReport {
     public static final String RMYTDReturn = "YTDReturn";
     public static final String RMYearReturn = "YearReturn";
 
+    public static final String RMWindowTotalReturn = "WindowTotalReturn";
+    public static final String RMWindowAnnualReturn = "WindowAnnualReturn";
+    public static final String RMStubTotalReturn = "StubTotalReturn";
+    public static final String RMStubAnnualReturn = "StubAnnualReturn";
+
+
     public static final String SMAbsPriceChange = "AbsPriceChange";
     public static final String SMAbsValueChange = "AbsValueChange";
     public static final String SMAnnualizedDividend = "AnnualizedDividend";

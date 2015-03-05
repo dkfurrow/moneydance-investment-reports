@@ -73,8 +73,11 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     public Double getResult() {
         if (!resultCurrent) {
             double mdReturn = super.getResult();
-
-            result = computeFinancialResults(mdReturn);
+            if(mdReturn == SecurityReport.UndefinedReturn){
+                result = SecurityReport.UndefinedReturn;
+            } else {
+                result = computeFinancialResults(mdReturn);
+            }
             resultCurrent = true;
         }
         return result;
