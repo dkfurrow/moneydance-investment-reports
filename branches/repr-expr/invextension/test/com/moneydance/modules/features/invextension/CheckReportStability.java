@@ -37,10 +37,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 
 @SuppressWarnings("unused")
-public class TestReportStability extends JFrame {
+public class CheckReportStability extends JFrame {
 
     public static final DateRange testDateRange = new DateRange(20090601, 20100601, 20100601);
     public static final File testFile = new File("E:\\Temp\\testFile.csv");
@@ -71,30 +72,32 @@ public class TestReportStability extends JFrame {
 
     private static void runReportFromFile() throws Exception {
         RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
+
+        Class testClass = TotalSnapshotReport.class;
+        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(testClass);
         reportConfig.setDateRange(testDateRange);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
+        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
 //        System.out.println(reportConfig.toString());
-        TotalReport report = new TotalFromToReport(reportConfig);
+        TotalReport report = new TotalSnapshotReport(reportConfig);
         report.calcReport(currentInfo);
         Object[][] reportObject = report.getReportTable();
-        printTotalAndAnnualReturnAll(reportObject);
+        printSelectedData(reportObject);
     }
 
 
-    public static void printTotalAndAnnualReturnAll(Object[][] inputObject) {
+    public static void printSelectedData(Object[][] inputObject) {
 
         StringBuffer sb = new StringBuffer();
 
         for (Object[] objs : inputObject) {
             InvestmentAccountWrapper investmentAccountWrapper = (InvestmentAccountWrapper) objs[0];
             SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) objs[1];
-            if (investmentAccountWrapper.getName().trim().equals("StockBrokerage1") &&
-                    securityAccountWrapper.getName().trim().equals("Securities/CASH-ALL")) {
-                System.out.println("Final: " + investmentAccountWrapper.getName() + ":" + securityAccountWrapper.getName() + tab + objs[22].toString()
-                        + tab + objs[23].toString());
+            if (investmentAccountWrapper.getName().trim().equals("Accounts-ALL") &&
+                    securityAccountWrapper.getName().trim().equals("All CASH")) {
+                System.out.println("Final: " + investmentAccountWrapper.getName() + ":" + securityAccountWrapper.getName() + tab + objs[24].toString()
+                        + tab + objs[25].toString());
             }
         }
     }

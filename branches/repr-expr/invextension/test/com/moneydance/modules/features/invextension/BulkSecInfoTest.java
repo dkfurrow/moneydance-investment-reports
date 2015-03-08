@@ -58,7 +58,7 @@ public class BulkSecInfoTest {
     // Stored csv file of transaction activity report (lot matching)
     public static final File mdTestFileCSVLotMatch = new File("./resources/transActivityReportLotMatch.csv");
     // The following two elements determine precision of testing decimal places for comparison
-    public static final int numDigitsToCompare = 1;
+    public static final int numDigitsToCompare = 4;
     // Limits precision to minimum digits of file or report output. To generate a failed test,
     // set to false--generated report and stored report have different decimal place precisions.
     public static final boolean limitComparisonToMinDigits = true;

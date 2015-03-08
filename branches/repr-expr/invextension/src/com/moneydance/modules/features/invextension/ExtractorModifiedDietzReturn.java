@@ -136,14 +136,14 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
                 case STUB: //returns same as 'ANY' IFF DEFAULT returns undefined
                     if(startValue != 0) return SecurityReport.UndefinedReturn;
                     if(startValue == 0 && !capitalValues.isEmpty()) {
-                        this.startDateInt = capitalValues.first().date;
+                        this.startDateInt = DateUtils.getPrevBusinessDay(capitalValues.first().date);
                     }
                     if(endValue == 0 && !capitalValues.isEmpty()){
                         this.endDateInt = capitalValues.last().date;
                     }
                 case ANY:
                     if(startValue == 0 && !capitalValues.isEmpty()) {
-                        this.startDateInt = capitalValues.first().date;
+                        this.startDateInt = DateUtils.getPrevBusinessDay(capitalValues.first().date);
                     }
                     if(endValue == 0 && !capitalValues.isEmpty()){
                         this.endDateInt = capitalValues.last().date;

@@ -45,7 +45,7 @@ import static org.junit.Assert.assertFalse;
  * (2) Compares generated "Snapshot" report from stored MD file to base version
  * saved in CSV Form.
  * (3) Compares generated "SnapShot" report to iterated "From/To" report, to
- * ensure consistency between generated data between the two reports
+ * ensure consistency between generated data between the two reportsPanel
  * Version 1.0
  *
  * @author Dale Furrow
@@ -114,7 +114,7 @@ public class ReportProdTest {
      */
     private static LinkedHashMap<String, Integer> getRetDateMap(BulkSecInfo currentInfo) {
         LinkedHashMap<String, Integer> retDateMap = new LinkedHashMap<>();
-        int firstDateInt = currentInfo.getFirstDateInt();
+        int firstDateInt = DateUtils.getPrevBusinessDay(currentInfo.getFirstDateInt());
         int fromDateInt = DateUtils.getPrevBusinessDay(firstDateInt);
         int prevFromDateInt = DateUtils.getPrevBusinessDay(toDateInt);
         int wkFromDateInt = DateUtils.getLatestBusinessDay(DateUtils.addDaysInt(toDateInt, -7));
@@ -209,6 +209,7 @@ public class ReportProdTest {
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(),  dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
+        reportConfig.setAllIncomeAccountsToInvestment(currentInfo.getRoot());
         TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
         fromToReport.calcReport(currentInfo);
         Object[][] ftObj = fromToReport.getReportTable();
@@ -260,7 +261,7 @@ public class ReportProdTest {
 
     /**
      * Tests "Snap" Report generated from MD File against iterations of
-     * "From/To" Reports, to ensure that reports are consistent     *
+     * "From/To" Reports, to ensure that reportsPanel are consistent     *
      *
      * @throws Exception
      */
@@ -342,9 +343,10 @@ public class ReportProdTest {
                         errorFound = true; // MD returns
                     break;
                 case "All":
-                    if (testRepSnapCol(snapTest, ftTest, 18, 22))
+                    // adjusted column to get "stub" columns from FT Report
+                    if (testRepSnapCol(snapTest, ftTest, 18, 24))
                         errorFound = true; // MD returns
-                    if (testRepSnapCol(snapTest, ftTest, 19, 23))
+                    if (testRepSnapCol(snapTest, ftTest, 19, 25))
                         errorFound = true; // Ann returns
                     if (testRepSnapCol(snapTest, ftTest, 22, 15))
                         errorFound = true; // Income
@@ -533,7 +535,12 @@ public class ReportProdTest {
             for (int i = 0; i < inputObj.length; i++) {
                 Object obj = inputObj[i];
                 if (obj instanceof Number) {
-                    convArray[i] = obj.toString();
+                    if(obj instanceof Double && obj.equals(SecurityReport.UndefinedReturn)){
+                        convArray[i] = "";
+                    } else {
+                        convArray[i] = obj.toString();
+                    }
+
                 } else if (isObjectAggregator(obj)) {
                     convArray[i] = getNameFromObject(obj);
                 } else {

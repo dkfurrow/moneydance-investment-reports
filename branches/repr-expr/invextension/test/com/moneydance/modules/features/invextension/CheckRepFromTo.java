@@ -106,8 +106,8 @@ public class CheckRepFromTo {
                 + "UnrealizedGain: " + tab + report.getSimpleMetric(SecurityReport.SMUnrealizedGain) + tab
                 + "TotalGain:" + tab + report.getSimpleMetric(SecurityReport.SMTotalGain));
 
-        System.out.println("\n" + "mdReturn: " + tab + report.getReturnMetric(SecurityReport.RMAllReturn) + tab
-                + "AnnualReturn: " + tab + report.getReturnMetric(SecurityReport.RMAnnualReturn));
+        System.out.println("\n" + "TotalReturn: " + tab + report.getReturnMetric(SecurityReport.RMWindowTotalReturn) + tab
+                + "AnnualReturn: " + tab + report.getReturnMetric(SecurityReport.RMWindowAnnualReturn));
         System.out.println("\n");
     }
 }
