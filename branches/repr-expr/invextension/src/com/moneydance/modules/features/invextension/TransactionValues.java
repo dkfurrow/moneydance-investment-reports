@@ -362,7 +362,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         long prevVal = prevPos / 100;
 
         boolean thisBreak;
-        if (txnID == 61.0) {
+        if (txnID == 190.0) {
         thisBreak = true;
         //TODO: Remove after debug
         }
@@ -809,6 +809,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
             int parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
             long amountLong = thisSplit.getAmount();
             long valueLong = thisSplit.getValue();
+            if(txnID == 190.0){ //TODO: remove after debug
+                int i = 0;
+            }
 
 	    /*
          * goes through each transaction type, assigns values for each
@@ -857,6 +860,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                                     this.splitTransfer = split.getAccount() == accountRef
                                             ? -amountLong : amountLong;
                                 }
+                                break;
                             }
                         case Account.ACCOUNT_TYPE_INCOME:
                             if (isInvestmentIncome(thisSplit)) {
