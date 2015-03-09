@@ -143,6 +143,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.desc = this.parentTxn.getDescription();
         this.mktPrice = 100;
 
+
         long initBal = invAcctWrapper.getInvestmentAccount().getStartBalance();
         if (initBal > 0) {
             this.buy = -initBal;
@@ -183,6 +184,13 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.dateInt = thisParentTxn.getDateInt();
         this.txnID = Long.valueOf(thisParentTxn.getTxnId()).doubleValue();
         this.desc = thisParentTxn.getDescription();
+
+
+        if(this.txnID == 61.0 ){ //TODO: Remove after debug
+            int i = 0;
+        }
+
+
 
         try {
             //iterate through splits
@@ -352,6 +360,14 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 - transactionValues.expense - transactionValues.commission;
         long prevPos = prevTransValues.position;
         long prevVal = prevPos / 100;
+
+        boolean thisBreak;
+        if (txnID == 61.0) {
+        thisBreak = true;
+        //TODO: Remove after debug
+        }
+
+
         
         InvestTxnType txnType = TxnUtil.getInvestTxnType(this.parentTxn);
 
@@ -435,6 +451,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         //mkt price is always 1, so no realized/unrealized gains
 
         //other fields derive
+        this.transfer = thisTransfer;
         this.perIncomeExpense = this.income + this.expense;
         this.perTotalGain = this.perUnrealizedGain + this.perRealizedGain + this.perIncomeExpense;
         this.cumTotalGain = this.perTotalGain + prevTransValues.cumTotalGain;
@@ -830,8 +847,17 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             this.splitSecQuantity = valueLong;
                             break;
                         case Account.ACCOUNT_TYPE_EXPENSE:
-                            this.splitCommission = amountLong;
-                            break;
+                            if(split.equals(TxnUtil.getCommissionPart(parentTxn))){
+                                this.splitCommission = amountLong;
+                                break;
+                            } else {
+                                if(isInvestmentExpense(thisSplit)){
+                                    this.splitExpense = amountLong;
+                                } else {
+                                    this.splitTransfer = split.getAccount() == accountRef
+                                            ? -amountLong : amountLong;
+                                }
+                            }
                         case Account.ACCOUNT_TYPE_INCOME:
                             if (isInvestmentIncome(thisSplit)) {
                                 this.splitIncome = amountLong;
@@ -891,14 +917,10 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 case DIVIDENDXFR: // income/expense transactions
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
-                            if (isInvestmentExpense(thisSplit)) {
                                 this.splitExpense = amountLong;
-                            }
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            if (isInvestmentIncome(thisSplit)) {
                                 this.splitIncome = amountLong;
-                            }
                             break;
                         default:
                             this.splitTransfer = split.getAccount() == accountRef ?
@@ -937,14 +959,10 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 case MISCINC: // misc income and expense
                     switch (acctType) {
                         case Account.ACCOUNT_TYPE_EXPENSE:
-                            if (isInvestmentExpense(thisSplit)) {
                                 this.splitExpense = amountLong;
-                            }
                             break;
                         case Account.ACCOUNT_TYPE_INCOME:
-                            if (isInvestmentIncome(thisSplit)) {
                                 this.splitIncome = amountLong;
-                            }
                             break;
                         case Account.ACCOUNT_TYPE_SECURITY:
                             this.splitBuy = amountLong; // provides for return of capital
