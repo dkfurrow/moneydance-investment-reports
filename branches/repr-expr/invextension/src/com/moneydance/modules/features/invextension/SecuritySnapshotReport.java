@@ -199,21 +199,26 @@ public class SecuritySnapshotReport extends SecurityReport {
     private void combineDividends(SecurityReport operand) {
         if ((Long) simpleMetric.get(SMAnnualizedDividend).value == 0
                 && (Long) operand.simpleMetric.get(SMAnnualizedDividend).value != 0) {
-            //take operand values
+            //take operand value for annualized dividend
             assignValue(SMAnnualizedDividend, operand);
-            assignValue(SMDividendYield, operand);
-            assignValue(SMYieldOnBasis, operand);
         } else if ((Long) simpleMetric.get(SMAnnualizedDividend).value != 0
                 && (Long) operand.simpleMetric.get(SMAnnualizedDividend).value != 0) {
             // both valid, add
             addValue(SMAnnualizedDividend, operand);
-            double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
-            simpleMetric.get(SMDividendYield).value = annualizedDividend / (Long) simpleMetric.get(SMEndValue).value;
-            simpleMetric.get(SMYieldOnBasis).value = annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value;
         }
+        // only process Annualized Dividend, yields are calculated on display
         // if both are zero, ignore and return
         // if operand is zero, then ignore and return
         // retain current values --return
+    }
+
+    public void outputDividendYield(String stringMetric){
+        double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
+        if(stringMetric.equals(SMDividendYield)){
+            outputLine.add(annualizedDividend / (Long) simpleMetric.get(SMEndValue).value);
+        } else if(stringMetric.equals(SMYieldOnBasis)){
+            outputLine.add(annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value);
+        }
     }
 
     @Override
@@ -242,8 +247,9 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         outputSimplePrice(SMIncome);
         outputSimplePrice(SMAnnualizedDividend);
-        outputSimpleValue(SMDividendYield);
-        outputSimpleValue(SMYieldOnBasis);
+
+        outputDividendYield(SMDividendYield);
+        outputDividendYield(SMYieldOnBasis);
 
         outputSimplePrice(SMRealizedGain);
         outputSimplePrice(SMUnrealizedGain);

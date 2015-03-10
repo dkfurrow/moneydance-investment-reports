@@ -45,7 +45,7 @@ import java.util.TreeMap;
  * @author Dale Furrow
  */
 public abstract class SecurityReport extends ComponentReport {
-    private final ArrayList<Object> outputLine = new ArrayList<>();
+    protected final ArrayList<Object> outputLine = new ArrayList<>();
     private final double positionScale;
     private final double priceScale;
 
