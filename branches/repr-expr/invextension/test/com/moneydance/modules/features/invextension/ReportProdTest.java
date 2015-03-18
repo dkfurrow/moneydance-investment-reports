@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertFalse;
+import com.moneydance.modules.features.invextension.SecurityReport.MetricEntry;
 
 /**
  * Generates 3 tests:
@@ -534,11 +535,13 @@ public class ReportProdTest {
             String[] convArray = new String[inputObj.length];
             for (int i = 0; i < inputObj.length; i++) {
                 Object obj = inputObj[i];
-                if (obj instanceof Number) {
-                    if(obj instanceof Double && obj.equals(SecurityReport.UndefinedReturn)){
+                if (obj instanceof MetricEntry) {
+                    MetricEntry metricEntry = (MetricEntry) obj;
+                    Double value = metricEntry.getDisplayValue();
+                    if(value.equals(SecurityReport.UndefinedReturn)){
                         convArray[i] = "";
                     } else {
-                        convArray[i] = obj.toString();
+                        convArray[i] = value.toString();
                     }
 
                 } else if (isObjectAggregator(obj)) {

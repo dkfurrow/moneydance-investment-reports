@@ -32,6 +32,7 @@ package com.moneydance.modules.features.invextension;
 import com.moneydance.apps.md.model.CurrencyTable;
 import com.moneydance.apps.md.model.CurrencyType;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -335,21 +336,22 @@ public abstract class SecurityReport extends ComponentReport {
     protected abstract void recordMetrics();
 
     protected void outputSimplePrice(String name) {
-        outputLine.add((Long) simpleMetric.get(name).value / priceScale);
+        MetricEntry metricEntry = simpleMetric.get(name);
+        outputLine.add(metricEntry.displayObject(priceScale));
     }
 
     protected void outputSimplePosition(String name) {
-        outputLine.add((Long) simpleMetric.get(name).value / positionScale);
+        outputLine.add(simpleMetric.get(name).displayObject(positionScale));
     }
 
     protected void outputSimpleValue(String name) {
-        outputLine.add(simpleMetric.get(name).value);
+        outputLine.add(simpleMetric.get(name).displayObject(null));
     }
 
     protected void outputReturn(String name) {
         MetricEntry<Double> entry = returnsMetric.get(name);
         entry.value = (Double) entry.extractor.getResult(); // Force calculation if aggregate
-        outputLine.add(entry.value);
+        outputLine.add(entry.displayObject(null));
     }
 
     public String getName() {
@@ -415,13 +417,39 @@ public abstract class SecurityReport extends ComponentReport {
 
 
     // For each metric, we have its current value and an extractor (which has its own state).
-    public class MetricEntry<V> {
+    public class MetricEntry<V> implements Comparable<MetricEntry<V>>{
         public V value;
         public final ExtractorBase<?> extractor;
+        public Double scalingFactor = null;
 
         MetricEntry(V v, ExtractorBase<?> e) {
             value = v;
             extractor = e;
+        }
+
+        /**
+         * returns object for report table model
+         * @param scalingFactor scaling factor for position or price
+         * @return object with scaling factor
+         */
+        public MetricEntry<V> displayObject(Double scalingFactor){
+            this.scalingFactor = scalingFactor;
+            return this;
+        }
+
+        /**
+         * returns scaled double value of Metric Entry for display
+         * @return double display value
+         */
+        public Double getDisplayValue(){
+            return scalingFactor != null ? (Long) value / scalingFactor : (Double) value;
+        }
+
+        @Override
+        public int compareTo(@NotNull MetricEntry<V> operand) {
+            Double thisDouble = getDisplayValue();
+            Double operandDouble = operand.getDisplayValue();
+            return thisDouble.compareTo(operandDouble);
         }
     }
 }

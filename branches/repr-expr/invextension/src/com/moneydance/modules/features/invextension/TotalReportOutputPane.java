@@ -41,6 +41,8 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import com.moneydance.modules.features.invextension.SecurityReport.MetricEntry;
+import com.moneydance.modules.features.invextension.TotalReport.ReportTableModel;
 
 /**
  * An extended and formatted of CoolTable by Kurt Riede added multi sort,
@@ -60,7 +62,7 @@ public class TotalReportOutputPane extends JScrollPane {
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
     public SortOrder thirdOrder = SortOrder.ASCENDING;
-    public TotalReport.ReportTableModel model;
+    public ReportTableModel model;
     public boolean closedPosHidden;
     public int closedPosColumn;
     int frozenColumns = 0;
@@ -197,8 +199,9 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public static String getDisplayValueFromObject(Object o) throws Exception {
         String outputName;
-        if (o instanceof Number) {
-            outputName = o.equals(SecurityReport.UndefinedReturn) ? "" : o.toString();
+        if (o instanceof MetricEntry) {
+            Double value = ((MetricEntry) o).getDisplayValue();
+            outputName = value.equals(SecurityReport.UndefinedReturn) ? "" : value.toString();
         } else if (o instanceof InvestmentAccountWrapper) {
             outputName = ((InvestmentAccountWrapper) o).getName();
         } else if (o instanceof SecurityAccountWrapper) {
@@ -245,7 +248,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                 // workaround--getPreferredSize insufficient for (at least some)
                 // numbers, so set width based on larger font size
-                if ((value instanceof Integer || value instanceof Double)) {
+                if (value instanceof MetricEntry) {
                     JLabel comp1 = (JLabel) comp;
                     Font f1 = new Font(comp1.getFont().getName(), comp1
                             .getFont().getStyle(),
@@ -369,13 +372,29 @@ public class TotalReportOutputPane extends JScrollPane {
         return reportConfig;
     }
 
+    class ClosedValueRowFilter extends RowFilter<ReportTableModel, Integer> {
+        @Override
+        public boolean include(Entry<? extends ReportTableModel, ? extends Integer> entry) {
+            boolean result = false;
+
+            ReportTableModel reportTableModel = entry.getModel();
+            int row = entry.getIdentifier();
+            Object object = reportTableModel.getValueAt(row, closedPosColumn);
+            MetricEntry metricEntry;
+            if (object instanceof MetricEntry) {
+                metricEntry = (MetricEntry) object;
+                result = metricEntry.getDisplayValue() != 0.0;
+            }
+            return result;
+        }
+    }
+
     public void sortRows() {
 
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>((TableModel) this.model);
+        TableRowSorter<ReportTableModel> rowSorter = new TableRowSorter<>(this.model);
         // apply row sorter
         if (closedPosHidden) {
-            RowFilter<TableModel, Object> rf = RowFilter.numberFilter(
-                    RowFilter.ComparisonType.NOT_EQUAL, 0.0, closedPosColumn);
+            RowFilter<ReportTableModel, Integer> rf = new ClosedValueRowFilter();
             rowSorter.setRowFilter(rf);
         } else {
             rowSorter.setRowFilter(null);
@@ -414,7 +433,7 @@ public class TotalReportOutputPane extends JScrollPane {
         loc.x = loc.x + 75; // moved spawned window to right
         loc.y = loc.y + 75; // moved spawned window down
         frame.setLocation(loc);
-        //frame.setVisible(true);
+        frame.setVisible(true);
     }
 
     public void setSortedTableHeader() {
@@ -569,45 +588,38 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public enum ColSizeOption {NORESIZE, MAXCONTRESIZE, MAXCONTCOLRESIZE}
 
-    public static class NumberTableCellRenderer extends DefaultTableCellRenderer {
+
+    public static class MetricEntryNumberRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = -1219099935272135292L;
 
-        private DecimalFormat integerFormat = new DecimalFormat("#,###;(#,###)");
+
         private DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
 
-        public NumberTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
+        public MetricEntryNumberRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
+            this.setName("Number(" + maxDecPlaces + "," + maxDecPlaces + ")");
 
             doubleFormat.setMinimumFractionDigits(minDecPlaces);
             doubleFormat.setMaximumFractionDigits(maxDecPlaces);
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table,
-                                                       Object value, boolean isSelected, boolean hasFocus,
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
 
-            if (value instanceof Integer) { // set Integers to Right
-                Integer i = (Integer) value;
-                String text = integerFormat.format(i);
-
-                JLabel renderedLabel2 = (JLabel) cell;
-                renderedLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-                renderedLabel2.setText(text);
-                renderedLabel2.setForeground(i < 0 ? Color.RED : Color.BLACK);
-            } else if (value instanceof Double) {
-                Double d = (Double) value;
+            if (value instanceof MetricEntry) {
+                Double d = ((MetricEntry) value).getDisplayValue();
                 String text;
-                if (d.isNaN() || d.equals(SecurityReport.UndefinedReturn)) {
+                if (d == null || d.isNaN() || d.equals(SecurityReport.UndefinedReturn)) {
                     text = "";
                 } else if (d == 0.0) {
                     text = "-";
                 } else {
                     text = doubleFormat.format(d);
                 }
-                
+
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
                         : SwingConstants.RIGHT);
@@ -623,6 +635,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
         public ObjectTableCellRenderer() {
             super();
+            setName("Object");
         }
 
         @Override
@@ -660,6 +673,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
         public PercentTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
+            setName("Percent");
 
             pctFormat.setMinimumFractionDigits(minDecPlaces);
             pctFormat.setMaximumFractionDigits(maxDecPlaces);
@@ -670,9 +684,9 @@ public class TotalReportOutputPane extends JScrollPane {
                                                        boolean hasFocus, int row, int column) {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
-            if (value instanceof Double) {
-                Double d = (Double) value;
-                String text = d.isNaN() || d.equals(SecurityReport.UndefinedReturn) ? "" : pctFormat.format(d);
+            if (value instanceof MetricEntry) {
+                Double d = ((MetricEntry) value).getDisplayValue();
+                String text = d == null || d.isNaN() || d.equals(SecurityReport.UndefinedReturn) ? "" : pctFormat.format(d);
 
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -929,9 +943,9 @@ public class TotalReportOutputPane extends JScrollPane {
         private static final long serialVersionUID = -3558604379360713628L;
         private LinkedList<Integer> viewHeader;
 
-        private TableCellRenderer double0Render = new NumberTableCellRenderer(0, 0);
-        private TableCellRenderer double2Render = new NumberTableCellRenderer(2, 2);
-        private TableCellRenderer double3Render = new NumberTableCellRenderer(3, 3);
+        private TableCellRenderer double0Render = new MetricEntryNumberRenderer(0, 0);
+        private TableCellRenderer double2Render = new MetricEntryNumberRenderer(2, 2);
+        private TableCellRenderer double3Render = new MetricEntryNumberRenderer(3, 3);
         private TableCellRenderer percent1Render = new PercentTableCellRenderer(1, 1);
         private TableCellRenderer defaultRender = new ObjectTableCellRenderer();
 
@@ -996,7 +1010,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                     String aggType1 = getDisplayValueFromObject(aggObj1);
                     String aggType2 = getDisplayValueFromObject(aggObj2);
-                    Double endPos = (Double) getModel().getValueAt(modelRow, closedPosColumn);
+                    MetricEntry endValueMetricEntry = (MetricEntry) getModel().getValueAt(modelRow, closedPosColumn);
                     String typeAggregateEnd = "-ALL";
                     String nameAggregateEnd = " ";
 
@@ -1012,7 +1026,7 @@ public class TotalReportOutputPane extends JScrollPane {
                     if (aggType1.endsWith(typeAggregateEnd) && aggType2.endsWith(typeAggregateEnd)) {
                         c.setBackground(Color.GREEN);
                     }
-                    if (endPos == 0.0) {
+                    if (endValueMetricEntry.getDisplayValue() == 0.0) {
                         c.setForeground(new Color(100, 100, 100));
                     } else {
                         c.setForeground(c.getForeground());

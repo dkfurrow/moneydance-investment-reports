@@ -215,9 +215,13 @@ public class SecuritySnapshotReport extends SecurityReport {
     public void outputDividendYield(String stringMetric){
         double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
         if(stringMetric.equals(SMDividendYield)){
-            outputLine.add(annualizedDividend / (Long) simpleMetric.get(SMEndValue).value);
+            MetricEntry metricEntry = simpleMetric.get(SMDividendYield);
+            metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMEndValue).value;
+            outputLine.add(metricEntry);
         } else if(stringMetric.equals(SMYieldOnBasis)){
-            outputLine.add(annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value);
+            MetricEntry metricEntry = simpleMetric.get(SMYieldOnBasis);
+            metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value;
+            outputLine.add(metricEntry);
         }
     }
 
