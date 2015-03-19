@@ -28,6 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -38,7 +40,7 @@ import java.util.TreeSet;
  * Compute Modified-Dietz return calculation for an investment over a given time interval.
  */
 @SuppressWarnings("ALL")
-public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
+public class ExtractorTotalReturn extends ExtractorBase<Double> {
     private ReturnWindowType returnWindowType;
     protected TreeSet<ReturnValueElement> capitalValues;
 
@@ -52,6 +54,8 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     protected long endPosition = 0;
     protected long endValue = 0;
 
+    boolean useOrdinary; // indicates non-time weighted returns (vs. Modified-Dietz)
+
     // Returns are not defined over an range in which the underlying security is not held, except for the
     // all returns and annual returns calculations, where we use the largest interval that the position is
     // open in the original range.
@@ -60,10 +64,11 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     private boolean resultCurrent = false;
     private double result = 0;
 
-    public ExtractorModifiedDietzReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                        ReturnWindowType returnWindowType) {
-        super(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
+    public ExtractorTotalReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
+                                ReturnWindowType returnWindowType, boolean useOrdinary) {
+        super(secAccountWrapper, startDateInt, endDateInt);
         this.returnWindowType = returnWindowType;
+        this.useOrdinary = useOrdinary;
         capitalValues = new TreeSet<>();
         switch (returnWindowType) {
             case ALL:
@@ -164,7 +169,7 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
     public void aggregateResults(ExtractorBase<?> op) {
-        ExtractorModifiedDietzReturn operand = (ExtractorModifiedDietzReturn) op;
+        ExtractorTotalReturn operand = (ExtractorTotalReturn) op;
 
         if (operand.firstTransaction != null) {
             this.startDateInt = Math.min(this.startDateInt, operand.startDateInt);
@@ -203,7 +208,7 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         if(intervalDays != 0){
             weightedCF = unnormalizedWeightedCF / intervalDays;
             return ((double) ((endValue + incomeExpenseScalar) - startValue - sumCF))
-                    / (startValue + weightedCF);
+                    / (startValue + (useOrdinary ? sumCF : weightedCF));
         } else {
             return SecurityReport.UndefinedReturn;
         }
@@ -225,5 +230,77 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
             }
         }
         return collapsedList;
+    }
+
+    public enum ReturnWindowType {
+        DEFAULT("Requires NonZero Initial Value at Window Start"),
+        ALL("Adjust Start Date to Day Before First Transaction"),
+        ANY("Any open position between window start and window end"),
+        STUB("Returns 'ANY' only if Zero Initial Value at Window Start");
+
+        private final String description;
+
+        ReturnWindowType(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        @Override
+        public String toString() {
+            return this.description;
+        }
+    }
+
+    class ReturnValueElement implements Comparable<ReturnValueElement> {
+        public final int date;
+        public long value;
+        public  double txnId;
+
+        public ReturnValueElement(int d, long v, double id) {
+            date = d;
+            value = v;
+            txnId = id;
+        }
+
+        public int compareTo(@NotNull ReturnValueElement operand) {
+            if(date!= operand.date) {
+                return date - operand.date;
+            } else {
+                return (int) Math.round((txnId - operand.txnId) * 10.0);
+            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ReturnValueElement)) return false;
+
+            ReturnValueElement that = (ReturnValueElement) o;
+
+            if (date != that.date) return false;
+            if (Double.compare(that.txnId, txnId) != 0) return false;
+            if (value != that.value) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            result = date;
+            result = 31 * result + (int) (value ^ (value >>> 32));
+            temp = Double.doubleToLongBits(txnId);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            return result;
+        }
+
+        public ReturnValueElement clone(){
+            return new ReturnValueElement(this.date, this.value, this.txnId);
+        }
+
     }
 }

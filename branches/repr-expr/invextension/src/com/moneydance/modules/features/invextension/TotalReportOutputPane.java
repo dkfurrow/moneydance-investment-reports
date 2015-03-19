@@ -1050,13 +1050,17 @@ public class TotalReportOutputPane extends JScrollPane {
                     JTable target = (JTable) e.getSource();
                     int rowViewIndex = target.getSelectedRow();
                     int rowModelIndex = convertRowIndexToModel(rowViewIndex);
-                    Object obj = model.getValueAt(rowModelIndex, 1);
-                    if (obj instanceof SecurityAccountWrapper) {
-                        SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) obj;
-                        if (securityAccountWrapper.isTradeable()) {
-                            SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
-                        }
+                    int columnViewIndex = target.getSelectedColumn();
+                    int columnModelIndex = convertColumnIndexToModel(columnViewIndex);
 
+                    if (columnModelIndex <= 4) {
+                        Object obj = model.getValueAt(rowModelIndex, 1);
+                        if (obj instanceof SecurityAccountWrapper) {
+                            SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) obj;
+                            if (securityAccountWrapper.isTradeable()) {
+                                SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
+                            }
+                        }
                     }
                 }
             }
