@@ -1061,11 +1061,50 @@ public class TotalReportOutputPane extends JScrollPane {
                                 SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
                             }
                         }
+                    } else {
+                        Object obj = model.getValueAt(rowModelIndex, columnModelIndex);
+                        if (obj instanceof MetricEntry) {
+                            MetricEntry metricEntry = (MetricEntry) obj;
+                            ExtractorReturnBase extractor = null;
+                            if(metricEntry.extractor instanceof ExtractorReturnBase){
+                                extractor = (ExtractorReturnBase) metricEntry.extractor;
+
+                                ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor, getRowInformation(rowModelIndex),
+                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight(), "Sample Description");
+                            }
+                        }
+
                     }
                 }
             }
-
         }
+    }
+
+    private String getRowInformation(int rowModelIndex){
+        StringBuffer rowInfo = new StringBuffer();
+        String element;
+        InvestmentAccountWrapper investmentAccountWrapper =
+                (InvestmentAccountWrapper) model.getValueAt(rowModelIndex, 0);
+        element = investmentAccountWrapper.getName();
+        if(element.length() > 0) rowInfo.append(element).append(" : ");
+        SecurityAccountWrapper securityAccountWrapper =
+                (SecurityAccountWrapper) model.getValueAt(rowModelIndex, 1);
+        element = securityAccountWrapper.getName();
+        if(element.length() > 0) rowInfo.append(element).append(" : ");
+        SecurityTypeWrapper securityTypeWrapper =
+                (SecurityTypeWrapper) model.getValueAt(rowModelIndex, 2);
+        element = securityTypeWrapper.getName();
+        if(element.length() > 0) rowInfo.append(element).append(" : ");
+        SecuritySubTypeWrapper securitySubTypeWrapper =
+                (SecuritySubTypeWrapper) model.getValueAt(rowModelIndex, 3);
+        element = securitySubTypeWrapper.getName();
+        if(element.length() > 0) rowInfo.append(element).append(" : ");
+        CurrencyWrapper currencyWrapper =
+                (CurrencyWrapper) model.getValueAt(rowModelIndex, 4);
+        element = currencyWrapper.getTicker();
+        if(element.length() > 0) rowInfo.append(element);
+
+        return  rowInfo.toString();
     }
 
     private class RowSortGui extends JPanel {

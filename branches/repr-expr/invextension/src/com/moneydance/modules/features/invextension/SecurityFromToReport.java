@@ -102,15 +102,15 @@ public class SecurityFromToReport extends SecurityReport {
         multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
 
         // Extractors for return calculations.
-        ExtractorTotalReturn aggregatedWindowTotalReturn = new ExtractorTotalReturn(securityAccount, fromDateInt,
-                toDateInt, ExtractorTotalReturn.ReturnWindowType.DEFAULT, reportConfig.useOrdinaryReturn());
+        ExtractorReturnBase aggregatedWindowTotalReturn = ExtractorReturnBase.factory(securityAccount, fromDateInt,
+                toDateInt, ExtractorReturnBase.ReturnWindowType.DEFAULT, reportConfig.useOrdinaryReturn());
         ExtractorIRR aggregatedWindowAnnualReturn
-                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorTotalReturn.ReturnWindowType.DEFAULT);
-        ExtractorTotalReturn aggregatedStubTotalReturn
-                = new ExtractorTotalReturn(securityAccount, fromDateInt,
-                toDateInt, ExtractorTotalReturn.ReturnWindowType.STUB, reportConfig.useOrdinaryReturn());
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.DEFAULT);
+        ExtractorReturnBase aggregatedStubTotalReturn
+                = ExtractorReturnBase.factory(securityAccount, fromDateInt,
+                toDateInt, ExtractorReturnBase.ReturnWindowType.STUB, reportConfig.useOrdinaryReturn());
         ExtractorIRR aggregatedStubAnnualReturn
-                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorTotalReturn.ReturnWindowType.STUB);
+                = new ExtractorIRR(securityAccount, fromDateInt, toDateInt, ExtractorReturnBase.ReturnWindowType.STUB);
 
         returnsMetric.put(RMWindowTotalReturn, new MetricEntry<>(0.0, aggregatedWindowTotalReturn));
         returnsMetric.put(RMWindowAnnualReturn, new MetricEntry<>(0.0, aggregatedWindowAnnualReturn));
