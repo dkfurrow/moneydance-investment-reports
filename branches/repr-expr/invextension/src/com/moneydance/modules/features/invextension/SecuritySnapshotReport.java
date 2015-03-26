@@ -49,8 +49,9 @@ public class SecuritySnapshotReport extends SecurityReport {
      * @param securityAccount Security Account Wrapper
      * @param dateRange       input date range
      */
-    public SecuritySnapshotReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount, DateRange dateRange) {
-        super(reportConfig, securityAccount, dateRange);
+    public SecuritySnapshotReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount,
+                                  CompositeReport compositeReport ,DateRange dateRange) {
+        super(reportConfig, securityAccount, compositeReport, dateRange);
 
         int fromDateInt = 19700101; // Earliest possible date
         int snapDateInt = dateRange.getSnapDateInt();
@@ -114,33 +115,33 @@ public class SecuritySnapshotReport extends SecurityReport {
         // Extractors for return calculations. Cannot point to same as above, since they have state.
         ReturnWindowType windowType = ExtractorReturnBase.ReturnWindowType.DEFAULT;
         ExtractorReturnBase aggregatedDayReturn
-                = ExtractorReturnBase.factory(securityAccount, prevDayFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, prevDayFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregatedWeekReturn
-                = ExtractorReturnBase.factory(securityAccount, weekFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, weekFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregatedMonthReturn
-                = ExtractorReturnBase.factory(securityAccount, MonthFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, MonthFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregated3MonthReturn
-                = ExtractorReturnBase.factory(securityAccount, threeMonthFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, threeMonthFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregatedYTDReturn
-                = ExtractorReturnBase.factory(securityAccount, ytdFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, ytdFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregatedYearReturn
-                = ExtractorReturnBase.factory(securityAccount, oneYearFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, oneYearFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorReturnBase aggregated3YearReturn
-                = ExtractorReturnBase.factory(securityAccount, threeYearFromDateInt,
+                = ExtractorReturnBase.factory(securityAccount, this, threeYearFromDateInt,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         // all period returns
         windowType = ExtractorReturnBase.ReturnWindowType.ALL;
         ExtractorReturnBase aggregatedAllReturn
-                = ExtractorReturnBase.factory(securityAccount, Integer.MIN_VALUE,
+                = ExtractorReturnBase.factory(securityAccount, this, Integer.MIN_VALUE,
                 snapDateInt, windowType, reportConfig.useOrdinaryReturn());
         ExtractorIRR aggregatedAnnualReturn
-                = new ExtractorIRR(securityAccount, Integer.MIN_VALUE, snapDateInt, windowType);
+                = new ExtractorIRR(securityAccount, this, Integer.MIN_VALUE, snapDateInt, windowType);
 
         returnsMetric.put(RMDayReturn, new MetricEntry<>(0.0, aggregatedDayReturn));
         returnsMetric.put(RMWeekReturn, new MetricEntry<>(0.0, aggregatedWeekReturn));
@@ -167,8 +168,8 @@ public class SecuritySnapshotReport extends SecurityReport {
     }
 
     @Override
-    public SecurityReport getAggregateSecurityReport() {
-        SecuritySnapshotReport aggregate = new SecuritySnapshotReport(reportConfig, null, getDateRange());
+    public SecurityReport getAggregateSecurityReport(CompositeReport compositeReport) {
+        SecuritySnapshotReport aggregate = new SecuritySnapshotReport(reportConfig, null, compositeReport, getDateRange());
         return initializeAggregateSecurityReport(aggregate);
     }
 

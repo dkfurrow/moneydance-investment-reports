@@ -161,17 +161,11 @@ public abstract class TotalReport {
 
     /**
      * Generates "All-Securities" Composite Report
-     *
-     * @param thisDateRange         input date range
-     * @param aggregationController input Aggregation Mode
      * @return composite for all security reports
      */
     @SuppressWarnings("unchecked")
-    public CompositeReport getAllCompositeReport(DateRange thisDateRange, AggregationController aggregationController) {
-        CompositeReport allComposite = new CompositeReport(aggregationController);
-        allComposite.setAggregateReport(getLeafSecurityReport(null, thisDateRange));
-        return allComposite;
-    }
+    public abstract CompositeReport getAllCompositeReport(DateRange dateRange,
+                                                          AggregationController aggregationController);
 
     /**
      * Designates which column controls the "closed-position" report GUI function
@@ -238,8 +232,7 @@ public abstract class TotalReport {
         //produce all leaf-level Security Reports
         for (InvestmentAccountWrapper invWrapper : currentInfo.getInvestmentWrappers()) {
             for (SecurityAccountWrapper secWrapper : invWrapper.getSecurityAccountWrappers()) {
-                SecurityReport thisReport = getLeafSecurityReport(secWrapper,
-                        dateRange);
+                SecurityReport thisReport = getLeafSecurityReport(secWrapper, dateRange);
                 securityReports.add(thisReport);
             }
         }

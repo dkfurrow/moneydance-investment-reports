@@ -124,7 +124,7 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
         //populate
         addSecuritySubTypeButton.setToolTipText("Add Security Subtype");
         securityNameTextField.setText(securityAccountWrapper.getName());
-        tickerTextField.setText(securityAccountWrapper.getCurrencyWrapper().getTicker());
+        tickerTextField.setText(securityAccountWrapper.getCurrencyWrapper().getName());
         securityTypeComboBox.setSelectedItem(securityAccountWrapper.getSecurityType());
         populateSecuritySubTypes(true);
 

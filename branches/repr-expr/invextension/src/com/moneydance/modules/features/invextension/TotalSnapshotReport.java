@@ -86,7 +86,15 @@ public class TotalSnapshotReport extends TotalReport {
 
     @Override
     public SecurityReport getLeafSecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
-        return new SecuritySnapshotReport(reportConfig, securityAccountWrapper, dateRange);
+        return new SecuritySnapshotReport(reportConfig, securityAccountWrapper, null, dateRange);
+    }
+
+    @Override
+    public CompositeReport getAllCompositeReport(DateRange dateRange, AggregationController aggregationController) {
+        CompositeReport compositeReport = new CompositeReport(aggregationController);
+        SecuritySnapshotReport allAggregate = new SecuritySnapshotReport(reportConfig, null, compositeReport, dateRange);
+        compositeReport.setAggregateReport(allAggregate);
+        return  compositeReport;
     }
 
 }

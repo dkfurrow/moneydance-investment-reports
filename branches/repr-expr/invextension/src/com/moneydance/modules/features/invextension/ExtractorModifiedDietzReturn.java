@@ -63,9 +63,9 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
     private boolean resultCurrent = false;
     private double result = 0;
 
-    public ExtractorModifiedDietzReturn(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
-                                ReturnWindowType returnWindowType) {
-        super(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
+    public ExtractorModifiedDietzReturn(SecurityAccountWrapper secAccountWrapper, SecurityReport securityReport, int startDateInt, int endDateInt,
+                                        ReturnWindowType returnWindowType) {
+        super(secAccountWrapper, securityReport, startDateInt, endDateInt, returnWindowType);
         this.returnWindowType = returnWindowType;
         capitalValues = new TreeSet<>();
         switch (returnWindowType) {

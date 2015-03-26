@@ -40,16 +40,16 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     private ExtractorReturnBase extractor;
     private Point location;
     private int maximumHeight;
-    private String description = "";
+
 
 
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
-                                               final String rowInformation, final Point location, final int maximumHeight, final String description){
+                                               final Point location, final int maximumHeight, final String description){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 ReturnsAuditDisplayFrame returnsAuditDisplayFrame =
-                        new ReturnsAuditDisplayFrame(extractor, location, maximumHeight, rowInformation);
+                        new ReturnsAuditDisplayFrame(extractor, location, maximumHeight);
                 returnsAuditDisplayFrame.showFrame();
             }
         });
@@ -57,11 +57,10 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
 
 
 
-    public ReturnsAuditDisplayFrame(ExtractorReturnBase extractor, Point location, int maximumHeight, String description)  {
+    public ReturnsAuditDisplayFrame(ExtractorReturnBase extractor, Point location, int maximumHeight)  {
         this.extractor = extractor;
         this.location = location;
         this.maximumHeight = maximumHeight;
-        this.description = description;
         initComponents();
     }
 
@@ -71,7 +70,7 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
         editor.getDocument().putProperty("Ignore-Charset", "true");  // this line makes no difference either way
         editor.setContentType("text/html");
         editor.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-        editor.setText("Returns Information: " + description);
+        editor.setText("Returns Information: " + extractor.getDescription());
 
         // make it read-only
         editor.setEditable(false);
@@ -80,7 +79,7 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(editor);
 
         // now add it all to a frame
-        this.setTitle(description);
+        this.setTitle("Return Calculation Elements");
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
         // make it easy to close the application

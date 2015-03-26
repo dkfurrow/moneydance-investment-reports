@@ -48,8 +48,9 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     private double result = 0;
 
 
-    public ExtractorIRR(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt, ReturnWindowType windowType) {
-        super(securityAccount, startDateInt, endDateInt, windowType);
+    public ExtractorIRR(SecurityAccountWrapper securityAccount, SecurityReport securityReport,
+                        int startDateInt, int endDateInt, ReturnWindowType windowType) {
+        super(securityAccount, securityReport, startDateInt, endDateInt, windowType);
         incomeValues = new TreeSet<>();
 
     }

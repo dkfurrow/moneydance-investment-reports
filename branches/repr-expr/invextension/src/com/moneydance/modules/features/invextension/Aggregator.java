@@ -37,6 +37,7 @@ package com.moneydance.modules.features.invextension;
 public interface Aggregator {
 
 
+    abstract String getName();
     /**
      * output name of aggregate e.g. if CurrencyTypeWrapper "IBM"
      *

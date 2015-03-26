@@ -638,7 +638,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
         txnInfo.add(referenceAccount.getParentAccount().getAccountName());
         txnInfo.add(referenceAccount.getAccountName());
-        txnInfo.add(securityAccountWrapper.getCurrencyWrapper().getTicker() == null ? "NoTicker" : securityAccountWrapper.getCurrencyWrapper().getTicker());
+        txnInfo.add(securityAccountWrapper.getCurrencyWrapper().getName() == null ? "NoTicker" : securityAccountWrapper.getCurrencyWrapper().getName());
         txnInfo.add(securityAccountWrapper.getDivFrequency().toString());
         txnInfo.add(Double.toString(txnID));
         txnInfo.add(DateUtils.convertToShort(dateInt));

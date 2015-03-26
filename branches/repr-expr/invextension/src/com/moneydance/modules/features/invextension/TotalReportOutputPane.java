@@ -211,7 +211,7 @@ public class TotalReportOutputPane extends JScrollPane {
         } else if (o instanceof SecuritySubTypeWrapper) {
             outputName = ((SecuritySubTypeWrapper) o).getName();
         } else if (o instanceof CurrencyWrapper) {
-            outputName = ((CurrencyWrapper) o).getTicker();
+            outputName = ((CurrencyWrapper) o).getName();
         } else {
             throw new Exception("invalid attempt to get name from object");
         }
@@ -1069,8 +1069,9 @@ public class TotalReportOutputPane extends JScrollPane {
                             if(metricEntry.extractor instanceof ExtractorReturnBase){
                                 extractor = (ExtractorReturnBase) metricEntry.extractor;
 
-                                ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor, getRowInformation(rowModelIndex),
-                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight(), "Sample Description");
+                                ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor,
+                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight(),
+                                        "Sample Description");
                             }
                         }
 
@@ -1078,33 +1079,6 @@ public class TotalReportOutputPane extends JScrollPane {
                 }
             }
         }
-    }
-
-    private String getRowInformation(int rowModelIndex){
-        StringBuffer rowInfo = new StringBuffer();
-        String element;
-        InvestmentAccountWrapper investmentAccountWrapper =
-                (InvestmentAccountWrapper) model.getValueAt(rowModelIndex, 0);
-        element = investmentAccountWrapper.getName();
-        if(element.length() > 0) rowInfo.append(element).append(" : ");
-        SecurityAccountWrapper securityAccountWrapper =
-                (SecurityAccountWrapper) model.getValueAt(rowModelIndex, 1);
-        element = securityAccountWrapper.getName();
-        if(element.length() > 0) rowInfo.append(element).append(" : ");
-        SecurityTypeWrapper securityTypeWrapper =
-                (SecurityTypeWrapper) model.getValueAt(rowModelIndex, 2);
-        element = securityTypeWrapper.getName();
-        if(element.length() > 0) rowInfo.append(element).append(" : ");
-        SecuritySubTypeWrapper securitySubTypeWrapper =
-                (SecuritySubTypeWrapper) model.getValueAt(rowModelIndex, 3);
-        element = securitySubTypeWrapper.getName();
-        if(element.length() > 0) rowInfo.append(element).append(" : ");
-        CurrencyWrapper currencyWrapper =
-                (CurrencyWrapper) model.getValueAt(rowModelIndex, 4);
-        element = currencyWrapper.getTicker();
-        if(element.length() > 0) rowInfo.append(element);
-
-        return  rowInfo.toString();
     }
 
     private class RowSortGui extends JPanel {

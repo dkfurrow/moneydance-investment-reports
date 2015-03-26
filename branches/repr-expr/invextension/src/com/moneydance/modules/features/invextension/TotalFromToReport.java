@@ -83,7 +83,15 @@ public class TotalFromToReport extends TotalReport {
 
     @Override
     public SecurityReport getLeafSecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
-        return new SecurityFromToReport(reportConfig, securityAccountWrapper, dateRange);
+        return new SecurityFromToReport(reportConfig, securityAccountWrapper, null, dateRange);
+    }
+
+    @Override
+    public CompositeReport getAllCompositeReport(DateRange dateRange, AggregationController aggregationController) {
+        CompositeReport compositeReport = new CompositeReport(aggregationController);
+        SecurityFromToReport allAggregate = new SecurityFromToReport(reportConfig, null, compositeReport, dateRange);
+        compositeReport.setAggregateReport(allAggregate);
+        return  compositeReport;
     }
 
 }

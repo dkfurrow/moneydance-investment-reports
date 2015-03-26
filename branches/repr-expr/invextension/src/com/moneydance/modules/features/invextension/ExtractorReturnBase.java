@@ -37,19 +37,28 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("ALL")
 public class ExtractorReturnBase extends ExtractorBase<Double> {
-    public ExtractorReturnBase(SecurityAccountWrapper secAccountWrapper, int startDateInt, int endDateInt,
+
+
+    private String description = "";
+    public ExtractorReturnBase(SecurityAccountWrapper secAccountWrapper, SecurityReport securityReport, int startDateInt, int endDateInt,
                                ReturnWindowType returnWindowType) {
         super(secAccountWrapper, startDateInt, endDateInt);
+        if(securityReport != null) description = securityReport.getDescription();
     }
 
-    protected static ExtractorReturnBase factory(SecurityAccountWrapper secAccountWrapper, int startDateInt,
+    protected static ExtractorReturnBase factory(SecurityAccountWrapper secAccountWrapper, SecurityReport securityReport, int startDateInt,
                                                  int endDateInt, ReturnWindowType returnWindowType, boolean useOrdinary) {
         if (useOrdinary) {
-            return new ExtractorOrdinaryReturn(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
+            return new ExtractorOrdinaryReturn(secAccountWrapper, securityReport, startDateInt, endDateInt, returnWindowType);
         } else {
-            return new ExtractorModifiedDietzReturn(secAccountWrapper, startDateInt, endDateInt, returnWindowType);
+            return new ExtractorModifiedDietzReturn(secAccountWrapper, securityReport, startDateInt, endDateInt, returnWindowType);
         }
     }
+
+    public String getDescription() {
+        return description;
+    }
+
 
     public enum ReturnWindowType {
         DEFAULT("Requires NonZero Initial Value at Window Start"),

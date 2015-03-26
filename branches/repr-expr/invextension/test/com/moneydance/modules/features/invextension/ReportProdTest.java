@@ -609,7 +609,7 @@ public class ReportProdTest {
             } else if (o instanceof SecuritySubTypeWrapper) {
                 outputName = ((SecuritySubTypeWrapper) o).getName();
             } else if (o instanceof CurrencyWrapper) {
-                outputName = ((CurrencyWrapper) o).getTicker();
+                outputName = ((CurrencyWrapper) o).getName();
             } else {
                 try {
                     throw new Exception("invalid attempt to get name from object");
