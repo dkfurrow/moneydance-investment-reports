@@ -1070,8 +1070,8 @@ public class TotalReportOutputPane extends JScrollPane {
                                 extractor = (ExtractorReturnBase) metricEntry.extractor;
 
                                 ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor,
-                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight(),
-                                        "Sample Description");
+                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight()
+                                );
                             }
                         }
 

@@ -28,7 +28,6 @@
 
 package com.moneydance.modules.features.invextension;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +36,7 @@ import java.util.TreeSet;
 
 /**
  * Created by larus on 11/27/14.
- *
+ * <p/>
  * Compute the IRR for an investment.
  */
 @SuppressWarnings("ALL")
@@ -55,6 +54,7 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
 
     }
 
+    @Override
     public boolean processNextTransaction(TransactionValues transaction, int transactionDateInt) {
         if (!super.processNextTransaction(transaction, transactionDateInt)) {
             return false;
@@ -71,10 +71,11 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         return true;
     }
 
+    @Override
     public Double getResult() {
         if (!resultCurrent) {
             double mdReturn = super.getResult();
-            if(mdReturn == SecurityReport.UndefinedReturn){
+            if (mdReturn == SecurityReport.UndefinedReturn) {
                 result = SecurityReport.UndefinedReturn;
             } else {
                 result = computeFinancialResults(mdReturn);
@@ -85,6 +86,7 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     }
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
+    @Override
     public void aggregateResults(ExtractorBase<?> op) {
         ExtractorIRR operand = (ExtractorIRR) op;
         super.aggregateResults(operand);
@@ -93,11 +95,11 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
     }
 
     private Double computeFinancialResults(double mdReturn) {
-        LinkedList<ReturnValueElement> allTuples = collapseAnnualReturnTuples();
+        LinkedList<ReturnValueElement> allTuples = collapseAnnualReturnElements();
 
         int outputArraySize = allTuples.size();
-        if(startValue != 0) outputArraySize ++;
-        if(endValue != 0) outputArraySize ++;
+        if (startValue != 0) outputArraySize++;
+        if (endValue != 0) outputArraySize++;
         double[] returns = new double[outputArraySize];
         double[] excelDates = new double[outputArraySize];
         int next = 0;
@@ -141,16 +143,35 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         return SecurityReport.UndefinedReturn; // No flow in interval, so return is undefined.
     }
 
-    private LinkedList<ReturnValueElement> collapseAnnualReturnTuples(){
+    @Override
+    public String getAuditString(){
+        StringBuilder auditString = new StringBuilder();
+        auditString.append(description).append(nl);
+        auditString.append("Result:").append(tab).append(result).append(nl);
+        auditString.append("StartDate:").append(tab).append(DateUtils.convertToShort(startDateInt)).append(tab);
+        auditString.append("EndDate:").append(tab).append(DateUtils.convertToShort(endDateInt)).append(tab).append(nl);
+        auditString.append("StartValue:").append(tab).append(displayLong(startValue)).append(tab);
+        auditString.append("EndValue:").append(tab).append(displayLong(endValue)).append(tab).append(nl);
+        auditString.append("Income(less expenses)").append(tab).append(displayLong(incomeExpenseScalar)).append(nl);
+        auditString.append(getDisplayDetails());
+        auditString.append(nl).append("TxnId").append(tab).append("Date").append(tab).append("Value").append(nl);
+        LinkedList<ReturnValueElement> returnValueElements = collapseAnnualReturnElements();
+        for(ReturnValueElement returnValueElement : returnValueElements){
+            auditString.append(returnValueElement.toString()).append(nl);
+        }
+        return auditString.toString();
+    }
+
+    private LinkedList<ReturnValueElement> collapseAnnualReturnElements() {
         ArrayList<ReturnValueElement> startList = new ArrayList<>();
 
         // reverse sign to comport with annual returns calc
-        for(ReturnValueElement returnValueElement : capitalValues){
+        for (ReturnValueElement returnValueElement : capitalValues) {
             ReturnValueElement newReturnValueElement = returnValueElement.clone();
             newReturnValueElement.value *= -1;
             startList.add(newReturnValueElement);
         }
-        for(ReturnValueElement returnValueElement : incomeValues){
+        for (ReturnValueElement returnValueElement : incomeValues) {
             ReturnValueElement newReturnValueElement = returnValueElement.clone();
             startList.add(newReturnValueElement);
         }
@@ -158,12 +179,12 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
         Collections.sort(startList);
         LinkedList<ReturnValueElement> collapsedList = new LinkedList<>();
         // Collapse returns on same date to single entry to speed computation
-        for(ReturnValueElement returnValueElement : startList){
-            if(collapsedList.isEmpty()) {
+        for (ReturnValueElement returnValueElement : startList) {
+            if (collapsedList.isEmpty()) {
                 collapsedList.add(returnValueElement.clone());
             } else {
                 ReturnValueElement lastValue = collapsedList.peekLast();
-                if(lastValue.date == returnValueElement.date){
+                if (lastValue.date == returnValueElement.date) {
                     lastValue.value += returnValueElement.value;
                 } else {
                     collapsedList.add(returnValueElement.clone());
@@ -171,19 +192,5 @@ public class ExtractorIRR extends ExtractorModifiedDietzReturn {
             }
         }
         return collapsedList;
-    }
-
-    private class dateValuePair implements Comparable<dateValuePair> {
-        public final int date;
-        public long value;
-
-        public dateValuePair(int d, long v) {
-            date = d;
-            value = v;
-        }
-
-        public int compareTo(@NotNull dateValuePair operand) {
-            return date - operand.date;
-        }
     }
 }

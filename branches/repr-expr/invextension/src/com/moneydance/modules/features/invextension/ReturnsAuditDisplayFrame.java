@@ -30,21 +30,17 @@ package com.moneydance.modules.features.invextension;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Diplays contents of ExtractorTotalReturn or ExtractorIRR
  */
-public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
+public class ReturnsAuditDisplayFrame extends JFrame {
     private ExtractorReturnBase extractor;
     private Point location;
     private int maximumHeight;
 
-
-
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
-                                               final Point location, final int maximumHeight, final String description){
+                                               final Point location, final int maximumHeight){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -55,8 +51,6 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
         });
     }
 
-
-
     public ReturnsAuditDisplayFrame(ExtractorReturnBase extractor, Point location, int maximumHeight)  {
         this.extractor = extractor;
         this.location = location;
@@ -65,45 +59,23 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     }
 
     private void initComponents(){
-        JEditorPane editor = new JEditorPane();
-
-        editor.getDocument().putProperty("Ignore-Charset", "true");  // this line makes no difference either way
-        editor.setContentType("text/html");
-        editor.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-        editor.setText("Returns Information: " + extractor.getDescription());
-
+        JTextPane textPane = new JTextPane();
+        textPane.setText("Returns Information: " + extractor.getAuditString());
         // make it read-only
-        editor.setEditable(false);
-
+        textPane.setEditable(false);
         // create a scrollpane; modify its attributes as desired
-        JScrollPane scrollPane = new JScrollPane(editor);
-
+        JScrollPane scrollPane = new JScrollPane(textPane);
         // now add it all to a frame
         this.setTitle("Return Calculation Elements");
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-
         // make it easy to close the application
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        // display the frame
-
-//        this.setSize(new Dimension(800, 600));
-
-
-
     }
-
-
 
     public void showFrame() {
         this.setLocation(location);
         this.setMaximumSize(new Dimension(500, maximumHeight));
         this.pack();
         this.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 }

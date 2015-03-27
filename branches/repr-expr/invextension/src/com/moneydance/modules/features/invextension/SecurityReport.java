@@ -406,10 +406,6 @@ public abstract class SecurityReport extends ComponentReport {
         return returnsMetric.get(name).extractor.startDateInt;
     }
 
-    public ArrayList<Object> getOutputLine() {
-        return outputLine;
-    }
-
 
     public void loadAggregators(){
         if(this.securityAccount != null){
@@ -489,19 +485,26 @@ public abstract class SecurityReport extends ComponentReport {
 
     public String getDescription(){
         String sep = " : ";
-        StringBuffer description = new StringBuffer();
+        StringBuilder description = new StringBuilder();
         description.append(compositeReport == null ? "Security: " : "Aggregate: ");
         int i = 0;
         Iterator<Object> iterator = outputLine.iterator();
-        while (iterator.hasNext() && i < 6){
+        while (iterator.hasNext() && i < 5){
             Object obj = iterator.next();
             if(obj instanceof Aggregator){
                 Aggregator aggregator = (Aggregator) obj;
-                description.append(aggregator.getName()).append(i < 5 ? sep : "");
+                String name = aggregator.getName();
+                if(name.length() > 0){
+                    description.append(name).append(i < 4 ? sep : "");
+                }
             }
             i++;
         }
         return  description.toString();
+    }
+
+    public double getPriceScale() {
+        return priceScale;
     }
 
 
