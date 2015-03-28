@@ -45,8 +45,8 @@ public class ExtractorBase<R> {
     protected TransactionValues lastTransactionBeforeEqualStartDate;
     protected TransactionValues lastTransactionWithinDateRange;
 
-    private final long pXqScale;
-    private final long qDpScale;    // 1/pDqScale to avoid fraction => multiply, not divide
+    private long pXqScale =  10000; // FIXME: this works when security quantity has 4 digits and currency has 2 digits
+    private long qDpScale = 10000;    // 1/pDqScale to avoid fraction => multiply, not divide
 
     /*
      * <p>Constructor</p>
@@ -63,10 +63,7 @@ public class ExtractorBase<R> {
 
         lastTransactionBeforeStartDate = null;
 
-        if (securityAccount == null) {
-            pXqScale = 10000;   // FIXME: this works when security quantity has 4 digits and currency has 2 digits
-            qDpScale = 10000;
-        } else {
+        if (securityAccount != null)  {
             CurrencyWrapper securityCurrencyWrapper = securityAccount.getCurrencyWrapper();
             CurrencyType securityCurrency = securityCurrencyWrapper.getCurrencyType();
             int securityDecimalPlaces = securityCurrency.getDecimalPlaces();
@@ -79,6 +76,21 @@ public class ExtractorBase<R> {
             pXqScale = (long) Math.pow(10.0, cashDecimalPlaces + securityDecimalPlaces - cashDecimalPlaces);
             qDpScale = (long) Math.pow(10.0, securityDecimalPlaces - cashDecimalPlaces + cashDecimalPlaces);  // 1/pDqScale to avoid fraction
         }
+    }
+
+    /**
+     * Copies other extractor
+     * @param extractor other extractor
+     */
+    public ExtractorBase (ExtractorBase extractor){
+        this.securityAccount = extractor.securityAccount;
+        this.startDateInt = extractor.startDateInt;
+        this.endDateInt = extractor.endDateInt;
+        this.lastTransactionBeforeStartDate = extractor.lastTransactionBeforeStartDate;
+        this.lastTransactionBeforeEqualStartDate = extractor.lastTransactionBeforeEqualStartDate;
+        this.lastTransactionWithinDateRange = extractor.lastTransactionWithinDateRange;
+        this.pXqScale = extractor.pXqScale;
+        this.qDpScale = extractor.qDpScale;
     }
 
     /* <p>Processes the next transaction in sequence of transactions.</p>

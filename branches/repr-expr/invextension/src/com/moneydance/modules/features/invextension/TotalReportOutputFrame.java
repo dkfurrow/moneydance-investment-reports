@@ -40,6 +40,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     public static final String SORT_ROWS = "sortRows";
     public static final String COPY_CLIPBOARD = "copyClipboard";
+    public static final String SWITCH_RETURN_TYPE = "switchReturnType";
     private static final long serialVersionUID = 2199471200123995601L;
     TotalReportOutputPane totalReportOutputPane;
     String frameText;
@@ -47,7 +48,10 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     JComboBox<Integer> freezeColsBox;
     JCheckBox hideClosedBox;
     JButton sortButton;
+    JButton switchReturnTypeButton;
     JButton copyToClipboardButton;
+    private boolean returnTypeSwitched = false;
+
 
     public TotalReportOutputFrame(TotalReportOutputPane totalReportOutputPane, String frameText) {
         this.totalReportOutputPane = totalReportOutputPane;
@@ -69,6 +73,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         freezeColsBox.setSelectedIndex(reportConfig.getNumFrozenColumns());
         sortButton = new JButton("Sort Table");
         hideClosedBox = new JCheckBox("Hide Positions with Zero Value", reportConfig.isClosedPosHidden());
+        switchReturnTypeButton = new JButton();
+        switchReturnTypes(true);
         copyToClipboardButton = new JButton("Copy Table to Clipboard");
         JLabel editInstructionLabel = new JLabel("Double-Click Security to Edit Properties");
         editInstructionLabel.setFont(editInstructionLabel.getFont().deriveFont(Font.ITALIC, 10));
@@ -87,6 +93,9 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
 
         sortButton.addActionListener(this);
         sortButton.setActionCommand(SORT_ROWS);
+
+        switchReturnTypeButton.addActionListener(this);
+        switchReturnTypeButton.setActionCommand(SWITCH_RETURN_TYPE);
 
         copyToClipboardButton.addActionListener(this);
         copyToClipboardButton.setActionCommand(COPY_CLIPBOARD);
@@ -107,6 +116,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         controlPanel.add(sortButton, c);
         c.gridx++;
         controlPanel.add(hideClosedBox, c);
+        c.gridx++;
+        controlPanel.add(switchReturnTypeButton, c);
         c.gridx++;
         controlPanel.add(copyToClipboardButton, c);
         c.gridx = 0;
@@ -137,6 +148,21 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
 
     }
 
+    private void switchReturnTypes(boolean isInitialSet){
+        if(!isInitialSet) {
+            totalReportOutputPane.switchReturnType();
+            returnTypeSwitched = !returnTypeSwitched;
+        }
+        boolean useOrdinary = reportConfig.useOrdinaryReturn();
+        String buttonText;
+        if(!returnTypeSwitched){
+            buttonText = useOrdinary ? "Switch to Time-Weighted Total Return" : "Switch to Ordinary Return";
+        } else {
+            buttonText = useOrdinary ? "Switch to Ordinary Return" : "Switch to Time-Weighted Total Return";
+        }
+        switchReturnTypeButton.setText(buttonText);
+    }
+
     public void showFrame() {
         this.setVisible(false);
         this.totalReportOutputPane.sortRows();
@@ -157,6 +183,9 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             }
             if (actionCommand.equals(SORT_ROWS)) {
                 totalReportOutputPane.sortRows(new Point(this.getLocationOnScreen()));
+            }
+            if (actionCommand.equals(SWITCH_RETURN_TYPE)){
+                switchReturnTypes(false);
             }
             if (actionCommand.equals(COPY_CLIPBOARD)) {
                 totalReportOutputPane.copyTableToClipboard();

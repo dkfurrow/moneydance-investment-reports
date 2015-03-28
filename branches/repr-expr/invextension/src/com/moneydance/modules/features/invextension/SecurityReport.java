@@ -511,7 +511,7 @@ public abstract class SecurityReport extends ComponentReport {
     // For each metric, we have its current value and an extractor (which has its own state).
     public class MetricEntry<V> implements Comparable<MetricEntry<V>>{
         public V value;
-        public final ExtractorBase<?> extractor;
+        public ExtractorBase<?> extractor;
         public Double scalingFactor = null;
 
         MetricEntry(V v, ExtractorBase<?> e) {

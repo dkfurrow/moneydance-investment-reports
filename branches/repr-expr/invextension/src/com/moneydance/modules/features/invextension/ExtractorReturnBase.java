@@ -94,6 +94,22 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
         }
     }
 
+    public ExtractorReturnBase(ExtractorReturnBase extractorReturnBase){
+        super(extractorReturnBase);
+        this.returnWindowType = extractorReturnBase.returnWindowType;
+        this.capitalValues = extractorReturnBase.capitalValues;
+        this.firstTransaction = extractorReturnBase.firstTransaction;
+        this.incomeExpenseScalar = extractorReturnBase.incomeExpenseScalar;
+        this.startPosition = extractorReturnBase.startPosition;
+        this.startValue = extractorReturnBase.startValue;
+        this.endPosition = extractorReturnBase.endPosition;
+        this.endValue = extractorReturnBase.endValue;
+        this.resultCurrent = false;
+        this.result = 0;
+        this.description = extractorReturnBase.description;
+        this.priceScale = extractorReturnBase.priceScale;
+    }
+
     protected static ExtractorReturnBase factory(SecurityAccountWrapper secAccountWrapper, SecurityReport securityReport, int startDateInt,
                                                  int endDateInt, ReturnWindowType returnWindowType, boolean useOrdinary) {
         if (useOrdinary) {
@@ -127,7 +143,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
 
     // Compiler warning (unchecked cast) because Java v7 type system is too weak to express this.
     public void aggregateResults(ExtractorBase<?> op) {
-        ExtractorModifiedDietzReturn operand = (ExtractorModifiedDietzReturn) op;
+        ExtractorReturnBase operand = (ExtractorReturnBase) op;
 
         if (operand.firstTransaction != null) {
             this.startDateInt = Math.min(this.startDateInt, operand.startDateInt);

@@ -48,6 +48,11 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
         super(secAccountWrapper, securityReport, startDateInt, endDateInt, returnWindowType);
     }
 
+    public ExtractorModifiedDietzReturn(ExtractorOrdinaryReturn extractorOrdinaryReturn){
+        super(extractorOrdinaryReturn);
+        getResult();
+    }
+
     // Compute Modified Dietz return
     @Override
     public double computeReturn() {

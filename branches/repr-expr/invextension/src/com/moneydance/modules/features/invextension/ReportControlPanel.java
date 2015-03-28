@@ -861,6 +861,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             hideClosedPosCheckBox.addActionListener(ReportControlPanel.this);
             useOrdinaryReturnCheckBox.addActionListener(ReportControlPanel.this);
 
+
+            String ordinaryReturnsCBToolTip = "<html> If checked, uses non-time-weighted ('Ordinary') returns" +
+                    "<br>" + "otherwise uses Modified-Dietz returns </html>";
+            useOrdinaryReturnCheckBox.setToolTipText(ordinaryReturnsCBToolTip);
+
             //initialize sub-panels
             JPanel topPanel = new JPanel();
             // Layout sub-panels

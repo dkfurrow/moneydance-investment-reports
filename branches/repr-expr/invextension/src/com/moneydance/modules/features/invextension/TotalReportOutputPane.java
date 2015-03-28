@@ -493,6 +493,62 @@ public class TotalReportOutputPane extends JScrollPane {
         this.lockedTable.getTableHeader().repaint();
     }
 
+    public void switchReturnType(){
+        Class<? extends ExtractorReturnBase> clazzToChange = null;
+        for(int j = 0; j < model.getColumnCount(); j++){
+            Object obj = model.getValueAt(0, j);
+            if(obj instanceof MetricEntry){
+                MetricEntry metricEntry = (MetricEntry) obj;
+                ExtractorBase extractor = metricEntry.extractor;
+                if(extractor != null){
+                    if(extractor.getClass().equals(ExtractorModifiedDietzReturn.class) ){
+                        clazzToChange = ExtractorModifiedDietzReturn.class;
+                        switchExtractor(metricEntry, clazzToChange);
+                        for(int i = 1; i < model.getRowCount(); i++){
+                            obj = model.getValueAt(i, j);
+                            if(obj instanceof MetricEntry){
+                                metricEntry = (MetricEntry) obj;
+                                switchExtractor(metricEntry, clazzToChange);
+                            }
+                        }
+                    } else if (extractor.getClass().equals(ExtractorOrdinaryReturn.class)){
+                        clazzToChange = ExtractorOrdinaryReturn.class;
+                        switchExtractor(metricEntry, clazzToChange);
+                        for(int i = 1; i < model.getRowCount(); i++){
+                            obj = model.getValueAt(i, j);
+                            if(obj instanceof MetricEntry){
+                                metricEntry = (MetricEntry) obj;
+                                switchExtractor(metricEntry, clazzToChange);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        model.fireTableDataChanged();
+        sortRows();
+    }
+
+    private void switchExtractor(MetricEntry metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {
+        assert metricEntry.extractor != null;
+        if(extractorToSwitch.equals(ExtractorModifiedDietzReturn.class)){
+            assert metricEntry.extractor instanceof ExtractorModifiedDietzReturn;
+            ExtractorModifiedDietzReturn extractorModifiedDietzReturn = (ExtractorModifiedDietzReturn) metricEntry.extractor;
+            ExtractorOrdinaryReturn extractorOrdinaryReturn = new ExtractorOrdinaryReturn(extractorModifiedDietzReturn);
+            metricEntry.extractor = extractorOrdinaryReturn;
+            metricEntry.value = extractorOrdinaryReturn.getResult();
+
+        } else if(extractorToSwitch.equals(ExtractorOrdinaryReturn.class)){
+            assert metricEntry.extractor instanceof ExtractorOrdinaryReturn;
+            ExtractorOrdinaryReturn extractorOrdinaryReturn = (ExtractorOrdinaryReturn) metricEntry.extractor;
+            ExtractorModifiedDietzReturn extractorModifiedDietzReturn = new ExtractorModifiedDietzReturn(extractorOrdinaryReturn);
+            metricEntry.extractor = extractorModifiedDietzReturn;
+            metricEntry.value = extractorModifiedDietzReturn.getResult();
+        }
+    }
+
+
+
     public void copyTableToClipboard() throws Exception {
         StringBuilder copyIn = new StringBuilder();
         int numCols = scrollTable.getViewHeader().size(); //allows for removal of columns

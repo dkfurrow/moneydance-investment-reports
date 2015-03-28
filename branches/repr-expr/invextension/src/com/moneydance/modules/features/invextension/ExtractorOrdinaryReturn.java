@@ -38,13 +38,14 @@ public class ExtractorOrdinaryReturn extends ExtractorReturnBase {
     // all returns and annual returns calculations, where we use the largest interval that the position is
     // open in the original range.
 
-
-    private boolean resultCurrent = false;
-    private double result = 0;
-
     public ExtractorOrdinaryReturn(SecurityAccountWrapper secAccountWrapper, SecurityReport securityReport, int startDateInt, int endDateInt,
                                    ReturnWindowType returnWindowType) {
         super(secAccountWrapper, securityReport, startDateInt, endDateInt, returnWindowType);
+    }
+
+    public ExtractorOrdinaryReturn(ExtractorModifiedDietzReturn extractorModifiedDietzReturn){
+        super(extractorModifiedDietzReturn);
+        getResult();
     }
 
     // Compute Modified Dietz return
