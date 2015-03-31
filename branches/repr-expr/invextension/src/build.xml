@@ -22,12 +22,10 @@ http://jakarta.apache.org/ant/index.html
 	<property name="optimize"  value="off"/>
 
 	<path id="classpath">
-		<pathelement path="../lib/extadmin.jar"/>
+		<pathelement path="../resources/extadmin.jar"/>
 		<pathelement path="../lib/moneydance.jar"/>
 		<!--added this"C:/Program Files (x86)/Java/jdk1.7.0_65/jre/lib/jfxrt.jar -->
         <pathelement path="../lib/annotations.jar"/>
-		<pathelement path="${env.JAVA_HOME}/jre/lib/jfxrt.jar"/>
-
 	</path>
 
 	<target name="init">

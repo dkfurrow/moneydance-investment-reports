@@ -28,7 +28,9 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.apps.md.controller.io.FileOpeningContext;
 import com.moneydance.apps.md.controller.io.FileUtils;
+import com.moneydance.apps.md.model.AccountBook;
 import com.moneydance.apps.md.model.RootAccount;
 import com.moneydance.awt.AwtUtil;
 
@@ -720,7 +722,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             try {
                 publish("Loading " + mdFile.getParentFile().getName());
-                root = FileUtils.readAccountsFromFile(mdFile, null);
+                AccountBook accountBook = AccountBook.accountBookForFolder(mdFile.getParentFile());
+
+                String dataName= "";
+                FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
+                RootAccount rootAccount = FileUtils.readAccountsFromFile(mdFile, fileOpeningContext);
+                accountBook.initializeAccounts(rootAccount);
+                root = accountBook.getRootAccount();
                 folderPanel.setOutputDirectory();
                 accountChooserPanel.populateBothAccountLists(reportConfig);
                 investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);

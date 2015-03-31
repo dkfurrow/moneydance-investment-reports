@@ -27,7 +27,9 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.apps.md.controller.io.FileOpeningContext;
 import com.moneydance.apps.md.controller.io.FileUtils;
+import com.moneydance.apps.md.model.AccountBook;
 import com.moneydance.apps.md.model.RootAccount;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -51,6 +53,8 @@ import static org.junit.Assert.assertFalse;
  * @author Dale Furrow
  */
 public class BulkSecInfoTest {
+    public static final String mdTestFolderStr = "./resources/testMD02.moneydance";
+    public static final File mdTestFolder = new File(mdTestFolderStr);
     // Stored Test Database
     public static final File mdTestFile = new File("./resources/testMD02.moneydance/root.mdinternal");
     // Stored csv file of transaction activity report (average cost)
@@ -64,13 +68,29 @@ public class BulkSecInfoTest {
     public static final boolean limitComparisonToMinDigits = true;
 
     /**
+     * initializes AccountBook from folder
+     * (note--must use java 1.8--otherwise get
+     * ava.security.NoSuchAlgorithmException: PBKDF2WithHmacSHA512 SecretKeyFactory not available)
+     * @throws Exception
+     */
+    private static RootAccount loadRootAccountFromFolder() throws Exception {
+
+        AccountBook accountBook = AccountBook.accountBookForFolder(mdTestFolder);
+        String dataName= "";
+        FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
+        RootAccount rootAccount = FileUtils.readAccountsFromFile(mdTestFile, fileOpeningContext);
+        accountBook.initializeAccounts(rootAccount);
+        return accountBook.getRootAccount();
+    }
+
+    /**
      * Gets BulkSecInfo from stored moneydance data file (avg cost basis)
      *
      * @return BulkSecInfo from stored file
      * @throws Exception
      */
     public static BulkSecInfo getBaseSecurityInfoAvgCost() throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        RootAccount root = loadRootAccountFromFolder();
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
@@ -84,7 +104,7 @@ public class BulkSecInfoTest {
      * @throws Exception
      */
     public static BulkSecInfo getBaseSecurityInfoLotMatch() throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        RootAccount root = loadRootAccountFromFolder();
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
