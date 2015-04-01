@@ -82,7 +82,7 @@ public class ExtractorBase<R> {
      * Copies other extractor
      * @param extractor other extractor
      */
-    public ExtractorBase (ExtractorBase extractor){
+    public ExtractorBase (ExtractorBase<R> extractor){
         this.securityAccount = extractor.securityAccount;
         this.startDateInt = extractor.startDateInt;
         this.endDateInt = extractor.endDateInt;

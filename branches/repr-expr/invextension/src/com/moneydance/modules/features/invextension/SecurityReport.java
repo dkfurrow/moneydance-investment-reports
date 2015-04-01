@@ -162,6 +162,7 @@ public abstract class SecurityReport extends ComponentReport {
         loadAggregators();
     }
 
+    @SuppressWarnings("unchecked")
     protected void doCalculations(SecurityAccountWrapper securityAccount) {
         if (securityAccount != null) {
             for (TransactionValues transaction : securityAccount.getTransactionValues()) {
@@ -327,7 +328,7 @@ public abstract class SecurityReport extends ComponentReport {
     protected abstract void recordMetrics();
 
     protected void outputSimplePrice(String name) {
-        MetricEntry metricEntry = simpleMetric.get(name);
+        MetricEntry<Number> metricEntry = simpleMetric.get(name);
         outputLine.add(metricEntry.displayObject(priceScale));
     }
 

@@ -38,6 +38,8 @@ import java.util.*;
  */
 public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPanelBase<Account> {
 
+    private static final long serialVersionUID = 5799086825356016359L;
+
     public ReportConfigInvestExpenseChooserPanel(ReportControlPanel reportControlPanel) {
         super(reportControlPanel, "<<-Remove Expense", "Add Expense->>", "Reset", "Expenses", "Actions", "Investment Expenses");
     }

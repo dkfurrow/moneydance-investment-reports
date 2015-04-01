@@ -35,9 +35,12 @@ import java.awt.*;
  * Diplays contents of ExtractorTotalReturn or ExtractorIRR
  */
 public class ReturnsAuditDisplayFrame extends JFrame {
+    private static final long serialVersionUID = -3102906929058309264L;
     private ExtractorReturnBase extractor;
     private Point location;
     private int maximumHeight;
+    private JTextPane textPane;
+    private JScrollPane scrollPane;
 
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
                                                final Point location, final int maximumHeight){
@@ -59,22 +62,28 @@ public class ReturnsAuditDisplayFrame extends JFrame {
     }
 
     private void initComponents(){
-        JTextPane textPane = new JTextPane();
+        textPane = new JTextPane();
+//        textPane.setSize(new Dimension(500, 500));
         textPane.setText("Returns Information: " + extractor.getAuditString());
+        textPane.setCaretPosition(0);
         // make it read-only
         textPane.setEditable(false);
         // create a scrollpane; modify its attributes as desired
-        JScrollPane scrollPane = new JScrollPane(textPane);
-        // now add it all to a frame
+
+        scrollPane = new JScrollPane(textPane);
+        scrollPane.setPreferredSize(new Dimension(500, Math.min(maximumHeight, textPane.getPreferredSize().height)));
+        // now add it all to a panel
+
+        this.getContentPane().setLayout(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+
         this.setTitle("Return Calculation Elements");
-        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        // make it easy to close the application
+        this.getContentPane().add(scrollPane, gc);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     public void showFrame() {
         this.setLocation(location);
-        this.setMaximumSize(new Dimension(500, maximumHeight));
         this.pack();
         this.setVisible(true);
     }

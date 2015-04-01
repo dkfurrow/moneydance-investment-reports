@@ -213,14 +213,15 @@ public class SecuritySnapshotReport extends SecurityReport {
         // retain current values --return
     }
 
+    @SuppressWarnings("unchecked")
     public void outputDividendYield(String stringMetric){
         double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
         if(stringMetric.equals(SMDividendYield)){
-            MetricEntry metricEntry = simpleMetric.get(SMDividendYield);
+            MetricEntry<Number> metricEntry = simpleMetric.get(SMDividendYield);
             metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMEndValue).value;
             outputLine.add(metricEntry);
         } else if(stringMetric.equals(SMYieldOnBasis)){
-            MetricEntry metricEntry = simpleMetric.get(SMYieldOnBasis);
+            MetricEntry<Number> metricEntry = simpleMetric.get(SMYieldOnBasis);
             metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value;
             outputLine.add(metricEntry);
         }

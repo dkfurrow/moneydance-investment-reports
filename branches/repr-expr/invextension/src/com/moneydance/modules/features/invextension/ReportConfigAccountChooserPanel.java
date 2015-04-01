@@ -60,6 +60,8 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     private final DefaultListModel<Account> includedAccountsListModel = new DefaultListModel<>();
     private final JList<Account> includedAccountsList = new JList<>(includedAccountsListModel);
     private final JScrollPane includedAccountsPane = new JScrollPane(includedAccountsList);
+    private final JCheckBox removeInactiveAccountsBox = new JCheckBox("<HTML>Remove Inactive Accounts" +
+            "</HTML>", false);
     private final JCheckBox removeHideOnHomepageAccountsBox = new JCheckBox("<HTML>Remove accounts with<br>" +
             "'Hide on Home Page' set</HTML>", false);
 
@@ -110,11 +112,13 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         availableAccountsPanel.add(availableAccountPane);
         accountsIncludedPanel.add(includedAccountsPane);
         //button panel
+        removeInactiveAccountsBox.setBorderPainted(true);
         removeHideOnHomepageAccountsBox.setBorderPainted(true);
-        accountControlPanel.setLayout(new GridLayout(4, 1));
+        accountControlPanel.setLayout(new GridLayout(5, 1));
         accountControlPanel.add(removeButton);
         accountControlPanel.add(addButton);
         accountControlPanel.add(resetButton);
+        accountControlPanel.add(removeInactiveAccountsBox);
         accountControlPanel.add(removeHideOnHomepageAccountsBox);
 
 
@@ -138,12 +142,32 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         removeButton.addActionListener(new removeAccountsListener());
         addButton.addActionListener(new addAccountsListener());
         resetButton.addActionListener(new resetListener());
+        removeInactiveAccountsBox.addActionListener(new removeInactiveAccountsListener());
         removeHideOnHomepageAccountsBox.addActionListener(new removeHideOnHomePageAccountListener());
 
         // renders
         availableAccountsList.setCellRenderer(new AccountCellRenderer());
         includedAccountsList.setCellRenderer(new AccountCellRenderer());
 
+    }
+
+    private void initializeHideInactiveAccountsButton() {
+        boolean hideInactiveAccountsRemoved = true;
+        HashSet<Account> hideInactiveAccounts = new HashSet<>();
+        TreeSet<Account> investmentAccountSet
+                = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT);
+
+        for (Account investmentAccount : investmentAccountSet) {
+            if (investmentAccount.getAccountIsInactive()) hideInactiveAccounts.add(investmentAccount);
+        }
+        for (int i = 0; i < includedAccountsListModel.size(); i++) {
+            Account account = includedAccountsListModel.getElementAt(i);
+            if (hideInactiveAccounts.contains(account)) {
+                hideInactiveAccountsRemoved = false;
+                break;
+            }
+        }
+        removeInactiveAccountsBox.setSelected(hideInactiveAccountsRemoved);
     }
 
     private void initializeHideOnHomePageButton() {
@@ -165,6 +189,16 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         removeHideOnHomepageAccountsBox.setSelected(hideOnHomePageAccountsRemoved);
     }
 
+    private void removeInactiveAccounts() {
+        for (int i = includedAccountsListModel.size() - 1; 0 <= i; i--) {
+            Account account = includedAccountsListModel.getElementAt(i);
+            if (account.getAccountIsInactive()) {
+                moveFromIncludedToAvailable(i);
+            }
+        }
+        if (reportControlPanel != null) updateReportConfig();
+    }
+
     private void removeHideOnHomePageAccounts() {
         for (int i = includedAccountsListModel.size() - 1; 0 <= i; i--) {
             Account account = includedAccountsListModel.getElementAt(i);
@@ -172,7 +206,6 @@ public class ReportConfigAccountChooserPanel extends JPanel {
                 moveFromIncludedToAvailable(i);
             }
         }
-
         if (reportControlPanel != null) updateReportConfig();
     }
 
@@ -187,6 +220,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         availableAccountPane.setPreferredSize(dimension);
         includedAccountsPane.setPreferredSize(dimension);
 
+        initializeHideInactiveAccountsButton();
         initializeHideOnHomePageButton();
     }
 
@@ -305,12 +339,32 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         }
     }
 
+    private void refillInactiveAccounts() {
+        for (int i = availableAccountsListModel.size() - 1; 0 <= i; i--) {
+            moveFromAvailableToIncluded(i);
+        }
+        removeInactiveAccountsBox.setSelected(false);
+        if (reportControlPanel != null) updateReportConfig();
+    }
+
     private void refillIncludedAccounts() {
         for (int i = availableAccountsListModel.size() - 1; 0 <= i; i--) {
             moveFromAvailableToIncluded(i);
         }
         removeHideOnHomepageAccountsBox.setSelected(false);
         if (reportControlPanel != null) updateReportConfig();
+    }
+
+    private class removeInactiveAccountsListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == removeInactiveAccountsBox) {
+                if (removeInactiveAccountsBox.isSelected()) {
+                    removeInactiveAccounts();
+                } else {
+                    refillInactiveAccounts();
+                }
+            }
+        }
     }
 
     private class removeHideOnHomePageAccountListener implements ActionListener {

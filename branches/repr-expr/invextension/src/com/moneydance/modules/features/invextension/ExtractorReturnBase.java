@@ -222,6 +222,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
                     if (endValue == 0 && !capitalValues.isEmpty()) {
                         this.endDateInt = capitalValues.last().date;
                     }
+                    break;
                 case ANY:
                     if (startValue == 0 && !capitalValues.isEmpty()) {
                         this.startDateInt = DateUtils.getPrevBusinessDay(capitalValues.first().date);

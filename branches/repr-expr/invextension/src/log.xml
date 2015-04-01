@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="7 seconds">
+<build time="5 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.7 in: C:\Program Files (x86)\Java\jdk1.7.0_65\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -354,15 +354,15 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\resources\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.ClassNotFoundException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NoClassDefFoundError loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
@@ -374,8 +374,8 @@
 	<message priority="debug"><![CDATA[Class java.util.Stack loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.Format loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormat loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.text.NumberFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NumberFormatException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.text.NumberFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Double loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormatSymbols loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Character loaded from parent loader (parentFirst)]]></message>
@@ -412,7 +412,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="6 seconds">
+	<target name="invextension" time="5 seconds">
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:43: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\dist because it already exists.]]></message>
 		</task>
@@ -588,104 +588,6 @@ not part of the command.]]></message>
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\XIRR.java
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\XIRRData.java
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecurityReport.java:194: warning: [unchecked] unchecked cast]]></message>
-			<message priority="warn"><![CDATA[                    p.value = (List<Number>) p.extractor.getResult();]]></message>
-			<message priority="warn"><![CDATA[                                                                  ^]]></message>
-			<message priority="warn"><![CDATA[  required: List<Number>]]></message>
-			<message priority="warn"><![CDATA[  found:    CAP#1]]></message>
-			<message priority="warn"><![CDATA[  where CAP#1 is a fresh type-variable:]]></message>
-			<message priority="warn"><![CDATA[    CAP#1 extends Object from capture of ?]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecurityReport.java:330: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[        MetricEntry metricEntry = simpleMetric.get(name);]]></message>
-			<message priority="warn"><![CDATA[        ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:383: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            MetricEntry metricEntry;]]></message>
-			<message priority="warn"><![CDATA[            ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:501: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[                MetricEntry metricEntry = (MetricEntry) obj;]]></message>
-			<message priority="warn"><![CDATA[                ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:502: warning: [rawtypes] found raw type: ExtractorBase]]></message>
-			<message priority="warn"><![CDATA[                ExtractorBase extractor = metricEntry.extractor;]]></message>
-			<message priority="warn"><![CDATA[                ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class ExtractorBase<R>]]></message>
-			<message priority="warn"><![CDATA[  where R is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    R extends Object declared in class ExtractorBase]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:532: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[    private void switchExtractor(MetricEntry metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {]]></message>
-			<message priority="warn"><![CDATA[                                 ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:538: warning: [unchecked] unchecked assignment to variable extractor as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.extractor = extractorOrdinaryReturn;]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:539: warning: [unchecked] unchecked assignment to variable value as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.value = extractorOrdinaryReturn.getResult();]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:545: warning: [unchecked] unchecked assignment to variable extractor as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.extractor = extractorModifiedDietzReturn;]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:546: warning: [unchecked] unchecked assignment to variable value as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.value = extractorModifiedDietzReturn.getResult();]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1069: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[                    MetricEntry endValueMetricEntry = (MetricEntry) getModel().getValueAt(modelRow, closedPosColumn);]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1123: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[                            MetricEntry metricEntry = (MetricEntry) obj;]]></message>
-			<message priority="warn"><![CDATA[                            ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorBase.java:85: warning: [rawtypes] found raw type: ExtractorBase]]></message>
-			<message priority="warn"><![CDATA[    public ExtractorBase (ExtractorBase extractor){]]></message>
-			<message priority="warn"><![CDATA[                          ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class ExtractorBase<R>]]></message>
-			<message priority="warn"><![CDATA[  where R is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    R extends Object declared in class ExtractorBase]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ExtractorReturnBase.java:225: warning: [fallthrough] possible fall-through into case]]></message>
-			<message priority="warn"><![CDATA[                case ANY:]]></message>
-			<message priority="warn"><![CDATA[                ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel.java:39: warning: [serial] serializable class ReportConfigInvestIncomeChooserPanel has no definition of serialVersionUID]]></message>
-			<message priority="warn"><![CDATA[public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPanelBase<Account> {]]></message>
-			<message priority="warn"><![CDATA[       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel.java:39: warning: [serial] serializable class ReportConfigInvestExpenseChooserPanel has no definition of serialVersionUID]]></message>
-			<message priority="warn"><![CDATA[public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPanelBase<Account> {]]></message>
-			<message priority="warn"><![CDATA[       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\ReturnsAuditDisplayFrame.java:37: warning: [serial] serializable class ReturnsAuditDisplayFrame has no definition of serialVersionUID]]></message>
-			<message priority="warn"><![CDATA[public class ReturnsAuditDisplayFrame extends JFrame {]]></message>
-			<message priority="warn"><![CDATA[       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java:219: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            MetricEntry metricEntry = simpleMetric.get(SMDividendYield);]]></message>
-			<message priority="warn"><![CDATA[            ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java:220: warning: [unchecked] unchecked assignment to variable value as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMEndValue).value;]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java:223: warning: [rawtypes] found raw type: SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            MetricEntry metricEntry = simpleMetric.get(SMYieldOnBasis);]]></message>
-			<message priority="warn"><![CDATA[            ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class SecurityReport.MetricEntry<V>]]></message>
-			<message priority="warn"><![CDATA[  where V is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    V extends Object declared in class SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\com\moneydance\modules\features\invextension\SecuritySnapshotReport.java:224: warning: [unchecked] unchecked assignment to variable value as member of raw type SecurityReport.MetricEntry]]></message>
-			<message priority="warn"><![CDATA[            metricEntry.value = annualizedDividend / (Long) simpleMetric.get(SMLongBasis).value;]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[21 warnings]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:53: " name="jar" time="0 seconds">
 			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\dist\invextension.mxt]]></message>
@@ -868,7 +770,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:65: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:65: " name="java" time="3 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:

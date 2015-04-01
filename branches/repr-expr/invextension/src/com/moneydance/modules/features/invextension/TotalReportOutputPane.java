@@ -374,15 +374,16 @@ public class TotalReportOutputPane extends JScrollPane {
 
     class ClosedValueRowFilter extends RowFilter<ReportTableModel, Integer> {
         @Override
+        @SuppressWarnings("unchecked")
         public boolean include(Entry<? extends ReportTableModel, ? extends Integer> entry) {
             boolean result = false;
 
             ReportTableModel reportTableModel = entry.getModel();
             int row = entry.getIdentifier();
             Object object = reportTableModel.getValueAt(row, closedPosColumn);
-            MetricEntry metricEntry;
+            MetricEntry<Number> metricEntry;
             if (object instanceof MetricEntry) {
-                metricEntry = (MetricEntry) object;
+                metricEntry = (MetricEntry<Number>) object;
                 result = metricEntry.getDisplayValue() != 0.0;
             }
             return result;
@@ -493,13 +494,14 @@ public class TotalReportOutputPane extends JScrollPane {
         this.lockedTable.getTableHeader().repaint();
     }
 
+    @SuppressWarnings("unchecked")
     public void switchReturnType(){
         Class<? extends ExtractorReturnBase> clazzToChange = null;
         for(int j = 0; j < model.getColumnCount(); j++){
             Object obj = model.getValueAt(0, j);
             if(obj instanceof MetricEntry){
-                MetricEntry metricEntry = (MetricEntry) obj;
-                ExtractorBase extractor = metricEntry.extractor;
+                MetricEntry<Number> metricEntry = (MetricEntry<Number>) obj;
+                ExtractorBase<?> extractor = metricEntry.extractor;
                 if(extractor != null){
                     if(extractor.getClass().equals(ExtractorModifiedDietzReturn.class) ){
                         clazzToChange = ExtractorModifiedDietzReturn.class;
@@ -529,7 +531,8 @@ public class TotalReportOutputPane extends JScrollPane {
         sortRows();
     }
 
-    private void switchExtractor(MetricEntry metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {
+    @SuppressWarnings("unchecked")
+    private void switchExtractor(MetricEntry<Number> metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {
         assert metricEntry.extractor != null;
         if(extractorToSwitch.equals(ExtractorModifiedDietzReturn.class)){
             assert metricEntry.extractor instanceof ExtractorModifiedDietzReturn;
@@ -1054,6 +1057,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
 
         @Override
+        @SuppressWarnings("unchecked")
         public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
             Component c = super.prepareRenderer(renderer, row, column);
             // Color row based on a cell value--overrides TableCellRenders in constructor
@@ -1066,7 +1070,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                     String aggType1 = getDisplayValueFromObject(aggObj1);
                     String aggType2 = getDisplayValueFromObject(aggObj2);
-                    MetricEntry endValueMetricEntry = (MetricEntry) getModel().getValueAt(modelRow, closedPosColumn);
+                    MetricEntry<Number> endValueMetricEntry = (MetricEntry<Number>) getModel().getValueAt(modelRow, closedPosColumn);
                     String typeAggregateEnd = "-ALL";
                     String nameAggregateEnd = " ";
 
@@ -1101,6 +1105,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
         class FormattedTableMouseAdapter extends MouseAdapter {
             @Override
+            @SuppressWarnings("unchecked")
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
@@ -1120,13 +1125,16 @@ public class TotalReportOutputPane extends JScrollPane {
                     } else {
                         Object obj = model.getValueAt(rowModelIndex, columnModelIndex);
                         if (obj instanceof MetricEntry) {
-                            MetricEntry metricEntry = (MetricEntry) obj;
-                            ExtractorReturnBase extractor = null;
+                            MetricEntry<Number> metricEntry = (MetricEntry<Number>) obj;
+                            ExtractorReturnBase extractor;
                             if(metricEntry.extractor instanceof ExtractorReturnBase){
                                 extractor = (ExtractorReturnBase) metricEntry.extractor;
+                                Rectangle rectangle = FormattedTable.this.getCellRect(0, columnViewIndex, true);
+                                Point screenLocation = FormattedTable.this.getLocationOnScreen();
+                                Point displayPoint = new Point(screenLocation.x+ rectangle.x, screenLocation.y + rectangle.y);
 
                                 ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor,
-                                        FormattedTable.this.getLocationOnScreen(), FormattedTable.this.getHeight()
+                                        displayPoint, FormattedTable.this.getHeight()
                                 );
                             }
                         }

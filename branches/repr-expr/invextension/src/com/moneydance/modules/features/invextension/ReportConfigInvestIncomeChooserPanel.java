@@ -38,6 +38,8 @@ import java.util.*;
  */
 public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPanelBase<Account> {
 
+    private static final long serialVersionUID = -9116375590457256545L;
+
     public ReportConfigInvestIncomeChooserPanel(ReportControlPanel reportControlPanel) {
         super(reportControlPanel, "<<-Remove Income", "Add Income->>", "Reset", "Income", "Actions", "Investment Income");
     }
