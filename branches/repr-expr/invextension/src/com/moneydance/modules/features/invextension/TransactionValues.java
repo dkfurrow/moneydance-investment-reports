@@ -400,23 +400,23 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 break;
             case BUY:
             case COVER:
-            case MISCEXP:
+            case MISCEXP: // include transfer to cover case of purchase against non-investment income
                 if (prevPos > 0) {
-                    this.sell = Math.min(acctEntry, prevVal);
-                    this.shortSell = Math.max(acctEntry - prevVal, 0);
+                    this.sell = Math.min(acctEntry - thisTransfer, prevVal);
+                    this.shortSell = Math.max(acctEntry - thisTransfer - prevVal, 0);
                 } else {
-                    this.shortSell = acctEntry;
+                    this.shortSell = acctEntry - thisTransfer;
                 }
                 break;
             case SELL:
             case SHORT:
             case MISCINC:
-            case DIVIDEND:
+            case DIVIDEND: // include transfer to cover case of sell to non-investment expense
                 if (prevPos < 0) {
-                    this.coverShort = Math.max(acctEntry, prevVal);
-                    this.buy = Math.min(acctEntry - prevVal, 0);
+                    this.coverShort = Math.max(acctEntry - thisTransfer, prevVal);
+                    this.buy = Math.min(acctEntry - thisTransfer - prevVal, 0);
                 } else {
-                    this.buy = acctEntry;
+                    this.buy = acctEntry - thisTransfer;
                 }
                 break;
             case BUY_XFER:

@@ -430,6 +430,14 @@ public class ReportConfig {
         this.viewHeader = viewHeader;
     }
 
+    public String showIncExpWarning(){
+        StringBuffer sb = new StringBuffer();
+        if(investmentIncomeNums.isEmpty()) sb.append("No Investment Income Categories Designated!")
+                .append(investmentExpenseNums.isEmpty() ? "\n" : "");
+        if(investmentExpenseNums.isEmpty()) sb.append("No Investment Expense Categories Designated!");
+        return sb.length() > 0 ? sb.toString() + "\nContinue Report Run?" : "";
+    }
+
     public AggregationController getAggregationController() {
         return aggregationController;
     }

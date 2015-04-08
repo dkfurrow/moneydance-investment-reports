@@ -535,7 +535,14 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 }
                 break;
             case RUN_REPORTS:
-                new ReportExecutor().execute();
+                String incExpWarning = reportConfig.showIncExpWarning();
+                int continueRun = JOptionPane.YES_OPTION;
+                if(incExpWarning.length() > 0)
+                    continueRun = JOptionPane.showConfirmDialog(ReportControlPanel.this, incExpWarning,
+                            "Warning: Income/Expenses", JOptionPane.YES_NO_OPTION);
+                if(continueRun == JOptionPane.YES_OPTION){
+                    new ReportExecutor().execute();
+                }
                 break;
             case RESET_REPORT_OPTIONS:
                 reportOptionsPanel.resetFields();
