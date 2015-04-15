@@ -292,14 +292,14 @@ public class TransactionValues implements Comparable<TransactionValues> {
             // Period Realized gains
             if (this.sell > 0) { // sale transaction
                 if (prevTransLine != null) {
-                    this.perRealizedGain = (this.sell + this.commission)
+                    this.perRealizedGain = (this.sell + this.commission + this.expense)
                             + (this.longBasis - prevTransLine.longBasis);
                 } else {
                     throw new Exception(securityAccountWrapper.getName() + " : SELL/SELLXFER cannot be first transaction: ");
                 }
             } else if (this.coverShort < 0) { // cover transaction
                 if (prevTransLine != null) {
-                    this.perRealizedGain = (this.coverShort + this.commission)
+                    this.perRealizedGain = (this.coverShort + this.commission + this.expense)
                             + (this.shortBasis - prevTransLine.shortBasis);
                 } else {
                     throw new Exception(securityAccountWrapper.getName() + " : COVER cannot be first transaction: ");

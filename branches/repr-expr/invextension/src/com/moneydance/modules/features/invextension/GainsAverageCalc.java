@@ -55,20 +55,22 @@ public class GainsAverageCalc implements GainsCalc {
     public long getLongBasis() {
         if (currentTrans.getPosition() <= positionTheshold) {// position short or closed
             return 0;
-        } else if (currentTrans.getPosition()
-                >= (prevTransValues == null ? 0 : adjPrevPos)) {
+        } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger position
             // add current buy to previous long basis
             return -currentTrans.getBuy()
                     - currentTrans.getCommission()
+                    - currentTrans.getExpense()
                     + (prevTransValues == null ? 0
                     : prevTransValues.getLongBasis());
-        } else {
+        } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
             // subsequent pos smaller than previous
             // implies prev long basis must exist
             double histAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
             return prevTransValues.getLongBasis()
                     + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
+        } else {
+            return  prevTransValues == null ? 0 : prevTransValues.getLongBasis();
         }
     }
 
@@ -79,19 +81,22 @@ public class GainsAverageCalc implements GainsCalc {
     public long getShortBasis() {
         if (currentTrans.getPosition() >= -positionTheshold) { // position long or closed
             return 0;
-        } else if (currentTrans.getPosition() <= (prevTransValues == null ? 0
-                : adjPrevPos)) {
+        } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger (more negative) position
             // add current short sale to previous short basis
             return -currentTrans.getShortSell()
                     - currentTrans.getCommission()
+                    - currentTrans.getExpense()
                     + (prevTransValues == null ? 0
                     : +prevTransValues.getShortBasis());
-        } else { // subsequent pos smaller (closer to 0) than previous
+        } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
+            // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
             double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return prevTransValues.getShortBasis()
                     + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
+        } else {
+            return prevTransValues == null ? 0 : prevTransValues.getShortBasis();
         }
     }
 
