@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="7 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.7 in: C:\Program Files (x86)\Java\jdk1.7.0_65\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -42,8 +42,9 @@
 	<message priority="debug"><![CDATA[Setting project property: env.HOMEDRIVE -> C:]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.VBOX_INSTALL_PATH -> C:\Program Files\Oracle\VirtualBox\]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ANT_CMD_LINE_ARGS ->  -listener org.apache.tools.ant.XmlLogger]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.ChocolateyInstall -> C:\ProgramData\chocolatey]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.FP_NO_HOST_CHECK -> NO]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.Path -> C:\Program Files (x86)\Google\Chrome\Application;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\CollabNet\Subversion Client;C:\Program Files (x86)\Java\jdk1.7.0_65\bin;C:\Program Files (x86)\MariaDB 10.0\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Program Files (x86)\Common Files\Acronis\SnapAPI\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\Ant\apache-ant-1.9.3\bin;C:\Program Files (x86)\Calibre2\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Git\cmd;C:\Anaconda;C:\Anaconda\Scripts;c:\program files\common files\microsoft shared\windows live;c:\program files (x86)\common files\microsoft shared\windows live;c:\pythonenv\base\user;c:\pythonenv\base\user\scripts]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.Path -> C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\CollabNet\Subversion Client;C:\Program Files (x86)\Java\jdk1.7.0_65\bin;C:\Program Files (x86)\MariaDB 10.0\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Program Files (x86)\Common Files\Acronis\SnapAPI\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\Ant\apache-ant-1.9.3\bin;C:\Program Files (x86)\Calibre2\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Git\cmd;C:\Anaconda;C:\Anaconda\Scripts;C:\ProgramData\chocolatey\bin;c:\program files\common files\microsoft shared\windows live;c:\program files (x86)\common files\microsoft shared\windows live;c:\pythonenv\base\user;c:\pythonenv\base\user\scripts]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.=:: -> ::\]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env._SCRIPT_DRIVE -> E: ]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ProgramFiles -> C:\Program Files (x86)]]></message>
@@ -55,7 +56,6 @@
 	<message priority="debug"><![CDATA[Setting project property: env._SCRIPT_PATH -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PUBLIC -> C:\Users\Public]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.COMPUTERNAME -> BACKROOM]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.CHROME_VERSION -> 41.0.2272.118]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.CommonProgramFiles -> C:\Program Files (x86)\Common Files]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.JAVA_HOME -> C:\Program Files (x86)\Java\jdk1.7.0_65]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PSModulePath -> C:\Windows\system32\WindowsPowerShell\v1.0\Modules\]]></message>
@@ -63,7 +63,6 @@
 	<message priority="debug"><![CDATA[Setting project property: env.=E: -> E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ProgramW6432 -> C:\Program Files]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.CALIBRE_DEVELOP_FROM -> E:\DKF\COMPUTER\Python\Projects\calibre-local\src]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.CHROME_MAIN_TIME -> 13072917397012652]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.LOGONSERVER -> \\BACKROOM]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.LOCALAPPDATA -> C:\Users\Dale Furrow\AppData\Local]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PROCESSOR_REVISION -> 1e05]]></message>
@@ -71,7 +70,6 @@
 	<message priority="debug"><![CDATA[Setting project property: env.ALLUSERSPROFILE -> C:\ProgramData]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERDOMAIN -> Backroom]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.HOMEPATH -> \Users\Dale Furrow]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.CHROME_RESTART -> Google Chrome|Whoa! Google Chrome has crashed. Relaunch now?|LEFT_TO_RIGHT]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PROMPT -> $P$G]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.MYSQL_HOME -> C:\Program Files (x86)\MariaDB 10.0]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.VS100COMNTOOLS -> C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Tools\]]></message>
@@ -89,7 +87,6 @@
 	<message priority="debug"><![CDATA[Setting project property: env.PROCESSOR_LEVEL -> 6]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ProgramData -> C:\ProgramData]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.SystemDrive -> C:]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.CHROME_BREAKPAD_PIPE_NAME -> \\.\pipe\GoogleCrashServices\S-1-5-18]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PROCESSOR_IDENTIFIER -> Intel64 Family 6 Model 30 Stepping 5, GenuineIntel]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PATHEXT -> .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERNAME -> Dale Furrow]]></message>
@@ -376,10 +373,10 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StringUtils]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\resources\extadmin.jar com/moneydance/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StringUtils loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.util.Stack loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.Format loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NumberFormatException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.util.Stack loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.NumberFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Double loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormatSymbols loaded from parent loader (parentFirst)]]></message>
@@ -403,15 +400,15 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.FeatureModuleContext]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.FeatureModuleContext loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.MDException loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.io.ByteArrayInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
-	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuilder loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipFile loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
@@ -776,7 +773,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:65: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-repr-expr\src\build.xml:65: " name="java" time="5 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:

@@ -121,7 +121,8 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
         populateLeftList(reportConfig);
         populateRightList(reportConfig);
 
-        Dimension dimension = reportControlPanel.getRelatedDimension(leftPane);
+        JScrollPane sizingPane = leftListModel.getSize() >= rightListModel.getSize() ? leftPane : rightPane;
+        Dimension dimension = reportControlPanel.getRelatedDimension(sizingPane);
         leftPane.setPreferredSize(dimension);
         rightPane.setPreferredSize(dimension);
     }
