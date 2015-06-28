@@ -1,0 +1,86 @@
+<!--
+build file for ant
+http://jakarta.apache.org/ant/index.html
+-->
+
+<project name="invextension" default="all" basedir=".">
+	<property name="version"  value="2.2"/>
+	<property name="src" value="."/>
+	<property name="build" value="../classes"/>
+    <property name="lib" value="../lib"/>
+	<property name="privkeyfile" value="${src}/priv_key"/>
+	<property name="pubkeyfile" value="${src}/pub_key"/>
+	<property name="privkeyid" value="99"/>
+	<property environment="env"/>
+
+	<property name="build.compiler"  value="modern"/>
+	<!--was "classic"-->
+	<property name="build.compiler.fulldepend"  value="true"/>
+	<property name="dist"  value="../dist"/>
+	<property name="tmp"  value="../tmp"/>
+	<property name="debug"  value="on"/>
+	<property name="optimize"  value="off"/>
+
+	<path id="classpath">
+		<pathelement path="../resources/extadmin.jar"/>
+		<pathelement path="../lib/moneydance.jar"/>
+		<!--added this"C:/Program Files (x86)/Java/jdk1.7.0_65/jre/lib/jfxrt.jar -->
+        <pathelement path="../lib/annotations.jar"/>
+	</path>
+
+	<target name="init">
+			<!--i.e. "clean"...gets rid of old build files/directories -->
+			<echo message="JAVA_HOME is set to = ${env.JAVA_HOME}" />
+			<delete includeemptydirs="true" verbose = "true" quiet = "true">
+				<fileset dir="${build}" includes="**/*" />
+			</delete>
+			<delete includeemptydirs="true" verbose = "true" quiet = "true">
+				<fileset dir="${dist}" includes="**/*" />
+			</delete>	
+	</target>
+
+	<target name="invextension" depends="init">
+		<mkdir dir="${dist}"/>
+		<mkdir dir="${build}"/>
+		<javac  target="1.7" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+      classpathref="classpath"  destdir="${build}"
+      includes="com/moneydance/modules/features/invextension/**"
+      includeantruntime = "false">
+			<!--changed to 1.7 -->
+			<compilerarg value = "-Xlint:all"/>
+		</javac>
+
+		<jar destfile="${dist}/invextension.mxt">
+			<fileset dir="${src}" includes="
+             com/moneydance/modules/features/invextension/meta_info.dict
+             com/moneydance/modules/features/invextension/*.gif
+             com/moneydance/modules/features/invextension/*.jpg
+             com/moneydance/modules/features/invextension/*.jpeg
+             com/moneydance/modules/features/invextension/InvestmentReportsHelp.html"/>
+			<fileset dir="${build}" includes="com/moneydance/modules/features/invextension/**"/>
+		</jar>
+
+		<java newenvironment="true" 
+      classpathref="classpath"
+      classname="com.moneydance.admin.KeyAdmin">
+			<arg value="signextjar"/>
+			<arg value="${privkeyfile}"/>
+			<arg value="${privkeyid}"/>
+			<arg value="invextension"/>
+			<arg line="${dist}/invextension.mxt"/>
+		</java>
+	</target>
+
+	<target name="genkeys">
+		<java 
+      classpathref="classpath"
+      classname="com.moneydance.admin.KeyAdmin">
+			<arg value="genkey"/>
+			<arg value="${privkeyfile}"/>
+			<arg value="${pubkeyfile}"/>
+		</java>
+	</target>
+
+	<target name="all" depends="invextension"/>
+
+</project>
