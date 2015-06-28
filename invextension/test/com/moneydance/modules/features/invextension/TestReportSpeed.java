@@ -36,6 +36,8 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
@@ -59,7 +61,7 @@ public class TestReportSpeed extends JFrame {
     private static final DecimalFormat decFormat = new DecimalFormat("#.000");
     private static LinkedHashMap<String, Date> recordTimes = new LinkedHashMap<>();
     private static final String startTime = "startTime";
-    public static final File mdTestFile = new File(testFileStr);
+    public static final File mdTestFile = new File(testFileStr1);
     private static final String tab = "\t";
 
     public static void main(String[] args) throws Exception {
@@ -69,6 +71,7 @@ public class TestReportSpeed extends JFrame {
         BulkSecInfo currentInfo =  new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
         addRecordTime("bulkInfoLoaded");
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
+        reportConfig.setDateRange(testDateRange);
         TotalReport report = new TotalSnapshotReport(reportConfig);
         report.calcReport(currentInfo);
         addRecordTime("reportCalculated");

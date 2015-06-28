@@ -41,6 +41,7 @@ import java.util.Vector;
 public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
     private SecurityAccount securityAccount;
     private CurrencyWrapper currencyWrapper;
+    private ReportConfig reportConfig;
     private Tradeable tradeable;
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
@@ -51,9 +52,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     private DIV_FREQUENCY divFrequency = DIV_FREQUENCY.UNKNOWN;
 
     public SecurityAccountWrapper(@NotNull SecurityAccount secAcct,
-                                  @NotNull InvestmentAccountWrapper invAcct) throws Exception {
+                                  @NotNull InvestmentAccountWrapper invAcct,
+                                  ReportConfig reportConfig) throws Exception {
         this.securityAccount = secAcct;
         this.invAcctWrapper = invAcct;
+        this.reportConfig = reportConfig;
         this.transValuesList = new ArrayList<>();
         this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct.getCurrencyType()
                 .getID());
@@ -114,7 +117,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         Collections.sort(assocTrans, BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
-                    thisAccount, this, transValuesSet, this.getBulkSecInfo());
+                    thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig);
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
             transValuesSet.add(transValuesToAdd);
             if (thisAccount instanceof SecurityAccount)
@@ -125,11 +128,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         setTransValuesList(transValuesSet);
     }
 
-    public double getPrice(int dateInt) {
+    public long getPrice(int dateInt) {
         if (currencyWrapper.isCash) {
-            return 1.0;
+            return 100;
         } else {
-            return 1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt);
+            return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
         }
     }
 
@@ -187,6 +190,15 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     }
 
+    public String getFullName(){
+        if (securityAccount != null) {
+            return securityAccount.getParentAccount().getAccountName() + ":" +
+                    securityAccount.getAccountName().trim();
+        } else {
+            return this.name;
+        }
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -215,7 +227,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         }
 
     }
-
+    
     @Override
     public int compareTo(@NotNull SecurityAccountWrapper o) {
         return BulkSecInfo.acctComp.compare(this.securityAccount, o.securityAccount);
@@ -227,65 +239,6 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     public void setTransValuesList(@Nullable ArrayList<TransactionValues> transValuesList) {
         this.transValuesList = transValuesList;
-    }
-
-    @NotNull
-    public ArrayList<TransactionValues> getFromToSubset(@NotNull ArrayList<Integer> fromToIndices) {
-        if (!fromToIndices.isEmpty()) {
-            return (new ArrayList<>(transValuesList.subList(fromToIndices.get(0),
-                    fromToIndices.get(1) + 1)));//To index is exclusive per List interface
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    @NotNull
-    public ArrayList<Integer> getFromToIndices(@NotNull DateRange dateRange) {
-        ArrayList<Integer> outputList = new ArrayList<>();
-        int fromElement = binarySearch(dateRange.getFromDateInt(), true);
-        if (fromElement != -1) {
-            int toElement = binarySearchRecursive(dateRange.getToDateInt(), fromElement,
-                    this.getTransactionValues().size() - 1, false);
-            if (toElement != -1) {
-                outputList.add(fromElement);
-                outputList.add(toElement);
-            }
-        }
-        return outputList;
-    }
-
-    public int binarySearch(int searchDateInt, boolean getFromDate) {
-        return binarySearchRecursive(searchDateInt, 0, this.getTransactionValues().size() - 1, getFromDate);
-    }
-
-    public int binarySearchRecursive(int searchDateInt, int left, int right, boolean getFromDate) {
-        if (left > right || getTransactionValues().isEmpty()) return -1;
-        int leftDateInt = getTransactionValues().get(left).getDateint();
-        int rightDateInt = getTransactionValues().get(right).getDateint();
-        if (getFromDate) {//check endpoints of list
-            if (searchDateInt < leftDateInt) return left;
-            if (searchDateInt >= rightDateInt) return -1;
-        } else {
-            if (searchDateInt >= rightDateInt) return right;
-            if (searchDateInt < leftDateInt) return -1;
-        }
-        //"middle" defined so that 2 element-set returns correct side
-        int middle = getFromDate ? Math.max((left + right) / 2, 1) : (left + right) / 2;
-        int middleDateInt = getTransactionValues().get(middle).getDateint();
-        if (getFromDate) { //get "from" element
-            int leftOfMiddleDateInt = getTransactionValues().get(middle - 1).getDateint();
-            if (searchDateInt < middleDateInt && searchDateInt >= leftOfMiddleDateInt) return middle;
-            else if (searchDateInt < leftOfMiddleDateInt) return binarySearchRecursive(searchDateInt, left, middle - 1,
-                    getFromDate); //search left side
-            else return binarySearchRecursive(searchDateInt, middle + 1, right, getFromDate);
-        } else { //get "to" element
-            int rightOfMiddleDateInt = getTransactionValues().get(middle + 1).getDateint();
-            if (searchDateInt >= middleDateInt && searchDateInt < rightOfMiddleDateInt) return middle;
-            else if (searchDateInt >= rightOfMiddleDateInt)
-                return binarySearchRecursive(searchDateInt, middle + 1, right,
-                        getFromDate);//search right side
-            else return binarySearchRecursive(searchDateInt, left, middle - 1, getFromDate);
-        }
     }
 
     public SecurityType getSecurityType() {
@@ -338,7 +291,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
      */
     class DividendFrequencyAnalyzer {
         public static final int MINIMUM_EX_DIV_DAYS = 21;
-        public static final int DIV_FREQENCY_INCREMENT = 60; // approx. two-month period
+        public static final int DIV_FREQUENCY_INCREMENT = 60; // approx. two-month period
         boolean dividendDetermined;
         int lastDividendDateInt;
 
@@ -347,7 +300,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             this.lastDividendDateInt = -1; //dummy date
         }
 
-        void analyzeDividend(@NotNull TransactionValues transactionValues) {
+        public void analyzeDividend(@NotNull TransactionValues transactionValues) {
             if (transactionValues.getIncome() > 0) {
                 InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());
                 switch (transType) {
@@ -356,7 +309,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                     case DIVIDEND_REINVEST:
                     case BANK:
                         if (transactionValues.getIncome() != 0.0) {
-                            int dividendDate = transactionValues.getDateint();
+                            int dividendDate = transactionValues.getDateInt();
                             int daysBetweenDivs = lastDividendDateInt == -1 ? -1 : DateUtils
                                     .getDaysBetween(dividendDate, lastDividendDateInt);
                             if (daysBetweenDivs == -1) {//implies first dividend in history
@@ -365,17 +318,20 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                             } else {//dividend frequency is annual unless we observe more frequent distributions
                                 if (daysBetweenDivs <= MINIMUM_EX_DIV_DAYS) return; //ignore--probable correction of
                                 // previous transaction
-                                if (daysBetweenDivs > MINIMUM_EX_DIV_DAYS && daysBetweenDivs < DIV_FREQENCY_INCREMENT) {
+                                if (daysBetweenDivs > MINIMUM_EX_DIV_DAYS && daysBetweenDivs < DIV_FREQUENCY_INCREMENT) {
                                     setDivFrequency(DIV_FREQUENCY.MONTHLY);
-                                } else if (daysBetweenDivs >= DIV_FREQENCY_INCREMENT && daysBetweenDivs < DIV_FREQENCY_INCREMENT * 2) {
+                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT && daysBetweenDivs < DIV_FREQUENCY_INCREMENT * 2) {
                                     setDivFrequency(DIV_FREQUENCY.QUARTERLY);
-                                } else if (daysBetweenDivs >= DIV_FREQENCY_INCREMENT * 2 && daysBetweenDivs <
-                                        DIV_FREQENCY_INCREMENT * 4) {
+                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT * 2 && daysBetweenDivs <
+                                        DIV_FREQUENCY_INCREMENT * 4) {
                                     setDivFrequency(DIV_FREQUENCY.BIANNUAL);
+                                } else {
+                                    // else dividend frequency still assumed to be annual
+                                    setDivFrequency(DIV_FREQUENCY.ANNUAL);
                                 }
-                                // else dividend frequency still assumed to be annual
                                 lastDividendDateInt = dividendDate;
                                 dividendDetermined = true;
+
                             }
                         }
                 }

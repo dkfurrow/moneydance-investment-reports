@@ -29,15 +29,15 @@
 package com.moneydance.modules.features.invextension;
 
 
+import com.moneydance.apps.md.model.Account;
+import com.moneydance.apps.md.model.RootAccount;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -45,32 +45,38 @@ import java.util.prefs.Preferences;
  * Controller for Report Configuration Options
  */
 public class ReportConfig {
-    Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
-    Class<? extends TotalReport> reportClass;
-    String reportTypeName;
-    String reportName;
-    boolean useAverageCostBasis;
-    AggregationController aggregationController;
-    boolean outputSingle;
-    int numFrozenColumns;
-    boolean closedPosHidden;
-    LinkedList<Integer> viewHeader;
-    HashSet<Integer> excludedAccountNums;
-    DateRange dateRange;
-    boolean isDefaultConfig = false;
-    FrameInfo frameInfo;
+    private Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
+    private Class<? extends TotalReport> reportClass;
+    private String reportTypeName;
+    private String reportName;
+    private boolean useAverageCostBasis;
+    private boolean useOrdinaryReturn;
+    private AggregationController aggregationController;
+    private boolean outputSingle;
+    private int numFrozenColumns;
+    private boolean closedPosHidden;
+    private LinkedList<Integer> viewHeader;
+    private HashSet<Integer> excludedAccountNums;
+    private HashSet<Integer> investmentExpenseNums;
+    private HashSet<Integer> investmentIncomeNums;
+    private DateRange dateRange;
+    private boolean isDefaultConfig = false;
+    private FrameInfo frameInfo;
 
     public ReportConfig() {
         this.reportClass = null;
         this.reportTypeName = "select any report";
         this.reportName = "select any report";
         this.useAverageCostBasis = true;
+        this.useOrdinaryReturn = true;
         this.aggregationController = null;
         this.outputSingle = false;
         this.numFrozenColumns = 0;
         this.closedPosHidden = true;
         this.viewHeader = new LinkedList<>();
         this.excludedAccountNums = new HashSet<>();
+        this.investmentExpenseNums = new HashSet<>();
+        this.investmentIncomeNums = new HashSet<>();
         this.dateRange = new DateRange();
         this.isDefaultConfig = false;
         this.frameInfo = new FrameInfo();
@@ -82,7 +88,8 @@ public class ReportConfig {
      *
      * @param reportClass           input Report Class
      * @param reportName            test report name
-     * @param useAverageCostBasis            test report name
+     * @param useAverageCostBasis   test report name
+     * @param useOrdinaryReturn    test report name                              
      * @param aggregationController test aggregation controller
      * @param outputSingle          irrelevant for testing
      * @param numFrozenColumns      irrelevant for testing
@@ -94,21 +101,25 @@ public class ReportConfig {
      * @throws IllegalAccessException
      */
     public ReportConfig(Class<? extends TotalReport> reportClass, String reportName, boolean useAverageCostBasis,
-                        AggregationController aggregationController, boolean outputSingle, int numFrozenColumns,
-                        boolean closedPosHidden, LinkedList<Integer> viewHeader, HashSet<Integer> excludedAccountNums,
-                        DateRange dateRange)
+                        boolean useOrdinaryReturn, AggregationController aggregationController, boolean outputSingle,
+                        int numFrozenColumns, boolean closedPosHidden, LinkedList<Integer> viewHeader,
+                        HashSet<Integer> excludedAccountNums, HashSet<Integer> investmentExpenseNums,
+                        HashSet<Integer> investmentIncomeNums, DateRange dateRange)
             throws NoSuchFieldException, IllegalAccessException {
 
         this.reportClass = reportClass;
         this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
         this.reportName = reportName;
         this.useAverageCostBasis = useAverageCostBasis;
+        this.useOrdinaryReturn = useOrdinaryReturn;
         this.aggregationController = aggregationController;
         this.outputSingle = outputSingle;
         this.numFrozenColumns = numFrozenColumns;
         this.closedPosHidden = closedPosHidden;
         this.viewHeader = viewHeader;
         this.excludedAccountNums = excludedAccountNums;
+        this.investmentExpenseNums = investmentExpenseNums;
+        this.investmentIncomeNums = investmentIncomeNums;
         this.dateRange = dateRange;
         this.frameInfo = new FrameInfo();
     }
@@ -123,27 +134,35 @@ public class ReportConfig {
      */
     public ReportConfig(Class<? extends TotalReport> reportClass, String reportName) throws NoSuchFieldException,
             IllegalAccessException, BackingStoreException {
+        initReportConfig(reportClass, reportName);
+    }
+
+    private void initReportConfig(Class<? extends TotalReport> reportClass, String reportName) throws NoSuchFieldException,
+            IllegalAccessException, BackingStoreException {
         this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
         boolean nodeExists = prefs.node(reportTypeName).nodeExists(reportName);
         Preferences thisReportPrefs = prefs.node(reportTypeName).node(nodeExists ? reportName : Prefs.STANDARD_NAME);
         ReportConfig standardConfig = getStandardReportConfig(reportClass); //used to populate defaults if pref not found
         this.reportClass = reportClass;
         this.reportName = reportName;
-        this.useAverageCostBasis = thisReportPrefs.getBoolean(Prefs.USE_AVERAGE_COST_BASIS,
-                standardConfig.useAverageCostBasis());
+        this.useAverageCostBasis = thisReportPrefs.getBoolean(Prefs.USE_AVERAGE_COST_BASIS, standardConfig.useAverageCostBasis());
+        this.useOrdinaryReturn = thisReportPrefs.getBoolean(Prefs.USE_ORDINARY_RETURN, standardConfig.useOrdinaryReturn());
         this.aggregationController = getAggregationControllerFromPrefs(thisReportPrefs);
         this.outputSingle = thisReportPrefs.getBoolean(Prefs.OUTPUT_SINGLE, standardConfig.isOutputSingle());
         this.numFrozenColumns = thisReportPrefs.getInt(Prefs.NUM_FROZEN_COLUMNS, standardConfig.getNumFrozenColumns());
         this.closedPosHidden = thisReportPrefs.getBoolean(Prefs.CLOSED_POS_HIDDEN, standardConfig.isClosedPosHidden());
         this.viewHeader = getLinkedListFromString(thisReportPrefs.get(Prefs.VIEWHEADER,
                 standardConfig.writeViewHeaderToString()));
-        this.excludedAccountNums = getHashSetFromString(thisReportPrefs.get(Prefs.EXCLUDEDACCOUNTNUMS,
-                standardConfig.writeExcludedAccountsToString()));
+        this.excludedAccountNums = stringToHashSet(thisReportPrefs.get(Prefs.EXCLUDEDACCOUNTNUMS,
+                accountListToString(standardConfig.getExcludedAccountNums())));
+        this.investmentExpenseNums = stringToHashSet(thisReportPrefs.get(Prefs.INVESTMENTEXPENSENUMS,
+                accountListToString(standardConfig.getInvestmentExpenseNums())));
+        this.investmentIncomeNums = stringToHashSet(thisReportPrefs.get(Prefs.INVESTMENTINCOMENUMS,
+                accountListToString(standardConfig.getInvestmentIncomeNums())));
         this.dateRange = DateRange.getDateRangeFromString(thisReportPrefs.get(Prefs.DATERANGE,
                 standardConfig.getDateRange().toString()));
         this.isDefaultConfig = thisReportPrefs.getBoolean(Prefs.ISSTANDARD, standardConfig.isOutputSingle());
         this.frameInfo = getFrameInfoFromPrefs(thisReportPrefs);
-
     }
 
     /**
@@ -158,26 +177,7 @@ public class ReportConfig {
 
     public ReportConfig(String reportClassSimpleName, String reportName) throws NoSuchFieldException,
             IllegalAccessException, ClassNotFoundException, BackingStoreException {
-        Class<? extends TotalReport> reportClass = getClassFromName(reportClassSimpleName);
-        this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
-        boolean nodeExists = prefs.node(reportTypeName).nodeExists(reportName);
-        Preferences thisReportPrefs = prefs.node(reportTypeName).node(nodeExists ? reportName : Prefs.STANDARD_NAME);
-        ReportConfig standardConfig = getStandardReportConfig(reportClass); //used to populate defaults if pref not found
-        this.reportClass = reportClass;
-        this.reportName = reportName;
-        this.useAverageCostBasis = thisReportPrefs.getBoolean(Prefs.USE_AVERAGE_COST_BASIS,
-                standardConfig.useAverageCostBasis());
-        this.aggregationController = getAggregationControllerFromPrefs(thisReportPrefs);
-        this.outputSingle = thisReportPrefs.getBoolean(Prefs.OUTPUT_SINGLE, standardConfig.isOutputSingle());
-        this.numFrozenColumns = thisReportPrefs.getInt(Prefs.NUM_FROZEN_COLUMNS, standardConfig.getNumFrozenColumns());
-        this.closedPosHidden = thisReportPrefs.getBoolean(Prefs.CLOSED_POS_HIDDEN, standardConfig.isClosedPosHidden());
-        this.viewHeader = getLinkedListFromString(thisReportPrefs.get(Prefs.VIEWHEADER, standardConfig.writeViewHeaderToString()));
-        this.excludedAccountNums = getHashSetFromString(thisReportPrefs.get(Prefs.EXCLUDEDACCOUNTNUMS,
-                standardConfig.writeExcludedAccountsToString()));
-        this.dateRange = DateRange.getDateRangeFromString(thisReportPrefs.get(Prefs.DATERANGE,
-                standardConfig.getDateRange().toString()));
-        this.isDefaultConfig = thisReportPrefs.getBoolean(Prefs.ISSTANDARD, standardConfig.isOutputSingle());
-        this.frameInfo = getFrameInfoFromPrefs(thisReportPrefs);
+        initReportConfig(getClassFromName(reportClassSimpleName), reportName);
     }
 
     public static String[] getReportNamesForClass(Class<? extends TotalReport> reportClass) throws
@@ -241,10 +241,12 @@ public class ReportConfig {
         LinkedList<Integer> viewHeader = getDefaultViewHeader(getModelHeader(reportClass));
         DateRange defaultDateRange = DateRange.getDefaultDateRange();
         HashSet<Integer> excludedAccountNums = new HashSet<>();
-        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true,
+        HashSet<Integer> investmentExpenseNums = new HashSet<>();
+        HashSet<Integer> investmentIncomeNums = new HashSet<>();
+        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true, false,
                 defaultAggregationController, false, 5, true, viewHeader, excludedAccountNums,
-                defaultDateRange);
-        standardConfig.setStandardConfig(true);
+                investmentExpenseNums, investmentIncomeNums, defaultDateRange);
+        standardConfig.setIsDefaultConfig(true);
         return standardConfig;
     }
 
@@ -274,12 +276,18 @@ public class ReportConfig {
         return new HashSet<>();
     }
 
+    public static HashSet<Integer> getDefaultInvestmentExpenseAccounts() {
+        return new HashSet<>();
+    }
+
+    public static HashSet<Integer> getDefaultInvestmentIncomeAccounts() {
+        return new HashSet<>();
+    }
+
 
     @SuppressWarnings("unchecked")
-    public static LinkedList<String> getModelHeader(
-            Class<? extends TotalReport> totalReportSubClass)
-            throws SecurityException, NoSuchFieldException,
-            IllegalArgumentException, IllegalAccessException {
+    public static LinkedList<String> getModelHeader(Class<? extends TotalReport> totalReportSubClass)
+            throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field modelHeader = totalReportSubClass.getDeclaredField("MODEL_HEADER");
         return (LinkedList<String>) modelHeader.get(LinkedList.class);
     }
@@ -295,33 +303,14 @@ public class ReportConfig {
         String[] viewHeaderStr = prefString.split(",");
         Integer[] viewHeaderInt = new Integer[viewHeaderStr.length];
         for (int i = 0; i < viewHeaderStr.length; i++) {
-            viewHeaderInt[i] = Integer.parseInt(viewHeaderStr[i]);
+            try {
+                viewHeaderInt[i] = Integer.parseInt(viewHeaderStr[i]);
+            } catch (NumberFormatException e) {
+                return new LinkedList<>();  // Empty list
+            }
         }
         return new LinkedList<>(Arrays.asList(viewHeaderInt));
     }
-
-    /**
-     * Generic method to get Hash Set from String where significant values
-     * are separated by commas
-     *
-     * @param prefString input String
-     * @return Linked list of values
-     */
-    public static HashSet<Integer> getHashSetFromString(String prefString) {
-        if (prefString != null && prefString.length() > 0) {
-            String[] excludedAccountStrs = prefString.split(",");
-            Integer[] excludedAccountNums = new Integer[excludedAccountStrs.length];
-            for (int i = 0; i < excludedAccountStrs.length; i++) {
-                excludedAccountNums[i] = Integer.parseInt(excludedAccountStrs[i]);
-            }
-            return new HashSet<>(Arrays.asList(excludedAccountNums));
-        } else {
-            return new HashSet<>();
-        }
-    }
-
-
-
 
     /**
      * Prints node for given report
@@ -340,7 +329,6 @@ public class ReportConfig {
             System.out.println(outString);
         }
     }
-
 
     /**
      * prints configuration node for all reports
@@ -442,6 +430,14 @@ public class ReportConfig {
         this.viewHeader = viewHeader;
     }
 
+    public String showIncExpWarning(){
+        StringBuffer sb = new StringBuffer();
+        if(investmentIncomeNums.isEmpty()) sb.append("No Investment Income Categories Designated!")
+                .append(investmentExpenseNums.isEmpty() ? "\n" : "");
+        if(investmentExpenseNums.isEmpty()) sb.append("No Investment Expense Categories Designated!");
+        return sb.length() > 0 ? sb.toString() + "\nContinue Report Run?" : "";
+    }
+
     public AggregationController getAggregationController() {
         return aggregationController;
     }
@@ -454,10 +450,24 @@ public class ReportConfig {
         return isDefaultConfig;
     }
 
-    public boolean useAverageCostBasis() {return useAverageCostBasis;}
+    public void setIsDefaultConfig(boolean flag) {
+        this.isDefaultConfig = flag;
+    }
 
-    public void setStandardConfig(boolean defaultConfig) {
-        this.isDefaultConfig = defaultConfig;
+    public boolean useAverageCostBasis() {
+        return useAverageCostBasis;
+    }
+
+    public void setUseAverageCostBasis(boolean flag) {
+        this.useAverageCostBasis = flag;
+    }
+
+    public boolean useOrdinaryReturn() {
+        return useOrdinaryReturn;
+    }
+
+    public void setUseOrdinaryReturn(boolean flag) {
+        this.useOrdinaryReturn = flag;
     }
 
     public boolean isOutputSingle() {
@@ -468,8 +478,6 @@ public class ReportConfig {
         this.outputSingle = outputSingle;
     }
 
-    public void setUseAverageCostBasis(boolean useAverageCostBasis) {this.useAverageCostBasis = useAverageCostBasis;}
-
     public DateRange getDateRange() {
         return dateRange;
     }
@@ -478,9 +486,26 @@ public class ReportConfig {
         return excludedAccountNums;
     }
 
+    public HashSet<Integer> getInvestmentExpenseNums() {
+        return investmentExpenseNums;
+    }
+
+    public void setInvestmentExpenseNums(HashSet<Integer> investmentExpenseNums) {
+        this.investmentExpenseNums = investmentExpenseNums;
+    }
+
+    public HashSet<Integer> getInvestmentIncomeNums() {
+        return investmentIncomeNums;
+    }
+
+    public void setInvestmentIncomeNums(HashSet<Integer> investmentIncomeNums) {
+        this.investmentIncomeNums = investmentIncomeNums;
+    }
+    
     public void setDateRange(DateRange dateRange) {
         this.dateRange = dateRange;
     }
+
     public void setExcludedAccountNums(HashSet<Integer> excludedAccountNums){
         this.excludedAccountNums = excludedAccountNums;
     }
@@ -554,16 +579,35 @@ public class ReportConfig {
      *
      * @return string to be saved to preferences
      */
-    public String writeExcludedAccountsToString() {
+    private String accountListToString(HashSet<Integer> accountNums) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for(Integer excludedAccountNum : excludedAccountNums){
-            sb.append(i == excludedAccountNums.size() - 1 ? excludedAccountNum : excludedAccountNum + ",");
+        for (int acctNum : accountNums) {
+            sb.append(i == accountNums.size() - 1 ? acctNum : acctNum + ",");
             i++;
         }
         return sb.toString();
     }
 
+    /**
+     * Generic method to get Hash Set from String where significant values
+     * are separated by commas
+     *
+     * @param prefString input String
+     * @return Linked list of values
+     */
+    private HashSet<Integer> stringToHashSet(String prefString) {
+        if (prefString != null && prefString.length() > 0) {
+            String[] excludedAccountStrs = prefString.split(",");
+            Integer[] accountNums = new Integer[excludedAccountStrs.length];
+            for (int i = 0; i < excludedAccountStrs.length; i++) {
+                accountNums[i] = Integer.parseInt(excludedAccountStrs[i]);
+            }
+            return new HashSet<>(Arrays.asList(accountNums));
+        } else {
+            return new HashSet<>();
+        }
+    }
 
 
     public String toString() {
@@ -571,12 +615,15 @@ public class ReportConfig {
         return "Report Class: " + reportTypeName + nl
                 + "Report Name: " + this.reportName + nl
                 + "Average Cost: " + this.useAverageCostBasis + nl
+                + "Ordinary Return: " + this.useOrdinaryReturn + nl
                 + "Aggregation Mode: " + aggregationController.getDescription() + nl
                 + "Output Single? " + outputSingle + nl
                 + "Number Frozen Columns: " + numFrozenColumns + nl
                 + "Closed Positions Hidden? " + isClosedPosHidden() + nl
                 + "View Header: " + writeViewHeaderToString() + nl
-                + "Excluded Account Nums: " + writeExcludedAccountsToString() + nl
+                + "Excluded Account Nums: " + accountListToString(excludedAccountNums) + nl
+                + "Investment Expense Nums: " + accountListToString(investmentExpenseNums) + nl
+                + "Investment Income Nums: " + accountListToString(investmentIncomeNums) + nl
                 + "DateRange: " + dateRange.toString() + nl
                 + "Is Default? " + isDefaultConfig + nl
                 + "Frame Info: " + frameInfo.toString();
@@ -589,15 +636,40 @@ public class ReportConfig {
         Preferences thisReportPrefs = prefs.node(reportTypeName).node(
                 (this.isDefaultConfig() ? this.reportName : this.reportName.trim()));
         thisReportPrefs.putBoolean(Prefs.USE_AVERAGE_COST_BASIS, useAverageCostBasis);
+        thisReportPrefs.putBoolean(Prefs.USE_ORDINARY_RETURN, useOrdinaryReturn);
         thisReportPrefs.put(Prefs.AGGREGATION_MODE, aggregationController.name());
         thisReportPrefs.putBoolean(Prefs.OUTPUT_SINGLE, outputSingle);
         thisReportPrefs.putInt(Prefs.NUM_FROZEN_COLUMNS, numFrozenColumns);
         thisReportPrefs.putBoolean(Prefs.CLOSED_POS_HIDDEN, closedPosHidden);
         thisReportPrefs.put(Prefs.VIEWHEADER, this.writeViewHeaderToString());
-        thisReportPrefs.put(Prefs.EXCLUDEDACCOUNTNUMS, this.writeExcludedAccountsToString());
+        thisReportPrefs.put(Prefs.EXCLUDEDACCOUNTNUMS, accountListToString(excludedAccountNums));
+        thisReportPrefs.put(Prefs.INVESTMENTEXPENSENUMS, accountListToString(investmentExpenseNums));
+        thisReportPrefs.put(Prefs.INVESTMENTINCOMENUMS, accountListToString(investmentIncomeNums));
         thisReportPrefs.put(Prefs.DATERANGE, dateRange.toString());
         thisReportPrefs.putBoolean(Prefs.ISSTANDARD, isDefaultConfig);
         thisReportPrefs.put(Prefs.FRAMEINFO, frameInfo.writeFrameInfoForPrefs());
+    }
+
+    public void setAllExpenseAccountsToInvestment(RootAccount root) {
+        if (root != null) {
+            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_EXPENSE);
+            HashSet<Integer> acctNums = new HashSet<>();
+            for (Account acct : accounts) {
+                acctNums.add(acct.getAccountNum());
+            }
+            this.investmentExpenseNums = acctNums;
+        }
+    }
+
+    public void setAllIncomeAccountsToInvestment(RootAccount root) {
+        if (root != null) {
+            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INCOME);
+            HashSet<Integer> acctNums = new HashSet<>();
+            for (Account acct : accounts) {
+                acctNums.add(acct.getAccountNum());
+            }
+            this.investmentIncomeNums = acctNums;
+        }
     }
 
     /**

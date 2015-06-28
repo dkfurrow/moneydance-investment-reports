@@ -42,7 +42,6 @@ import java.util.LinkedList;
 
 public class TotalSnapshotReport extends TotalReport {
 
-
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "Last\nPrice", "End\nPos", "End\nValue",
             "Abs\nPrcChg", "Abs\nValChg", "Pct\nPrcChg", "TR\n1Day", "TR\n1Wk",
@@ -59,8 +58,12 @@ public class TotalSnapshotReport extends TotalReport {
             ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2};
 
+    private ReportConfig reportConfig;
+
     public TotalSnapshotReport(ReportConfig reportConfig) throws Exception {
         super(reportConfig, COL_TYPES, MODEL_HEADER);
+
+        this.reportConfig = reportConfig;
     }
 
     @Override
@@ -82,9 +85,16 @@ public class TotalSnapshotReport extends TotalReport {
     }
 
     @Override
-    public SecurityReport getLeafSecurityReport(
-            SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
-        return new SecuritySnapshotReport(securityAccountWrapper, dateRange);
+    public SecurityReport getLeafSecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
+        return new SecuritySnapshotReport(reportConfig, securityAccountWrapper, null, dateRange);
+    }
+
+    @Override
+    public CompositeReport getAllCompositeReport(DateRange dateRange, AggregationController aggregationController) {
+        CompositeReport compositeReport = new CompositeReport(aggregationController);
+        SecuritySnapshotReport allAggregate = new SecuritySnapshotReport(reportConfig, null, compositeReport, dateRange);
+        compositeReport.setAggregateReport(allAggregate);
+        return  compositeReport;
     }
 
 }

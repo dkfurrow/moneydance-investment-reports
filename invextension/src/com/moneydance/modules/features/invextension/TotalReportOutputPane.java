@@ -41,6 +41,8 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import com.moneydance.modules.features.invextension.SecurityReport.MetricEntry;
+import com.moneydance.modules.features.invextension.TotalReport.ReportTableModel;
 
 /**
  * An extended and formatted of CoolTable by Kurt Riede added multi sort,
@@ -60,7 +62,7 @@ public class TotalReportOutputPane extends JScrollPane {
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
     public SortOrder thirdOrder = SortOrder.ASCENDING;
-    public TotalReport.ReportTableModel model;
+    public ReportTableModel model;
     public boolean closedPosHidden;
     public int closedPosColumn;
     int frozenColumns = 0;
@@ -72,6 +74,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public TotalReportOutputPane(TotalReport totalReport) throws NoSuchFieldException, IllegalAccessException {
         super();
+        setVisible(false);
         this.totalReport = totalReport;
         this.model = totalReport.getReportTableModel();
         this.reportConfig = totalReport.getReportConfig();
@@ -165,6 +168,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 new ScrollableSelectFirstColumnCellAction());
         setAction(lockedTable, "selectLastColumn",
                 new LockedTableSelectLastColumnCellAction());
+        setVisible(true);
     }
 
     public static Integer maxInt(Integer... values) {
@@ -195,7 +199,10 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public static String getDisplayValueFromObject(Object o) throws Exception {
         String outputName;
-        if (o instanceof InvestmentAccountWrapper) {
+        if (o instanceof MetricEntry) {
+            Double value = ((MetricEntry) o).getDisplayValue();
+            outputName = value.equals(SecurityReport.UndefinedReturn) ? "" : value.toString();
+        } else if (o instanceof InvestmentAccountWrapper) {
             outputName = ((InvestmentAccountWrapper) o).getName();
         } else if (o instanceof SecurityAccountWrapper) {
             outputName = ((SecurityAccountWrapper) o).getName();
@@ -204,9 +211,7 @@ public class TotalReportOutputPane extends JScrollPane {
         } else if (o instanceof SecuritySubTypeWrapper) {
             outputName = ((SecuritySubTypeWrapper) o).getName();
         } else if (o instanceof CurrencyWrapper) {
-            outputName = ((CurrencyWrapper) o).getTicker();
-        } else if (o instanceof Number) {
-            outputName = o.toString();
+            outputName = ((CurrencyWrapper) o).getName();
         } else {
             throw new Exception("invalid attempt to get name from object");
         }
@@ -243,7 +248,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                 // workaround--getPreferredSize insufficient for (at least some)
                 // numbers, so set width based on larger font size
-                if ((value instanceof Integer || value instanceof Double)) {
+                if (value instanceof MetricEntry) {
                     JLabel comp1 = (JLabel) comp;
                     Font f1 = new Font(comp1.getFont().getName(), comp1
                             .getFont().getStyle(),
@@ -367,13 +372,30 @@ public class TotalReportOutputPane extends JScrollPane {
         return reportConfig;
     }
 
+    class ClosedValueRowFilter extends RowFilter<ReportTableModel, Integer> {
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean include(Entry<? extends ReportTableModel, ? extends Integer> entry) {
+            boolean result = false;
+
+            ReportTableModel reportTableModel = entry.getModel();
+            int row = entry.getIdentifier();
+            Object object = reportTableModel.getValueAt(row, closedPosColumn);
+            MetricEntry<Number> metricEntry;
+            if (object instanceof MetricEntry) {
+                metricEntry = (MetricEntry<Number>) object;
+                result = metricEntry.getDisplayValue() != 0.0;
+            }
+            return result;
+        }
+    }
+
     public void sortRows() {
 
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>((TableModel) this.model);
+        TableRowSorter<ReportTableModel> rowSorter = new TableRowSorter<>(this.model);
         // apply row sorter
         if (closedPosHidden) {
-            RowFilter<TableModel, Object> rf = RowFilter.numberFilter(
-                    RowFilter.ComparisonType.NOT_EQUAL, 0.0, closedPosColumn);
+            RowFilter<ReportTableModel, Integer> rf = new ClosedValueRowFilter();
             rowSorter.setRowFilter(rf);
         } else {
             rowSorter.setRowFilter(null);
@@ -472,6 +494,64 @@ public class TotalReportOutputPane extends JScrollPane {
         this.lockedTable.getTableHeader().repaint();
     }
 
+    @SuppressWarnings("unchecked")
+    public void switchReturnType(){
+        Class<? extends ExtractorReturnBase> clazzToChange = null;
+        for(int j = 0; j < model.getColumnCount(); j++){
+            Object obj = model.getValueAt(0, j);
+            if(obj instanceof MetricEntry){
+                MetricEntry<Number> metricEntry = (MetricEntry<Number>) obj;
+                ExtractorBase<?> extractor = metricEntry.extractor;
+                if(extractor != null){
+                    if(extractor.getClass().equals(ExtractorModifiedDietzReturn.class) ){
+                        clazzToChange = ExtractorModifiedDietzReturn.class;
+                        switchExtractor(metricEntry, clazzToChange);
+                        for(int i = 1; i < model.getRowCount(); i++){
+                            obj = model.getValueAt(i, j);
+                            if(obj instanceof MetricEntry){
+                                metricEntry = (MetricEntry) obj;
+                                switchExtractor(metricEntry, clazzToChange);
+                            }
+                        }
+                    } else if (extractor.getClass().equals(ExtractorOrdinaryReturn.class)){
+                        clazzToChange = ExtractorOrdinaryReturn.class;
+                        switchExtractor(metricEntry, clazzToChange);
+                        for(int i = 1; i < model.getRowCount(); i++){
+                            obj = model.getValueAt(i, j);
+                            if(obj instanceof MetricEntry){
+                                metricEntry = (MetricEntry) obj;
+                                switchExtractor(metricEntry, clazzToChange);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        model.fireTableDataChanged();
+        sortRows();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void switchExtractor(MetricEntry<Number> metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {
+        assert metricEntry.extractor != null;
+        if(extractorToSwitch.equals(ExtractorModifiedDietzReturn.class)){
+            assert metricEntry.extractor instanceof ExtractorModifiedDietzReturn;
+            ExtractorModifiedDietzReturn extractorModifiedDietzReturn = (ExtractorModifiedDietzReturn) metricEntry.extractor;
+            ExtractorOrdinaryReturn extractorOrdinaryReturn = new ExtractorOrdinaryReturn(extractorModifiedDietzReturn);
+            metricEntry.extractor = extractorOrdinaryReturn;
+            metricEntry.value = extractorOrdinaryReturn.getResult();
+
+        } else if(extractorToSwitch.equals(ExtractorOrdinaryReturn.class)){
+            assert metricEntry.extractor instanceof ExtractorOrdinaryReturn;
+            ExtractorOrdinaryReturn extractorOrdinaryReturn = (ExtractorOrdinaryReturn) metricEntry.extractor;
+            ExtractorModifiedDietzReturn extractorModifiedDietzReturn = new ExtractorModifiedDietzReturn(extractorOrdinaryReturn);
+            metricEntry.extractor = extractorModifiedDietzReturn;
+            metricEntry.value = extractorModifiedDietzReturn.getResult();
+        }
+    }
+
+
+
     public void copyTableToClipboard() throws Exception {
         StringBuilder copyIn = new StringBuilder();
         int numCols = scrollTable.getViewHeader().size(); //allows for removal of columns
@@ -567,69 +647,54 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public enum ColSizeOption {NORESIZE, MAXCONTRESIZE, MAXCONTCOLRESIZE}
 
-    public static class NumberTableCellRenderer extends DefaultTableCellRenderer {
+
+    public static class MetricEntryNumberRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = -1219099935272135292L;
 
-        int minDecPlaces;
-        int maxDecPlaces;
 
-        public NumberTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
+        private DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
+
+        public MetricEntryNumberRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
-            this.minDecPlaces = minDecPlaces;
-            this.maxDecPlaces = maxDecPlaces;
+            this.setName("Number(" + maxDecPlaces + "," + maxDecPlaces + ")");
+
+            doubleFormat.setMinimumFractionDigits(minDecPlaces);
+            doubleFormat.setMaximumFractionDigits(maxDecPlaces);
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table,
-                                                       Object value, boolean isSelected, boolean hasFocus,
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
 
-            if (value instanceof Integer) {// set Integers to Right
-                DecimalFormat numberFormat = new DecimalFormat(
-                        "#,###;(#,###)");
-                Integer i = (Integer) value;
-                JLabel renderedLabel2 = (JLabel) cell;
-                renderedLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-                String text = numberFormat.format(i);
-                renderedLabel2.setText(text);
-                renderedLabel2.setForeground(i < 0 ? Color.RED
-                        : Color.BLACK);
-            }
-            if (value instanceof Double) {// set Integers to Right
-                Double d = (Double) value;
-                DecimalFormat numberFormat = new DecimalFormat(
-                        "#,##0;(#,##0)");
-                numberFormat.setMinimumFractionDigits(minDecPlaces);
-                numberFormat.setMaximumFractionDigits(maxDecPlaces);
-
-                JLabel renderedLabel = (JLabel) cell;
-                renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
-                        : SwingConstants.RIGHT);
+            if (value instanceof MetricEntry) {
+                Double d = ((MetricEntry) value).getDisplayValue();
                 String text;
-                if (d.equals(Double.NaN)) {
+                if (d == null || d.isNaN() || d.equals(SecurityReport.UndefinedReturn)) {
                     text = "";
                 } else if (d == 0.0) {
                     text = "-";
                 } else {
-                    text = numberFormat.format(d);
+                    text = doubleFormat.format(d);
                 }
+
+                JLabel renderedLabel = (JLabel) cell;
+                renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
+                        : SwingConstants.RIGHT);
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED
-                        : Color.BLACK);
+                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
     }
 
     static class ObjectTableCellRenderer extends DefaultTableCellRenderer {
-
-
         private static final long serialVersionUID = -7152447480811826901L;
 
         public ObjectTableCellRenderer() {
             super();
+            setName("Object");
         }
 
         @Override
@@ -642,7 +707,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 cell = super.getTableCellRendererComponent(table,
                         objectName, isSelected, hasFocus, row, column);
 
-                if (objectName != null) {// set Integers to Right
+                if (objectName != null) {
                     JLabel renderedLabel = (JLabel) cell;
                     renderedLabel.setHorizontalAlignment(SwingConstants.LEFT);
                     renderedLabel.setForeground(Color.BLACK);
@@ -662,13 +727,15 @@ public class TotalReportOutputPane extends JScrollPane {
 
     static class PercentTableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 8743892160294317814L;
-        int minDecPlaces;
-        int maxDecPlaces;
+
+        private DecimalFormat pctFormat = new DecimalFormat("#.#%");
 
         public PercentTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
-            this.minDecPlaces = minDecPlaces;
-            this.maxDecPlaces = maxDecPlaces;
+            setName("Percent");
+
+            pctFormat.setMinimumFractionDigits(minDecPlaces);
+            pctFormat.setMaximumFractionDigits(maxDecPlaces);
         }
 
         @Override
@@ -676,17 +743,14 @@ public class TotalReportOutputPane extends JScrollPane {
                                                        boolean hasFocus, int row, int column) {
             Component cell = super.getTableCellRendererComponent(table,
                     value, isSelected, hasFocus, row, column);
-            if (value instanceof Double) {// set Integers to Right
-                DecimalFormat pctFormat = new DecimalFormat("#.#%");
-                pctFormat.setMinimumFractionDigits(minDecPlaces);
-                pctFormat.setMaximumFractionDigits(maxDecPlaces);
-                Double d = (Double) value;
+            if (value instanceof MetricEntry) {
+                Double d = ((MetricEntry) value).getDisplayValue();
+                String text = d == null || d.isNaN() || d.equals(SecurityReport.UndefinedReturn) ? "" : pctFormat.format(d);
+
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                String text = d.equals(Double.NaN) ? "" : pctFormat.format(d);
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED
-                        : Color.BLACK);
+                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
@@ -935,9 +999,15 @@ public class TotalReportOutputPane extends JScrollPane {
 
     class FormattedTable extends JTable {
 
-
         private static final long serialVersionUID = -3558604379360713628L;
         private LinkedList<Integer> viewHeader;
+
+        private TableCellRenderer double0Render = new MetricEntryNumberRenderer(0, 0);
+        private TableCellRenderer double2Render = new MetricEntryNumberRenderer(2, 2);
+        private TableCellRenderer double3Render = new MetricEntryNumberRenderer(3, 3);
+        private TableCellRenderer percent1Render = new PercentTableCellRenderer(1, 1);
+        private TableCellRenderer defaultRender = new ObjectTableCellRenderer();
+
 
         private FormattedTable(TableModel model, ColType[] colFormats,
                                LinkedList<Integer> viewHeader) {
@@ -947,20 +1017,26 @@ public class TotalReportOutputPane extends JScrollPane {
             for (int i = 0; i < colFormats.length; i++) {
                 ColType colType = colFormats[i];
                 tableColumn = this.getColumnModel().getColumn(i);
-                if (colType == ColType.DOUBLE0) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(0,
-                            0));
-                } else if (colType == ColType.DOUBLE2) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(2,
-                            2));
-                } else if (colType == ColType.DOUBLE3) {
-                    tableColumn.setCellRenderer(new NumberTableCellRenderer(3,
-                            3));
-                } else if (colType == ColType.PERCENT1) {
-                    tableColumn.setCellRenderer(new PercentTableCellRenderer(1,
-                            1));
-                } else {
-                    tableColumn.setCellRenderer(new ObjectTableCellRenderer());
+                switch (colType) {
+                    case DOUBLE0:
+                        tableColumn.setCellRenderer(double0Render);
+                        break;
+
+                    case DOUBLE2:
+                        tableColumn.setCellRenderer(double2Render);
+                        break;
+
+                    case DOUBLE3:
+                        tableColumn.setCellRenderer(double3Render);
+                        break;
+
+                    case PERCENT1:
+                        tableColumn.setCellRenderer(percent1Render);
+                        break;
+
+                    default:
+                        tableColumn.setCellRenderer(defaultRender);
+                        break;
                 }
             }
             setColumnOrder(this, viewHeader);
@@ -976,15 +1052,15 @@ public class TotalReportOutputPane extends JScrollPane {
         public TotalReport.ReportTableModel getReportTableModel() {
             return model;
         }
+
         public LinkedList<Integer> getViewHeader(){ return viewHeader;}
 
 
         @Override
-        public Component prepareRenderer(TableCellRenderer renderer, int row,
-                                         int column) {
+        @SuppressWarnings("unchecked")
+        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
             Component c = super.prepareRenderer(renderer, row, column);
-            // Color row based on a cell value--overrides TableCellRenders in
-            // Constructor
+            // Color row based on a cell value--overrides TableCellRenders in constructor
             try {
                 if (!isRowSelected(row)) {
                     c.setBackground(getBackground());
@@ -994,8 +1070,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                     String aggType1 = getDisplayValueFromObject(aggObj1);
                     String aggType2 = getDisplayValueFromObject(aggObj2);
-                    Double endPos = (Double) getModel().getValueAt(modelRow,
-                            closedPosColumn);
+                    MetricEntry<Number> endValueMetricEntry = (MetricEntry<Number>) getModel().getValueAt(modelRow, closedPosColumn);
                     String typeAggregateEnd = "-ALL";
                     String nameAggregateEnd = " ";
 
@@ -1011,11 +1086,13 @@ public class TotalReportOutputPane extends JScrollPane {
                     if (aggType1.endsWith(typeAggregateEnd) && aggType2.endsWith(typeAggregateEnd)) {
                         c.setBackground(Color.GREEN);
                     }
-                    if (endPos == 0.0) {
+                    if (endValueMetricEntry.getDisplayValue() == 0.0) {
                         c.setForeground(new Color(100, 100, 100));
                     } else {
                         c.setForeground(c.getForeground());
                     }
+                } else {
+                    c.setBackground(new Color(255, 255, 153));  // Light yellow
                 }
             } catch (Exception e) {
                 LogController.logException(e, "Error on Report Output Pane: ");
@@ -1028,27 +1105,44 @@ public class TotalReportOutputPane extends JScrollPane {
 
         class FormattedTableMouseAdapter extends MouseAdapter {
             @Override
+            @SuppressWarnings("unchecked")
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
                     int rowViewIndex = target.getSelectedRow();
                     int rowModelIndex = convertRowIndexToModel(rowViewIndex);
-                    Object obj = model.getValueAt(rowModelIndex, 1);
-                    if (obj instanceof SecurityAccountWrapper) {
-                        SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) obj;
-                        if (securityAccountWrapper.isTradeable()) {
-                            SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
-                        }
+                    int columnViewIndex = target.getSelectedColumn();
+                    int columnModelIndex = convertColumnIndexToModel(columnViewIndex);
 
+                    if (columnModelIndex <= 4) {
+                        Object obj = model.getValueAt(rowModelIndex, 1);
+                        if (obj instanceof SecurityAccountWrapper) {
+                            SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) obj;
+                            if (securityAccountWrapper.isTradeable()) {
+                                SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
+                            }
+                        }
+                    } else {
+                        Object obj = model.getValueAt(rowModelIndex, columnModelIndex);
+                        if (obj instanceof MetricEntry) {
+                            MetricEntry<Number> metricEntry = (MetricEntry<Number>) obj;
+                            ExtractorReturnBase extractor;
+                            if(metricEntry.extractor instanceof ExtractorReturnBase){
+                                extractor = (ExtractorReturnBase) metricEntry.extractor;
+                                Rectangle rectangle = FormattedTable.this.getCellRect(0, columnViewIndex, true);
+                                Point screenLocation = FormattedTable.this.getLocationOnScreen();
+                                Point displayPoint = new Point(screenLocation.x+ rectangle.x, screenLocation.y + rectangle.y);
+
+                                ReturnsAuditDisplayFrame.showReturnsAuditDisplay(extractor,
+                                        displayPoint, FormattedTable.this.getHeight()
+                                );
+                            }
+                        }
 
                     }
                 }
-
             }
-
         }
-
-
     }
 
     private class RowSortGui extends JPanel {
@@ -1188,8 +1282,7 @@ public class TotalReportOutputPane extends JScrollPane {
             JLabel newLabel = new JLabel(value.toString());
             newLabel.setHorizontalTextPosition(JLabel.LEFT);
             newLabel.setForeground(Color.red);
-            newLabel.setBackground(setSortColor(sortPriority)); // doesn't
-            // appear
+            newLabel.setBackground(setSortColor(sortPriority)); // doesn't appear
 
             newLabel.setToolTipText("Sort Priority: " + sortPriority
                     + " Order: " + (descending ? "Descending" : "Ascending"));

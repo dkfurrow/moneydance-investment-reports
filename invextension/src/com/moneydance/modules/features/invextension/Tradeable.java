@@ -89,6 +89,10 @@ public class Tradeable implements Aggregator {
         return true;
     }
 
+    @Override
+    public String getName() {
+        return getAggregateName();
+    }
 
     @Override
     public String getAggregateName() {

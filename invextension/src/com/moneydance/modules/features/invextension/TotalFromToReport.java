@@ -39,13 +39,12 @@ import java.util.LinkedList;
  *
  * @author Dale Furrow
  */
-public class TotalFromToReport
-        extends TotalReport {
+public class TotalFromToReport extends TotalReport {
 
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "StartPos", "EndPos", "Start\nPrice", "End\nPrice", "Start\nValue", "End\nValue", "Buy",
             "Sell", "Short\nSell", "Cover\nShort", "Income", "Expense", "Long\nBasis", "Short\nBasis", "Realized\nGain",
-            "Unrealized\nGain", "Period\nReturn", "Pct\nReturn", "Ann_Pct\nReturn"));
+            "Unrealized\nGain", "Period\nReturn", "TotPct\nReturn", "AnnPct\nReturn", "Stub-TotPct\nReturn", "Stub-AnnPct\nReturn"));
     public static String reportTypeName = "'From-To' Report";
     private static ColType[] COL_TYPES = new ColType[]{ColType.OBJECT,
             ColType.OBJECT, ColType.OBJECT, ColType.OBJECT, ColType.OBJECT,
@@ -53,10 +52,14 @@ public class TotalFromToReport
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,
-            ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1};
+            ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1};
+
+    private ReportConfig reportConfig;
 
     public TotalFromToReport(ReportConfig reportConfig) throws Exception {
         super(reportConfig, COL_TYPES, MODEL_HEADER);
+
+        this.reportConfig = reportConfig;
     }
 
     @Override
@@ -79,9 +82,16 @@ public class TotalFromToReport
     }
 
     @Override
-    public SecurityReport getLeafSecurityReport(
-            SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
-        return new SecurityFromToReport(securityAccountWrapper, dateRange);
+    public SecurityReport getLeafSecurityReport(SecurityAccountWrapper securityAccountWrapper, DateRange dateRange) {
+        return new SecurityFromToReport(reportConfig, securityAccountWrapper, null, dateRange);
+    }
+
+    @Override
+    public CompositeReport getAllCompositeReport(DateRange dateRange, AggregationController aggregationController) {
+        CompositeReport compositeReport = new CompositeReport(aggregationController);
+        SecurityFromToReport allAggregate = new SecurityFromToReport(reportConfig, null, compositeReport, dateRange);
+        compositeReport.setAggregateReport(allAggregate);
+        return  compositeReport;
     }
 
 }

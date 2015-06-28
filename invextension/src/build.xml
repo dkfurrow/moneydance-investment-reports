@@ -11,6 +11,7 @@ http://jakarta.apache.org/ant/index.html
 	<property name="privkeyfile" value="${src}/priv_key"/>
 	<property name="pubkeyfile" value="${src}/pub_key"/>
 	<property name="privkeyid" value="99"/>
+	<property environment="env"/>
 
 	<property name="build.compiler"  value="modern"/>
 	<!--was "classic"-->
@@ -21,15 +22,15 @@ http://jakarta.apache.org/ant/index.html
 	<property name="optimize"  value="off"/>
 
 	<path id="classpath">
-		<pathelement path="../lib/extadmin.jar"/>
+		<pathelement path="../resources/extadmin.jar"/>
 		<pathelement path="../lib/moneydance.jar"/>
-		<!--added this-->
+		<!--added this"C:/Program Files (x86)/Java/jdk1.7.0_65/jre/lib/jfxrt.jar -->
         <pathelement path="../lib/annotations.jar"/>
-
 	</path>
 
 	<target name="init">
 			<!--i.e. "clean"...gets rid of old build files/directories -->
+			<echo message="JAVA_HOME is set to = ${env.JAVA_HOME}" />
 			<delete includeemptydirs="true" verbose = "true" quiet = "true">
 				<fileset dir="${build}" includes="**/*" />
 			</delete>

@@ -125,12 +125,15 @@ public class BulkSecInfo {
     private RootAccount root;
     /* GainsCalc Type */
     private GainsCalc gainsCalc;
+    /* ReportConfig from panel or from test code */
+    private static ReportConfig reportConfig;
     /* HashSet of InvestmentAccount Wrappers */
     private HashSet<InvestmentAccountWrapper> investmentWrappers;
 
     public BulkSecInfo(RootAccount root, ReportConfig reportConfig) throws Exception {
         this.root = root;
-        this.gainsCalc = reportConfig.useAverageCostBasis ? new GainsAverageCalc() : new GainsLotMatchCalc();
+        BulkSecInfo.reportConfig = reportConfig;
+        this.gainsCalc = reportConfig.useAverageCostBasis() ? new GainsAverageCalc() : new GainsLotMatchCalc();
         nextAcctNumber = this.root.getHighestAccountNum() + 1;
         transactionSet = this.root.getTransactionSet();
         securityTransactionValues = new HashMap<>();
@@ -156,6 +159,8 @@ public class BulkSecInfo {
     public static void setNextTxnNumber(long nextTxnNumber) {
         BulkSecInfo.nextTxnNumber = nextTxnNumber;
     }
+
+    public static ReportConfig getReportConfig() { return BulkSecInfo.reportConfig;}
 
     /**
      * loads selected accounts into HashSet
@@ -271,11 +276,11 @@ public class BulkSecInfo {
             currencyInfo.add(cur.getTickerSymbol());
         }
         int todayDate = DateUtils.getLastCurrentDateInt();
-        int dateint = cur.getSnapshot(i).getDateInt();
+        int dateInt = cur.getSnapshot(i).getDateInt();
         double closeRate = cur.getSnapshot(i).getUserRate();
-        currencyInfo.add(DateUtils.convertToShort(dateint));
+        currencyInfo.add(DateUtils.convertToShort(dateInt));
         currencyInfo.add(Double.toString(1 / closeRate));
-        currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateint,
+        currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateInt,
                 closeRate, todayDate)));
         return currencyInfo.toArray(new String[currencyInfo.size()]);
     }
@@ -376,7 +381,7 @@ public class BulkSecInfo {
         int nextId = currencyTable.getNextID();
         int dateInt = DateUtils.convertToDateInt(new Date());
         CurrencyType cashCurrencyType = new CurrencyType
-                (nextId, "", "CASH", 1.0, 1, "", "", "CASH",
+                (nextId, "", "CASH", 1.0, 4, "", "", "CASH",
                         dateInt, CurrencyType.CURRTYPE_SECURITY, currencyTable);
         cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
@@ -424,8 +429,7 @@ public class BulkSecInfo {
         for (Account selectedSubAccount : selectedSubAccounts) {
             InvestmentAccount invAcct = (InvestmentAccount) selectedSubAccount;
             //Load investment account into Wrapper Class
-            InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(
-                    invAcct, this);
+            InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(invAcct, this, reportConfig);
             invAcctWrappers.add(invAcctWrapper);
         } // end Investment Accounts Loop
         return invAcctWrappers;

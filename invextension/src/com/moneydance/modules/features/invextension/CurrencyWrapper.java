@@ -145,7 +145,8 @@ public class CurrencyWrapper implements Aggregator {
         return reportingName;
     }
 
-    public String getTicker() {
+    @Override
+    public String getName() {
         if (currencyType != null) {
             return getTickerSymbolFromCurrType();
         } else {

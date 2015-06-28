@@ -35,7 +35,7 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Initiates extention in Moneydance, passes Moneydance data
+ * Initiates extension in Moneydance, passes Moneydance data
  * to other classes
  *
  * @author Dale Furrow

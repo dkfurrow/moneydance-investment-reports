@@ -61,8 +61,8 @@ public class InvestmentAccountWrapper implements Aggregator {
     private ArrayList<SecurityAccountWrapper> securityAccountWrappers;
     private String name;
 
-    public InvestmentAccountWrapper(InvestmentAccount invAcct,
-                                    BulkSecInfo currentInfo) throws Exception {
+    public InvestmentAccountWrapper(InvestmentAccount invAcct, BulkSecInfo currentInfo,
+                                    ReportConfig reportConfig) throws Exception {
         this.currentInfo = currentInfo;
         this.investmentAccount = invAcct;
         this.acctNum = this.investmentAccount.getAccountNum();
@@ -75,12 +75,11 @@ public class InvestmentAccountWrapper implements Aggregator {
         for (Account subSecAcct : subSecAccts) {
             SecurityAccount secAcct = (SecurityAccount) subSecAcct;
             //Load Security Account into Wrapper Class
-            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(
-                    secAcct, this);
+            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(secAcct, this, reportConfig);
             // add Security Account to Investment Account
             this.securityAccountWrappers.add(secAcctWrapper);
         }
-        createCashWrapper();  //creates basic cash wrapper
+        createCashWrapper(reportConfig);  //creates basic cash wrapper
         this.securityAccountWrappers.add(cashWrapper);   //add cash wrapper to total securityAccountWrappers
         createCashTransactions(); //populates cash wrapper with synthetic cash transactions
     }
@@ -104,16 +103,16 @@ public class InvestmentAccountWrapper implements Aggregator {
         // transactions for this InvestmentAccountWrapper
         tempTransValues.addAll(this.getTransactionValues());
         ArrayList<TransactionValues> cashTransactions = new ArrayList<>();
+
         // add initial balance as a transValues object (use day before first
         // transaction date if available, creation date if not
-        int firstDateInt = tempTransValues.isEmpty() ? DateUtils
-                .getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
-                : DateUtils.getPrevBusinessDay(tempTransValues.get(0)
-                .getDateint());
+        int firstDateInt = tempTransValues.isEmpty()
+                ? DateUtils.getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
+                : DateUtils.getPrevBusinessDay(tempTransValues.get(0).getDateInt());
         TransactionValues initialTransactionValues = new TransactionValues(this, firstDateInt);
         cashTransactions.add(initialTransactionValues);
-        // now there is guaranteed to be one transaction, so prevTransValues
-        // always exists
+
+        // now there is guaranteed to be one transaction, so prevTransValues always exists
         for (TransactionValues transactionValues : tempTransValues) {
             TransactionValues prevCashTransValues = cashTransactions.get(cashTransactions.size() - 1);
             // add synthetic cash transaction to overall cashTransactions set
@@ -129,8 +128,7 @@ public class InvestmentAccountWrapper implements Aggregator {
      *
      * @throws Exception
      */
-    public void createCashWrapper()
-            throws Exception {
+    private void createCashWrapper(ReportConfig reportConfig) throws Exception {
         SecurityAccount cashAccount = new SecurityAccount("~Cash",
                 BulkSecInfo.getNextAcctNumber(),
                 currentInfo.getCashCurrencyWrapper().getCurrencyType(), null, null,
@@ -138,8 +136,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);
         cashAccount.setSecuritySubType("Money Market");
-        this.cashWrapper = new SecurityAccountWrapper(
-                cashAccount, this);
+        this.cashWrapper = new SecurityAccountWrapper(cashAccount, this, reportConfig);
         BulkSecInfo.setNextAcctNumber(BulkSecInfo.getNextAcctNumber() + 1);
         currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
         cashWrapper.generateTransValues();
@@ -197,8 +194,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     public ArrayList<TransactionValues> getTransactionValues() throws Exception {
         ArrayList<TransactionValues> outputTransactionValues = new ArrayList<>();
         for (SecurityAccountWrapper securityAccountWrapper : securityAccountWrappers) {
-            ArrayList<TransactionValues> accountTransactionValues = securityAccountWrapper
-                    .getTransactionValues();
+            ArrayList<TransactionValues> accountTransactionValues = securityAccountWrapper.getTransactionValues();
             if (accountTransactionValues != null) {
                 for (TransactionValues transactionValues : accountTransactionValues) {
                     boolean success = outputTransactionValues.add(transactionValues);

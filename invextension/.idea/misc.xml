@@ -22,7 +22,7 @@
     <option name="OPEN_IN_BROWSER" value="true" />
     <option name="OPTION_INCLUDE_LIBS" value="false" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">
@@ -31,12 +31,7 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchUrls">
-                <list>
-                  <option value="https://moneydance-investment-reports.googlecode.com/svn/branches/repr-expr/invextension/src/com/moneydance/modules/features/invextension" />
-                </list>
-              </option>
-              <option name="trunkUrl" value="https://moneydance-investment-reports.googlecode.com/svn/trunk/invextension/src/com/moneydance/modules/features/invextension" />
+              <option name="trunkUrl" value="" />
             </SvnBranchConfiguration>
           </value>
         </entry>

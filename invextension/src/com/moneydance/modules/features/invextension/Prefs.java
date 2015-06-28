@@ -52,6 +52,7 @@ public class Prefs {
     static final String LAST_REPORT_TYPE_RUN = "LAST_REPORT_TYPE_RUN";
     static final String LAST_REPORT_NAME_RUN = "LAST_REPORT_NAME_RUN";
     static final String USE_AVERAGE_COST_BASIS = "USE_AVERAGE_COST_BASIS";
+    static final String USE_ORDINARY_RETURN = "USE_ORDINARY_RETURN";
     static final String EXPORT_DIR_PATH = "EXPORT_DIR_PATH";
     static final String AGGREGATION_MODE = "AGGREGATION_MODE";
     static final String OUTPUT_SINGLE = "OUTPUT_SINGLE";
@@ -59,6 +60,8 @@ public class Prefs {
     static final String CLOSED_POS_HIDDEN = "CLOSED_POS_HIDDEN";
     static final String VIEWHEADER = "VIEWHEADER";
     static final String EXCLUDEDACCOUNTNUMS = "EXCLUDEDACCOUNTNUMS";
+    static final String INVESTMENTEXPENSENUMS = "INVESTMENTEXPENSENUMS";
+    static final String INVESTMENTINCOMENUMS = "INVESTMENTINCOMENUMS";
     static final String DATERANGE = "DATERANGE";
     static final String ISSTANDARD = "ISSTANDARD";
     static final String FRAMEINFO = "FRAMEINFO";

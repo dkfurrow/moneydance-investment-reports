@@ -27,6 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -36,8 +37,7 @@ import java.util.HashSet;
  *
  * @author Dale Furrow
  */
-public class CompositeReport
-        extends ComponentReport {
+public class CompositeReport extends ComponentReport {
 
     private AggregationController aggregationController;
     private Aggregator firstAggregator; //aggregator value of first Aggregate Type
@@ -48,22 +48,7 @@ public class CompositeReport
     // Hash set which contains references to SecurityReports aggregated by
     // this composite
     private HashSet<SecurityReport> securityReports;
-    /**
-     * * Generic constructor with null aggregate report value
-     * (used to construct All-SecurityReport aggregate
-     *
-     * @param aggregationController input AggregationMode
-     */
-    public CompositeReport(AggregationController aggregationController) {
-        this.aggregationController = aggregationController;
-        this.compositeType = COMPOSITE_TYPE.ALL;
-        this.firstAggregator = null;
-        this.secondAggregator = null;
 
-        this.securityReports = new HashSet<>();
-        this.aggregateReport = null;
-
-    }
     /**
      * Constructor which creates composite from "seed" SecurityReport
      *
@@ -93,9 +78,27 @@ public class CompositeReport
                 throw new UnsupportedOperationException();
         }
         this.securityReports = new HashSet<>();
-        securityReports.add(securityReport);
-        this.aggregateReport = securityReport.getAggregateSecurityReport();
+        if(securityReport != null) {
+            securityReports.add(securityReport);
+            this.aggregateReport = securityReport.getAggregateSecurityReport(this);
+        }
     }
+
+    /**
+     * Creates "All" Composite report
+     * @param aggregationController report config aggregation controller
+     */
+    public CompositeReport(AggregationController aggregationController){
+        this.aggregationController = aggregationController;
+        this.compositeType = COMPOSITE_TYPE.ALL;
+        this.firstAggregator = null;
+        this.secondAggregator = null;
+        this.securityReports = new HashSet<>();
+        this.aggregateReport = null;
+    }
+
+
+
 
     public HashSet<SecurityReport> getSecurityReports() {
         return securityReports;
@@ -257,74 +260,16 @@ public class CompositeReport
     }
 
     @Override
-    public void recomputeAggregateReturns() {
-        this.aggregateReport.recomputeAggregateReturns();
-    }
-
-    @Override
     public Object[] toTableRow() throws SecurityException,
             IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {
 
-        String firstAggregateName;
-        String secondAggregateName;
+        return aggregateReport.toTableRow();
+    }
 
-        if (this.compositeType == COMPOSITE_TYPE.ALL) {
-            firstAggregateName = aggregationController.getFirstAggregator().getAllTypesName();
-            secondAggregateName = aggregationController.getSecondAggregator().getAllTypesName();
-        } else if (this.compositeType == COMPOSITE_TYPE.FIRST) {
-            firstAggregateName = firstAggregator.getAggregateName() + " ";
-            secondAggregateName = secondAggregator.getAllTypesName();
-        } else if (this.compositeType == COMPOSITE_TYPE.SECOND) {
-            firstAggregateName = firstAggregator.getAllTypesName();
-            secondAggregateName = secondAggregator.getAggregateName();
-        } else { //"Both" Case
-            firstAggregateName = firstAggregator.getAggregateName();
-            secondAggregateName = secondAggregator.getAggregateName();
-        }
 
-        //generate dummy aggregator objects
-        InvestmentAccountWrapper investmentAccountWrapper = new InvestmentAccountWrapper("Null");
-        SecurityAccountWrapper securityAccountWrapper = new SecurityAccountWrapper("Null");
-        SecurityTypeWrapper securityTypeWrapper = new SecurityTypeWrapper("Null");
-        SecuritySubTypeWrapper securitySubTypeWrapper = new SecuritySubTypeWrapper("Null");
-        CurrencyWrapper currencyWrapper = new CurrencyWrapper("Null");
-
-        Aggregator controllerFirstAggregator = aggregationController.getFirstAggregator();
-        //sets name for first aggregator
-        if (controllerFirstAggregator instanceof InvestmentAccountWrapper)
-            investmentAccountWrapper.setName(firstAggregateName);//investmentAccountStr = firstAggStrName;
-        if (controllerFirstAggregator instanceof SecurityTypeWrapper)
-            securityTypeWrapper.setName(firstAggregateName);//securityTypeStr = firstAggStrName;
-        if (controllerFirstAggregator instanceof SecuritySubTypeWrapper)
-            securitySubTypeWrapper.setName(firstAggregateName); //securitySubTypeStr = firstAggStrName;
-        if (controllerFirstAggregator instanceof Tradeable)
-            securityAccountWrapper.setName(firstAggregateName); //securityAccountStr = firstAggStrName;
-        if (controllerFirstAggregator instanceof CurrencyWrapper)
-            currencyWrapper.setTicker(firstAggregateName);
-
-        Aggregator controllerSecondAggregator = aggregationController.getSecondAggregator();
-        //sets name for second aggregator
-        if (controllerSecondAggregator instanceof InvestmentAccountWrapper)
-            investmentAccountWrapper.setName(secondAggregateName);//investmentAccountStr = secondAggStrName;
-        if (controllerSecondAggregator instanceof SecurityTypeWrapper)
-            securityTypeWrapper.setName(secondAggregateName);//securityTypeStr = secondAggStrName;
-        if (controllerSecondAggregator instanceof SecuritySubTypeWrapper)
-            securitySubTypeWrapper.setName(secondAggregateName);//securitySubTypeStr = secondAggStrName;
-        if (controllerSecondAggregator instanceof Tradeable) {
-            securityAccountWrapper.setName(secondAggregateName);//securityAccountStr = secondAggStrName;
-        }
-        //can't have currency as second aggregate, so not included here
-        //add objects to output for first 5 columns
-        aggregateReport.getOutputLine().add(investmentAccountWrapper);
-        aggregateReport.getOutputLine().add(securityAccountWrapper);
-        aggregateReport.getOutputLine().add(securityTypeWrapper);
-        aggregateReport.getOutputLine().add(securitySubTypeWrapper);
-        aggregateReport.getOutputLine().add(currencyWrapper);
-        // add remainder of report (depending on type) and output
-        aggregateReport.addLineBody();
-        return aggregateReport.getOutputLine().toArray();
-
+    public AggregationController getAggregationController() {
+        return aggregationController;
     }
 
     //COMPOSITE_TYPE controls type of Aggregation (i.e. first aggregator only,

@@ -54,6 +54,9 @@ public class AllAggregate implements Aggregator {
     }
 
     @Override
+    public String getName() {return null;}
+
+    @Override
     public String getAggregateName() {
         return null;
     }
