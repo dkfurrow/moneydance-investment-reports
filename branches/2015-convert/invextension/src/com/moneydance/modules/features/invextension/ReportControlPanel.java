@@ -28,10 +28,10 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.controller.io.FileOpeningContext;
-import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.AccountBook;
-import com.moneydance.apps.md.model.RootAccount;
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.moneydance.apps.md.controller.AccountBookWrapper;
+import com.moneydance.apps.md.controller.io.AccountBookUtil;
 import com.moneydance.awt.AwtUtil;
 
 import javax.swing.*;
@@ -80,7 +80,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
 
     // Report types
-    private RootAccount root;
+    private Account root;
+    private AccountBook accountBook;
     private BulkSecInfo currentInfo = null;
 
 
@@ -495,8 +496,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
 
 
-    public void loadMDFile(File mdFile) {
-        new MDFileLoader(mdFile).execute();
+    public void loadMDFile(File mdFolder) {
+        new MDFileLoader(mdFolder).execute();
     }
 
     @Override
@@ -639,7 +640,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 this.getPreferredSize().height - 150);
     }
 
-    public RootAccount getRoot() {
+    public Account getRoot() {
         return root;
     }
 
@@ -719,30 +720,47 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     private class MDFileLoader extends SwingWorker<Void, String> {
-        File mdFile;
+        File mdFolder;
 
         MDFileLoader(File mdFile) {
-            this.mdFile = mdFile;
+            this.mdFolder = mdFile;
         }
 
         @Override
         protected Void doInBackground() throws Exception {
             try {
-                publish("Loading " + mdFile.getParentFile().getName());
-                AccountBook accountBook = AccountBook.accountBookForFolder(mdFile.getParentFile());
+                publish("Loading " + mdFolder.getName());
+                AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
+                // must add this section or get null pointer error
+                ArrayList<File> folderFiles = new ArrayList<>();
+                folderFiles.add(mdFolder);
+                AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
+
+                publish("Doing Initial Load of AccountBook...");
+                wrapper.doInitialLoad(null);
+                accountBook = wrapper.getBook();
+                root = accountBook.getRootAccount();
+
+//                int accountCount = accountBook.getRootAccount().getSubAccounts().size();
+//                long transactionCount = accountBook.getTransactionSet().getTransactionCount();
+//                System.out.println("AccountBook Initialized...Number of Accounts: " + accountCount + ", with "
+//                        + transactionCount + " transactions");
+//
+//
+//                AccountBook accountBook = AccountBook.accountBookForFolder(mdFolder.getParentFile());
 
                 String dataName= "";
-                FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
-                RootAccount rootAccount = FileUtils.readAccountsFromFile(mdFile, fileOpeningContext);
-                accountBook.initializeAccounts(rootAccount);
-                root = accountBook.getRootAccount();
+//                FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
+//                RootAccount rootAccount = FileUtils.readAccountsFromFile(mdFolder, fileOpeningContext);
+//                accountBook.initializeAccounts(rootAccount);
+//                root = accountBook.getRootAccount();
                 folderPanel.setOutputDirectory();
                 accountChooserPanel.populateBothAccountLists(reportConfig);
                 investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
                 investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
-                publish(mdFile.getParentFile().getName() + " Loaded! Choose Report to run.");
+                publish(mdFolder.getName() + " Loaded! Choose Report to run.");
             } catch (Exception e) {
-                publish("Error! " + mdFile.getParentFile().getName() + " not loaded!");
+                publish("Error! " + mdFolder.getName() + " not loaded!");
                 LogController.logException(e, "Error on Loading MD File: ");
             }
             return null;
@@ -807,7 +825,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             directoryOutputField.setText(outputPath);
             if (outputPath.length() == 0) {
                 outputPath = root == null ? System.getProperty("user.home") :
-                        root.getDataFile().getParentFile().getAbsolutePath();
+                        accountBook.getRootFolder().getAbsolutePath();
                 File outputPathFolder = new File(outputPath);
                 if (outputPathFolder.canWrite()) {
                     directoryOutputField.setText(outputPath);
@@ -969,7 +987,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             //load BulkSecInfo...
             if (root != null) {
                 try {
-                    currentInfo = new BulkSecInfo(root, reportConfig);
+                    currentInfo = new BulkSecInfo(accountBook, reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
                     publish(showErrorMessage("Error--Could not load securities from data file!"));

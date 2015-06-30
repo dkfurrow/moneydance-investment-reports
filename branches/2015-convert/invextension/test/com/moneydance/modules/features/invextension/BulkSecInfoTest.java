@@ -27,10 +27,12 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.moneydance.apps.md.controller.AccountBookWrapper;
+import com.moneydance.apps.md.controller.io.AccountBookUtil;
 import com.moneydance.apps.md.controller.io.FileOpeningContext;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.AccountBook;
-import com.moneydance.apps.md.model.RootAccount;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -73,14 +75,26 @@ public class BulkSecInfoTest {
      * ava.security.NoSuchAlgorithmException: PBKDF2WithHmacSHA512 SecretKeyFactory not available)
      * @throws Exception
      */
-    private static RootAccount loadRootAccountFromFolder() throws Exception {
+    public static MDFileInfo loadRootAccountFromFolder() throws Exception {
 
-        AccountBook accountBook = AccountBook.accountBookForFolder(mdTestFolder);
-        String dataName= "";
-        FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
-        RootAccount rootAccount = FileUtils.readAccountsFromFile(mdTestFile, fileOpeningContext);
-        accountBook.initializeAccounts(rootAccount);
-        return accountBook.getRootAccount();
+        System.out.println("Test File Exists? " + mdTestFile.isFile());
+        System.out.println("Test Folder Exists? " + mdTestFolder.isDirectory());
+        System.out.println("Loading Wrapper...");
+        AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdTestFolder);
+
+        // must add this section or get null pointer error
+        ArrayList<File> folderFiles = new ArrayList<>();
+        folderFiles.add(mdTestFolder);
+        AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
+
+        System.out.println("Doing Initial Load of AccountBook...");
+        wrapper.doInitialLoad(null);
+        AccountBook accountBook = wrapper.getBook();
+        int accountCount = accountBook.getRootAccount().getSubAccounts().size();
+        long transactionCount = accountBook.getTransactionSet().getTransactionCount();
+        System.out.println("AccountBook Initialized...Number of Accounts: " + accountCount + ", with "
+                + transactionCount + " transactions");
+        return new MDFileInfo(accountBook, accountBook.getRootAccount());
     }
 
     /**
@@ -90,11 +104,12 @@ public class BulkSecInfoTest {
      * @throws Exception
      */
     public static BulkSecInfo getBaseSecurityInfoAvgCost() throws Exception {
-        RootAccount root = loadRootAccountFromFolder();
+        MDFileInfo mdFileInfo = loadRootAccountFromFolder();
+        Account root = mdFileInfo.getRootAccount();
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
-        return new BulkSecInfo(root, reportConfig);
+        return new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
     }
 
     /**
@@ -104,12 +119,13 @@ public class BulkSecInfoTest {
      * @throws Exception
      */
     public static BulkSecInfo getBaseSecurityInfoLotMatch() throws Exception {
-        RootAccount root = loadRootAccountFromFolder();
+        MDFileInfo mdFileInfo = loadRootAccountFromFolder();
+        Account root = mdFileInfo.getRootAccount();
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
         reportConfig.setUseAverageCostBasis(false);
-        return new BulkSecInfo(root, reportConfig);
+        return new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
     }
 
     /**
@@ -371,4 +387,27 @@ public class BulkSecInfoTest {
             return this.row;
         }
     }
+
+    /**
+     * Struct to hold AccountBook, RootAccount
+     */
+    public static class MDFileInfo{
+        AccountBook accountBook;
+        Account rootAccount;
+
+
+        public MDFileInfo(AccountBook accountBook, Account rootAccount) {
+            this.accountBook = accountBook;
+            this.rootAccount = rootAccount;
+        }
+
+        public AccountBook getAccountBook() {
+            return accountBook;
+        }
+
+        public Account getRootAccount() {
+            return rootAccount;
+        }
+    }
+
 }

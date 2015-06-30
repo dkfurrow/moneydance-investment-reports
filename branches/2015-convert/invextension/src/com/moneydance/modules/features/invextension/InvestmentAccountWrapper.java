@@ -27,10 +27,9 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.InvestmentAccount;
-import com.moneydance.apps.md.model.SecurityAccount;
-import com.moneydance.apps.md.model.SecurityType;
+
+
+import com.infinitekind.moneydance.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +51,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     //associated BulkSecInfo
     BulkSecInfo currentInfo;
     // associated Investment Account
-    private InvestmentAccount investmentAccount;
+    private Account investmentAccount;
     // Account Number
     private int acctNum;
     // associated CashAccount
@@ -61,7 +60,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     private ArrayList<SecurityAccountWrapper> securityAccountWrappers;
     private String name;
 
-    public InvestmentAccountWrapper(InvestmentAccount invAcct, BulkSecInfo currentInfo,
+    public InvestmentAccountWrapper(Account invAcct, BulkSecInfo currentInfo,
                                     ReportConfig reportConfig) throws Exception {
         this.currentInfo = currentInfo;
         this.investmentAccount = invAcct;
@@ -70,12 +69,11 @@ public class InvestmentAccountWrapper implements Aggregator {
         this.name = investmentAccount.getAccountName().trim();
         //get Security Sub Accounts
         TreeSet<Account> subSecAccts = BulkSecInfo.getSelectedSubAccounts(invAcct,
-                Account.ACCOUNT_TYPE_SECURITY);
+                Account.AccountType.SECURITY);
         //Loop through Security Sub Accounts
         for (Account subSecAcct : subSecAccts) {
-            SecurityAccount secAcct = (SecurityAccount) subSecAcct;
             //Load Security Account into Wrapper Class
-            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(secAcct, this, reportConfig);
+            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct, this, reportConfig);
             // add Security Account to Investment Account
             this.securityAccountWrappers.add(secAcctWrapper);
         }
@@ -129,15 +127,13 @@ public class InvestmentAccountWrapper implements Aggregator {
      * @throws Exception
      */
     private void createCashWrapper(ReportConfig reportConfig) throws Exception {
-        SecurityAccount cashAccount = new SecurityAccount("~Cash",
-                BulkSecInfo.getNextAcctNumber(),
-                currentInfo.getCashCurrencyWrapper().getCurrencyType(), null, null,
-                this.investmentAccount);
+        Account cashAccount = new Account(getAccountBook());
+        cashAccount.setAccountName("~Cash");
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);
         cashAccount.setSecuritySubType("Money Market");
+        cashAccount.setCurrencyType(currentInfo.getCashCurrencyWrapper().getCurrencyType());
         this.cashWrapper = new SecurityAccountWrapper(cashAccount, this, reportConfig);
-        BulkSecInfo.setNextAcctNumber(BulkSecInfo.getNextAcctNumber() + 1);
         currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
         cashWrapper.generateTransValues();
     }
@@ -164,6 +160,10 @@ public class InvestmentAccountWrapper implements Aggregator {
 
     public BulkSecInfo getBulkSecInfo() {
         return this.currentInfo;
+    }
+
+    public AccountBook getAccountBook(){
+        return this.currentInfo.getAccountBook();
     }
 
 

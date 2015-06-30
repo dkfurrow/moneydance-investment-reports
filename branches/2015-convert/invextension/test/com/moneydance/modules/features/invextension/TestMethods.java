@@ -29,6 +29,7 @@
 package com.moneydance.modules.features.invextension;
 
 import java.util.LinkedList;
+import java.util.UUID;
 
 /**
  * Various test methods useful in development
@@ -38,14 +39,14 @@ public class TestMethods {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         try {
-            Class reportClass = TotalSnapshotReport.class;
-            LinkedList<Integer> viewHeaderTest = ReportConfig.getLinkedListFromString("0,1,3,5,6,10");
-            AggregationController aggregationController = AggregationController.INVACCT;
-            boolean outputSingle = false;
-            String reportName = "TotalSnapshotReport1";
-            DateRange dateRange = DateRange.getDefaultDateRange();
-            int numFrozenColumns = 5;
-            boolean closedPosHidden = true;
+//            Class reportClass = TotalSnapshotReport.class;
+//            LinkedList<Integer> viewHeaderTest = ReportConfig.getLinkedListFromString("0,1,3,5,6,10");
+//            AggregationController aggregationController = AggregationController.INVACCT;
+//            boolean outputSingle = false;
+//            String reportName = "TotalSnapshotReport1";
+//            DateRange dateRange = DateRange.getDefaultDateRange();
+//            int numFrozenColumns = 5;
+//            boolean closedPosHidden = true;
 
 
 //            ReportConfig reportConfig = new ReportConfig(reportClass,reportingName, aggregationMode, outputSingle,
@@ -61,15 +62,19 @@ public class TestMethods {
 //            ArrayList<ReportConfig> reportConfigs = ReportConfig.getReportConfigsForClass(reportClass);
 //            System.out.println("report configs size: " + reportConfigs.size());
 //            ReportConfig.printPrefNode(reportClass);
-            ReportConfig.clearConfigNode();
-            ReportConfig.printConfigNode();
+//            ReportConfig.clearConfigNode();
+//            ReportConfig.printConfigNode();
 
 //            for(ReportConfig thisReportConfig : reportConfigs){
 //                System.out.println(thisReportConfig);
 //                System.out.println("--------");
 //
 //            }
-            System.out.println(reportClass.getPackage().getName());
+//            System.out.println(reportClass.getPackage().getName());
+            UUID thisUUID = UUID.randomUUID();
+            System.out.println(thisUUID.toString());
+
+
 
 
         } catch (Exception e) {

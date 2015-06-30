@@ -28,8 +28,9 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.util.CustomDateFormat;
 import com.moneydance.awt.JDateField;
-import com.moneydance.util.CustomDateFormat;
+
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -55,12 +56,12 @@ public class DateRangePanel extends JPanel {
     public static final String DATE_PATTERN = ((SimpleDateFormat) DateFormat
             .getDateInstance(DateFormat.SHORT, Locale.getDefault()))
             .toPattern();
-    public static final CustomDateFormat DATE_FORMAT = new CustomDateFormat(DATE_PATTERN);
+    public static final CustomDateFormat THIS_DATE_FORMAT = new CustomDateFormat(DATE_PATTERN);
     public static final String DATE_RANGE_CHANGED = "dateRangeChanged";
     private List<PropertyChangeListener> listeners = new ArrayList<>();
-    private JDateField snapDateField = new JDateField(DATE_FORMAT);
-    private JDateField fromDateField = new JDateField(DATE_FORMAT);
-    private JDateField toDateField = new JDateField(DATE_FORMAT);
+    private JDateField snapDateField = new JDateField(THIS_DATE_FORMAT);
+    private JDateField fromDateField = new JDateField(THIS_DATE_FORMAT);
+    private JDateField toDateField = new JDateField(THIS_DATE_FORMAT);
     private static final long serialVersionUID = -5752555026802594107L;
     private DateRange dateRange;
     private JComboBox<DateRange.REF_DATE> refDateComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.REF_DATE.values()));

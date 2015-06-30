@@ -28,8 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 
 import javax.swing.*;
 import java.io.File;
@@ -66,9 +66,11 @@ public class TestReportSpeed extends JFrame {
 
     public static void main(String[] args) throws Exception {
         addRecordTime(startTime);
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        BulkSecInfoTest.MDFileInfo mdFileInfo = BulkSecInfoTest.loadRootAccountFromFolder();
+        Account root = mdFileInfo.getRootAccount();
         addRecordTime("fileLoaded");
-        BulkSecInfo currentInfo =  new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+        BulkSecInfo currentInfo =  new BulkSecInfo(mdFileInfo.getAccountBook(),
+                ReportConfig.getStandardReportConfig(TotalFromToReport.class));
         addRecordTime("bulkInfoLoaded");
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
         reportConfig.setDateRange(testDateRange);

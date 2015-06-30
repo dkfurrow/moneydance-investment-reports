@@ -45,15 +45,15 @@ public class TestReportOutput extends JFrame {
      */
     //
     //
-    private static String testFileStr = "./resources/testMD02.moneydance/root.mdinternal";
-    private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestCurrent.moneydance\\\\root.mdinternal";
-    private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
-    private static String testFileStr3 = "E:\\\\Temp\\\\TestMD02.moneydance\\\\root.mdinternal";
-    public static final File mdTestFile = new File(testFileStr1);
+    private static String testFileStr = "./resources/testMD02.moneydance";
+    private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestCurrent.moneydance";
+    private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance";
+    private static String testFileStr3 = "E:\\\\Temp\\\\TestMD02.moneydance\\\\";
+    public static final File mdTestFolder = new File(testFileStr);
 
     public static void main(String[] args) throws Exception {
 
-        ReportControlFrame frame = new ReportControlFrame(mdTestFile);
+        ReportControlFrame frame = new ReportControlFrame(mdTestFolder);
 
 
     }

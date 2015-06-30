@@ -28,8 +28,9 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.RootAccount;
+
+
+import com.infinitekind.moneydance.model.Account;
 
 import java.util.*;
 
@@ -50,9 +51,9 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
 
     @Override
     void populateLeftList(ReportConfig reportConfig) {
-        RootAccount root = reportControlPanel.getRoot();
+        Account root = reportControlPanel.getRoot();
         if (root != null) {
-            TreeSet<Account> expenseAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_EXPENSE);
+            TreeSet<Account> expenseAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.EXPENSE);
             ArrayList<Account> sortedExpenseAccounts = new ArrayList<>();
             sortedExpenseAccounts.addAll(expenseAccounts);
             Collections.sort(sortedExpenseAccounts, new compareAccountNames());

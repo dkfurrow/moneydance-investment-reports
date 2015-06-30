@@ -27,8 +27,8 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 
 import java.io.File;
 import java.util.GregorianCalendar;
@@ -41,8 +41,8 @@ public class GenericTestMethods {
     public static final DateRange dateRange = new DateRange(fromDateInt, toDateInt, toDateInt);
 
     public static void main(String[] args) throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+//        Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
+//        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
 
 //	listBaseCurrency(currentInfo);
 //	listAssocSecTnsMap(currentInfo);
@@ -55,10 +55,10 @@ public class GenericTestMethods {
 //	listTransactionCounts(currentInfo);
 //	testCompareSpec();
 //	listTransWithTransUtil(currentInfo);
-        verifyAggregateByCurrencyReport(currentInfo);
-        System.out.println("DataFile Path: " + root.getDataFile().getParentFile().getAbsolutePath());
-        long sampleDateValue = DateUtils.getExcelDateValue(20100208);
-        System.out.println("Sample Date Value" + sampleDateValue);
+//        verifyAggregateByCurrencyReport(currentInfo);
+//        System.out.println("DataFile Path: " + root.getDataFile().getParentFile().getAbsolutePath());
+//        long sampleDateValue = DateUtils.getExcelDateValue(20100208);
+//        System.out.println("Sample Date Value" + sampleDateValue);
         GregorianCalendar gc = new GregorianCalendar(1900, 1, 1);
         gc.setTimeInMillis(0L);
 

@@ -28,7 +28,7 @@
 package com.moneydance.modules.features.invextension;
 
 
-import com.moneydance.apps.md.model.SecurityType;
+import com.infinitekind.moneydance.model.SecurityType;
 
 import java.util.Arrays;
 import java.util.HashMap;

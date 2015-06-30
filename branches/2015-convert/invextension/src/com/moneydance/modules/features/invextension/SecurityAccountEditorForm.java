@@ -28,8 +28,11 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.CurrencyTable;
+import com.infinitekind.moneydance.model.CurrencyType;
+import com.infinitekind.moneydance.model.SecurityType;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -77,13 +80,14 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
      */
     public static void main(String[] args) {
         try {
-            RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
-            BulkSecInfo bulkSecInfo = new BulkSecInfo(root,
-                    ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-            Iterator<InvestmentAccountWrapper> iterator = bulkSecInfo.getInvestmentWrappers().iterator();
-            InvestmentAccountWrapper investmentAccountWrapper = iterator.next();
-            SecurityAccountWrapper firstSecurityAccountWrapper = investmentAccountWrapper.getSecurityAccountWrappers().get(0);
-            createAndShowSecurityEditorForm(firstSecurityAccountWrapper, null);
+            //TODO: Fix main method
+//            Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
+//            BulkSecInfo bulkSecInfo = new BulkSecInfo(root,
+//                    ReportConfig.getStandardReportConfig(TotalFromToReport.class));
+//            Iterator<InvestmentAccountWrapper> iterator = bulkSecInfo.getInvestmentWrappers().iterator();
+//            InvestmentAccountWrapper investmentAccountWrapper = iterator.next();
+//            SecurityAccountWrapper firstSecurityAccountWrapper = investmentAccountWrapper.getSecurityAccountWrappers().get(0);
+//            createAndShowSecurityEditorForm(firstSecurityAccountWrapper, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -235,16 +239,17 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
         String newTicker = tickerTextField.getText().trim();
         SecurityType newSecurityType = (SecurityType) securityTypeComboBox.getSelectedItem();
         String newSecuritySubType = (String) securitySubTypeComboBox.getSelectedItem();
-        SecurityAccount securityAccount = securityAccountWrapper.getSecurityAccount();
+        Account securityAccount = securityAccountWrapper.getSecurityAccount();
         CurrencyType currencyType = securityAccountWrapper.getCurrencyWrapper().getCurrencyType();
         CurrencyTable currencyTable = currencyType.getTable();
-        RootAccount rootAccount = securityAccount.getRootAccount();
+        Account rootAccount = securityAccount.getRootAccount();
         currencyType.setName(newSecurityName);
         currencyType.setTickerSymbol(newTicker);
         securityAccount.setSecurityType(newSecurityType);
         securityAccount.setSecuritySubType(newSecuritySubType);
-        rootAccount.accountModified(securityAccount);
-        rootAccount.currencyTableModified(currencyTable);
+//        TODO: Fix security Wrapper Update
+//        rootAccount.accountModified(securityAccount);
+//        rootAccount.currencyTableModified(currencyTable);
         table.getReportTableModel().fireTableDataChanged();
         this.dispose();
     }

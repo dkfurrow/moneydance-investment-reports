@@ -32,8 +32,10 @@ package com.moneydance.modules.features.invextension;
  * Created by larus on 11/28/14.
  */
 
-import com.moneydance.apps.md.model.InvestTxnType;
-import com.moneydance.apps.md.model.TxnUtil;
+
+
+import com.infinitekind.moneydance.model.InvestTxnType;
+import com.infinitekind.moneydance.model.TxnUtil;
 
 import java.util.Arrays;
 import java.util.Iterator;

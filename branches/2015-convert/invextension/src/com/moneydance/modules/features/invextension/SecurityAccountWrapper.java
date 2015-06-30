@@ -27,7 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.*;
+import com.infinitekind.moneydance.model.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ import java.util.Vector;
  * Adds functionality to
  */
 public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
-    private SecurityAccount securityAccount;
+    private Account securityAccount;
     private CurrencyWrapper currencyWrapper;
     private ReportConfig reportConfig;
     private Tradeable tradeable;
@@ -51,22 +51,21 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     private ArrayList<TransactionValues> transValuesList;
     private DIV_FREQUENCY divFrequency = DIV_FREQUENCY.UNKNOWN;
 
-    public SecurityAccountWrapper(@NotNull SecurityAccount secAcct,
-                                  @NotNull InvestmentAccountWrapper invAcct,
+    public SecurityAccountWrapper(@NotNull Account secAcct, @NotNull InvestmentAccountWrapper invAcct,
                                   ReportConfig reportConfig) throws Exception {
         this.securityAccount = secAcct;
         this.invAcctWrapper = invAcct;
         this.reportConfig = reportConfig;
         this.transValuesList = new ArrayList<>();
-        this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct.getCurrencyType()
-                .getID());
+        this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers()
+                .get(secAcct.getCurrencyType().getParameter("id"));
         this.tradeable = new Tradeable(this.currencyWrapper);
         this.securityTypeWrapper = new SecurityTypeWrapper(this);
         this.securitySubTypeWrapper = new SecuritySubTypeWrapper(this);
         this.name = secAcct.getAccountName().trim();
         generateTransValues();
         CurrencyWrapper thisCurWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct
-                .getCurrencyType().getID());
+                .getCurrencyType().getParameter("id"));
         // add account to list of accounts in currencyWrapper
         thisCurWrapper.secAccts.add(this);
         // set CurrencyWrapper associated with this SecurityWrapper
@@ -81,17 +80,6 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     public SecurityAccountWrapper(String name) {
         securityAccount = null;
         this.name = name;
-    }
-
-    @SuppressWarnings("unused")
-    @NotNull
-    private static Vector<Account> getSubAccount(@NotNull SecurityAccount secAcct2) {
-        Vector<Account> accts = new Vector<>();
-        while (secAcct2.getSubAccounts().hasMoreElements()) {
-            accts.add((Account) secAcct2.getSubAccounts().nextElement());
-        }
-        return accts;
-
     }
 
     /**
@@ -120,7 +108,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                     thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig);
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
             transValuesSet.add(transValuesToAdd);
-            if (thisAccount instanceof SecurityAccount)
+            if (thisAccount.getAccountType() == Account.AccountType.SECURITY)
                 invAcctWrapper.getBulkSecInfo().getSecurityTransactionValues().put(transValuesToAdd.getTxnID(),
                         transValuesToAdd);
 
@@ -249,7 +237,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         return securityAccount.getSecuritySubType();
     }
 
-    public SecurityAccount getSecurityAccount() {
+    public Account getSecurityAccount() {
         return securityAccount;
     }
 

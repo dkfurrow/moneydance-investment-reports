@@ -29,8 +29,8 @@
 package com.moneydance.modules.features.invextension;
 
 
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.RootAccount;
+
+import com.infinitekind.moneydance.model.Account;
 
 import javax.swing.*;
 import java.awt.*;
@@ -650,9 +650,9 @@ public class ReportConfig {
         thisReportPrefs.put(Prefs.FRAMEINFO, frameInfo.writeFrameInfoForPrefs());
     }
 
-    public void setAllExpenseAccountsToInvestment(RootAccount root) {
+    public void setAllExpenseAccountsToInvestment(Account root) {
         if (root != null) {
-            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_EXPENSE);
+            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.EXPENSE);
             HashSet<Integer> acctNums = new HashSet<>();
             for (Account acct : accounts) {
                 acctNums.add(acct.getAccountNum());
@@ -661,9 +661,9 @@ public class ReportConfig {
         }
     }
 
-    public void setAllIncomeAccountsToInvestment(RootAccount root) {
+    public void setAllIncomeAccountsToInvestment(Account root) {
         if (root != null) {
-            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INCOME);
+            TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INCOME);
             HashSet<Integer> acctNums = new HashSet<>();
             for (Account acct : accounts) {
                 acctNums.add(acct.getAccountNum());

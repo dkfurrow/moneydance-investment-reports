@@ -28,8 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 import org.junit.Test;
 
 import java.io.File;
@@ -51,20 +51,21 @@ public class IncludeExcludeAccountsTest {
 
     @Test
     public void testIncludedExcludedAccounts() throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        BulkSecInfoTest.MDFileInfo mdFileInfo = BulkSecInfoTest.loadRootAccountFromFolder();
+        Account root = mdFileInfo.getRootAccount();
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setDateRange(testDateRange);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
         TotalReport report = new TotalFromToReport(reportConfig);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
+        BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         report.calcReport(currentInfo);
         IncludeExcludeAccountsTest.baseReportObject = report.getReportTable();
 
         reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setDateRange(testDateRange);
         report = new TotalFromToReport(reportConfig);
-        currentInfo = new BulkSecInfo(root, reportConfig);
+        currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         report.calcReport(currentInfo);
         compareCashAccounts(report.getReportTable());
     }
