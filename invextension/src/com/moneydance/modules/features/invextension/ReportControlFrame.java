@@ -58,17 +58,17 @@ public class ReportControlFrame
     /**
      * Constructor which initiates from saved MD data
      *
-     * @param mdFile valid MD files
+     * @param mdFolder valid MD files
      * @throws IllegalAccessException
      * @throws BackingStoreException
      * @throws NoSuchFieldException
      */
-    public ReportControlFrame(File mdFile) throws Exception {
+    public ReportControlFrame(File mdFolder) throws Exception {
         super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
         this.extension = null;
         reportControlPanel = new ReportControlPanel(this);
         populateReportFrame();
-        reportControlPanel.loadMDFile(mdFile);
+        reportControlPanel.loadMDFile(mdFolder);
     }
 
     public Main getExtension() {

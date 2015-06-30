@@ -28,7 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.CurrencyType;
+
+import com.infinitekind.moneydance.model.CurrencyType;
 
 /**
  * Created by larus on 11/27/14.

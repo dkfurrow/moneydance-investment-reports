@@ -27,7 +27,9 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.CurrencyType;
+
+
+import com.infinitekind.moneydance.model.CurrencyType;
 
 import java.util.ArrayList;
 

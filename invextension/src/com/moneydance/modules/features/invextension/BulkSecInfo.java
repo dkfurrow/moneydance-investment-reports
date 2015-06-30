@@ -28,7 +28,7 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.*;
+import com.infinitekind.moneydance.model.*;
 
 import java.util.*;
 
@@ -50,8 +50,8 @@ public class BulkSecInfo {
     static Comparator<Account> acctComp = new Comparator<Account>() {
         @Override
         public int compare(Account a1, Account a2) {
-            Integer t1 = a1.getAccountType();
-            Integer t2 = a2.getAccountType();
+            Integer t1 = a1.getAccountType().code();
+            Integer t2 = a2.getAccountType().code();
             String name1 = a1.getAccountName();
             String name2 = a1.getAccountName();
             Integer num1 = a1.getAccountNum();
@@ -79,8 +79,8 @@ public class BulkSecInfo {
 
             Integer d1 = t1.getDateInt();
             Integer d2 = t2.getDateInt();
-            Long id1 = t1.getTxnId();
-            Long id2 = t2.getTxnId();
+            String id1 = t1.getParameter("id");
+            String id2 = t2.getParameter("id");
             Integer assocAcctNum1 = getAssociatedAccount(t1).getAccountNum();
             Integer assocAcctNum2 = getAssociatedAccount(t2).getAccountNum();
             Integer transTypeSort1 = getTxnSortOrder(t1);
@@ -103,12 +103,7 @@ public class BulkSecInfo {
             } // end date order
         } // end compare method
     }; // end inner class
-    /* static reference to nextAcctNumber (to number account implementations of
-     * cash currency */
-    private static int nextAcctNumber;
-    /*static reference to nextTxnNumber (to uniquely identify initial balance
-     *  cash transactions)*/
-    private static long nextTxnNumber;
+
     /* conveys account data here for processing */
     public Main extension;
     /* Cash Currency Type for uninvested cash */
@@ -116,13 +111,15 @@ public class BulkSecInfo {
     /* first transaction date (to price cash currency)*/
     private int firstDateInt;
     /* HashSet of CurrencyWrappers */
-    private HashMap<Integer, CurrencyWrapper> currencyWrappers;
+    private HashMap<String, CurrencyWrapper> currencyWrappers;
     /* all transactions in root */
     private TransactionSet transactionSet;
     /*TreeMap of Transvalues for leaf-level security Accounts */
-    private HashMap<Double, TransactionValues> securityTransactionValues;
+    private HashMap<String, TransactionValues> securityTransactionValues;
     /* root account */
-    private RootAccount root;
+    private Account root;
+    /* Account Book */
+    private AccountBook accountBook;
     /* GainsCalc Type */
     private GainsCalc gainsCalc;
     /* ReportConfig from panel or from test code */
@@ -130,34 +127,25 @@ public class BulkSecInfo {
     /* HashSet of InvestmentAccount Wrappers */
     private HashSet<InvestmentAccountWrapper> investmentWrappers;
 
-    public BulkSecInfo(RootAccount root, ReportConfig reportConfig) throws Exception {
-        this.root = root;
+    public BulkSecInfo(AccountBook accountBook, ReportConfig reportConfig) throws Exception {
+        this.accountBook = accountBook;
+        this.root = accountBook.getRootAccount();
         BulkSecInfo.reportConfig = reportConfig;
         this.gainsCalc = reportConfig.useAverageCostBasis() ? new GainsAverageCalc() : new GainsLotMatchCalc();
-        nextAcctNumber = this.root.getHighestAccountNum() + 1;
-        transactionSet = this.root.getTransactionSet();
+        transactionSet = accountBook.getTransactionSet();
         securityTransactionValues = new HashMap<>();
-        firstDateInt = transactionSet.getDateBounds().getStartDateInt();
-        BulkSecInfo.nextTxnNumber = transactionSet.getAllTxns().getLastTxn().getTxnId() + 1L;
+        firstDateInt = getFirstDateInt(transactionSet);
         cashCurrencyWrapper = defineCashCurrency();
         currencyWrappers = getCurrencyWrappersFromRoot();
         investmentWrappers = getInvestmentAccountInfo(reportConfig);
     }
 
-    public static int getNextAcctNumber() {
-        return nextAcctNumber;
-    }
-
-    public static void setNextAcctNumber(int nextAcctNumber) {
-        BulkSecInfo.nextAcctNumber = nextAcctNumber;
-    }
-
-    public static long getNextTxnNumber() {
-        return nextTxnNumber;
-    }
-
-    public static void setNextTxnNumber(long nextTxnNumber) {
-        BulkSecInfo.nextTxnNumber = nextTxnNumber;
+    public int getFirstDateInt(TransactionSet transactionSet){
+        int dateInt = Integer.MAX_VALUE;
+        for(AbstractTxn txn : transactionSet){
+            dateInt = Math.min(txn.getDateInt(), dateInt);
+        }
+        return dateInt;
     }
 
     public static ReportConfig getReportConfig() { return BulkSecInfo.reportConfig;}
@@ -171,12 +159,12 @@ public class BulkSecInfo {
      */
 
     public static TreeSet<Account> getSelectedSubAccounts(Account parentAcct,
-                                                          int... acctTypes) {
+                                                          Account.AccountType... acctTypes) {
         int sz = parentAcct.getSubAccountCount();
-        ArrayList<Integer> acctTypesList = new ArrayList<>();
+        ArrayList<Account.AccountType> acctTypesList = new ArrayList<>();
         TreeSet<Account> SubAccts = new TreeSet<>(acctComp);
         if (acctTypes.length > 0) {
-            for (int acctType : acctTypes) {
+            for (Account.AccountType acctType : acctTypes) {
                 acctTypesList.add(acctType);
             }
         }
@@ -248,12 +236,13 @@ public class BulkSecInfo {
      * @return ArrayList of String Arrays
      */
     public static ArrayList<String[]> ListAllCurrenciesInfo(
-            HashMap<Integer, CurrencyWrapper> theseCurs) {
+            HashMap<String, CurrencyWrapper> theseCurs) {
         ArrayList<String[]> currInfo = new ArrayList<>();
 
         for (CurrencyWrapper curWrapper : theseCurs.values()) {
-            for (int i = 0; i < curWrapper.currencyType.getSnapshotCount(); i++) {
-                currInfo.add(loadCurrencySnapshotArray(curWrapper.currencyType, i));
+            List<CurrencySnapshot> snapshots = curWrapper.currencyType.getSnapshots();
+            for (int i = 0; i < snapshots.size(); i++) {
+                currInfo.add(loadCurrencySnapshotArray(curWrapper.currencyType, snapshots.get(i)));
             }
         }
         return currInfo;
@@ -263,12 +252,12 @@ public class BulkSecInfo {
      * loads data from individual currency snapshot
      *
      * @param cur CurrencyType
-     * @param i   index of currency snapshot
+     * @param snapshot   index of currency snapshot
      * @return String array of currency and price info
      */
-    public static String[] loadCurrencySnapshotArray(CurrencyType cur, int i) {
+    public static String[] loadCurrencySnapshotArray(CurrencyType cur, CurrencySnapshot snapshot) {
         ArrayList<String> currencyInfo = new ArrayList<>();
-        currencyInfo.add(Integer.toString(cur.getID()));
+        currencyInfo.add(Integer.toString(cur.getID())); // TODO: Change output of currency snapshots
         currencyInfo.add(cur.getName());
         if (cur.getTickerSymbol().isEmpty()) {
             currencyInfo.add("NoTicker");
@@ -276,8 +265,8 @@ public class BulkSecInfo {
             currencyInfo.add(cur.getTickerSymbol());
         }
         int todayDate = DateUtils.getLastCurrentDateInt();
-        int dateInt = cur.getSnapshot(i).getDateInt();
-        double closeRate = cur.getSnapshot(i).getUserRate();
+        int dateInt = snapshot.getDateInt();
+        double closeRate = snapshot.getUserRate();
         currencyInfo.add(DateUtils.convertToShort(dateInt));
         currencyInfo.add(Double.toString(1 / closeRate));
         currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateInt,
@@ -316,7 +305,7 @@ public class BulkSecInfo {
         }
         for (int i = 0; i < parent.getSplitCount(); i++) {
             if (parent.getSplit(i).getAccount().getAccountType()
-                    == Account.ACCOUNT_TYPE_SECURITY)
+                    == Account.AccountType.SECURITY)
                 associatedAccount = parent.getSplit(i).getAccount();
         }
         return associatedAccount;
@@ -326,7 +315,7 @@ public class BulkSecInfo {
         return transactionSet;
     }
 
-    public HashMap<Double, TransactionValues> getSecurityTransactionValues() {
+    public HashMap<String, TransactionValues> getSecurityTransactionValues() {
         return securityTransactionValues;
     }
 
@@ -334,7 +323,7 @@ public class BulkSecInfo {
         return cashCurrencyWrapper;
     }
 
-    public HashMap<Integer, CurrencyWrapper> getCurrencyWrappers() {
+    public HashMap<String, CurrencyWrapper> getCurrencyWrappers() {
         return currencyWrappers;
     }
 
@@ -342,9 +331,11 @@ public class BulkSecInfo {
         return firstDateInt;
     }
 
-    public RootAccount getRoot() {
+    public Account getRoot() {
         return root;
     }
+
+    public AccountBook getAccountBook() {return accountBook;}
 
     public GainsCalc getGainsCalc() {
         return gainsCalc;
@@ -377,12 +368,15 @@ public class BulkSecInfo {
      * @return synthetic cash security, value 1
      */
     private CurrencyWrapper defineCashCurrency() {
-        CurrencyTable currencyTable = root.getCurrencyTable();
-        int nextId = currencyTable.getNextID();
+        CurrencyTable currencyTable = accountBook.getCurrencies();
         int dateInt = DateUtils.convertToDateInt(new Date());
-        CurrencyType cashCurrencyType = new CurrencyType
-                (nextId, "", "CASH", 1.0, 4, "", "", "CASH",
-                        dateInt, CurrencyType.CURRTYPE_SECURITY, currencyTable);
+        CurrencyType cashCurrencyType = new CurrencyType(currencyTable);
+        cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
+        cashCurrencyType.setName("CASH");
+        cashCurrencyType.setTickerSymbol("CASH");
+        cashCurrencyType.setRawRate(1.0, false);
+        cashCurrencyType.setDecimalPlaces(4);
+        // "asof_dt" is parameter to set date (if needed)
         cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
         cashCurrencyWrapper.setCash();
@@ -394,12 +388,12 @@ public class BulkSecInfo {
      *
      * @return map of currency ids to associated currency wrappers
      */
-    private HashMap<Integer, CurrencyWrapper> getCurrencyWrappersFromRoot() {
-        CurrencyType[] currencies = root.getCurrencyTable().getAllCurrencies();
-        HashMap<Integer, CurrencyWrapper> wrapperHashMap = new HashMap<>();
+    private HashMap<String, CurrencyWrapper> getCurrencyWrappersFromRoot() {
+        List<CurrencyType> currencies = accountBook.getCurrencies().getAllCurrencies();
+        HashMap<String, CurrencyWrapper> wrapperHashMap = new HashMap<>();
         for (CurrencyType currency : currencies) {
-            if (currency.getCurrencyType() == CurrencyType.CURRTYPE_SECURITY) {
-                Integer thisID = currency.getID();
+            if (currency.getCurrencyType() == CurrencyType.Type.SECURITY) {
+                String thisID = currency.getParameter("id");
                 wrapperHashMap.put(thisID, new CurrencyWrapper(currency, this));
             }
         }
@@ -417,7 +411,7 @@ public class BulkSecInfo {
      * @throws Exception
      */
     private HashSet<InvestmentAccountWrapper> getInvestmentAccountInfo(ReportConfig reportConfig) throws Exception {
-        TreeSet<Account> allSubAccounts = getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT);
+        TreeSet<Account> allSubAccounts = getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
         HashSet<Integer> excludedAccountNums = reportConfig.getExcludedAccountNums();
         TreeSet<Account> selectedSubAccounts = new TreeSet<>(acctComp);
         for (Account account : allSubAccounts){
@@ -427,9 +421,9 @@ public class BulkSecInfo {
         }
         HashSet<InvestmentAccountWrapper> invAcctWrappers = new HashSet<>();
         for (Account selectedSubAccount : selectedSubAccounts) {
-            InvestmentAccount invAcct = (InvestmentAccount) selectedSubAccount;
             //Load investment account into Wrapper Class
-            InvestmentAccountWrapper invAcctWrapper = new InvestmentAccountWrapper(invAcct, this, reportConfig);
+            InvestmentAccountWrapper invAcctWrapper =
+                    new InvestmentAccountWrapper(selectedSubAccount, this, reportConfig);
             invAcctWrappers.add(invAcctWrapper);
         } // end Investment Accounts Loop
         return invAcctWrappers;

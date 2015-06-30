@@ -300,9 +300,9 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
     public class ReturnValueElement implements Comparable<ReturnValueElement> {
         public final int date;
         public long value;
-        public double txnId;
+        public String txnId;
 
-        public ReturnValueElement(int d, long v, double id) {
+        public ReturnValueElement(int d, long v, String id) {
             date = d;
             value = v;
             txnId = id;
@@ -312,7 +312,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
             if (date != operand.date) {
                 return date - operand.date;
             } else {
-                return (int) Math.round((txnId - operand.txnId) * 10.0);
+                return txnId.compareTo(operand.txnId);
             }
         }
 
@@ -324,7 +324,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
             ReturnValueElement that = (ReturnValueElement) o;
 
             if (date != that.date) return false;
-            if (Double.compare(that.txnId, txnId) != 0) return false;
+            if (txnId.compareTo(that.txnId) != 0) return false;
             if (value != that.value) return false;
 
             return true;
@@ -336,7 +336,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
             long temp;
             result = date;
             result = 31 * result + (int) (value ^ (value >>> 32));
-            temp = Double.doubleToLongBits(txnId);
+            temp = txnId.hashCode();
             result = 31 * result + (int) (temp ^ (temp >>> 32));
             return result;
         }

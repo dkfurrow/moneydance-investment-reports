@@ -27,7 +27,8 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.SecurityType;
+import com.infinitekind.moneydance.model.SecurityType;
+
 
 /**
  * Wrapper for Moneydance Class SecurityType, adds increased functionality

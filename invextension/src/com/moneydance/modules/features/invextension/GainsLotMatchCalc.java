@@ -27,10 +27,11 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.CurrencyType;
-import com.moneydance.apps.md.model.ParentTxn;
-import com.moneydance.apps.md.model.SplitTxn;
-import com.moneydance.apps.md.model.TxnUtil;
+
+import com.infinitekind.moneydance.model.CurrencyType;
+import com.infinitekind.moneydance.model.ParentTxn;
+import com.infinitekind.moneydance.model.SplitTxn;
+import com.infinitekind.moneydance.model.TxnUtil;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -48,7 +49,7 @@ public class GainsLotMatchCalc implements GainsCalc {
     TransactionValues currentTrans;
     TransactionValues prevTransValues;
     long adjPrevPos;
-    Hashtable<Long, Long> matchTable;
+    Hashtable<String, Long> matchTable;
 
 
     public GainsLotMatchCalc() {
@@ -113,25 +114,24 @@ public class GainsLotMatchCalc implements GainsCalc {
      * @param thisMatchTable match table from security
      * @return weighted cost of security
      */
-    private double getWeightedCost(Hashtable<Long, Long> thisMatchTable) {
+    private double getWeightedCost(Hashtable<String, Long> thisMatchTable) {
         double totWeightedNumerator = 0.0;
         double totalAllocatedQtyAdjust = 0.0;
-        for (Long allocationSplitTransNum : thisMatchTable.keySet()) {
+        for (String allocationSplitTransId : thisMatchTable.keySet()) {
             //split transaction number
             //parent transaction of associated split
             ParentTxn allocationParentTrans = currentInfo.getTransactionSet()
-                    .getTxnByID(allocationSplitTransNum).getParentTxn();
-            //parent transaction number
-            Double allocationParentTransNum = (Long
-                    .valueOf(allocationParentTrans.getTxnId()).doubleValue());
+                    .getTxnByID(allocationSplitTransId).getParentTxn();
+            //parent transaction id
+            String allocationParentTransId = allocationParentTrans.getParameter("id");
             //Transvalue associated with parent transaction number
             TransactionValues allocationTransValues = currentInfo.getSecurityTransactionValues()
-                    .get(allocationParentTransNum);
+                    .get(allocationParentTransId);
             //Split-adjustment for shares (adjusts previous shares to current)
             Double splitAdjust = getSplitAdjust(currentTrans,
                     allocationTransValues);
             //Lots to include in weighted average
-            Long allocationQtyAdjust = thisMatchTable.get(allocationSplitTransNum);
+            Long allocationQtyAdjust = thisMatchTable.get(allocationSplitTransId);
             //add to total quantity (will use as denominator later)
             totalAllocatedQtyAdjust += allocationQtyAdjust;
 
@@ -201,20 +201,19 @@ public class GainsLotMatchCalc implements GainsCalc {
      *
      * @return lot match table for security
      */
-    public Hashtable<Long, Long> getLotMatchTable() {
-        Hashtable<Long, Long> lotMatchTable = new Hashtable<>();
+    public Hashtable<String, Long> getLotMatchTable() {
+        Hashtable<String, Long> lotMatchTable = new Hashtable<>();
         SplitTxn securitySplit = currentTrans.getReferenceAccount().getCurrencyType()
                 .equals(currentInfo.getCashCurrencyWrapper().getCurrencyType()) ? null
                 : TxnUtil.getSecurityPart(currentTrans.getParentTxn());
-        Hashtable<String, String> splitTable = null;
+        Hashtable<String, Long> splitTable = null;
         if (securitySplit != null) {
             splitTable = TxnUtil.parseCostBasisTag(securitySplit);
         }
         if (splitTable != null) {
             for (String key : splitTable.keySet()) {
-                Long keyLong = Long.parseLong(key);
-                Long valueLong = Long.parseLong(splitTable.get(key));
-                lotMatchTable.put(keyLong, valueLong);
+                Long valueLong = splitTable.get(key);
+                lotMatchTable.put(key, valueLong);
             }
         }
         if (lotMatchTable.size() > 0) {

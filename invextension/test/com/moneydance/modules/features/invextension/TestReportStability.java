@@ -28,8 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -60,7 +60,7 @@ public class TestReportStability extends JFrame {
     public static Object[][][] outputPanel;
     public static ReportConfig reportConfig;
     public static Class<? extends TotalReport> reportClass = TotalSnapshotReport.class;
-    public static RootAccount root;
+    public static Account root;
     public static BulkSecInfo currentInfo;
     public static LinkedList<String> modelHeader;
     public static Double threshold = 0.001;
@@ -88,11 +88,12 @@ public class TestReportStability extends JFrame {
 
     public static void initializeTest() throws Exception {
         //initialize common elements
-        root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        BulkSecInfoTest.MDFileInfo mdFileInfo = BulkSecInfoTest.loadRootAccountFromFolder();
+        root = mdFileInfo.getRootAccount();
         reportConfig = ReportConfig.getStandardReportConfig(reportClass);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
-        currentInfo = new BulkSecInfo(root, reportConfig);
+        currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         //initialize comparison object
         TotalReport report = (TotalReport) reportClass.getDeclaredConstructors()[0].newInstance(reportConfig);
         modelHeader = report.getModelHeader();

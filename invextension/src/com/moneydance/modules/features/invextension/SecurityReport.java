@@ -29,8 +29,9 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.CurrencyTable;
-import com.moneydance.apps.md.model.CurrencyType;
+
+import com.infinitekind.moneydance.model.CurrencyTable;
+import com.infinitekind.moneydance.model.CurrencyType;
 import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TYPE;
 import org.jetbrains.annotations.NotNull;
 

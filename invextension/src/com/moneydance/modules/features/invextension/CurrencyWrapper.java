@@ -27,7 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import com.moneydance.apps.md.model.CurrencyType;
+import com.infinitekind.moneydance.model.CurrencyType;
 
 import java.util.LinkedHashSet;
 
@@ -43,7 +43,7 @@ public class CurrencyWrapper implements Aggregator {
     static String columnName = "Ticker";
     static String reportingName = "Ticker";
     CurrencyType currencyType;
-    int curID;
+    String curID;
     String ticker;
     boolean isCash = false; //true if Currency represents uninvested cash
     LinkedHashSet<SecurityAccountWrapper> secAccts;
@@ -53,7 +53,7 @@ public class CurrencyWrapper implements Aggregator {
         this.currentInfo = currentInfo;
         this.currencyType = currencyType;
         this.secAccts = new LinkedHashSet<>();
-        this.curID = this.currencyType.getID();
+        this.curID = this.currencyType.getParameter("id");
         this.ticker = getTickerSymbolFromCurrType();
     }
 
@@ -95,7 +95,7 @@ public class CurrencyWrapper implements Aggregator {
     }
 
 
-    public int getCurID() {
+    public String getCurID() {
         return curID;
     }
 
@@ -107,7 +107,7 @@ public class CurrencyWrapper implements Aggregator {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + curID;
+        result = prime * result + curID.hashCode();
         return result;
     }
 

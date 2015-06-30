@@ -28,8 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 
 import javax.swing.*;
 import java.io.File;
@@ -71,14 +71,15 @@ public class CheckReportStability extends JFrame {
     }
 
     private static void runReportFromFile() throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+        BulkSecInfoTest.MDFileInfo mdFileInfo = BulkSecInfoTest.loadRootAccountFromFolder();
+        Account root = mdFileInfo.getRootAccount();
 
         Class testClass = TotalSnapshotReport.class;
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(testClass);
         reportConfig.setDateRange(testDateRange);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
+        BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
 //        System.out.println(reportConfig.toString());
         TotalReport report = new TotalSnapshotReport(reportConfig);
         report.calcReport(currentInfo);

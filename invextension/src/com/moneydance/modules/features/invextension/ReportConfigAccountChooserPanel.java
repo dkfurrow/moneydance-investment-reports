@@ -28,9 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.Account;
-import com.moneydance.apps.md.model.RootAccount;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -50,7 +49,7 @@ import java.util.TreeSet;
 public class ReportConfigAccountChooserPanel extends JPanel {
 
     private static final long serialVersionUID = -8990699863699414946L;
-    private RootAccount root;
+    private Account root;
     private ReportControlPanel reportControlPanel;
 
     //JLists
@@ -155,7 +154,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         boolean hideInactiveAccountsRemoved = true;
         HashSet<Account> hideInactiveAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT);
+                = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
 
         for (Account investmentAccount : investmentAccountSet) {
             if (investmentAccount.getAccountIsInactive()) hideInactiveAccounts.add(investmentAccount);
@@ -174,7 +173,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         boolean hideOnHomePageAccountsRemoved = true;
         HashSet<Account> hideOnHomePageAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT);
+                = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
 
         for (Account investmentAccount : investmentAccountSet) {
             if (investmentAccount.getHideOnHomePage()) hideOnHomePageAccounts.add(investmentAccount);
@@ -228,7 +227,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         if (root == null) root = reportControlPanel.getRoot();
         if (root != null) {
             TreeSet<Account> investmentAccountSet
-                    = BulkSecInfo.getSelectedSubAccounts(root, Account.ACCOUNT_TYPE_INVESTMENT);
+                    = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
 
             for (Account investmentAccount : investmentAccountSet) {
                 availableAccountsListModel.addElement(investmentAccount);

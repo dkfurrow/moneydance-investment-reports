@@ -28,8 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.Account;
 import com.moneydance.apps.md.controller.io.FileUtils;
-import com.moneydance.apps.md.model.RootAccount;
 
 import java.io.File;
 
@@ -48,18 +48,18 @@ public class TestReportOutput2 {
     //
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
-        RootAccount root = FileUtils.readAccountsFromFile(mdTestFile, null);
+//        Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
 
 //        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "StandardFTTest");
-        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
-        reportConfig.setDateRange(testDateRange);
-        reportConfig.setAllExpenseAccountsToInvestment(root);
-        reportConfig.setAllIncomeAccountsToInvestment(root);
-        System.out.println(reportConfig.toString());
-        TotalReport report = new TotalFromToReport(reportConfig);
-        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
-        report.calcReport(currentInfo);
-        report.displayReport();
+//        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
+//        reportConfig.setDateRange(testDateRange);
+//        reportConfig.setAllExpenseAccountsToInvestment(root);
+//        reportConfig.setAllIncomeAccountsToInvestment(root);
+//        System.out.println(reportConfig.toString());
+//        TotalReport report = new TotalFromToReport(reportConfig);
+//        BulkSecInfo currentInfo = new BulkSecInfo(root, reportConfig);
+//        report.calcReport(currentInfo);
+//        report.displayReport();
 
 
 
