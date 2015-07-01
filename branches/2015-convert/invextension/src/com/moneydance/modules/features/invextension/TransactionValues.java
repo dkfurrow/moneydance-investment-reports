@@ -801,7 +801,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
             InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());
             Account.AccountType acctType = thisSplit.getAccount().getAccountType();
             Account.AccountType parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
-            long amountLong = thisSplit.getAmount();
+            long amountLong = -thisSplit.getAmount(); //added minus sign for 2015
             long valueLong = thisSplit.getValue();
 
 
