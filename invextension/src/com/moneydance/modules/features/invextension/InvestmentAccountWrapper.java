@@ -128,11 +128,12 @@ public class InvestmentAccountWrapper implements Aggregator {
      */
     private void createCashWrapper(ReportConfig reportConfig) throws Exception {
         Account cashAccount = new Account(getAccountBook());
-        cashAccount.setAccountName("~Cash");
+        cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);
         cashAccount.setSecuritySubType("Money Market");
         cashAccount.setCurrencyType(currentInfo.getCashCurrencyWrapper().getCurrencyType());
+        cashAccount.setParentAccount(this.investmentAccount);
         this.cashWrapper = new SecurityAccountWrapper(cashAccount, this, reportConfig);
         currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
         cashWrapper.generateTransValues();
