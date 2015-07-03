@@ -133,6 +133,10 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         return outputList;
     }
 
+    public AccountBook getAccountBook(){
+        return this.invAcctWrapper.getAccountBook();
+    }
+
     private BulkSecInfo getBulkSecInfo() {
         return this.invAcctWrapper.getBulkSecInfo();
     }

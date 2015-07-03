@@ -28,10 +28,7 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.infinitekind.moneydance.model.Account;
-import com.infinitekind.moneydance.model.CurrencyTable;
-import com.infinitekind.moneydance.model.CurrencyType;
-import com.infinitekind.moneydance.model.SecurityType;
+import com.infinitekind.moneydance.model.*;
 import com.moneydance.apps.md.controller.io.FileUtils;
 
 import javax.swing.*;
@@ -71,27 +68,6 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
         this.table = table;
         this.securityAccountWrapper = securityAccountWrapper;
         initComponents();
-    }
-
-    /**
-     * test method
-     *
-     * @param args no arguments needed
-     */
-    public static void main(String[] args) {
-        try {
-            //TODO: Fix main method
-//            Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
-//            BulkSecInfo bulkSecInfo = new BulkSecInfo(root,
-//                    ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-//            Iterator<InvestmentAccountWrapper> iterator = bulkSecInfo.getInvestmentWrappers().iterator();
-//            InvestmentAccountWrapper investmentAccountWrapper = iterator.next();
-//            SecurityAccountWrapper firstSecurityAccountWrapper = investmentAccountWrapper.getSecurityAccountWrappers().get(0);
-//            createAndShowSecurityEditorForm(firstSecurityAccountWrapper, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -247,10 +223,20 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
         currencyType.setTickerSymbol(newTicker);
         securityAccount.setSecurityType(newSecurityType);
         securityAccount.setSecuritySubType(newSecuritySubType);
-//        TODO: Fix security Wrapper Update
-//        rootAccount.accountModified(securityAccount);
-//        rootAccount.currencyTableModified(currencyTable);
+        syncAccountBook(securityAccount, securityAccountWrapper.getAccountBook());
+        syncAccountBook(currencyType, securityAccountWrapper.getAccountBook());
         table.getReportTableModel().fireTableDataChanged();
         this.dispose();
     }
+
+    /**
+     * Syncs account book after making a change
+     * @param syncableItem Syncable Item, e.g. Transaction, Account
+     */
+    public static void syncAccountBook(MoneydanceSyncableItem syncableItem, AccountBook accountBook){
+        syncableItem.syncItem();
+        accountBook.save();
+    }
+
+
 }

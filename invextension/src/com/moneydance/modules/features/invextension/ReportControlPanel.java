@@ -118,8 +118,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     public ReportControlPanel(ReportControlFrame reportControlFrame) throws Exception {
         this.reportControlFrame = reportControlFrame;
         boolean runInApplication = reportControlFrame.getExtension() != null;
-        if (runInApplication)
-            root = reportControlFrame.getExtension().getUnprotectedContext().getRootAccount();
+        if (runInApplication) {
+            accountBook = reportControlFrame.getExtension().getUnprotectedContext().getCurrentAccountBook();
+            root = accountBook.getRootAccount();
+        }
+
         initComponents();
         if (runInApplication) reportStatusText.setText("Choose reports to run");
 

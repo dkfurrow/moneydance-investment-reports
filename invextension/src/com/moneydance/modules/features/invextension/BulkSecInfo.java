@@ -257,7 +257,7 @@ public class BulkSecInfo {
      */
     public static String[] loadCurrencySnapshotArray(CurrencyType cur, CurrencySnapshot snapshot) {
         ArrayList<String> currencyInfo = new ArrayList<>();
-        currencyInfo.add(Integer.toString(cur.getID())); // TODO: Change output of currency snapshots
+        currencyInfo.add(cur.getParameter("id"));
         currencyInfo.add(cur.getName());
         if (cur.getTickerSymbol().isEmpty()) {
             currencyInfo.add("NoTicker");

@@ -30,17 +30,24 @@ package com.moneydance.modules.features.invextension;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Diplays contents of ExtractorTotalReturn or ExtractorIRR
  */
-public class ReturnsAuditDisplayFrame extends JFrame {
+public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = -3102906929058309264L;
+    public static final String COPY_CLIPBOARD = "copyClipboard";
+    private String auditString;
     private ExtractorReturnBase extractor;
     private Point location;
     private int maximumHeight;
     private JTextPane textPane;
     private JScrollPane scrollPane;
+    private JButton copyToClipboardButton;
 
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
                                                final Point location, final int maximumHeight){
@@ -58,13 +65,17 @@ public class ReturnsAuditDisplayFrame extends JFrame {
         this.extractor = extractor;
         this.location = location;
         this.maximumHeight = maximumHeight;
+        auditString = extractor.getAuditString();
         initComponents();
     }
 
     private void initComponents(){
+        copyToClipboardButton = new JButton("Copy to Clipboard");
+        copyToClipboardButton. addActionListener(this);
+        copyToClipboardButton.setActionCommand(COPY_CLIPBOARD);
         textPane = new JTextPane();
 //        textPane.setSize(new Dimension(500, 500));
-        textPane.setText("Returns Information: " + extractor.getAuditString());
+        textPane.setText("Returns Information: " + auditString);
         textPane.setCaretPosition(0);
         // make it read-only
         textPane.setEditable(false);
@@ -76,8 +87,11 @@ public class ReturnsAuditDisplayFrame extends JFrame {
 
         this.getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
+        gc.anchor = GridBagConstraints.WEST;
 
         this.setTitle("Return Calculation Elements");
+        this.add(copyToClipboardButton, gc);
+        gc.gridy = 1;
         this.getContentPane().add(scrollPane, gc);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
@@ -87,4 +101,28 @@ public class ReturnsAuditDisplayFrame extends JFrame {
         this.pack();
         this.setVisible(true);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String actionCommand = e.getActionCommand();
+        if (actionCommand.equals(COPY_CLIPBOARD)) {
+            try {
+                copyAuditStringToClipboard();
+            } catch (Exception e1) {
+                LogController.logException(e1, "Error on Copy Audit String to Clipboard: ");
+                JOptionPane.showMessageDialog(this, "Error! See " +
+                                ReportControlPanel.getOutputDirectoryPath() + " for details", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }
+
+    public void copyAuditStringToClipboard() throws Exception {
+
+        StringSelection stsel = new StringSelection(auditString);
+        Clipboard system = Toolkit.getDefaultToolkit().getSystemClipboard();
+        system.setContents(stsel, stsel);
+    }
+
 }
