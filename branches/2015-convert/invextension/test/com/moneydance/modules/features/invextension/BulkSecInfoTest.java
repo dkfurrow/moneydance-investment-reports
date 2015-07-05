@@ -352,9 +352,17 @@ public class BulkSecInfoTest {
                         errorFound = true;
                     }
                 } else {
-                    if (!similarElements(compStr, baseStr, decPlaces, limitPrecision)) {
-                        printErrorMessage(compRpt, baseRpt, i);
-                        errorFound = true;
+                    if (i != 4) {// not transaction id
+                        if (!similarElements(compStr, baseStr, decPlaces, limitPrecision)) {
+                            printErrorMessage(compRpt, baseRpt, i);
+                            errorFound = true;
+                        }
+                    } else { // transaction id, print if unequal, but not error because transactions are
+                        // identified by charactaristic 'hash'
+                        if(!baseStr.equals(compStr)){
+                            System.out.println("Inserted Transaction: " + baseRpt.printElements() + " transction Ids not equal");
+
+                        }
                     }
                 }
             }
@@ -378,14 +386,25 @@ public class BulkSecInfoTest {
 
         @Override
         public int compareTo(@NotNull TransLine t) {
-            Double cDoubleComp = Double.parseDouble(t.getRow()[4]);
-            Double cDoubleThis = Double.parseDouble(this.getRow()[4]);
-            return cDoubleThis.compareTo(cDoubleComp);
+            // because new uuid's are created for initial balance transactions,
+            // must compare by 'hashing' fields together
+            String[] rowComp = t.getRow();
+            String idComp = rowComp[0] + rowComp[1] + rowComp[2] + rowComp[5] + rowComp[7];
+            String[] rowThis = t.getRow();
+            String idThis = rowThis[0] + rowThis[1] + rowThis[2] + rowThis[5] + rowThis[7];
+            return idThis.compareTo(idComp);
         }
 
         private String[] getRow() {
             return this.row;
         }
+
+        public String printElements(){
+            String sep = " : ";
+            return row[0] + sep + row[1] + sep  + row[2] + sep  + row[5] + sep  + row[7];
+        }
+
+
     }
 
     /**
