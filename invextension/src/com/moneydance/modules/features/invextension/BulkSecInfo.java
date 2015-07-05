@@ -369,15 +369,21 @@ public class BulkSecInfo {
      */
     private CurrencyWrapper defineCashCurrency() {
         CurrencyTable currencyTable = accountBook.getCurrencies();
-        int dateInt = DateUtils.convertToDateInt(new Date());
-        CurrencyType cashCurrencyType = new CurrencyType(currencyTable);
-        cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
-        cashCurrencyType.setName("CASH");
-        cashCurrencyType.setTickerSymbol("CASH");
-        cashCurrencyType.setRawRate(1.0, false);
-        cashCurrencyType.setDecimalPlaces(4);
-        // "asof_dt" is parameter to set date (if needed)
-        cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
+        CurrencyType cashCurrencyType = null;
+        if(currencyTable.getCurrencyByTickerSymbol("CASH") == null){
+            cashCurrencyType = new CurrencyType(currencyTable);
+            cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
+            cashCurrencyType.setName("CASH");
+            cashCurrencyType.setTickerSymbol("CASH");
+            cashCurrencyType.setRawRate(1.0, false);
+            cashCurrencyType.setDecimalPlaces(4);
+            cashCurrencyType.setParameter("asof_dt", firstDateInt);
+            cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
+        } else {
+            cashCurrencyType = currencyTable.getCurrencyByTickerSymbol("CASH");
+        }
+        // ensure user rate is 1.0
+        if(cashCurrencyType.getUserRate() != 1.0) cashCurrencyType.setUserRate(1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
         cashCurrencyWrapper.setCash();
         return cashCurrencyWrapper;
