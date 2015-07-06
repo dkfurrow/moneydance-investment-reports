@@ -1182,7 +1182,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     firstSort = cb.getSelectedIndex();
                 }
             });
@@ -1191,7 +1191,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     secondSort = cb.getSelectedIndex();
                 }
             });
@@ -1200,7 +1200,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     thirdSort = cb.getSelectedIndex();
                 }
             });
@@ -1210,7 +1210,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     firstOrder = (SortOrder) cb.getSelectedItem();
                 }
             });
@@ -1219,7 +1219,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     secondOrder = (SortOrder) cb.getSelectedItem();
                 }
             });
@@ -1228,7 +1228,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     @SuppressWarnings("unchecked")
-                    JComboBox cb = (JComboBox) e.getSource();
+                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
                     thirdOrder = (SortOrder) cb.getSelectedItem();
                 }
             });
