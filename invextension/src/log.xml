@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="8 seconds">
+<build time="9 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.8 in: C:\Program Files (x86)\Java\jdk1.8.0_25\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -412,14 +412,14 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="8 seconds">
+	<target name="invextension" time="9 seconds">
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:43: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\dist because it already exists.]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:44: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:48: " name="javac" time="3 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:48: " name="javac" time="2 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AggregationController.java added as com\moneydance\modules\features\invextension\AggregationController.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Aggregator.java added as com\moneydance\modules\features\invextension\Aggregator.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AllAggregate.java added as com\moneydance\modules\features\invextension\AllAggregate.class doesn't exist.]]></message>
@@ -588,43 +588,6 @@ not part of the command.]]></message>
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\XIRR.java
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\XIRRData.java
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1185: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1194: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1203: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1213: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1222: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\com\moneydance\modules\features\invextension\TotalReportOutputPane.java:1231: warning: [rawtypes] found raw type: JComboBox]]></message>
-			<message priority="warn"><![CDATA[                    JComboBox cb = (JComboBox) e.getSource();]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[  missing type arguments for generic class JComboBox<E>]]></message>
-			<message priority="warn"><![CDATA[  where E is a type-variable:]]></message>
-			<message priority="warn"><![CDATA[    E extends Object declared in class JComboBox]]></message>
-			<message priority="warn"><![CDATA[6 warnings]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:53: " name="jar" time="0 seconds">
 			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\dist\invextension.mxt]]></message>
@@ -808,7 +771,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:65: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015\src\build.xml:65: " name="java" time="6 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:

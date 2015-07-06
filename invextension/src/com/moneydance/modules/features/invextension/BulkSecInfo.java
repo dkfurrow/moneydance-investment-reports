@@ -370,7 +370,9 @@ public class BulkSecInfo {
     private CurrencyWrapper defineCashCurrency() {
         CurrencyTable currencyTable = accountBook.getCurrencies();
         CurrencyType cashCurrencyType = null;
-        if(currencyTable.getCurrencyByTickerSymbol("CASH") == null){
+        boolean cashCurrencyAbsent = currencyTable.getCurrencyByTickerSymbol("CASH") == null &&
+                currencyTable.getCurrencyByName("CASH") == null;
+        if(cashCurrencyAbsent){
             cashCurrencyType = new CurrencyType(currencyTable);
             cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
             cashCurrencyType.setName("CASH");
