@@ -48,7 +48,7 @@ public class TestReportOutput2 {
     //
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
-//        Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
+//        Account root = FileUtils.readAccountsFromFile(mdTestFolder, null);
 
 //        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "StandardFTTest");
 //        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);

@@ -41,7 +41,7 @@ public class GenericTestMethods {
     public static final DateRange dateRange = new DateRange(fromDateInt, toDateInt, toDateInt);
 
     public static void main(String[] args) throws Exception {
-//        Account root = FileUtils.readAccountsFromFile(mdTestFile, null);
+//        Account root = FileUtils.readAccountsFromFile(mdTestFolder, null);
 //        BulkSecInfo currentInfo = new BulkSecInfo(root, ReportConfig.getStandardReportConfig(TotalFromToReport.class));
 
 //	listBaseCurrency(currentInfo);

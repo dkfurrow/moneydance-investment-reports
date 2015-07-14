@@ -29,16 +29,15 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
-import com.moneydance.apps.md.controller.io.FileUtils;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.moneydance.apps.md.controller.AccountBookWrapper;
+import com.moneydance.apps.md.controller.io.AccountBookUtil;
 
 import javax.swing.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 
 @SuppressWarnings("unused")
@@ -55,18 +54,18 @@ public class TestReportSpeed extends JFrame {
     //
     //
     private static String testFileStr = "./resources/testMD02.moneydance/root.mdinternal";
-    private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
+    private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test-2015.moneydance";
     private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
     private static final DecimalFormat decFormat = new DecimalFormat("#.000");
     private static LinkedHashMap<String, Date> recordTimes = new LinkedHashMap<>();
     private static final String startTime = "startTime";
-    public static final File mdTestFile = new File(testFileStr1);
+    public static final File mdTestFolder = new File(testFileStr1);
     private static final String tab = "\t";
 
     public static void main(String[] args) throws Exception {
         addRecordTime(startTime);
-        BulkSecInfoTest.MDFileInfo mdFileInfo = BulkSecInfoTest.loadRootAccountFromFolder();
+        BulkSecInfoTest.MDFileInfo mdFileInfo = loadRootAccountFromFolder();
         Account root = mdFileInfo.getRootAccount();
         addRecordTime("fileLoaded");
         BulkSecInfo currentInfo =  new BulkSecInfo(mdFileInfo.getAccountBook(),
@@ -83,6 +82,36 @@ public class TestReportSpeed extends JFrame {
         describeBulkSecInfo(currentInfo);
 
     }
+
+    /**
+     * initializes AccountBook from folder
+     * (note--must use java 1.8--otherwise get
+     * ava.security.NoSuchAlgorithmException: PBKDF2WithHmacSHA512 SecretKeyFactory not available)
+     * @throws Exception
+     */
+    public static BulkSecInfoTest.MDFileInfo loadRootAccountFromFolder() throws Exception {
+
+
+        System.out.println("Test Folder Exists? " + mdTestFolder.isDirectory());
+        System.out.println("Loading Wrapper...");
+        AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdTestFolder);
+
+        // must add this section or get null pointer error
+        ArrayList<File> folderFiles = new ArrayList<>();
+        folderFiles.add(mdTestFolder);
+        AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
+
+        System.out.println("Doing Initial Load of AccountBook...");
+        wrapper.doInitialLoad(null);
+        AccountBook accountBook = wrapper.getBook();
+        int accountCount = accountBook.getRootAccount().getSubAccounts().size();
+        long transactionCount = accountBook.getTransactionSet().getTransactionCount();
+        System.out.println("AccountBook Initialized...Number of Accounts: " + accountCount + ", with "
+                + transactionCount + " transactions");
+        return new BulkSecInfoTest.MDFileInfo(accountBook, accountBook.getRootAccount());
+    }
+
+
 
     @SuppressWarnings("unused")
     public static StringBuffer writeObjectToStringBuffer(Object[][] object) {
