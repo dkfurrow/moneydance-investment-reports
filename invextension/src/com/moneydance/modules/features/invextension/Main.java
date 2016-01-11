@@ -118,7 +118,9 @@ public class Main
     private synchronized void showReportWindow() {
         if (reportWindow == null) {
             try {
-                reportWindow = new ReportControlFrame(this);
+                MDData mdData = MDData.getInstance();
+                mdData.setExtension(this);
+                reportWindow = new ReportControlFrame();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -44,13 +44,17 @@ public class ReportControlFrame
 
 {
     private static final long serialVersionUID = 334888425056725292L;
-    private Main extension;
     private ReportControlPanel reportControlPanel;
+    private boolean runInApplication;
 
 
-    public ReportControlFrame(Main extension) throws Exception {
+    /**
+     * Constructor which initiates from application
+     * @throws Exception
+     */
+    public ReportControlFrame() throws Exception {
         super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
-        this.extension = extension;
+        runInApplication = true;
         reportControlPanel = new ReportControlPanel(this);
         populateReportFrame();
     }
@@ -65,14 +69,14 @@ public class ReportControlFrame
      */
     public ReportControlFrame(File mdFolder) throws Exception {
         super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
-        this.extension = null;
+        runInApplication = false;
         reportControlPanel = new ReportControlPanel(this);
         populateReportFrame();
-        reportControlPanel.loadMDFile(mdFolder);
+        MDData.getInstance().loadMDFile(mdFolder, reportControlPanel);
     }
 
-    public Main getExtension() {
-        return extension;
+    public boolean isRunInApplication(){
+        return runInApplication;
     }
 
     public ReportControlPanel getReportControlPanel() {
@@ -101,8 +105,8 @@ public class ReportControlFrame
     @Override
     public final void processEvent(AWTEvent evt) {
         if (evt.getID() == WindowEvent.WINDOW_CLOSING) {
-            if (extension != null) {
-                extension.closeConsole();
+            if (MDData.getInstance().getExtension() != null) {
+                MDData.getInstance().getExtension().closeConsole();
             } else {
                 goAway();
             }
@@ -115,6 +119,6 @@ public class ReportControlFrame
         reportControlPanel.savePreferences();
         setVisible(false);
         dispose();
-        if (this.extension == null) System.exit(0); //exit if run as headless
+        if (MDData.getInstance().getExtension() == null) System.exit(0); //exit if run as headless
     }
 }

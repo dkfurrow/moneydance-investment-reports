@@ -46,6 +46,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
@@ -57,7 +59,8 @@ import java.util.prefs.BackingStoreException;
  * @version 1.0
  * @since 1.0
  */
-public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener, ItemListener {
+public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
+        ItemListener {
     private static final long serialVersionUID = -7581739722392109525L;
     public static final Dimension OPTIONS_BOX_DIMENSION = new Dimension(400, 20);
     public static final int textFieldWidth = 400;
@@ -78,13 +81,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private static Level logLevel = Level.INFO;
     private ReportControlFrame reportControlFrame;
 
-
-    // Report types
-    private Account root;
-    private AccountBook accountBook;
-    private BulkSecInfo currentInfo = null;
-
-
+    private static MDData mdData = MDData.getInstance();
 
     private JLabel snapReportLabel = new JLabel("Snapshot Reports");
     private JComboBox<String> snapReportComboBox = new JComboBox<>();
@@ -117,15 +114,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
      */
     public ReportControlPanel(ReportControlFrame reportControlFrame) throws Exception {
         this.reportControlFrame = reportControlFrame;
-        boolean runInApplication = reportControlFrame.getExtension() != null;
-        if (runInApplication) {
-            accountBook = reportControlFrame.getExtension().getUnprotectedContext().getCurrentAccountBook();
-            root = accountBook.getRootAccount();
-        }
-
+        if (reportControlFrame.isRunInApplication()) mdData.SetRunInApplication();
         initComponents();
-        if (runInApplication) reportStatusText.setText("Choose reports to run");
-
+        if(reportControlFrame.isRunInApplication()){
+            java.util.List<String> msgs = mdData.getTransactionStatus();
+            msgs.add("Choose Reports to Run");
+            updateStatus(msgs);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -268,8 +263,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         runButtonPanel.add(showHelpFileButton, c);
         c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0;
         c.gridx = 0;
@@ -326,7 +319,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         this.add(reportTabbedPane);
         //set preferences
         setReportConfigInGUI();
-        if(root != null) {
+        if(mdData.getRoot() != null) {
+            //TODO: replace with method
             accountChooserPanel.populateBothAccountLists(reportConfig);
             investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
             investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
@@ -334,6 +328,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
 
 
+    }
+
+    public void setAccountAndFolderSubPanels() throws Exception {
+        accountChooserPanel.populateBothAccountLists(reportConfig);
+        investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
+        investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
+        folderPanel.setOutputDirectory();
     }
 
     private JPanel addVerticalComponents(JComponent[] panelComponents) {
@@ -484,7 +485,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         reportOptionsPanel.setReportConfigInOptionsPanel();
         dateRangePanel.populateDateRangePanel(reportConfig.getDateRange());
         fieldChooserPanel.populateFieldChooser(reportConfig);
-        if (root != null) {
+        if (mdData.getRoot() != null) {
             accountChooserPanel.populateBothAccountLists(reportConfig);
             investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
             investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
@@ -496,12 +497,16 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 + " for details";
     }
 
-
-
-
-    public void loadMDFile(File mdFolder) {
-        new MDFileLoader(mdFolder).execute();
+    void updateStatus(java.util.List<String> msgs) {
+        String output = reportStatusText.getText();
+        for (String msg : msgs) {
+            output += (msg + "\n");
+        }
+        reportStatusText.setText(output);
     }
+
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -643,10 +648,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 this.getPreferredSize().height - 150);
     }
 
-    public Account getRoot() {
-        return root;
-    }
-
     public void setNewReportName(String reportName) {
         Class<? extends TotalReport> reportClass = reportConfig.getReportClass();
         JComboBox<String> comboBox = reportClass == TotalFromToReport.class
@@ -722,63 +723,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    private class MDFileLoader extends SwingWorker<Void, String> {
-        File mdFolder;
-
-        MDFileLoader(File mdFile) {
-            this.mdFolder = mdFile;
-        }
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            try {
-                publish("Loading " + mdFolder.getName());
-                AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
-                // must add this section or get null pointer error
-                ArrayList<File> folderFiles = new ArrayList<>();
-                folderFiles.add(mdFolder);
-                AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
-
-                publish("Doing Initial Load of AccountBook...");
-                wrapper.doInitialLoad(null);
-                accountBook = wrapper.getBook();
-                root = accountBook.getRootAccount();
-
-//                int accountCount = accountBook.getRootAccount().getSubAccounts().size();
-//                long transactionCount = accountBook.getTransactionSet().getTransactionCount();
-//                System.out.println("AccountBook Initialized...Number of Accounts: " + accountCount + ", with "
-//                        + transactionCount + " transactions");
-//
-//
-//                AccountBook accountBook = AccountBook.accountBookForFolder(mdFolder.getParentFile());
-
-                String dataName= "";
-//                FileOpeningContext fileOpeningContext = new FileOpeningContext(dataName, null);
-//                RootAccount rootAccount = FileUtils.readAccountsFromFile(mdFolder, fileOpeningContext);
-//                accountBook.initializeAccounts(rootAccount);
-//                root = accountBook.getRootAccount();
-                folderPanel.setOutputDirectory();
-                accountChooserPanel.populateBothAccountLists(reportConfig);
-                investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
-                investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
-                publish(mdFolder.getName() + " Loaded! Choose Report to run.");
-            } catch (Exception e) {
-                publish("Error! " + mdFolder.getName() + " not loaded!");
-                LogController.logException(e, "Error on Loading MD File: ");
-            }
-            return null;
-        }
-
-        @Override
-        protected void process(java.util.List<String> msgs) {
-            String output = "";
-            for (String msg : msgs) {
-                output += (msg + " ");
-            }
-            reportStatusText.setText(output);
-        }
-
-    }
 
     public class FolderPanel extends JPanel{
         private static final long serialVersionUID = 3037092760394483468L;
@@ -827,8 +771,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             String outputPath = Prefs.REPORT_PREFS.get(Prefs.EXPORT_DIR_PATH, "");
             directoryOutputField.setText(outputPath);
             if (outputPath.length() == 0) {
-                outputPath = root == null ? System.getProperty("user.home") :
-                        accountBook.getRootFolder().getAbsolutePath();
+                outputPath = mdData.getRoot() == null ? System.getProperty("user.home") :
+                        mdData.getAccountBook().getRootFolder().getAbsolutePath();
                 File outputPathFolder = new File(outputPath);
                 if (outputPathFolder.canWrite()) {
                     directoryOutputField.setText(outputPath);
@@ -988,17 +932,18 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             if(transActivityCheckbox.isSelected()) publish("writing transaction data to file\n");
             if(secPricesCheckbox.isSelected()) publish("writing security price data to file\n");
             //load BulkSecInfo...
-            if (root != null) {
+            if (mdData.getRoot() != null) {
                 try {
-                    currentInfo = new BulkSecInfo(accountBook, reportConfig);
+                    mdData.setCurrentInfo(reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
                     publish(showErrorMessage("Error--Could not load securities from data file!"));
                 }
             }
             //Now Run Reports...
-            if (logLevel != Level.SEVERE && currentInfo != null) {
+            if (logLevel != Level.SEVERE && mdData.getCurrentInfo() != null) {
                 try {
+                    BulkSecInfo currentInfo = mdData.getCurrentInfo();
                     if (snapReportComboBox.getSelectedIndex() != 0) {
                         TotalReport report = new TotalSnapshotReport(reportConfig);
                         report.calcReport(currentInfo);

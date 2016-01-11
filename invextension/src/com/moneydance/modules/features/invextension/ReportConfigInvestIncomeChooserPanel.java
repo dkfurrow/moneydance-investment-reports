@@ -51,7 +51,7 @@ public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPan
 
     @Override
     void populateLeftList(ReportConfig reportConfig) {
-        Account root = reportControlPanel.getRoot();
+        Account root = MDData.getInstance().getRoot();
         if (root != null) {
             TreeSet<Account> incomeAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INCOME);
             ArrayList<Account> sortedIncomeAccounts = new ArrayList<>();

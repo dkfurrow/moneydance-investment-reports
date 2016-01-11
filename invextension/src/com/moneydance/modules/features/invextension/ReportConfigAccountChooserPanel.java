@@ -49,7 +49,6 @@ import java.util.TreeSet;
 public class ReportConfigAccountChooserPanel extends JPanel {
 
     private static final long serialVersionUID = -8990699863699414946L;
-    private Account root;
     private ReportControlPanel reportControlPanel;
 
     //JLists
@@ -76,15 +75,15 @@ public class ReportConfigAccountChooserPanel extends JPanel {
 
     @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception {
-        Class<? extends TotalReport> reportClass = TotalSnapshotReport.class;
-        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(reportClass);
-        ReportConfigAccountChooserPanel testPanel = new ReportConfigAccountChooserPanel();
-        String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
-        String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
-        File mdFile = new File(testFileStr2);
-        testPanel.root = FileUtils.readAccountsFromFile(mdFile, null);
-        testPanel.populateBothAccountLists(reportConfig);
-        ReportControlPanel.TestFrame frame = new ReportControlPanel.TestFrame(testPanel);
+//        Class<? extends TotalReport> reportClass = TotalSnapshotReport.class;
+//        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(reportClass);
+//        ReportConfigAccountChooserPanel testPanel = new ReportConfigAccountChooserPanel();
+//        String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
+//        String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
+//        File mdFile = new File(testFileStr2);
+//        testPanel.root = FileUtils.readAccountsFromFile(mdFile, null);
+//        testPanel.populateBothAccountLists(reportConfig);
+//        ReportControlPanel.TestFrame frame = new ReportControlPanel.TestFrame(testPanel);
     }
 
     private void initComponents() {
@@ -154,7 +153,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         boolean hideInactiveAccountsRemoved = true;
         HashSet<Account> hideInactiveAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
+                = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
 
         for (Account investmentAccount : investmentAccountSet) {
             if (investmentAccount.getAccountIsInactive()) hideInactiveAccounts.add(investmentAccount);
@@ -173,7 +172,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         boolean hideOnHomePageAccountsRemoved = true;
         HashSet<Account> hideOnHomePageAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
+                = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
 
         for (Account investmentAccount : investmentAccountSet) {
             if (investmentAccount.getHideOnHomePage()) hideOnHomePageAccounts.add(investmentAccount);
@@ -224,10 +223,9 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     }
 
     private void populateAvailableAccountsList() throws Exception {
-        if (root == null) root = reportControlPanel.getRoot();
-        if (root != null) {
+        if (MDData.getInstance().getRoot() != null) {
             TreeSet<Account> investmentAccountSet
-                    = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
+                    = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
 
             for (Account investmentAccount : investmentAccountSet) {
                 availableAccountsListModel.addElement(investmentAccount);
