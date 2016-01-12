@@ -28,10 +28,6 @@
 
 package com.moneydance.modules.features.invextension;
 
-import com.infinitekind.moneydance.model.Account;
-import com.infinitekind.moneydance.model.AccountBook;
-import com.moneydance.apps.md.controller.AccountBookWrapper;
-import com.moneydance.apps.md.controller.io.AccountBookUtil;
 import com.moneydance.awt.AwtUtil;
 
 import javax.swing.*;
@@ -46,6 +42,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -60,7 +57,7 @@ import java.util.prefs.BackingStoreException;
  * @since 1.0
  */
 public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
-        ItemListener {
+        ItemListener, Observer {
     private static final long serialVersionUID = -7581739722392109525L;
     public static final Dimension OPTIONS_BOX_DIMENSION = new Dimension(400, 20);
     public static final int textFieldWidth = 400;
@@ -117,6 +114,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         if (reportControlFrame.isRunInApplication()) mdData.SetRunInApplication();
         initComponents();
         if(reportControlFrame.isRunInApplication()){
+            mdData.getLastTransactionDate().addObserver(this);
+            mdData.startTransactionMonitorThread();
             java.util.List<String> msgs = mdData.getTransactionStatus();
             msgs.add("Choose Reports to Run");
             updateStatus(msgs);
@@ -320,11 +319,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         //set preferences
         setReportConfigInGUI();
         if(mdData.getRoot() != null) {
-            //TODO: replace with method
-            accountChooserPanel.populateBothAccountLists(reportConfig);
-            investmentIncomeChooserPanel.populateBothIncomeLists(reportConfig);
-            investmentExpenseChooserPanel.populateBothExpenseLists(reportConfig);
-            folderPanel.setOutputDirectory();
+            setAccountAndFolderSubPanels();
         }
 
 
@@ -664,6 +659,20 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             comboBox.addItem(reportName);
             comboBox.setSelectedItem(reportName);
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o instanceof MDData.ObservableLastTransactionDate){
+            MDData.ObservableLastTransactionDate lastTransactionDate = (MDData.ObservableLastTransactionDate) o;
+            java.util.List<String> msgs = new ArrayList<>();
+            Date previousLastDate = lastTransactionDate.getPreviousLastTransactionDate();
+            Date currentLastDate = lastTransactionDate.getLastTransactionDate();
+            msgs.add("Previous last Transaction Date" + MDData.DATE_PATTERN_LONG.format(previousLastDate));
+            msgs.add("Current last Transaction Date" + MDData.DATE_PATTERN_LONG.format(currentLastDate));
+            updateStatus(msgs);
+        }
+
     }
 
     public static class TestFrame extends JFrame {

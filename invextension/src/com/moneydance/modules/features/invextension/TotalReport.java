@@ -263,11 +263,11 @@ public abstract class TotalReport {
         }
     }
 
+
+
     public void displayReport() throws SecurityException,
             IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {
-
-
         TotalReportOutputPane.createAndShowTable(this);
     }
 
@@ -283,7 +283,7 @@ public abstract class TotalReport {
          * Class provides a generic TableModel which receives data from the
          * reporting methods above.
          */
-    public static class ReportTableModel extends AbstractTableModel {
+    public class ReportTableModel extends AbstractTableModel {
         private static final long serialVersionUID = -3662731131946834218L;
         public String[] columnNames;
         public Object[][] data;
