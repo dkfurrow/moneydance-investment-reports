@@ -29,7 +29,6 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
-import com.moneydance.apps.md.controller.io.FileUtils;
 
 import javax.swing.*;
 import java.io.File;
@@ -37,7 +36,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 
 
 @SuppressWarnings("unused")
@@ -81,8 +79,8 @@ public class CheckReportStability extends JFrame {
         reportConfig.setAllIncomeAccountsToInvestment(root);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
 //        System.out.println(reportConfig.toString());
-        TotalReport report = new TotalSnapshotReport(reportConfig);
-        report.calcReport(currentInfo);
+        TotalReport report = new TotalSnapshotReport(reportConfig, currentInfo);
+        report.calcReport();
         Object[][] reportObject = report.getReportTable();
         printSelectedData(reportObject);
     }

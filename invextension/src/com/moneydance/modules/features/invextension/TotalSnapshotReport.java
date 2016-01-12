@@ -58,12 +58,8 @@ public class TotalSnapshotReport extends TotalReport {
             ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2};
 
-    private ReportConfig reportConfig;
-
-    public TotalSnapshotReport(ReportConfig reportConfig) throws Exception {
-        super(reportConfig, COL_TYPES, MODEL_HEADER);
-
-        this.reportConfig = reportConfig;
+    public TotalSnapshotReport(ReportConfig reportConfig, BulkSecInfo currentInfo) throws Exception {
+        super(reportConfig, currentInfo, COL_TYPES, MODEL_HEADER);
     }
 
     @Override

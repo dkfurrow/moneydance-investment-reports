@@ -29,7 +29,6 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
-import com.moneydance.apps.md.controller.io.FileUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -57,16 +56,16 @@ public class IncludeExcludeAccountsTest {
         reportConfig.setDateRange(testDateRange);
         reportConfig.setAllExpenseAccountsToInvestment(root);
         reportConfig.setAllIncomeAccountsToInvestment(root);
-        TotalReport report = new TotalFromToReport(reportConfig);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
-        report.calcReport(currentInfo);
+        TotalReport report = new TotalFromToReport(reportConfig, currentInfo);
+        report.calcReport();
         IncludeExcludeAccountsTest.baseReportObject = report.getReportTable();
 
         reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
         reportConfig.setDateRange(testDateRange);
-        report = new TotalFromToReport(reportConfig);
+        report = new TotalFromToReport(reportConfig, currentInfo);
         currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
-        report.calcReport(currentInfo);
+        report.calcReport();
         compareCashAccounts(report.getReportTable());
     }
 

@@ -952,27 +952,28 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             //Now Run Reports...
             if (logLevel != Level.SEVERE && mdData.getCurrentInfo() != null) {
                 try {
-                    BulkSecInfo currentInfo = mdData.getCurrentInfo();
                     if (snapReportComboBox.getSelectedIndex() != 0) {
-                        TotalReport report = new TotalSnapshotReport(reportConfig);
-                        report.calcReport(currentInfo);
+                        TotalReport report = new TotalSnapshotReport(reportConfig, MDData
+                                .getInstance().getCurrentInfo());
+                        report.calcReport();
                         report.displayReport();
                     }
                     if (fromToReportComboBox.getSelectedIndex() != 0) {
-                        TotalReport report = new TotalFromToReport(reportConfig);
-                        report.calcReport(currentInfo);
+                        TotalReport report = new TotalFromToReport(reportConfig, MDData.
+                                getInstance().getCurrentInfo());
+                        report.calcReport();
                         report.displayReport();
                     }
                     if (transActivityCheckbox.isSelected()) {
                         ArrayList<String[]> transActivityReport
-                                = currentInfo.listAllTransValues(currentInfo.getInvestmentWrappers());
+                                = MDData.getInstance().getCurrentInfo().listAllTransValues();
                         File transActivityReportFile = getOutputFile("transActivityReport.csv");
                         IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
                                 transActivityReport, transActivityReportFile);
                     }
                     if (secPricesCheckbox.isSelected()) {
                         ArrayList<String[]> secPricesReport
-                                = BulkSecInfo.ListAllCurrenciesInfo(currentInfo.getCurrencyWrappers());
+                                = MDData.getInstance().getCurrentInfo().ListAllCurrenciesInfo();
                         File secPricesReportFile = getOutputFile("secPricesReport.csv");
                         IOUtils.writeArrayListToCSV(BulkSecInfo.listCurrencySnapshotHeader(),
                                 secPricesReport, secPricesReportFile);

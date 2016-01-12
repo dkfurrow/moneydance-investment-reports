@@ -235,11 +235,10 @@ public class BulkSecInfo {
      *
      * @return ArrayList of String Arrays
      */
-    public static ArrayList<String[]> ListAllCurrenciesInfo(
-            HashMap<String, CurrencyWrapper> theseCurs) {
+    public ArrayList<String[]> ListAllCurrenciesInfo() {
         ArrayList<String[]> currInfo = new ArrayList<>();
 
-        for (CurrencyWrapper curWrapper : theseCurs.values()) {
+        for (CurrencyWrapper curWrapper : currencyWrappers.values()) {
             List<CurrencySnapshot> snapshots = curWrapper.currencyType.getSnapshots();
             for (int i = 0; i < snapshots.size(); i++) {
                 currInfo.add(loadCurrencySnapshotArray(curWrapper.currencyType, snapshots.get(i)));
@@ -348,15 +347,13 @@ public class BulkSecInfo {
     /**
      * lists all TransactionValues in InvestmentAccountWrappers
      *
-     * @param investmentAccountWrappers Hash set of investment account wrappers
      * @return ArrayList of String Arrays with values
      * @throws Exception
      */
-    public ArrayList<String[]> listAllTransValues(
-            HashSet<InvestmentAccountWrapper> investmentAccountWrappers) throws Exception {
+    public ArrayList<String[]> listAllTransValues() throws Exception {
         ArrayList<String[]> transactionsInfo = new ArrayList<>();
 
-        for (InvestmentAccountWrapper investmentAccountWrapper : investmentAccountWrappers) {
+        for (InvestmentAccountWrapper investmentAccountWrapper : investmentWrappers) {
             transactionsInfo.addAll(investmentAccountWrapper.listTransValuesInfo());
         }
         return transactionsInfo;

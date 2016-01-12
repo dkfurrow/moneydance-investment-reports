@@ -257,7 +257,7 @@ public class MDData {
 
     }
 
-    private class CurrencyData implements Comparable{
+    private static class CurrencyData implements Comparable<CurrencyData>{
         CurrencyType currencyType;
         TreeSet<Date> dates;
 
@@ -267,8 +267,7 @@ public class MDData {
         }
 
         @Override
-        public int compareTo(Object o) {
-            CurrencyData otherCurrency = (CurrencyData) o;
+        public int compareTo(CurrencyData otherCurrency) {
             return currencyType.getIDString().compareTo(otherCurrency.currencyType.getIDString());
         }
     }

@@ -29,7 +29,6 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
-import com.moneydance.apps.md.controller.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -97,7 +96,7 @@ public class TestReportStability extends JFrame {
         //initialize comparison object
         TotalReport report = (TotalReport) reportClass.getDeclaredConstructors()[0].newInstance(reportConfig);
         modelHeader = report.getModelHeader();
-        report.calcReport(currentInfo);
+        report.calcReport();
         Object[][] reportObject = report.getReportTable();
         reportLineQuantity = reportObject.length;
         reportLineLength = reportObject[0].length;
@@ -107,7 +106,7 @@ public class TestReportStability extends JFrame {
 
     public static void runReport(int iterationCount) throws Exception {
         TotalReport report = (TotalReport) reportClass.getDeclaredConstructors()[0].newInstance(reportConfig);
-        report.calcReport(currentInfo);
+        report.calcReport();
         Object[][] initialReportObject = report.getReportTable();
         Object[][] sortedReportObject = sortReportObject(initialReportObject);
         for (int i = 0; i < reportLineQuantity; i++) {

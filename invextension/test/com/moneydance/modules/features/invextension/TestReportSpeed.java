@@ -73,8 +73,8 @@ public class TestReportSpeed extends JFrame {
         addRecordTime("bulkInfoLoaded");
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
         reportConfig.setDateRange(testDateRange);
-        TotalReport report = new TotalSnapshotReport(reportConfig);
-        report.calcReport(currentInfo);
+        TotalReport report = new TotalSnapshotReport(reportConfig, currentInfo);
+        report.calcReport();
         addRecordTime("reportCalculated");
         report.displayReport();
         addRecordTime("endProcess");

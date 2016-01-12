@@ -56,12 +56,14 @@ public abstract class TotalReport {
     private Boolean outputSingle; // indicates a composite report with only one security report will print
     private LinkedList<String> modelHeader;
     private LinkedList<Integer> viewHeader;
-    private ReportConfig reportConfig;
+    protected ReportConfig reportConfig;
+    private BulkSecInfo currentInfo;
     private ColType[] colTypes;
 
-    public TotalReport(ReportConfig reportConfig, ColType[] colTypes,
+    public TotalReport(ReportConfig reportConfig, BulkSecInfo currentInfo, ColType[] colTypes,
                        LinkedList<String> modelHeader) throws Exception {
         this.reportConfig = reportConfig;
+        this.currentInfo = currentInfo;
         this.aggregationController = reportConfig.getAggregationController();
         this.outputSingle = reportConfig.isOutputSingle();
         this.numFrozenColumns = reportConfig.getNumFrozenColumns();
@@ -227,7 +229,7 @@ public abstract class TotalReport {
         return getModelHeader().indexOf(aggregationController.getSecondAggregator().getColumnName());
     }
 
-    public void calcReport(BulkSecInfo currentInfo) {
+    public void calcReport() {
 
         //produce all leaf-level Security Reports
         for (InvestmentAccountWrapper invWrapper : currentInfo.getInvestmentWrappers()) {

@@ -253,8 +253,7 @@ public class BulkSecInfoTest {
      * @throws Exception
      */
     private static ArrayList<TransLine> readStringArrayIntoTransLine(BulkSecInfo currentInfo) throws Exception {
-        ArrayList<String[]> transActivityReport
-                = currentInfo.listAllTransValues(currentInfo.getInvestmentWrappers());
+        ArrayList<String[]> transActivityReport = currentInfo.listAllTransValues();
         ArrayList<TransLine> outputTransAL = new ArrayList<>();
         for (String[] row : transActivityReport) {
             TransLine line = new TransLine(row);

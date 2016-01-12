@@ -211,8 +211,8 @@ public class ReportProdTest {
                 ReportConfig.getDefaultInvestmentIncomeAccounts(),  dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
         reportConfig.setAllIncomeAccountsToInvestment(currentInfo.getRoot());
-        TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
-        fromToReport.calcReport(currentInfo);
+        TotalFromToReport fromToReport = new TotalFromToReport(reportConfig, currentInfo);
+        fromToReport.calcReport();
         Object[][] ftObj = fromToReport.getReportTable();
         ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftObj);
         ArrayList<ReportLine> ftBase = readCSVIntoRptLine(ftBaseFile);
@@ -246,8 +246,8 @@ public class ReportProdTest {
                 ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                 ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
-        TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
-        snapshotReport.calcReport(currentInfo);
+        TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig, currentInfo);
+        snapshotReport.calcReport();
         Object[][] snapObj = snapshotReport.getReportTable();
         ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapObj);
         ArrayList<ReportLine> snapBase = readCSVIntoRptLine(snapBaseFile);
@@ -280,8 +280,8 @@ public class ReportProdTest {
                 ReportConfig.getDefaultInvestmentIncomeAccounts(), dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
         reportConfig.setAllIncomeAccountsToInvestment(currentInfo.getRoot());
-        TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig);
-        snapshotReport.calcReport(currentInfo);
+        TotalSnapshotReport snapshotReport = new TotalSnapshotReport(reportConfig, currentInfo);
+        snapshotReport.calcReport();
         Object[][] snapValues = snapshotReport.getReportTable();
         ArrayList<ReportLine> snapTest = readObjArrayIntoRptLine(snapValues);
         DateRange thisDateRange = dateRange;
@@ -304,8 +304,8 @@ public class ReportProdTest {
                     ReportConfig.getDefaultViewHeader(TotalFromToReport.MODEL_HEADER),
                     ReportConfig.getDefaultExcludedAccounts(), ReportConfig.getDefaultInvestmentExpenseAccounts(),
                     ReportConfig.getDefaultInvestmentIncomeAccounts(),dateRange);
-            TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
-            fromToReport.calcReport(currentInfo);
+            TotalFromToReport fromToReport = new TotalFromToReport(reportConfig, currentInfo);
+            fromToReport.calcReport();
             Object[][] ftValues = fromToReport.getReportTable();
             ArrayList<ReportLine> ftTest = readObjArrayIntoRptLine(ftValues);
             switch (retCat) {

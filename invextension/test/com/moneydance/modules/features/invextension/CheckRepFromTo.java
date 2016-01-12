@@ -56,8 +56,8 @@ public class CheckRepFromTo {
                 ReportConfig.getDefaultInvestmentIncomeAccounts(),dateRange);
         reportConfig.setAllExpenseAccountsToInvestment(currentInfo.getRoot());
         reportConfig.setAllIncomeAccountsToInvestment(currentInfo.getRoot());
-        TotalFromToReport fromToReport = new TotalFromToReport(reportConfig);
-        fromToReport.calcReport(currentInfo);
+        TotalFromToReport fromToReport = new TotalFromToReport(reportConfig, currentInfo);
+        fromToReport.calcReport();
         ArrayList<ComponentReport> componentReports = fromToReport.getReports();
         for (ComponentReport componentReport : componentReports) {
             printFromTo(componentReport);
