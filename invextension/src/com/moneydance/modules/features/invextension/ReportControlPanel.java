@@ -111,11 +111,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
      */
     public ReportControlPanel(ReportControlFrame reportControlFrame) throws Exception {
         this.reportControlFrame = reportControlFrame;
-        if (reportControlFrame.isRunInApplication()) mdData.SetRunInApplication();
+        if (reportControlFrame.isRunInApplication()) mdData.initializeMDDataInApplication();
         initComponents();
         if(reportControlFrame.isRunInApplication()){
-            mdData.getLastTransactionDate().addObserver(this);
-            mdData.startTransactionMonitorThread();
+              //TODO: Remove
+//            mdData.getLastTransactionDate().addObserver(this);
+//            mdData.startTransactionMonitorThread();
             java.util.List<String> msgs = mdData.getTransactionStatus();
             msgs.add("Choose Reports to Run");
             updateStatus(msgs);

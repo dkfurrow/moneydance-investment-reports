@@ -32,11 +32,15 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Handle external controls for TotalReportOutputPane
  */
-class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener {
+class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, Observer {
     public static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     public static final String SORT_ROWS = "sortRows";
     public static final String COPY_CLIPBOARD = "copyClipboard";
@@ -50,6 +54,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     JButton sortButton;
     JButton switchReturnTypeButton;
     JButton copyToClipboardButton;
+    JCheckBox refreshPricesBox;
+    Date lastPriceUpdateOnSelection;
     private boolean returnTypeSwitched = false;
 
 
@@ -76,6 +82,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         switchReturnTypeButton = new JButton();
         switchReturnTypes(true);
         copyToClipboardButton = new JButton("Copy Table to Clipboard");
+        refreshPricesBox = new JCheckBox("Refresh Security Prices");
+        refreshPricesBox.setToolTipText("Run Yahoo Quotes Update Extension Every 10 minutes, refresh");
         JLabel editInstructionLabel = new JLabel("Double-Click Security to Edit Properties");
         editInstructionLabel.setFont(editInstructionLabel.getFont().deriveFont(Font.ITALIC, 10));
 
@@ -100,8 +108,9 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         copyToClipboardButton.addActionListener(this);
         copyToClipboardButton.setActionCommand(COPY_CLIPBOARD);
 
-        hideClosedBox.addItemListener(this);
+        refreshPricesBox.addItemListener(this);
 
+        hideClosedBox.addItemListener(this);
 
         freezeColsPanel.add(freezeColsLabel);
         freezeColsPanel.add(freezeColsBox);
@@ -120,6 +129,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         controlPanel.add(switchReturnTypeButton, c);
         c.gridx++;
         controlPanel.add(copyToClipboardButton, c);
+        c.gridx++;
+        controlPanel.add(refreshPricesBox, c);
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 4;
@@ -190,6 +201,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             if (actionCommand.equals(COPY_CLIPBOARD)) {
                 totalReportOutputPane.copyTableToClipboard();
             }
+
         } catch (Exception e1) {
             LogController.logException(e1, "Error on Report Output Pane: ");
             JOptionPane.showMessageDialog(this, "Error! See " +
@@ -206,6 +218,48 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             totalReportOutputPane.setFrozenColumns(0); // repaint doesn't work properly w/o this line
             totalReportOutputPane.setFrozenColumns(freezeColsBox.getSelectedIndex());
         }
+        if (e.getSource().equals(refreshPricesBox)){
+            String addText = "";
+            MDData mdData = MDData.getInstance();
+            if(e.getStateChange() == ItemEvent.SELECTED){
+                mdData.getLastTransactionDate().addObserver(this);
+                mdData.startTransactionMonitorThread();
+                addText = " Selected!"; //TODO: Remove after debug
+                lastPriceUpdateOnSelection = mdData.getLastPriceUpdatedDate();
+            } else {
+                mdData.getLastTransactionDate().deleteObserver(this);
+                mdData.stopTransactionMonitorThread();
+                addText = " De-Selected!"; //TODO: Remove after debug
+
+            }
+            this.setTitle(frameText + addText);//TODO: Remove after debug
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) { //TODO: Remove
+        try {
+            if(o instanceof MDData.ObservableLastTransactionDate){
+                StringBuilder msg = new StringBuilder();
+                MDData.ObservableLastTransactionDate lastTransactionDate = (MDData.ObservableLastTransactionDate) o;
+                Date previousLastDate = lastTransactionDate.getPreviousLastTransactionDate();
+                Date currentLastDate = lastTransactionDate.getLastTransactionDate();
+                msg.append("New Transaction: ");
+                MDData mdData = MDData.getInstance();
+                mdData.reloadMDData();
+                Date newLastPriceDate = mdData.getLastPriceUpdatedDate();
+                boolean reloadReport = newLastPriceDate.after(lastPriceUpdateOnSelection);
+                System.out.println("Reload Report: " + reloadReport);
+                if(reloadReport){
+                    String msg1 = "New Price Date " + MDData.DATE_PATTERN_LONG.format(newLastPriceDate);
+                    msg.append(msg1);
+                }
+                setTitle(msg.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     class OutputFrameWindowAdapter extends WindowAdapter {

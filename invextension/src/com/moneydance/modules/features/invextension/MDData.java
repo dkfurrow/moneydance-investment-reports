@@ -17,15 +17,17 @@ import java.util.*;
  * Singgleton Class holds all Moneydance Data
  */
 public class MDData {
+    File mdFolder;
     private FeatureModuleContext featureModuleContext;
     private AccountBook accountBook;
     private Account root;
     private BulkSecInfo currentInfo;
     private ObservableLastTransactionDate lastTransactionDate;
     private Calendar lastYahooqtUpdate;
-    private TreeMap<CurrencyData, Date> currencyUpdateMap = new TreeMap<>();
+    private Date lastPriceUpdateDate;
     private Main extension;
     private Thread transactionMonitorThread;
+    private volatile boolean shutdown = false;
     private static MDData uniqueInstance;
     public static final DateFormat DATE_PATTERN_LONG =  DateFormat.getDateTimeInstance
             (DateFormat.LONG, DateFormat.LONG);
@@ -83,6 +85,11 @@ public class MDData {
         transactionMonitorThread.start();
     }
 
+    public void stopTransactionMonitorThread(){
+        shutdown = true;
+    }
+
+
 
     public void setRoot(Account root) {
         this.root = root;
@@ -105,19 +112,18 @@ public class MDData {
         }
     }
 
-    public void getCurrencyUpdateMap() {
+    public Date getLastPriceUpdatedDate() {
         java.util.List<CurrencyType> currencies = accountBook
                 .getCurrencies().getAllCurrencies();
+        TreeSet<Date> priceUpdateSet = new TreeSet<>();
         for (CurrencyType currency : currencies) {
             String priceDateStr = currency.getParameter("price_date");
             if (priceDateStr != null) {
                 Date priceDate = new Date(Long.parseLong(priceDateStr));
-                if (updatedOnLastYahooQt(priceDate)) {
-                    currencyUpdateMap.put(new CurrencyData(currency), priceDate);
-                }
+                priceUpdateSet.add(priceDate);
             }
         }
-
+        return Collections.max(priceUpdateSet);
     }
 
     public Boolean updatedOnLastYahooQt(Date date){
@@ -153,16 +159,17 @@ public class MDData {
         }
     }
 
+
+
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
         msgs.add("Last Modified Txn: " + DATE_PATTERN_LONG.format
                 (lastTransactionDate.getLastTransactionDate()));
         if(lastYahooqtUpdate != null){
             msgs.add("YahooQuote last Update: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdate.getTime()));
-            getCurrencyUpdateMap();
-            Date maxDate = Collections.max(currencyUpdateMap.values());
+            getLastPriceUpdatedDate();
             msgs.add("YahooQuote latest Security Price: " +
-                    DATE_PATTERN_LONG.format(maxDate));
+                    DATE_PATTERN_LONG.format(lastPriceUpdateDate));
         } else {
             msgs.add("YahooQuote last Update: " + "NOT USED");
         }
@@ -178,17 +185,40 @@ public class MDData {
         System.out.print("Synced: " + synced);
     }
 
-    public void SetRunInApplication() {
+    public void initializeMDDataInApplication() {
         featureModuleContext = extension.getUnprotectedContext();
         accountBook = featureModuleContext.getCurrentAccountBook();
         root = accountBook.getRootAccount();
         lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
         getLastYahooUpdateDate();
-        if(lastYahooqtUpdate != null) getCurrencyUpdateMap();
+        if(lastYahooqtUpdate != null) lastPriceUpdateDate = getLastPriceUpdatedDate();
+    }
+
+    protected void initializeMDDataHeadless() throws Exception{
+        AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
+        // must add this section or get null pointer error
+        ArrayList<File> folderFiles = new ArrayList<>();
+        folderFiles.add(mdFolder);
+        AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
+        wrapper.doInitialLoad(null);
+        featureModuleContext = null;
+        accountBook = wrapper.getBook();
+        root = accountBook.getRootAccount();
+        lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
+        getLastYahooUpdateDate();
+        if(lastYahooqtUpdate != null) lastPriceUpdateDate = getLastPriceUpdatedDate();
     }
 
     public void loadMDFile(File mdFolder, ReportControlPanel reportControlPanel) {
         new MDFileLoader(mdFolder, reportControlPanel).execute();
+    }
+
+    public void reloadMDData() throws Exception {
+        if(featureModuleContext != null){
+            initializeMDDataInApplication();
+        } else {
+            initializeMDDataHeadless();
+        }
     }
 
     public static class ObservableLastTransactionDate extends Observable{
@@ -231,7 +261,7 @@ public class MDData {
 
         @Override
         public void run() {
-            while (true) {
+            while (!shutdown) {
                 Date latestTransactionDate = getLastTransactionModified();
                 boolean newTransaction = lastTransactionDate.isNewTransactionDate(latestTransactionDate);
                 try {
@@ -273,11 +303,11 @@ public class MDData {
     }
 
     private class MDFileLoader extends SwingWorker<Void, String> {
-        File mdFolder;
+
         ReportControlPanel reportControlPanel;
 
-        MDFileLoader(File mdFile, ReportControlPanel reportControlPanel) {
-            this.mdFolder = mdFile;
+        MDFileLoader(File mdFolder, ReportControlPanel reportControlPanel) {
+            MDData.this.mdFolder = mdFolder;
             this.reportControlPanel = reportControlPanel;
         }
 
@@ -285,27 +315,12 @@ public class MDData {
         protected Void doInBackground() throws Exception {
             try {
                 publish("Loading " + mdFolder.getName());
-                AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
-                // must add this section or get null pointer error
-                ArrayList<File> folderFiles = new ArrayList<>();
-                folderFiles.add(mdFolder);
-                AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
-
-                publish("Doing Initial Load of AccountBook...");
-                wrapper.doInitialLoad(null);
-                accountBook = wrapper.getBook();
-                root = accountBook.getRootAccount();
-
-                lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
-                getLastYahooUpdateDate();
-                if(lastYahooqtUpdate != null) getCurrencyUpdateMap();
+                initializeMDDataHeadless();
                 for (String msg:getTransactionStatus()){
                     publish(msg);
                 }
                 reportControlPanel.setAccountAndFolderSubPanels();
                 publish(mdFolder.getName() + " Loaded! Choose Report to run.");
-                lastTransactionDate.addObserver(reportControlPanel);
-                startTransactionMonitorThread();
 
             } catch (Exception e) {
                 publish("Error! " + mdFolder.getName() + " not loaded!");
