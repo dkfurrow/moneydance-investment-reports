@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Singgleton Class holds all Moneydance Data
@@ -24,8 +23,9 @@ public class MDData {
     private Account root;
     private BulkSecInfo currentInfo;
     private ObservableLastTransactionDate lastTransactionDate;
-    private Calendar lastYahooqtUpdate;
-    private Date lastPriceUpdateDate;
+    private Calendar lastYahooqtUpdateDate;
+    private Date lastPriceUpdateTime;
+    private HashMap<String, Double> userRateMap = new HashMap<>();
     private Main extension;
     private Thread transactionMonitorThread;
     private volatile boolean shutdown = false;
@@ -34,6 +34,8 @@ public class MDData {
             (DateFormat.LONG, DateFormat.LONG);
     public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
             (DateFormat.SHORT, Locale.getDefault());
+    public static final DateFormat DATE_PATTERN_MEDIUM =  DateFormat.getDateTimeInstance
+            (DateFormat.MEDIUM, DateFormat.MEDIUM);
 
 
     /**
@@ -71,8 +73,8 @@ public class MDData {
         return extension;
     }
 
-    public void setCurrentInfo(ReportConfig reportConfig) throws Exception {
-        if(accountBook == null) throw new Exception("Call to setCurrentInfo, but account book is null");
+    public void generateCurrentInfo(ReportConfig reportConfig) throws Exception {
+        if(accountBook == null) throw new Exception("Call to generateCurrentInfo, but account book is null");
         this.currentInfo = new BulkSecInfo(accountBook, reportConfig);
     }
 
@@ -108,35 +110,41 @@ public class MDData {
         }
     }
 
-    public Date getLastPriceUpdatedDate() {
+    public void generateCurrentPriceData() {
         java.util.List<CurrencyType> currencies = accountBook
                 .getCurrencies().getAllCurrencies();
-        TreeSet<Date> priceUpdateSet = new TreeSet<>();
+        long maxDateTime = 0L;
         for (CurrencyType currency : currencies) {
             String priceDateStr = currency.getParameter("price_date");
+            String currencyID = currency.getParameter("id");
+            double decimalPlaces = Math.pow(10.0,(double) currency.getDecimalPlaces());
+            Double userRate = (double) Math.round(currency.getUserRate() * decimalPlaces) / decimalPlaces;
             if (priceDateStr != null) {
-                Date priceDate = new Date(Long.parseLong(priceDateStr));
-                priceUpdateSet.add(priceDate);
+                Long priceDateLong = Long.parseLong(priceDateStr);
+                maxDateTime = Math.max(maxDateTime, priceDateLong);
+            }
+            if(currencyID!= null && userRate!= null){
+                userRateMap.put(currencyID, userRate);
             }
         }
-        return Collections.max(priceUpdateSet);
+        lastPriceUpdateTime =  new Date(maxDateTime);
     }
 
     public Boolean updatedOnLastYahooQt(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        return lastYahooqtUpdate.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
-                lastYahooqtUpdate.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR);
+        return lastYahooqtUpdateDate.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
+                lastYahooqtUpdateDate.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR);
     }
 
-    public void getLastYahooUpdateDate(){
+    public void generateLastYahooUpdateDate(){
         Integer lastUpdateDate = root.getIntParameter("yahooqt.quoteLastUpdate",0);
         if (lastUpdateDate == 0){
-            lastYahooqtUpdate = null;
+            lastYahooqtUpdateDate = null;
         } else {
             Calendar gc = Calendar.getInstance();
             gc.setTime(DateUtils.convertToDate(lastUpdateDate));
-            lastYahooqtUpdate = gc;
+            lastYahooqtUpdateDate = gc;
         }
     }
 
@@ -155,17 +163,23 @@ public class MDData {
         }
     }
 
+    public Date getLastPriceUpdateTime() {
+        return lastPriceUpdateTime;
+    }
 
+    public HashMap<String, Double> getUserRateMap() {
+        return userRateMap;
+    }
 
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
-        msgs.add("Last Modified Txn: " + DATE_PATTERN_LONG.format
+        msgs.add("MD last modified: " + DATE_PATTERN_LONG.format
                 (lastTransactionDate.getLastTransactionDate()));
-        if(lastYahooqtUpdate != null){
-            msgs.add("YahooQuote last Update: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdate.getTime()));
-            getLastPriceUpdatedDate();
-            msgs.add("YahooQuote latest Security Price: " +
-                    DATE_PATTERN_LONG.format(lastPriceUpdateDate));
+        if(lastYahooqtUpdateDate != null){
+            msgs.add("YahooQuote updated on: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdateDate.getTime()));
+            generateCurrentPriceData();
+            msgs.add("Security latest price updated: " +
+                    DATE_PATTERN_LONG.format(lastPriceUpdateTime));
         } else {
             msgs.add("YahooQuote last Update: " + "NOT USED");
         }
@@ -186,8 +200,8 @@ public class MDData {
         accountBook = featureModuleContext.getCurrentAccountBook();
         root = accountBook.getRootAccount();
         lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
-        getLastYahooUpdateDate();
-        if(lastYahooqtUpdate != null) lastPriceUpdateDate = getLastPriceUpdatedDate();
+        generateLastYahooUpdateDate();
+        if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
 
     }
 
@@ -202,8 +216,8 @@ public class MDData {
         accountBook = wrapper.getBook();
         root = accountBook.getRootAccount();
         lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
-        getLastYahooUpdateDate();
-        if(lastYahooqtUpdate != null) lastPriceUpdateDate = getLastPriceUpdatedDate();
+        generateLastYahooUpdateDate();
+        if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
     }
 
     public void loadMDFile(File mdFolder, ReportControlPanel reportControlPanel) {
@@ -218,6 +232,17 @@ public class MDData {
             initializeMDDataHeadless();
             currentInfo = new BulkSecInfo(accountBook, reportConfig);
         }
+    }
+
+    public boolean hasNewUserRate(HashMap<String, Double> lastUserRateMap) {
+        for (String id: userRateMap.keySet()){
+            Double lastUserRate = lastUserRateMap.get(id);
+            Double currentUserRate = userRateMap.get(id);
+            if(lastUserRate != null && currentUserRate != null){
+                if(currentUserRate != lastUserRate) return true;
+            }
+        }
+        return false;
     }
 
     public static class ObservableLastTransactionDate extends Observable{

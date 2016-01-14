@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="6 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.8 in: C:\Java\jdk1.8.0_45\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -334,19 +334,19 @@
 	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.util.Vector loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamVector]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StreamVector.class]]></message>
-	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamVector loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.io.PrintStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringEncodingException]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StringEncodingException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringEncodingException loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.io.PrintStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringReader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.util.Vector loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamVector]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StreamVector.class]]></message>
+	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamVector loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StreamUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamUtil loaded from ant loader]]></message>
@@ -360,24 +360,24 @@
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuilder loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringUtils]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringUtils loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.List loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NumberFormatException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Double loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormatSymbols loaded from parent loader (parentFirst)]]></message>
@@ -417,7 +417,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="6 seconds">
+	<target name="invextension" time="7 seconds">
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:43: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist because it already exists.]]></message>
 		</task>
@@ -782,7 +782,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="3 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="4 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:

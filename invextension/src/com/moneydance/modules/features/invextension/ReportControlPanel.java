@@ -941,7 +941,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             //load BulkSecInfo...
             if (mdData.getRoot() != null) {
                 try {
-                    mdData.setCurrentInfo(reportConfig);
+                    mdData.generateCurrentInfo(reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
                     publish(showErrorMessage("Error--Could not load securities from data file!"));
