@@ -368,6 +368,10 @@ public class TotalReportOutputPane extends JScrollPane {
         }
     }
 
+    public ReportTableModel getModel(){
+        return model;
+    }
+
     public ReportConfig getReportConfig() {
         return reportConfig;
     }

@@ -33,8 +33,10 @@ import com.moneydance.modules.features.invextension.TotalReportOutputPane.ColTyp
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -265,8 +267,6 @@ public abstract class TotalReport {
         }
     }
 
-
-
     public void displayReport() throws SecurityException,
             IllegalArgumentException, NoSuchFieldException,
             IllegalAccessException {
@@ -300,6 +300,34 @@ public abstract class TotalReport {
             this.data = body;
         }
 
+        public void refreshReport(BulkSecInfo newCurrentInfo) throws Exception{
+            TotalReport.this.securityReports = new HashSet<>();
+            TotalReport.this.compositeReports = new HashSet<>();
+            TotalReport.this.currentInfo = newCurrentInfo;//TODO: Check if needed
+            TotalReport.this.calcReport();
+            Object[][] newData = getReportTable();
+            if(!isSameDimension(newData)) throw new Exception("Error on Refresh--different dimensions!");
+            for (int i = 0; i < data.length; i++){
+                Object [] row = data[i];
+                Object [] newRow = newData[i];
+                for (int j = 0; j < row.length; j++) {
+                    row[j] = newRow[j];
+                }
+            }
+            fireTableDataChanged();
+        }
+
+        private boolean isSameDimension(Object[][] newData){
+            boolean sameDimension = true;
+            if(newData.length != data.length){
+                return false;
+            } else {
+                for (int i = 0; i < data.length; i++){
+                    if(data[i].length != newData[i].length) sameDimension = false;
+                }
+                return  sameDimension;
+            }
+        }
 
         @Override
         public int getColumnCount() {

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Singgleton Class holds all Moneydance Data
@@ -47,12 +48,7 @@ public class MDData {
         return uniqueInstance;
     }
 
-    public void refreshPrices(ReportConfig reportConfig) throws Exception {
-        FeatureModuleContext featureModuleContext = extension.getUnprotectedContext();
-        featureModuleContext.showURL("moneydance:fmodule:yahooqt:update");
-        currentInfo = new BulkSecInfo(accountBook, reportConfig);
 
-    }
 
 
     public AccountBook getAccountBook() {
@@ -80,8 +76,8 @@ public class MDData {
         this.currentInfo = new BulkSecInfo(accountBook, reportConfig);
     }
 
-    public void startTransactionMonitorThread(){
-        transactionMonitorThread = new Thread(new TransactionMonitor());
+    public void startTransactionMonitorThread(ReportConfig reportConfig){
+        transactionMonitorThread = new Thread(new TransactionMonitor(reportConfig));
         transactionMonitorThread.start();
     }
 
@@ -192,6 +188,7 @@ public class MDData {
         lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
         getLastYahooUpdateDate();
         if(lastYahooqtUpdate != null) lastPriceUpdateDate = getLastPriceUpdatedDate();
+
     }
 
     protected void initializeMDDataHeadless() throws Exception{
@@ -213,11 +210,13 @@ public class MDData {
         new MDFileLoader(mdFolder, reportControlPanel).execute();
     }
 
-    public void reloadMDData() throws Exception {
+    public void reloadMDData(ReportConfig reportConfig) throws Exception {
         if(featureModuleContext != null){
             initializeMDDataInApplication();
+            currentInfo = new BulkSecInfo(accountBook, reportConfig);
         } else {
             initializeMDDataHeadless();
+            currentInfo = new BulkSecInfo(accountBook, reportConfig);
         }
     }
 
@@ -258,6 +257,13 @@ public class MDData {
     private class TransactionMonitor implements Runnable {
         private long waitTime = 60000;
         private TreeSet<Date> newTransactionDateQueue = new TreeSet<>();
+        private  Date lastRefreshTime;
+        private long updateFrequency = 5; //minutes
+        private ReportConfig reportConfig;
+
+        TransactionMonitor(ReportConfig reportConfig){
+            this.reportConfig = reportConfig;
+        }
 
         @Override
         public void run() {
@@ -265,6 +271,15 @@ public class MDData {
                 Date latestTransactionDate = getLastTransactionModified();
                 boolean newTransaction = lastTransactionDate.isNewTransactionDate(latestTransactionDate);
                 try {
+                    if(lastRefreshTime == null){
+                        lastRefreshTime = new Date();
+                        refreshPrices();
+                    } else {
+                        if(isTimeToRefresh()){
+                            lastRefreshTime = new Date();
+                            refreshPrices();
+                        }
+                    }
                     if (newTransaction) {
                         boolean notSeenBefore = newTransactionDateQueue.add(latestTransactionDate);
                         if (notSeenBefore) { // wait for another cycle
@@ -278,10 +293,22 @@ public class MDData {
                     } else {
                         Thread.sleep(waitTime);
                     }
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     LogController.logException(e, "Error in Transaction Monitor");
                 }
+            }
+        }
 
+        public boolean isTimeToRefresh(){
+            long diff = new Date().getTime() - lastRefreshTime.getTime();
+            return diff > updateFrequency * 60000;
+        }
+
+        public void refreshPrices() throws Exception {
+            if (extension != null) {
+                FeatureModuleContext featureModuleContext = extension.getUnprotectedContext();
+                featureModuleContext.showURL("moneydance:fmodule:yahooqt:update");
+                currentInfo = new BulkSecInfo(accountBook, reportConfig); //TODO: Test if needed
             }
         }
 
