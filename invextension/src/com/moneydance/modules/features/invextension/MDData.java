@@ -22,7 +22,7 @@ public class MDData {
     private AccountBook accountBook;
     private Account root;
     private BulkSecInfo currentInfo;
-    private ObservableLastTransactionDate lastTransactionDate;
+    private ObservableLastTransactionDate observableLastTransactionDate;
     private Calendar lastYahooqtUpdateDate;
     private Date lastPriceUpdateTime;
     private HashMap<String, Double> userRateMap = new HashMap<>();
@@ -57,8 +57,8 @@ public class MDData {
         return accountBook;
     }
 
-    public ObservableLastTransactionDate getLastTransactionDate(){
-        return lastTransactionDate;
+    public ObservableLastTransactionDate getObservableLastTransactionDate(){
+        return observableLastTransactionDate;
     }
 
     public Account getRoot() {
@@ -174,7 +174,7 @@ public class MDData {
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
         msgs.add("MD last modified: " + DATE_PATTERN_LONG.format
-                (lastTransactionDate.getLastTransactionDate()));
+                (observableLastTransactionDate.getLastTransactionDate()));
         if(lastYahooqtUpdateDate != null){
             msgs.add("YahooQuote updated on: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdateDate.getTime()));
             generateCurrentPriceData();
@@ -195,17 +195,18 @@ public class MDData {
         System.out.print("Synced: " + synced);
     }
 
-    public void initializeMDDataInApplication() {
+    public void initializeMDDataInApplication(boolean newObservable) {
         featureModuleContext = extension.getUnprotectedContext();
         accountBook = featureModuleContext.getCurrentAccountBook();
         root = accountBook.getRootAccount();
-        lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
+        if (newObservable) observableLastTransactionDate =
+                new ObservableLastTransactionDate(getLastTransactionModified());
         generateLastYahooUpdateDate();
         if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
 
     }
 
-    protected void initializeMDDataHeadless() throws Exception{
+    protected void initializeMDDataHeadless(boolean newObservable) throws Exception{
         AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
         // must add this section or get null pointer error
         ArrayList<File> folderFiles = new ArrayList<>();
@@ -215,7 +216,8 @@ public class MDData {
         featureModuleContext = null;
         accountBook = wrapper.getBook();
         root = accountBook.getRootAccount();
-        lastTransactionDate = new ObservableLastTransactionDate(getLastTransactionModified());
+        if(newObservable) observableLastTransactionDate =
+                new ObservableLastTransactionDate(getLastTransactionModified());
         generateLastYahooUpdateDate();
         if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
     }
@@ -226,10 +228,10 @@ public class MDData {
 
     public void reloadMDData(ReportConfig reportConfig) throws Exception {
         if(featureModuleContext != null){
-            initializeMDDataInApplication();
+            initializeMDDataInApplication(false);
             currentInfo = new BulkSecInfo(accountBook, reportConfig);
         } else {
-            initializeMDDataHeadless();
+            initializeMDDataHeadless(false);
             currentInfo = new BulkSecInfo(accountBook, reportConfig);
         }
     }
@@ -280,10 +282,10 @@ public class MDData {
     
 
     private class TransactionMonitor implements Runnable {
-        private long waitTime = 60000;
+        private long transactionWaitTimeMills = 60000;
         private TreeSet<Date> newTransactionDateQueue = new TreeSet<>();
         private  Date lastRefreshTime;
-        private long updateFrequency = 5; //minutes
+        private long updateFrequencyMins = 5; 
         private ReportConfig reportConfig;
 
         TransactionMonitor(ReportConfig reportConfig){
@@ -294,29 +296,31 @@ public class MDData {
         public void run() {
             while (!shutdown) {
                 Date latestTransactionDate = getLastTransactionModified();
-                boolean newTransaction = lastTransactionDate.isNewTransactionDate(latestTransactionDate);
+                boolean newTransaction = observableLastTransactionDate.isNewTransactionDate(latestTransactionDate);
                 try {
-                    if(lastRefreshTime == null){
+                    // refresh Yahoo quote extension
+                    if(lastRefreshTime == null){ //refresh immediately
                         lastRefreshTime = new Date();
                         refreshPrices();
                     } else {
-                        if(isTimeToRefresh()){
+                        if(isTimeToRefresh()){// refresh after interval
                             lastRefreshTime = new Date();
                             refreshPrices();
                         }
                     }
+                    //check for new transactions
                     if (newTransaction) {
                         boolean notSeenBefore = newTransactionDateQueue.add(latestTransactionDate);
                         if (notSeenBefore) { // wait for another cycle
-                            Thread.sleep(waitTime);
+                            Thread.sleep(transactionWaitTimeMills);
                         } else { // seen before
-                            if (new Date().getTime() - newTransactionDateQueue.last().getTime() >= waitTime) {
-                                lastTransactionDate.setChanged(latestTransactionDate);
+                            if (new Date().getTime() - newTransactionDateQueue.last().getTime() >= transactionWaitTimeMills) {
+                                observableLastTransactionDate.setChanged(latestTransactionDate);
                                 newTransactionDateQueue.clear();
                             }
                         }
                     } else {
-                        Thread.sleep(waitTime);
+                        Thread.sleep(transactionWaitTimeMills);
                     }
                 } catch (Exception e) {
                     LogController.logException(e, "Error in Transaction Monitor");
@@ -326,7 +330,7 @@ public class MDData {
 
         public boolean isTimeToRefresh(){
             long diff = new Date().getTime() - lastRefreshTime.getTime();
-            return diff > updateFrequency * 60000;
+            return diff > updateFrequencyMins * 60000;
         }
 
         public void refreshPrices() throws Exception {
@@ -367,7 +371,7 @@ public class MDData {
         protected Void doInBackground() throws Exception {
             try {
                 publish("Loading " + mdFolder.getName());
-                initializeMDDataHeadless();
+                initializeMDDataHeadless(true);
                 for (String msg:getTransactionStatus()){
                     publish(msg);
                 }

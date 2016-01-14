@@ -48,7 +48,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public static final String SWITCH_RETURN_TYPE = "switchReturnType";
     private static final long serialVersionUID = 2199471200123995601L;
     public static final int textFieldWidth = 300;
-    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:m:s z");
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:mm:ss z");
     TotalReportOutputPane totalReportOutputPane;
     String frameText;
     ReportConfig reportConfig;
@@ -234,11 +234,11 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             MDData mdData = MDData.getInstance();
             if(e.getStateChange() == ItemEvent.SELECTED){
                 reportLatestPriceTime(mdData.getLastPriceUpdateTime());
-                mdData.getLastTransactionDate().addObserver(this);
+                mdData.getObservableLastTransactionDate().addObserver(this);
                 mdData.startTransactionMonitorThread(reportConfig);
 
             } else {
-                mdData.getLastTransactionDate().deleteObserver(this);
+                mdData.getObservableLastTransactionDate().deleteObserver(this);
                 mdData.stopTransactionMonitorThread();
             }
         }
@@ -259,7 +259,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public void update(Observable o, Object arg) {
         try {
             if(o instanceof MDData.ObservableLastTransactionDate){
-                String msg = "";
+
+
                 MDData.ObservableLastTransactionDate lastTransactionDate = (MDData.ObservableLastTransactionDate) o;
                 Date previousLastDate = lastTransactionDate.getPreviousLastTransactionDate();
                 Date currentLastDate = lastTransactionDate.getLastTransactionDate();
@@ -267,16 +268,13 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
                 HashMap<String, Double> lastUserRateMap = new HashMap<>(mdData.getUserRateMap());
                 mdData.reloadMDData(reportConfig);
                 boolean reloadReport = mdData.hasNewUserRate(lastUserRateMap);
-                updateStatus("Last Trans Date: " + TIME_FORMAT.format(currentLastDate)); //TODO: Remove after debug
                 if(reloadReport){
                     reportLatestPriceTime(mdData.getLastPriceUpdateTime());
                     totalReportOutputPane.getModel().refreshReport(mdData.getCurrentInfo());
                     totalReportOutputPane.sortRows();
                     totalReportOutputPane.repaint();
                     totalReportOutputPane.sortRows();
-
                 }
-                updateStatus(msg);
             }
         } catch (Exception e) {
             e.printStackTrace();
