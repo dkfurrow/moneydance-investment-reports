@@ -490,7 +490,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     void updateStatus(java.util.List<String> msgs) {
         String output = reportStatusText.getText();
         for (String msg : msgs) {
-            output += (msg + "\n");
+            String newLine = msgs.indexOf(msg) < msgs.size() - 1 ? "\n" : "";
+            output += (msg + newLine);
         }
         reportStatusText.setText(output);
     }

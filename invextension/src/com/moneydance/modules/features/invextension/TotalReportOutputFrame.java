@@ -48,7 +48,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public static final String COPY_CLIPBOARD = "copyClipboard";
     public static final String SWITCH_RETURN_TYPE = "switchReturnType";
     private static final long serialVersionUID = 2199471200123995601L;
-    public static final int textFieldWidth = 300;
+    public static final int textFieldWidth = 305;
     public static final int textFieldHeight = 60;
     public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:mm:ss z");
     TotalReportOutputPane totalReportOutputPane;
@@ -258,6 +258,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             mdData.stopTransactionMonitorThread();
         } else {
             updateStatus("Refresh Prices Started...");
+            reportLatestPriceTime(mdData.getLastPriceUpdateTime());
             if(!isLiveReport()) updateStatus("Warning: Report end date is not today!");
             long updateFrequencyMins = new Long(refreshPricesInterval[selectedIndex]);
             mdData.getObservableLastTransactionDate().addObserver(this);

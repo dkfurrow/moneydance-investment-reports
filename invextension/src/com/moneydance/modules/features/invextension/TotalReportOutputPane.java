@@ -137,7 +137,6 @@ public class TotalReportOutputPane extends JScrollPane {
                 KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
         final Action scrollTablePrevColumnCellAction = getAction(scrollTable,
                 KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK);
-
         setAction(lockedTable, "selectNextColumn",
                 new LockedTableSelectNextColumnCellAction(
                         lockedTableNextColumnCellAction));
@@ -150,7 +149,6 @@ public class TotalReportOutputPane extends JScrollPane {
         setAction(scrollTable, "selectPreviousColumn",
                 new ScrollTableSelectPreviousColumnCellAction(
                         scrollTablePrevColumnCellAction));
-
         setAction(lockedTable, "selectNextColumnCell",
                 new LockedTableSelectNextColumnCellAction(
                         lockedTableNextColumnCellAction));
@@ -163,7 +161,6 @@ public class TotalReportOutputPane extends JScrollPane {
         setAction(scrollTable, "selectPreviousColumnCell",
                 new ScrollTableSelectPreviousColumnCellAction(
                         scrollTablePrevColumnCellAction));
-
         setAction(scrollTable, "selectFirstColumn",
                 new ScrollableSelectFirstColumnCellAction());
         setAction(lockedTable, "selectLastColumn",

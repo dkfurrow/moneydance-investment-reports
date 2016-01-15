@@ -36,7 +36,7 @@ public class MDData {
             (DateFormat.LONG, DateFormat.LONG);
     public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
             (DateFormat.SHORT, Locale.getDefault());
-    public static final DateFormat DATE_PATTERN_MEDIUM =  new SimpleDateFormat("HH:mm dd-MMM-yyyy");
+    public static final DateFormat DATE_PATTERN_MEDIUM =  new SimpleDateFormat("HH:mm, dd-MMM-yyyy");
 
 
     /**
