@@ -113,22 +113,6 @@ public class TestReportSpeed extends JFrame {
 
 
 
-    @SuppressWarnings("unused")
-    public static StringBuffer writeObjectToStringBuffer(Object[][] object) {
-        StringBuffer outBuffer = new StringBuffer();
-        for (Object[] objects : object) {
-            for (int j = 0; j < objects.length; j++) {
-                Object element = objects[j] == null ? "*NULL*" : objects[j];
-                if (j == objects.length - 1) {
-                    outBuffer.append(element.toString()).append("\r\n");
-                } else {
-                    outBuffer.append(element.toString()).append(",");
-                }
-            }
-        }
-        return outBuffer;
-
-    }
 
     public static void addRecordTime(String mileStone){
         recordTimes.put(mileStone, new Date());

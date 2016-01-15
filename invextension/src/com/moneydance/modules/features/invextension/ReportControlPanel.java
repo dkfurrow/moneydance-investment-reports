@@ -42,9 +42,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
@@ -57,7 +54,7 @@ import java.util.prefs.BackingStoreException;
  * @since 1.0
  */
 public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
-        ItemListener, Observer {
+        ItemListener {
     private static final long serialVersionUID = -7581739722392109525L;
     public static final Dimension OPTIONS_BOX_DIMENSION = new Dimension(400, 20);
     public static final int textFieldWidth = 400;
@@ -659,20 +656,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if(o instanceof MDData.ObservableLastTransactionDate){
-            MDData.ObservableLastTransactionDate lastTransactionDate = (MDData.ObservableLastTransactionDate) o;
-            java.util.List<String> msgs = new ArrayList<>();
-            Date previousLastDate = lastTransactionDate.getPreviousLastTransactionDate();
-            Date currentLastDate = lastTransactionDate.getLastTransactionDate();
-            msgs.add("Previous last Transaction Date" + MDData.DATE_PATTERN_LONG.format(previousLastDate));
-            msgs.add("Current last Transaction Date" + MDData.DATE_PATTERN_LONG.format(currentLastDate));
-            updateStatus(msgs);
-        }
-
-    }
-
     public static class TestFrame extends JFrame {
 
         private static final long serialVersionUID = 2202318227772787528L;
@@ -738,12 +721,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         public FolderPanel(){
             // set Action Listener
-            dirChooserButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    showFileChooser();
-                }
-            });
+            dirChooserButton.addActionListener(e -> showFileChooser());
             setPanelTitle(this, "Download Location");
             directoryOutputField.setPreferredSize(new Dimension(textFieldWidth, 24));
             this.setLayout(new GridBagLayout());

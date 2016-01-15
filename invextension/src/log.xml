@@ -186,7 +186,6 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\LogController$CustomXMLFormatter.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\LogController.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\MDData$CurrencyData.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\MDData$MDFileLoader.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\MDData$ObservableLastTransactionDate.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\MDData$TransactionMonitor.class]]></message>
@@ -224,7 +223,6 @@
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlFrame.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlPanel$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel$1.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportExecutor.class]]></message>
 			<message priority="info"><![CDATA[Deleting E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes\com\moneydance\modules\features\invextension\ReportControlPanel$ReportOptionsPanel.class]]></message>
@@ -424,7 +422,7 @@
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:44: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:48: " name="javac" time="3 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:48: " name="javac" time="4 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AggregationController.java added as com\moneydance\modules\features\invextension\AggregationController.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Aggregator.java added as com\moneydance\modules\features\invextension\Aggregator.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AllAggregate.java added as com\moneydance\modules\features\invextension\AllAggregate.class doesn't exist.]]></message>
@@ -674,7 +672,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/InvestmentAccountWrapper.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/LogController$CustomXMLFormatter.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/LogController.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$CurrencyData.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$MDFileLoader.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$ObservableLastTransactionDate.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$TransactionMonitor.class]]></message>
@@ -712,7 +709,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportConfigInvestIncomeChooserPanel.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlFrame.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel$FolderPanel$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel$FolderPanel.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel$ReportExecutor.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel$ReportOptionsPanel.class]]></message>
@@ -782,7 +778,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="3 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -872,7 +868,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/InvestmentAccountWrapper.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/LogController$CustomXMLFormatter.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/LogController.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$CurrencyData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$MDFileLoader.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$ObservableLastTransactionDate.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$TransactionMonitor.class]]></message>
@@ -910,7 +905,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportConfigInvestIncomeChooserPanel.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlFrame.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel$FolderPanel$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel$FolderPanel.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel$ReportExecutor.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel$ReportOptionsPanel.class]]></message>
@@ -977,7 +971,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 23562 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 23305 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />

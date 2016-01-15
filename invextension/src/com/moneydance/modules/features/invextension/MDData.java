@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -28,14 +29,14 @@ public class MDData {
     private HashMap<String, Double> userRateMap = new HashMap<>();
     private Main extension;
     private Thread transactionMonitorThread;
-    private volatile boolean shutdown = false;
+    private TransactionMonitor transactionMonitor;
+
     private static MDData uniqueInstance;
     public static final DateFormat DATE_PATTERN_LONG =  DateFormat.getDateTimeInstance
             (DateFormat.LONG, DateFormat.LONG);
     public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
             (DateFormat.SHORT, Locale.getDefault());
-    public static final DateFormat DATE_PATTERN_MEDIUM =  DateFormat.getDateTimeInstance
-            (DateFormat.MEDIUM, DateFormat.MEDIUM);
+    public static final DateFormat DATE_PATTERN_MEDIUM =  new SimpleDateFormat("HH:mm dd-MMM-yyyy");
 
 
     /**
@@ -78,13 +79,17 @@ public class MDData {
         this.currentInfo = new BulkSecInfo(accountBook, reportConfig);
     }
 
-    public void startTransactionMonitorThread(ReportConfig reportConfig){
-        transactionMonitorThread = new Thread(new TransactionMonitor(reportConfig));
+    public void startTransactionMonitorThread(ReportConfig reportConfig, long updateFrequencyMins){
+        transactionMonitor = new TransactionMonitor(reportConfig, updateFrequencyMins);
+        transactionMonitorThread = new Thread(transactionMonitor);
         transactionMonitorThread.start();
     }
 
-    public void stopTransactionMonitorThread(){
-        shutdown = true;
+    public void stopTransactionMonitorThread() throws InterruptedException {
+        if(transactionMonitorThread!= null){
+            transactionMonitor.doShutdown();
+        }
+
     }
 
 
@@ -105,7 +110,7 @@ public class MDData {
             String priceDate = currency.getParameter("price_date");
             if(priceDate != null){
                 System.out.print(currency.getName() + " : "
-                        + DATE_PATTERN_LONG.format(new Date(Long.parseLong(priceDate))) + "\n");
+                        + DATE_PATTERN_MEDIUM.format(new Date(Long.parseLong(priceDate))) + "\n");
             }
         }
     }
@@ -123,18 +128,11 @@ public class MDData {
                 Long priceDateLong = Long.parseLong(priceDateStr);
                 maxDateTime = Math.max(maxDateTime, priceDateLong);
             }
-            if(currencyID!= null && userRate!= null){
+            if(currencyID != null){
                 userRateMap.put(currencyID, userRate);
             }
         }
         lastPriceUpdateTime =  new Date(maxDateTime);
-    }
-
-    public Boolean updatedOnLastYahooQt(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return lastYahooqtUpdateDate.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
-                lastYahooqtUpdateDate.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR);
     }
 
     public void generateLastYahooUpdateDate(){
@@ -173,13 +171,13 @@ public class MDData {
 
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
-        msgs.add("MD last modified: " + DATE_PATTERN_LONG.format
+        msgs.add("MD last modified: " + DATE_PATTERN_MEDIUM.format
                 (observableLastTransactionDate.getLastTransactionDate()));
         if(lastYahooqtUpdateDate != null){
             msgs.add("YahooQuote updated on: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdateDate.getTime()));
             generateCurrentPriceData();
-            msgs.add("Security latest price updated: " +
-                    DATE_PATTERN_LONG.format(lastPriceUpdateTime));
+            msgs.add("latest security price: " +
+                    DATE_PATTERN_MEDIUM.format(lastPriceUpdateTime));
         } else {
             msgs.add("YahooQuote last Update: " + "NOT USED");
         }
@@ -241,7 +239,7 @@ public class MDData {
             Double lastUserRate = lastUserRateMap.get(id);
             Double currentUserRate = userRateMap.get(id);
             if(lastUserRate != null && currentUserRate != null){
-                if(currentUserRate != lastUserRate) return true;
+                if(!Objects.equals(currentUserRate, lastUserRate)) return true;
             }
         }
         return false;
@@ -285,11 +283,13 @@ public class MDData {
         private long transactionWaitTimeMills = 60000;
         private TreeSet<Date> newTransactionDateQueue = new TreeSet<>();
         private  Date lastRefreshTime;
-        private long updateFrequencyMins = 5; 
+        private long updateFrequencyMins;
         private ReportConfig reportConfig;
+        private volatile boolean shutdown = false;
 
-        TransactionMonitor(ReportConfig reportConfig){
+        TransactionMonitor(ReportConfig reportConfig, long updateFrequencyMins){
             this.reportConfig = reportConfig;
+            this.updateFrequencyMins = updateFrequencyMins;
         }
 
         @Override
@@ -328,6 +328,10 @@ public class MDData {
             }
         }
 
+        public void doShutdown(){
+            shutdown = true;
+        }
+
         public boolean isTimeToRefresh(){
             long diff = new Date().getTime() - lastRefreshTime.getTime();
             return diff > updateFrequencyMins * 60000;
@@ -341,21 +345,6 @@ public class MDData {
             }
         }
 
-    }
-
-    private static class CurrencyData implements Comparable<CurrencyData>{
-        CurrencyType currencyType;
-        TreeSet<Date> dates;
-
-
-        CurrencyData(CurrencyType currencyType){
-            this.currencyType = currencyType;
-        }
-
-        @Override
-        public int compareTo(CurrencyData otherCurrency) {
-            return currencyType.getIDString().compareTo(otherCurrency.currencyType.getIDString());
-        }
     }
 
     private class MDFileLoader extends SwingWorker<Void, String> {

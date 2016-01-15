@@ -430,7 +430,7 @@ public class TotalReportOutputPane extends JScrollPane {
         JFrame frame = new JFrame("Row Sort");
 
         // Create and set up the content pane.
-        JComponent newContentPane = new RowSortGui(this);
+        JComponent newContentPane = new RowSortGui(this, frame);
         newContentPane.setOpaque(true); // content panes must be opaque
         frame.setContentPane(newContentPane);
         // Display the window.
@@ -1153,9 +1153,11 @@ public class TotalReportOutputPane extends JScrollPane {
         private static final long serialVersionUID = -8349629256510555172L;
 
         public TotalReportOutputPane tablePane;
+        public JFrame enclosingFrame;
 
-        public RowSortGui(TotalReportOutputPane thisTable) {
+        public RowSortGui(TotalReportOutputPane thisTable, JFrame enclosingFrame) {
             tablePane = thisTable;
+            this.enclosingFrame = enclosingFrame;
             String[] colNames = tablePane.getAllColumnNames();
             JPanel boxPanel = new JPanel();
             JComboBox<String> firstSortBox = new JComboBox<>(colNames);
@@ -1178,6 +1180,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     tablePane.sortRows();
+                    enclosingFrame.dispose();
                 }
             });
             // set sorts

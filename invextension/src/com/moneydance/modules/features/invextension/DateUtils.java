@@ -538,6 +538,16 @@ public final class DateUtils {
         return nd;
     }
 
+    public static boolean isToday(int dateInt){
+        Calendar nowCal = GregorianCalendar.getInstance();
+        nowCal.setTime(new Date());
+        Calendar compareCal = convertToCal(dateInt);
+        return nowCal.get(Calendar.DAY_OF_MONTH) == compareCal.get(Calendar.DAY_OF_MONTH) &&
+                nowCal.get(Calendar.MONTH) == compareCal.get(Calendar.MONTH) &&
+                nowCal.get(Calendar.YEAR) == compareCal.get(Calendar.YEAR);
+
+    }
+
     /**
      * converts date to dateInt
      *
