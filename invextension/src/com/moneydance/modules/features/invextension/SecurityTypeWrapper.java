@@ -66,6 +66,7 @@ public class SecurityTypeWrapper implements Aggregator {
         } else {
             this.securityType = securityType;
         }
+        assert this.securityType != null;
         this.name = this.securityType.name().trim();
     }
 

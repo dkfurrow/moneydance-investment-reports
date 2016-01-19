@@ -145,6 +145,7 @@ public class ReportProdTest {
      */
     private static ArrayList<ReportLine> readCSVIntoRptLine(File readFile) {
         ArrayList<String[]> inputStrAL = IOUtils.readCSVIntoArrayList(readFile);
+        assert inputStrAL != null;
         inputStrAL.remove(0); // remove header row
         ArrayList<ReportLine> outputRptAL = new ArrayList<>();
         for (String[] inLine : inputStrAL) {

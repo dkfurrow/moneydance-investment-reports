@@ -37,33 +37,33 @@ package com.moneydance.modules.features.invextension;
 public interface Aggregator {
 
 
-    abstract String getName();
+    String getName();
     /**
      * output name of aggregate e.g. if CurrencyTypeWrapper "IBM"
      *
      * @return name of aggregate
      */
-    abstract String getAggregateName();
+    String getAggregateName();
 
     /**
      * Output generic name (e.g. "Tickers-ALL" for Currency Type)
      *
      * @return name of aggregator type
      */
-    abstract String getAllTypesName();
+    String getAllTypesName();
 
     /**
      * name for column header
      *
      * @return name
      */
-    abstract String getColumnName();
+    String getColumnName();
 
     /**
      * name for title of report
      *
      * @return title report name
      */
-    abstract String getReportingName();
+    String getReportingName();
 
 }

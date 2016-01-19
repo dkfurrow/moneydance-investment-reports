@@ -27,22 +27,21 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import com.moneydance.modules.features.invextension.SecurityReport.MetricEntry;
+import com.moneydance.modules.features.invextension.TotalReport.ReportTableModel;
+
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
-import com.moneydance.modules.features.invextension.SecurityReport.MetricEntry;
-import com.moneydance.modules.features.invextension.TotalReport.ReportTableModel;
 
 /**
  * An extended and formatted of CoolTable by Kurt Riede added multi sort,
@@ -497,7 +496,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     @SuppressWarnings("unchecked")
     public void switchReturnType(){
-        Class<? extends ExtractorReturnBase> clazzToChange = null;
+        Class<? extends ExtractorReturnBase> clazzToChange;
         for(int j = 0; j < model.getColumnCount(); j++){
             Object obj = model.getValueAt(0, j);
             if(obj instanceof MetricEntry){
@@ -506,30 +505,30 @@ public class TotalReportOutputPane extends JScrollPane {
                 if(extractor != null){
                     if(extractor.getClass().equals(ExtractorModifiedDietzReturn.class) ){
                         clazzToChange = ExtractorModifiedDietzReturn.class;
-                        switchExtractor(metricEntry, clazzToChange);
-                        for(int i = 1; i < model.getRowCount(); i++){
-                            obj = model.getValueAt(i, j);
-                            if(obj instanceof MetricEntry){
-                                metricEntry = (MetricEntry) obj;
-                                switchExtractor(metricEntry, clazzToChange);
-                            }
-                        }
+                        changeColumnMetricEntry(clazzToChange, j, metricEntry);
                     } else if (extractor.getClass().equals(ExtractorOrdinaryReturn.class)){
                         clazzToChange = ExtractorOrdinaryReturn.class;
-                        switchExtractor(metricEntry, clazzToChange);
-                        for(int i = 1; i < model.getRowCount(); i++){
-                            obj = model.getValueAt(i, j);
-                            if(obj instanceof MetricEntry){
-                                metricEntry = (MetricEntry) obj;
-                                switchExtractor(metricEntry, clazzToChange);
-                            }
-                        }
+                        changeColumnMetricEntry(clazzToChange, j, metricEntry);
                     }
                 }
             }
         }
         model.fireTableDataChanged();
         sortRows();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void changeColumnMetricEntry(Class<? extends ExtractorReturnBase> clazzToChange,
+                                         int j, MetricEntry<Number> metricEntry) {
+        Object obj;
+        switchExtractor(metricEntry, clazzToChange);
+        for(int i = 1; i < model.getRowCount(); i++){
+            obj = model.getValueAt(i, j);
+            if(obj instanceof MetricEntry){
+                metricEntry = (MetricEntry) obj;
+                switchExtractor(metricEntry, clazzToChange);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -605,42 +604,38 @@ public class TotalReportOutputPane extends JScrollPane {
         system.setContents(stsel, stsel);
     }
 
-    Comparator<Object> objectComp = new Comparator<Object>() {
+    Comparator<Object> objectComp = (o1, o2) -> {
+        try {
+            String o1Str = getDisplayValueFromObject(o1);
+            String o2Str = getDisplayValueFromObject(o2);
+            LinkedList<String> endStrings = new LinkedList<>();
+            endStrings.add("CASH");
+            endStrings.add("CASH  "); //handles aggregate by ticker
+            endStrings.add("-ALL");
+            endStrings.add("-ALL "); //handles last row of all-aggregate
 
-        @Override
-        public int compare(Object o1, Object o2) {
-            try {
-                String o1Str = getDisplayValueFromObject(o1);
-                String o2Str = getDisplayValueFromObject(o2);
-                LinkedList<String> endStrings = new LinkedList<>();
-                endStrings.add("CASH");
-                endStrings.add("CASH  "); //handles aggregate by ticker
-                endStrings.add("-ALL");
-                endStrings.add("-ALL "); //handles last row of all-aggregate
+            int o1Rank = -1;
+            int o2Rank = -1;
 
-                int o1Rank = -1;
-                int o2Rank = -1;
-
-                for (String string : endStrings) {
-                    if (o1Str.endsWith(string))
-                        o1Rank = endStrings.indexOf(string);
-                    if (o2Str.endsWith(string))
-                        o2Rank = endStrings.indexOf(string);
-                }
-
-                if (o1Rank == o2Rank) {
-                    return o1Str.compareTo(o2Str);
-                } else {
-                    return o1Rank - o2Rank;
-                }
-            } catch (Exception e) {
-                LogController.logException(e, "Error on Report Output Pane: ");
-                JOptionPane.showMessageDialog(TotalReportOutputPane.this,
-                        "Error! See " + ReportControlPanel.getOutputDirectoryPath() +
-                                " for details", "Error", JOptionPane.ERROR_MESSAGE);
-                return 0;
-
+            for (String string : endStrings) {
+                if (o1Str.endsWith(string))
+                    o1Rank = endStrings.indexOf(string);
+                if (o2Str.endsWith(string))
+                    o2Rank = endStrings.indexOf(string);
             }
+
+            if (o1Rank == o2Rank) {
+                return o1Str.compareTo(o2Str);
+            } else {
+                return o1Rank - o2Rank;
+            }
+        } catch (Exception e) {
+            LogController.logException(e, "Error on Report Output Pane: ");
+            JOptionPane.showMessageDialog(TotalReportOutputPane.this,
+                    "Error! See " + ReportControlPanel.getOutputDirectoryPath() +
+                            " for details", "Error", JOptionPane.ERROR_MESSAGE);
+            return 0;
+
         }
     };
 
@@ -681,10 +676,12 @@ public class TotalReportOutputPane extends JScrollPane {
                 }
 
                 JLabel renderedLabel = (JLabel) cell;
-                renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
-                        : SwingConstants.RIGHT);
+                if(d != null){
+                    renderedLabel.setHorizontalAlignment(d == 0.0 ? SwingConstants.CENTER
+                            : SwingConstants.RIGHT);
+                    renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
+                }
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
@@ -751,7 +748,7 @@ public class TotalReportOutputPane extends JScrollPane {
                 JLabel renderedLabel = (JLabel) cell;
                 renderedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 renderedLabel.setText(text);
-                renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
+                if(d!= null) renderedLabel.setForeground(d < 0 ? Color.RED : Color.BLACK);
             }
             return cell;
         }
@@ -885,116 +882,6 @@ public class TotalReportOutputPane extends JScrollPane {
             } else {
                 lockedTablePrevColumnCellAction.actionPerformed(e);
             }
-        }
-    }
-
-    public class JScrollPaneAdjuster implements PropertyChangeListener,
-            Serializable {
-        private static final long serialVersionUID = -6372520752839570952L;
-
-        private JScrollPane pane;
-        private transient Adjuster x, y;
-
-        public JScrollPaneAdjuster(JScrollPane pane) {
-            this.pane = pane;
-            this.x = new Adjuster(pane.getViewport(), pane.getColumnHeader(),
-                    Adjuster.X);
-            this.y = new Adjuster(pane.getViewport(), pane.getRowHeader(),
-                    Adjuster.Y);
-            pane.addPropertyChangeListener(this);
-        }
-
-        @Override
-        public void propertyChange(PropertyChangeEvent e) {
-            String name = e.getPropertyName();
-            switch (name) {
-                case "viewport":
-                    x.setViewport((JViewport) e.getNewValue());
-                    y.setViewport((JViewport) e.getNewValue());
-                    break;
-                case "rowHeader":
-                    y.setHeader((JViewport) e.getNewValue());
-                    break;
-                case "columnHeader":
-                    x.setHeader((JViewport) e.getNewValue());
-                    break;
-            }
-        }
-
-        private void readObject(ObjectInputStream in) throws IOException,
-                ClassNotFoundException {
-            in.defaultReadObject();
-            x = new Adjuster(pane.getViewport(), pane.getColumnHeader(),
-                    Adjuster.X);
-            y = new Adjuster(pane.getViewport(), pane.getRowHeader(),
-                    Adjuster.Y);
-        }
-
-        private class Adjuster implements ChangeListener, Runnable {
-
-            public static final int X = 1, Y = 2;
-            private JViewport viewport, header;
-            private int type;
-
-            public Adjuster(JViewport viewport, JViewport header, int type) {
-                this.viewport = viewport;
-                this.header = header;
-                this.type = type;
-                if (header != null) {
-                    header.addChangeListener(this);
-                }
-            }
-
-            public void setViewport(JViewport newViewport) {
-                viewport = newViewport;
-            }
-
-            public void setHeader(JViewport newHeader) {
-                if (header != null) {
-                    header.removeChangeListener(this);
-                }
-                header = newHeader;
-                if (header != null) {
-                    header.addChangeListener(this);
-                }
-            }
-
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (viewport == null || header == null) {
-                    return;
-                }
-                if (type == X) {
-                    if (viewport.getViewPosition().x != header
-                            .getViewPosition().x) {
-                        SwingUtilities.invokeLater(this);
-                    }
-                } else {
-                    if (viewport.getViewPosition().y != header
-                            .getViewPosition().y) {
-                        SwingUtilities.invokeLater(this);
-                    }
-                }
-            }
-
-            @Override
-            public void run() {
-                if (viewport == null || header == null) {
-                    return;
-                }
-                Point v = viewport.getViewPosition(), h = header
-                        .getViewPosition();
-                if (type == X) {
-                    if (v.x != h.x) {
-                        viewport.setViewPosition(new Point(h.x, v.y));
-                    }
-                } else {
-                    if (v.y != h.y) {
-                        viewport.setViewPosition(new Point(v.x, h.y));
-                    }
-                }
-            }
-
         }
     }
 
@@ -1172,69 +1059,41 @@ public class TotalReportOutputPane extends JScrollPane {
             thirdOrderBox.setSelectedItem(tablePane.thirdOrder);
 
             JButton sortButton = new JButton("Sort Table");
-            sortButton.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    tablePane.sortRows();
-                    enclosingFrame.dispose();
-                }
+            sortButton.addActionListener(e -> {
+                tablePane.sortRows();
+                enclosingFrame.dispose();
             });
             // set sorts
-            firstSortBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    firstSort = cb.getSelectedIndex();
-                }
+            firstSortBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                firstSort = cb.getSelectedIndex();
             });
-            secondSortBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    secondSort = cb.getSelectedIndex();
-                }
+            secondSortBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                secondSort = cb.getSelectedIndex();
             });
-            thirdSortBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    thirdSort = cb.getSelectedIndex();
-                }
+            thirdSortBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                thirdSort = cb.getSelectedIndex();
             });
             // set orders within sorts
-            firstOrderBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    firstOrder = (SortOrder) cb.getSelectedItem();
-                }
+            firstOrderBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                firstOrder = (SortOrder) cb.getSelectedItem();
             });
-            secondOrderBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    secondOrder = (SortOrder) cb.getSelectedItem();
-                }
+            secondOrderBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                secondOrder = (SortOrder) cb.getSelectedItem();
             });
-            thirdOrderBox.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    @SuppressWarnings("unchecked")
-                    JComboBox<String> cb = (JComboBox<String>) e.getSource();
-                    thirdOrder = (SortOrder) cb.getSelectedItem();
-                }
+            thirdOrderBox.addActionListener(e -> {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>) e.getSource();
+                thirdOrder = (SortOrder) cb.getSelectedItem();
             });
 
             // build frame

@@ -90,12 +90,7 @@ public class ReportConfigFieldChooserPanel extends JPanel {
 
         String[] titles = {"Available Fields", "Actions", "Viewed Fields"};
         JPanel[] panels = {availableFieldsPanel, fieldControlPanel, viewedFieldsPanel};
-        for (int i = 0; i < panels.length; i++) {
-            TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
-            Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-            titledBorder.setTitleColor(new Color(100, 100, 100));
-            panels[i].setBorder(BorderFactory.createCompoundBorder(titledBorder, emptyBorder));
-        }
+        ReportConfigChooserPanelBase.setPanelBorders(titles, panels);
         //available fields
         if (reportConfig != null) {
             orderedHeadersFromModel = ReportConfig.getModelHeader(reportConfig.getReportClass());
@@ -141,6 +136,8 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         moveDownButton.addActionListener(new MoveDownListener());
         resetButton.addActionListener(new ResetListener());
     }
+
+
 
     private void populateModelHeaderList(ReportConfig reportConfig) {
         for (int i = 0; i < orderedHeadersFromModel.size(); i++) {

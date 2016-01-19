@@ -79,29 +79,29 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorIncome eIncome = new ExtractorIncome(securityAccount, fromDateInt, snapDateInt);
 
         // Put them into a table under the appropriate names
-        simpleMetric.put(SMStartPrice, new MetricEntry<Number>(0L, eStartPrice));
-        simpleMetric.put(SMStartPosition, new MetricEntry<Number>(0L, eStartPosition));
-        simpleMetric.put(SMStartValue, new MetricEntry<Number>(0L, eStartValue));
+        simpleMetric.put(SMStartPrice, new MetricEntry<>(0L, eStartPrice));
+        simpleMetric.put(SMStartPosition, new MetricEntry<>(0L, eStartPosition));
+        simpleMetric.put(SMStartValue, new MetricEntry<>(0L, eStartValue));
 
-        simpleMetric.put(SMEndPrice, new MetricEntry<Number>(0L, eEndPrice));
-        simpleMetric.put(SMEndPosition, new MetricEntry<Number>(0L, eEndPosition));
-        simpleMetric.put(SMEndValue, new MetricEntry<Number>(0L, eEndValue));
+        simpleMetric.put(SMEndPrice, new MetricEntry<>(0L, eEndPrice));
+        simpleMetric.put(SMEndPosition, new MetricEntry<>(0L, eEndPosition));
+        simpleMetric.put(SMEndValue, new MetricEntry<>(0L, eEndValue));
 
-        simpleMetric.put(SMAbsPriceChange, new MetricEntry<Number>(0L, null));
-        simpleMetric.put(SMAbsValueChange, new MetricEntry<Number>(0L, null));
-        simpleMetric.put(SMPctPriceChange, new MetricEntry<Number>(0.0, null));
+        simpleMetric.put(SMAbsPriceChange, new MetricEntry<>(0L, null));
+        simpleMetric.put(SMAbsValueChange, new MetricEntry<>(0L, null));
+        simpleMetric.put(SMPctPriceChange, new MetricEntry<>(0.0, null));
 
-        simpleMetric.put(SMLongBasis, new MetricEntry<Number>(0L, eLongBasis));
-        simpleMetric.put(SMShortBasis, new MetricEntry<Number>(0L, eShortBasis));
+        simpleMetric.put(SMLongBasis, new MetricEntry<>(0L, eLongBasis));
+        simpleMetric.put(SMShortBasis, new MetricEntry<>(0L, eShortBasis));
 
-        simpleMetric.put(SMIncome, new MetricEntry<Number>(0L, eIncome));
-        simpleMetric.put(SMAnnualizedDividend, new MetricEntry<Number>(0L, null));
-        simpleMetric.put(SMDividendYield, new MetricEntry<Number>(0.0, null));
-        simpleMetric.put(SMYieldOnBasis, new MetricEntry<Number>(0.0, null));
+        simpleMetric.put(SMIncome, new MetricEntry<>(0L, eIncome));
+        simpleMetric.put(SMAnnualizedDividend, new MetricEntry<>(0L, null));
+        simpleMetric.put(SMDividendYield, new MetricEntry<>(0.0, null));
+        simpleMetric.put(SMYieldOnBasis, new MetricEntry<>(0.0, null));
 
-        simpleMetric.put(SMRealizedGain, new MetricEntry<Number>(0L, null));
-        simpleMetric.put(SMUnrealizedGain, new MetricEntry<Number>(0L, null));
-        simpleMetric.put(SMTotalGain, new MetricEntry<Number>(0L, null));
+        simpleMetric.put(SMRealizedGain, new MetricEntry<>(0L, null));
+        simpleMetric.put(SMUnrealizedGain, new MetricEntry<>(0L, null));
+        simpleMetric.put(SMTotalGain, new MetricEntry<>(0L, null));
 
         // These extractors return multiple values, which are exploded into values in the normal metrics
         ExtractorPriceChanges ePriceChange = new ExtractorPriceChanges(securityAccount, fromDateInt, snapDateInt);  // x 3

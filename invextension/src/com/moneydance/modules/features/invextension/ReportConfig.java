@@ -40,6 +40,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 
 /**
  * Controller for Report Configuration Options
@@ -224,6 +225,7 @@ public class ReportConfig {
      * @throws IllegalAccessException
      * @throws BackingStoreException
      */
+    @SuppressWarnings("unused")
     public static void clearConfigNode()
             throws NoSuchFieldException,
             IllegalAccessException, BackingStoreException {
@@ -335,6 +337,7 @@ public class ReportConfig {
      * @throws IOException
      * @throws BackingStoreException
      */
+    @SuppressWarnings("unused")
     public static void printConfigNode() throws IOException, BackingStoreException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             Prefs.REPORT_CONFIG_PREFS.exportSubtree(baos);
@@ -431,7 +434,7 @@ public class ReportConfig {
     }
 
     public String showIncExpWarning(){
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if(investmentIncomeNums.isEmpty()) sb.append("No Investment Income Categories Designated!")
                 .append(investmentExpenseNums.isEmpty() ? "\n" : "");
         if(investmentExpenseNums.isEmpty()) sb.append("No Investment Expense Categories Designated!");
@@ -653,22 +656,16 @@ public class ReportConfig {
     public void setAllExpenseAccountsToInvestment(Account root) {
         if (root != null) {
             TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.EXPENSE);
-            HashSet<Integer> acctNums = new HashSet<>();
-            for (Account acct : accounts) {
-                acctNums.add(acct.getAccountNum());
-            }
-            this.investmentExpenseNums = acctNums;
+            this.investmentExpenseNums = accounts.stream().map(Account::getAccountNum)
+                    .collect(Collectors.toCollection(HashSet::new));
         }
     }
 
     public void setAllIncomeAccountsToInvestment(Account root) {
         if (root != null) {
             TreeSet<Account> accounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.INCOME);
-            HashSet<Integer> acctNums = new HashSet<>();
-            for (Account acct : accounts) {
-                acctNums.add(acct.getAccountNum());
-            }
-            this.investmentIncomeNums = acctNums;
+            this.investmentIncomeNums = accounts.stream().map(Account::getAccountNum)
+                    .collect(Collectors.toCollection(HashSet::new));
         }
     }
 

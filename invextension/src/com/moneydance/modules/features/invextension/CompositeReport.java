@@ -27,7 +27,6 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -78,10 +77,8 @@ public class CompositeReport extends ComponentReport {
                 throw new UnsupportedOperationException();
         }
         this.securityReports = new HashSet<>();
-        if(securityReport != null) {
-            securityReports.add(securityReport);
-            this.aggregateReport = securityReport.getAggregateSecurityReport(this);
-        }
+        securityReports.add(securityReport);
+        this.aggregateReport = securityReport.getAggregateSecurityReport(this);
     }
 
     /**
@@ -156,10 +153,7 @@ public class CompositeReport extends ComponentReport {
                 this.aggregateReport.setCurrencyWrapper(null);
 
             }
-
-
         }
-
     }
 
     @Override
@@ -247,7 +241,6 @@ public class CompositeReport extends ComponentReport {
             if (this.firstAggregator.equals(securityReport
                     .getAggregator(aggregationController.getFirstAggregator())))
                 compositeFor = true;
-
         } else {
             if (this.firstAggregator.equals(securityReport
                     .getAggregator(aggregationController.getFirstAggregator()))
@@ -274,7 +267,7 @@ public class CompositeReport extends ComponentReport {
 
     //COMPOSITE_TYPE controls type of Aggregation (i.e. first aggregator only,
     // second aggregator only, or both (i.e. A, B, A && B)
-    public static enum COMPOSITE_TYPE {
+    public enum COMPOSITE_TYPE {
         FIRST, SECOND, BOTH, ALL
     }
 

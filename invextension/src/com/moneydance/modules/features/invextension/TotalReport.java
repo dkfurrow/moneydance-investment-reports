@@ -33,10 +33,9 @@ import com.moneydance.modules.features.invextension.TotalReportOutputPane.ColTyp
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 
 /**
@@ -90,10 +89,11 @@ public abstract class TotalReport {
         }
     }
 
+    @SuppressWarnings("unused")
     public HashSet<SecurityReport> getSecurityReports() {
         return securityReports;
     }
-
+    @SuppressWarnings("unused")
     public HashSet<CompositeReport> getCompositeReports() {
         return compositeReports;
     }
@@ -132,10 +132,9 @@ public abstract class TotalReport {
             if (outputSingle) {
                 allReports.addAll(compositeReports);
             } else {
-                for (CompositeReport compositeReport : compositeReports) {
-                    if (compositeReport.getSecurityReports().size() > 1)
-                        allReports.add(compositeReport);
-                }
+                allReports.addAll(compositeReports.stream()
+                        .filter(compositeReport -> compositeReport
+                                .getSecurityReports().size() > 1).collect(Collectors.toList()));
             }
             int i = 0;
             int cols = 0;
@@ -310,9 +309,7 @@ public abstract class TotalReport {
             for (int i = 0; i < data.length; i++){
                 Object [] row = data[i];
                 Object [] newRow = newData[i];
-                for (int j = 0; j < row.length; j++) {
-                    row[j] = newRow[j];
-                }
+                System.arraycopy(newRow, 0, row, 0, row.length);
             }
             fireTableDataChanged();
         }

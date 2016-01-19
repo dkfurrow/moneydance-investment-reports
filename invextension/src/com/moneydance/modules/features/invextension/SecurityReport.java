@@ -165,42 +165,25 @@ public abstract class SecurityReport extends ComponentReport {
 
     @SuppressWarnings("unchecked")
     protected void doCalculations(SecurityAccountWrapper securityAccount) {
-        if (securityAccount != null) {
+        if (securityAccount != null && securityAccount.getTransactionValues() != null) {
             for (TransactionValues transaction : securityAccount.getTransactionValues()) {
                 int transactionDateInt = transaction.getDateInt();  // CSE across loops and method invocations
-                for (MetricEntry<Number> p : simpleMetric.values()) {
-                    if (p.extractor != null) {
-                        p.extractor.processNextTransaction(transaction, transactionDateInt);
-                    }
-                }
-                for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
-                    if (p.extractor != null) {
-                        p.extractor.processNextTransaction(transaction, transactionDateInt);
-                    }
-                }
-                for (MetricEntry<Double> p : returnsMetric.values()) {
-                    if (p.extractor != null) {
-                        p.extractor.processNextTransaction(transaction, transactionDateInt);
-                    }
-                }
+                simpleMetric.values().stream().filter(p -> p.extractor != null)
+                        .forEach(p -> p.extractor.processNextTransaction(transaction, transactionDateInt));
+                multipleMetrics.values().stream().filter(p -> p.extractor != null)
+                        .forEach(p -> p.extractor.processNextTransaction(transaction, transactionDateInt));
+                returnsMetric.values().stream().filter(p -> p.extractor != null)
+                        .forEach(p -> p.extractor.processNextTransaction(transaction, transactionDateInt));
             }
 
-            for (MetricEntry<Number> p : simpleMetric.values()) {
-                if (p.extractor != null) {
-                    p.value = (Number) p.extractor.getResult();
-                }
-            }
-            for (MetricEntry<List<Number>> p : multipleMetrics.values()) {
-                if (p.extractor != null) {
-                    // Java compiler warning: unchecked cast -- Java type system can't handle this
-                    p.value = (List<Number>) p.extractor.getResult();
-                }
-            }
-            for (MetricEntry<Double> p : returnsMetric.values()) {
-                if (p.extractor != null) {
-                    p.value = (Double) p.extractor.getResult();
-                }
-            }
+            simpleMetric.values().stream().filter(p -> p.extractor != null).forEach(p -> p.value = (Number) p.extractor.getResult());
+            // Java compiler warning: unchecked cast -- Java type system can't handle this
+            multipleMetrics.values().stream().filter(p -> p.extractor != null).forEach(p -> {
+                // Java compiler warning: unchecked cast -- Java type system can't handle this
+                p.value = (List<Number>) p.extractor.getResult();
+            });
+            returnsMetric.values().stream().filter(p -> p.extractor != null)
+                    .forEach(p -> p.value = (Double) p.extractor.getResult());
         }
     }
 

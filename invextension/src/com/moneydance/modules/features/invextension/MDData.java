@@ -32,8 +32,6 @@ public class MDData {
     private TransactionMonitor transactionMonitor;
 
     private static MDData uniqueInstance;
-    public static final DateFormat DATE_PATTERN_LONG =  DateFormat.getDateTimeInstance
-            (DateFormat.LONG, DateFormat.LONG);
     public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
             (DateFormat.SHORT, Locale.getDefault());
     public static final DateFormat DATE_PATTERN_MEDIUM =  new SimpleDateFormat("HH:mm, dd-MMM-yyyy");
@@ -268,14 +266,6 @@ public class MDData {
             return lastTransactionDate;
         }
 
-        public Date getPreviousLastTransactionDate() {
-            if(!previousLastTransactionDates.isEmpty()){
-                return previousLastTransactionDates.last();
-            } else {
-                return null;
-            }
-
-        }
     }
     
 
@@ -361,9 +351,7 @@ public class MDData {
             try {
                 publish("Loading " + mdFolder.getName());
                 initializeMDDataHeadless(true);
-                for (String msg:getTransactionStatus()){
-                    publish(msg);
-                }
+                getTransactionStatus().forEach(this::publish);
                 reportControlPanel.setAccountAndFolderSubPanels();
                 publish(mdFolder.getName() + " Loaded! Choose Report to run.");
 

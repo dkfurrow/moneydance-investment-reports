@@ -29,7 +29,6 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.*;
-import com.moneydance.apps.md.controller.io.FileUtils;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -37,8 +36,6 @@ import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /**
@@ -50,8 +47,6 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
     private static final String SECURITY_TYPE_CHANGED = "securityTypeChanged";
     private static final String ADD_SECURITY_SUBTYPE = "addSecuritySubType";
     private static final String UPDATE_SECURITY = "updateSecurity";
-    private static String testFileStr = "./resources/testMD02.moneydance/root.mdinternal";
-    public static final File mdTestFile = new File(testFileStr);
     JTextField securityNameTextField = new JTextField();
     JTextField tickerTextField = new JTextField();
     JComboBox<SecurityType> securityTypeComboBox = new JComboBox<>
@@ -217,8 +212,6 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
         String newSecuritySubType = (String) securitySubTypeComboBox.getSelectedItem();
         Account securityAccount = securityAccountWrapper.getSecurityAccount();
         CurrencyType currencyType = securityAccountWrapper.getCurrencyWrapper().getCurrencyType();
-        CurrencyTable currencyTable = currencyType.getTable();
-        Account rootAccount = securityAccount.getRootAccount();
         currencyType.setName(newSecurityName);
         currencyType.setTickerSymbol(newTicker);
         securityAccount.setSecurityType(newSecurityType);

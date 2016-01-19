@@ -51,6 +51,8 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
     private final JList<ItemType> rightList = new JList<>(rightListModel);
     private final JScrollPane rightPane = new JScrollPane(rightList);
 
+    public static final Color HIGHLIGHT_COLOR = new Color(0, 0, 128);
+
     public ReportConfigChooserPanelBase(ReportControlPanel reportControlPanel,
                                         String removeButtonLabel, String addButtonLabel, String resetButtonLabel,
                                         String leftLabel, String middleLabel, String rightLabel) {
@@ -149,6 +151,15 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
         model.addElement(item); // At end
     }
 
+    public static void setPanelBorders(String[] titles, JPanel[] panels) {
+        for (int i = 0; i < panels.length; i++) {
+            TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
+            Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+            titledBorder.setTitleColor(new Color(100, 100, 100));
+            panels[i].setBorder(BorderFactory.createCompoundBorder(titledBorder, emptyBorder));
+        }
+    }
+
     abstract void updateReportConfig();
 
     private class removeItemListener implements ActionListener {
@@ -193,7 +204,7 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
 
     private class ItemCellRender extends JLabel implements ListCellRenderer<ItemType> {
         private static final long serialVersionUID = 7586072864239449518L;
-        private final Color HIGHLIGHT_COLOR = new Color(0, 0, 128);
+
 
         public ItemCellRender() {
             setOpaque(true);
@@ -202,15 +213,20 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
         public Component getListCellRendererComponent(JList<? extends ItemType> list, ItemType item,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
             setText(fullName(item));
-            if (isSelected) {
-                setBackground(HIGHLIGHT_COLOR);
-                setForeground(Color.white);
-            } else {
-                setBackground(Color.white);
-                setForeground(Color.black);
-            }
+            setSelectionBehavior(this, isSelected);
             return this;
         }
+    }
+
+    public static void setSelectionBehavior(JLabel label, boolean isSelected){
+        if (isSelected) {
+            label.setBackground(HIGHLIGHT_COLOR);
+            label.setForeground(Color.white);
+        } else {
+            label.setBackground(Color.white);
+            label.setForeground(Color.black);
+        }
+
     }
 }
 

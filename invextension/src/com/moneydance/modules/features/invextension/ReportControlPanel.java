@@ -496,9 +496,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         reportStatusText.setText(output);
     }
 
-
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();

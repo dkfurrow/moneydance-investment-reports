@@ -42,27 +42,19 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = -3102906929058309264L;
     public static final String COPY_CLIPBOARD = "copyClipboard";
     private String auditString;
-    private ExtractorReturnBase extractor;
     private Point location;
     private int maximumHeight;
-    private JTextPane textPane;
-    private JScrollPane scrollPane;
-    private JButton copyToClipboardButton;
 
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
                                                final Point location, final int maximumHeight){
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ReturnsAuditDisplayFrame returnsAuditDisplayFrame =
-                        new ReturnsAuditDisplayFrame(extractor, location, maximumHeight);
-                returnsAuditDisplayFrame.showFrame();
-            }
+        SwingUtilities.invokeLater(() -> {
+            ReturnsAuditDisplayFrame returnsAuditDisplayFrame =
+                    new ReturnsAuditDisplayFrame(extractor, location, maximumHeight);
+            returnsAuditDisplayFrame.showFrame();
         });
     }
 
     public ReturnsAuditDisplayFrame(ExtractorReturnBase extractor, Point location, int maximumHeight)  {
-        this.extractor = extractor;
         this.location = location;
         this.maximumHeight = maximumHeight;
         auditString = extractor.getAuditString();
@@ -70,10 +62,10 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     }
 
     private void initComponents(){
-        copyToClipboardButton = new JButton("Copy to Clipboard");
+        JButton copyToClipboardButton = new JButton("Copy to Clipboard");
         copyToClipboardButton. addActionListener(this);
         copyToClipboardButton.setActionCommand(COPY_CLIPBOARD);
-        textPane = new JTextPane();
+        JTextPane textPane = new JTextPane();
 //        textPane.setSize(new Dimension(500, 500));
         textPane.setText("Returns Information: " + auditString);
         textPane.setCaretPosition(0);
@@ -81,7 +73,7 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
         textPane.setEditable(false);
         // create a scrollpane; modify its attributes as desired
 
-        scrollPane = new JScrollPane(textPane);
+        JScrollPane scrollPane = new JScrollPane(textPane);
         scrollPane.setPreferredSize(new Dimension(500, Math.min(maximumHeight, textPane.getPreferredSize().height)));
         // now add it all to a panel
 

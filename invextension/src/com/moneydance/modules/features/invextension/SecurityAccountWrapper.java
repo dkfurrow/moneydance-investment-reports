@@ -33,7 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Adds functionality to
@@ -90,7 +91,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     public void generateTransValues() throws Exception {
         ArrayList<TransactionValues> transValuesSet = new ArrayList<>();
         ArrayList<ParentTxn> assocTrans = new ArrayList<>();
-        Account thisAccount = currencyWrapper.curID == invAcctWrapper.getBulkSecInfo().getCashCurrencyWrapper().getCurID() ? invAcctWrapper
+        Account thisAccount = Objects.equals(currencyWrapper.curID, invAcctWrapper.getBulkSecInfo().getCashCurrencyWrapper().getCurID()) ? invAcctWrapper
                 .getInvestmentAccount() : this.securityAccount;
         TxnSet txnSet = invAcctWrapper.getBulkSecInfo().getTransactionSet().getTransactionsForAccount(thisAccount);
         DividendFrequencyAnalyzer dividendFrequencyAnalyzer = new DividendFrequencyAnalyzer();
@@ -105,7 +106,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         Collections.sort(assocTrans, BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
-                    thisAccount, this, transValuesSet, this.getBulkSecInfo(), reportConfig);
+                    thisAccount, this, transValuesSet, this.getBulkSecInfo());
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
             transValuesSet.add(transValuesToAdd);
             if (thisAccount.getAccountType() == Account.AccountType.SECURITY)
@@ -127,9 +128,9 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     @NotNull
     public ArrayList<String[]> listTransValuesInfo() {
         ArrayList<String[]> outputList = new ArrayList<>();
-        for (TransactionValues transactionValues : transValuesList) {
-            outputList.add(transactionValues.listInfo());
-        }
+        assert transValuesList != null;
+        outputList.addAll(transValuesList.stream().map(TransactionValues::listInfo)
+                .collect(Collectors.toList()));
         return outputList;
     }
 

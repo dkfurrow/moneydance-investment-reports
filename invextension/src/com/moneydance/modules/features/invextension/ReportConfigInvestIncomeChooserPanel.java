@@ -58,9 +58,7 @@ public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPan
             sortedIncomeAccounts.addAll(incomeAccounts);
             Collections.sort(sortedIncomeAccounts, new compareAccountNames());
 
-            for (Account acct : sortedIncomeAccounts) {
-                leftListModel.addElement(acct);
-            }
+            sortedIncomeAccounts.forEach(leftListModel::addElement);
         }
     }
 

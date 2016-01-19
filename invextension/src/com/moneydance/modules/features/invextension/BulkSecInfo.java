@@ -31,6 +31,7 @@ package com.moneydance.modules.features.invextension;
 import com.infinitekind.moneydance.model.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Retrieves maps which show relationships among accounts, + between accounts
@@ -47,61 +48,57 @@ public class BulkSecInfo {
      * Comparator to generate ordering of accounts based on type,
      * name and number
      */
-    static Comparator<Account> acctComp = new Comparator<Account>() {
-        @Override
-        public int compare(Account a1, Account a2) {
-            Integer t1 = a1.getAccountType().code();
-            Integer t2 = a2.getAccountType().code();
-            String name1 = a1.getAccountName();
-            String name2 = a1.getAccountName();
-            Integer num1 = a1.getAccountNum();
-            Integer num2 = a2.getAccountNum();
+    static Comparator<Account> acctComp = (a1, a2) -> {
+        Integer t1 = a1.getAccountType().code();
+        Integer t2 = a2.getAccountType().code();
+        String name1 = a1.getAccountName();
+        String name2 = a1.getAccountName();
+        Integer num1 = a1.getAccountNum();
+        Integer num2 = a2.getAccountNum();
 
-            if (t1.compareTo(t2) != 0) {// different Account Types
-                // Investment: 3000, Security 4000
-                return t1.compareTo(t2);// sort by Account Type
-            } else { // same account type
-                if (name1.compareTo(name2) != 0) {// different names
-                    return name1.compareTo(name2);
-                } else {// same names and account types
-                    return num1.compareTo(num2);
-                }
+        if (t1.compareTo(t2) != 0) {// different Account Types
+            // Investment: 3000, Security 4000
+            return t1.compareTo(t2);// sort by Account Type
+        } else { // same account type
+            if (name1.compareTo(name2) != 0) {// different names
+                return name1.compareTo(name2);
+            } else {// same names and account types
+                return num1.compareTo(num2);
             }
         }
     };
+
+
     /**
      * Comparator sorts transaction by date, account number, a custom
      * ordering based on transaction type, finally by transaction ID
      */
-    static Comparator<ParentTxn> txnComp = new Comparator<ParentTxn>() {
-        @Override
-        public int compare(ParentTxn t1, ParentTxn t2) {
+    static Comparator<ParentTxn> txnComp = (t1, t2) -> {
 
-            Integer d1 = t1.getDateInt();
-            Integer d2 = t2.getDateInt();
-            String id1 = t1.getParameter("id");
-            String id2 = t2.getParameter("id");
-            Integer assocAcctNum1 = getAssociatedAccount(t1).getAccountNum();
-            Integer assocAcctNum2 = getAssociatedAccount(t2).getAccountNum();
-            Integer transTypeSort1 = getTxnSortOrder(t1);
-            Integer transTypeSort2 = getTxnSortOrder(t2);
+        Integer d1 = t1.getDateInt();
+        Integer d2 = t2.getDateInt();
+        String id1 = t1.getParameter("id");
+        String id2 = t2.getParameter("id");
+        Integer assocAcctNum1 = getAssociatedAccount(t1).getAccountNum();
+        Integer assocAcctNum2 = getAssociatedAccount(t2).getAccountNum();
+        Integer transTypeSort1 = getTxnSortOrder(TxnUtil.getInvestTxnType(t1));
+        Integer transTypeSort2 = getTxnSortOrder(TxnUtil.getInvestTxnType(t2));
 
-            if (d1.compareTo(d2) != 0) {// different dates
-                return d1.compareTo(d2); // return date order
-            } else { // same date
-                // if Associated Accounts are different, sort Acct Nums
-                if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
-                    return assocAcctNum1.compareTo(assocAcctNum2);
-                } else {
-                    // if transaction types are different, sort on custom order
-                    if (transTypeSort1.compareTo(transTypeSort2) != 0) {
-                        return transTypeSort1.compareTo(transTypeSort2);
-                    } else { // sort on transIDs
-                        return id1.compareTo(id2);
-                    } // end transIDs order
-                }// end custom order
-            } // end date order
-        } // end compare method
+        if (d1.compareTo(d2) != 0) {// different dates
+            return d1.compareTo(d2); // return date order
+        } else { // same date
+            // if Associated Accounts are different, sort Acct Nums
+            if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
+                return assocAcctNum1.compareTo(assocAcctNum2);
+            } else {
+                // if transaction types are different, sort on custom order
+                if (transTypeSort1.compareTo(transTypeSort2) != 0) {
+                    return transTypeSort1.compareTo(transTypeSort2);
+                } else { // sort on transIDs
+                    return id1.compareTo(id2);
+                } // end transIDs order
+            }// end custom order
+        } // end date order
     }; // end inner class
 
     /* conveys account data here for processing */
@@ -164,9 +161,7 @@ public class BulkSecInfo {
         ArrayList<Account.AccountType> acctTypesList = new ArrayList<>();
         TreeSet<Account> SubAccts = new TreeSet<>(acctComp);
         if (acctTypes.length > 0) {
-            for (Account.AccountType acctType : acctTypes) {
-                acctTypesList.add(acctType);
-            }
+            Collections.addAll(acctTypesList, acctTypes);
         }
         for (int i = 0; i < sz; i++) {
             Account acct = parentAcct.getSubAccount(i);
@@ -183,11 +178,9 @@ public class BulkSecInfo {
      * returns integer for customer sort order based on transaction type
      * (ensures buys come before sells on day trades, for example)
      *
-     * @param parentTxn Parent Transaction
      * @return Integer which represents sort order
      */
-    public static Integer getTxnSortOrder(ParentTxn parentTxn) {
-        InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
+    public static Integer getTxnSortOrder(InvestTxnType transType) {
         Integer txnOrder = 0;
         switch (transType) {
             case BUY:
@@ -240,9 +233,9 @@ public class BulkSecInfo {
 
         for (CurrencyWrapper curWrapper : currencyWrappers.values()) {
             List<CurrencySnapshot> snapshots = curWrapper.currencyType.getSnapshots();
-            for (int i = 0; i < snapshots.size(); i++) {
-                currInfo.add(loadCurrencySnapshotArray(curWrapper.currencyType, snapshots.get(i)));
-            }
+            currInfo.addAll(snapshots.stream().map(snapshot ->
+                    loadCurrencySnapshotArray(curWrapper.currencyType, snapshot))
+                    .collect(Collectors.toList()));
         }
         return currInfo;
     }
@@ -366,7 +359,7 @@ public class BulkSecInfo {
      */
     private CurrencyWrapper defineCashCurrency() {
         CurrencyTable currencyTable = accountBook.getCurrencies();
-        CurrencyType cashCurrencyType = null;
+        CurrencyType cashCurrencyType;
         boolean cashCurrencyAbsent = currencyTable.getCurrencyByTickerSymbol("CASH") == null &&
                 currencyTable.getCurrencyByName("CASH") == null;
         if(cashCurrencyAbsent){
@@ -396,12 +389,11 @@ public class BulkSecInfo {
     private HashMap<String, CurrencyWrapper> getCurrencyWrappersFromRoot() {
         List<CurrencyType> currencies = accountBook.getCurrencies().getAllCurrencies();
         HashMap<String, CurrencyWrapper> wrapperHashMap = new HashMap<>();
-        for (CurrencyType currency : currencies) {
-            if (currency.getCurrencyType() == CurrencyType.Type.SECURITY) {
-                String thisID = currency.getParameter("id");
-                wrapperHashMap.put(thisID, new CurrencyWrapper(currency, this));
-            }
-        }
+        currencies.stream().filter(currency -> currency.getCurrencyType() ==
+                CurrencyType.Type.SECURITY).forEach(currency -> {
+            String thisID = currency.getParameter("id");
+            wrapperHashMap.put(thisID, new CurrencyWrapper(currency, this));
+        });
         // make sure new Currency is added!
         wrapperHashMap.put(cashCurrencyWrapper.getCurID(),
                 cashCurrencyWrapper);
@@ -419,11 +411,8 @@ public class BulkSecInfo {
         TreeSet<Account> allSubAccounts = getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
         HashSet<Integer> excludedAccountNums = reportConfig.getExcludedAccountNums();
         TreeSet<Account> selectedSubAccounts = new TreeSet<>(acctComp);
-        for (Account account : allSubAccounts){
-            if(!excludedAccountNums.contains(account.getAccountNum())) {
-                selectedSubAccounts.add(account);
-            }
-        }
+        selectedSubAccounts.addAll(allSubAccounts.stream().filter(account ->
+                !excludedAccountNums.contains(account.getAccountNum())).collect(Collectors.toList()));
         HashSet<InvestmentAccountWrapper> invAcctWrappers = new HashSet<>();
         for (Account selectedSubAccount : selectedSubAccounts) {
             //Load investment account into Wrapper Class

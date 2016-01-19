@@ -58,9 +58,7 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
             sortedExpenseAccounts.addAll(expenseAccounts);
             Collections.sort(sortedExpenseAccounts, new compareAccountNames());
 
-            for (Account acct : sortedExpenseAccounts) {
-                leftListModel.addElement(acct);
-            }
+            sortedExpenseAccounts.forEach(leftListModel::addElement);
         }
     }
 

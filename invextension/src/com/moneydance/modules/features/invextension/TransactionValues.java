@@ -180,8 +180,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public TransactionValues(ParentTxn thisParentTxn, Account referenceAccount,
                              SecurityAccountWrapper securityAccountWrapper,
-                             ArrayList<TransactionValues> prevTransLines, BulkSecInfo currentInfo,
-                             ReportConfig reportConfig) throws Exception {
+                             ArrayList<TransactionValues> prevTransLines,
+                             BulkSecInfo currentInfo) throws Exception {
 
         //initialize values
         this.parentTxn = thisParentTxn;
@@ -627,10 +627,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
         return shortBasis;
     }
 
-    public long getTransfer() {
-        return transfer;
-    }
-
     public String getTxnID() {
         return txnID;
     }
@@ -681,58 +677,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
     public Integer getTxnSortOrder() {
         InvestTxnType transType = this.parentTxn != null ?
                 TxnUtil.getInvestTxnType(parentTxn) : InvestTxnType.BANK;
-        Integer txnOrder = 0;
-        switch (transType) {
-            case BUY:
-                txnOrder = 0;
-                break;
-            case BUY_XFER:
-                txnOrder = 1;
-                break;
-            case DIVIDEND_REINVEST:
-                txnOrder = 2;
-                break;
-            case SELL:
-                txnOrder = 3;
-                break;
-            case SELL_XFER:
-                txnOrder = 4;
-                break;
-            case SHORT:
-                txnOrder = 5;
-                break;
-            case COVER:
-                txnOrder = 6;
-                break;
-            case MISCINC:
-                txnOrder = 7;
-                break;
-            case MISCEXP:
-                txnOrder = 8;
-                break;
-            case DIVIDEND:
-                txnOrder = 9;
-                break;
-            case DIVIDENDXFR:
-                txnOrder = 10;
-                break;
-            case BANK:
-                txnOrder = 11;
-                break;
-        }
-        return txnOrder;
+        return BulkSecInfo.getTxnSortOrder(transType);
     }
 
-    /**
-     * totalFlows are all cash flows (including income/expense)
-     * note buys are < 0 by convention for IRR
-     *
-     * @return total cash effect of transaction
-     */
-    public long getTotalFlows() {
-        return getBuy() + getSell() + getShortSell() +
-                getCoverShort() + getCommission() + getIncome() + getExpense();
-    }
 
     public long getIncomeExpenseFlows() {
         return getIncome() + getExpense();

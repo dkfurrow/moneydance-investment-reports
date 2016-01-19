@@ -29,18 +29,16 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
-import com.moneydance.apps.md.controller.io.FileUtils;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Field chooser panel to control the order and identity of fields to be included
@@ -63,27 +61,10 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     private final JCheckBox removeHideOnHomepageAccountsBox = new JCheckBox("<HTML>Remove accounts with<br>" +
             "'Hide on Home Page' set</HTML>", false);
 
-    private ReportConfigAccountChooserPanel() {
-        initComponents();
-    }
-
     public ReportConfigAccountChooserPanel(ReportControlPanel reportControlPanel) {
         this.reportControlPanel = reportControlPanel;
         initComponents();
 
-    }
-
-    @SuppressWarnings("unused")
-    public static void main(String[] args) throws Exception {
-//        Class<? extends TotalReport> reportClass = TotalSnapshotReport.class;
-//        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(reportClass);
-//        ReportConfigAccountChooserPanel testPanel = new ReportConfigAccountChooserPanel();
-//        String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test.moneydance\\\\root.mdinternal";
-//        String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestSave.moneydance\\\\root.mdinternal";
-//        File mdFile = new File(testFileStr2);
-//        testPanel.root = FileUtils.readAccountsFromFile(mdFile, null);
-//        testPanel.populateBothAccountLists(reportConfig);
-//        ReportControlPanel.TestFrame frame = new ReportControlPanel.TestFrame(testPanel);
     }
 
     private void initComponents() {
@@ -99,12 +80,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
 
         String[] titles = {"Available Accounts", "Actions", "Accounts in Report"};
         JPanel[] panels = {availableAccountsPanel, accountControlPanel, accountsIncludedPanel};
-        for (int i = 0; i < panels.length; i++) {
-            TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
-            Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-            titledBorder.setTitleColor(new Color(100, 100, 100));
-            panels[i].setBorder(BorderFactory.createCompoundBorder(titledBorder, emptyBorder));
-        }
+        ReportConfigChooserPanelBase.setPanelBorders(titles, panels);
 
 
         availableAccountsPanel.add(availableAccountPane);
@@ -149,42 +125,27 @@ public class ReportConfigAccountChooserPanel extends JPanel {
 
     }
 
-    private void initializeHideInactiveAccountsButton() {
-        boolean hideInactiveAccountsRemoved = true;
-        HashSet<Account> hideInactiveAccounts = new HashSet<>();
+    private void initializeHideButton(JCheckBox checkBox){
+        Predicate<Account> hideFunction =
+                checkBox.equals(removeInactiveAccountsBox) ?
+                        Account::getAccountIsInactive : Account::getHideOnHomePage;
+        boolean hideAccountsRemoved = true;
+        HashSet<Account> hideAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
+                = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance()
+                .getRoot(), Account.AccountType.INVESTMENT);
 
-        for (Account investmentAccount : investmentAccountSet) {
-            if (investmentAccount.getAccountIsInactive()) hideInactiveAccounts.add(investmentAccount);
-        }
+        hideAccounts.addAll(investmentAccountSet.stream()
+                .filter(hideFunction).collect(Collectors.toList()));
         for (int i = 0; i < includedAccountsListModel.size(); i++) {
             Account account = includedAccountsListModel.getElementAt(i);
-            if (hideInactiveAccounts.contains(account)) {
-                hideInactiveAccountsRemoved = false;
+            if (hideAccounts.contains(account)) {
+                hideAccountsRemoved = false;
                 break;
             }
         }
-        removeInactiveAccountsBox.setSelected(hideInactiveAccountsRemoved);
-    }
+        checkBox.setSelected(hideAccountsRemoved);
 
-    private void initializeHideOnHomePageButton() {
-        boolean hideOnHomePageAccountsRemoved = true;
-        HashSet<Account> hideOnHomePageAccounts = new HashSet<>();
-        TreeSet<Account> investmentAccountSet
-                = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
-
-        for (Account investmentAccount : investmentAccountSet) {
-            if (investmentAccount.getHideOnHomePage()) hideOnHomePageAccounts.add(investmentAccount);
-        }
-        for (int i = 0; i < includedAccountsListModel.size(); i++) {
-            Account account = includedAccountsListModel.getElementAt(i);
-            if (hideOnHomePageAccounts.contains(account)) {
-                hideOnHomePageAccountsRemoved = false;
-                break;
-            }
-        }
-        removeHideOnHomepageAccountsBox.setSelected(hideOnHomePageAccountsRemoved);
     }
 
     private void removeInactiveAccounts() {
@@ -218,8 +179,8 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         availableAccountPane.setPreferredSize(dimension);
         includedAccountsPane.setPreferredSize(dimension);
 
-        initializeHideInactiveAccountsButton();
-        initializeHideOnHomePageButton();
+        initializeHideButton(removeInactiveAccountsBox);
+        initializeHideButton(removeHideOnHomepageAccountsBox);
     }
 
     private void populateAvailableAccountsList() throws Exception {
@@ -227,9 +188,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
             TreeSet<Account> investmentAccountSet
                     = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
 
-            for (Account investmentAccount : investmentAccountSet) {
-                availableAccountsListModel.addElement(investmentAccount);
-            }
+            investmentAccountSet.forEach(availableAccountsListModel::addElement);
         } else {
             throw new Exception("Cannot obtain account list");
         }
@@ -270,9 +229,8 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         HashSet<Integer> excludedAccountNums = new HashSet<>();
         HashSet<Account> excludedAccounts = getExcludedAccountSet();
 
-        for (Account account : excludedAccounts) {
-            excludedAccountNums.add(account.getAccountNum());
-        }
+        excludedAccountNums.addAll(excludedAccounts.stream()
+                .map(Account::getAccountNum).collect(Collectors.toList()));
 
         reportControlPanel.getReportConfig().setExcludedAccountNums(excludedAccountNums);
     }
@@ -378,8 +336,6 @@ public class ReportConfigAccountChooserPanel extends JPanel {
 
     class AccountCellRenderer extends JLabel implements ListCellRenderer<Account> {
         private static final long serialVersionUID = 7586072864239449518L;
-        private final Color HIGHLIGHT_COLOR = new Color(0, 0, 128);
-
         public AccountCellRenderer() {
             setOpaque(true);
         }
@@ -388,13 +344,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
                                                       int index, boolean isSelected, boolean cellHasFocus) {
             String displayText = value.getAccountName().trim() + " (id: " + value.getAccountNum() + ")";
             setText(displayText);
-            if (isSelected) {
-                setBackground(HIGHLIGHT_COLOR);
-                setForeground(Color.white);
-            } else {
-                setBackground(Color.white);
-                setForeground(Color.black);
-            }
+            ReportConfigChooserPanelBase.setSelectionBehavior(this, isSelected);
             return this;
         }
     }
