@@ -39,10 +39,7 @@ import org.junit.Test;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 import static org.junit.Assert.assertFalse;
 
@@ -210,13 +207,13 @@ public class BulkSecInfoTest {
      * @return true if error found
      * @throws ParseException
      */
-    private static boolean compareTransactions(ArrayList<TransLine> compRpt,
-                                               ArrayList<TransLine> baseRpt, int decPlaces) throws ParseException {
+    private static boolean compareTransactions(HashMap<String, TransLine> compRpt,
+                                               HashMap<String, TransLine> baseRpt, int decPlaces) throws ParseException {
         boolean errorFound = false;
         System.out.println("Comparing Transactions-- ");
-        for (int i = 0; i < compRpt.size(); i++) {
-            TransLine compLine = compRpt.get(i);
-            TransLine baseLine = baseRpt.get(i);
+        for (TransLine compLine : compRpt.values()) {
+            String idCompLine = compLine.getRow()[4];
+            TransLine baseLine = baseRpt.get(idCompLine);
             if (TransLine.compareTransLines(compLine, baseLine, decPlaces, limitComparisonToMinDigits)) {
                 errorFound = true;
             }
@@ -232,16 +229,16 @@ public class BulkSecInfoTest {
      * @param readFile file to be read
      * @return ArrayList of TransLine type
      */
-    private static ArrayList<TransLine> readCSVIntoTransLine(File readFile) {
+    private static HashMap<String, TransLine> readCSVIntoTransLine(File readFile) {
         ArrayList<String[]> inputStrAL = IOUtils.readCSVIntoArrayList(readFile);
         inputStrAL.remove(0); // remove header row
-        ArrayList<TransLine> outputTransAL = new ArrayList<>();
+        HashMap<String, TransLine> outputTransHM = new HashMap<>();
         for (String[] inLine : inputStrAL) {
             TransLine outLine = new TransLine(inLine);
-            outputTransAL.add(outLine);
+            String id = outLine.getRow()[4];
+            outputTransHM.put(id, outLine);
         }
-        Collections.sort(outputTransAL);
-        return outputTransAL;
+        return outputTransHM;
     }
 
     /**
@@ -252,15 +249,15 @@ public class BulkSecInfoTest {
      * @return ArrayList of type Transline from stored md data
      * @throws Exception
      */
-    private static ArrayList<TransLine> readStringArrayIntoTransLine(BulkSecInfo currentInfo) throws Exception {
+    private static HashMap<String, TransLine> readStringArrayIntoTransLine(BulkSecInfo currentInfo) throws Exception {
         ArrayList<String[]> transActivityReport = currentInfo.listAllTransValues();
-        ArrayList<TransLine> outputTransAL = new ArrayList<>();
+        HashMap<String, TransLine> outputTransHM = new HashMap<>();
         for (String[] row : transActivityReport) {
             TransLine line = new TransLine(row);
-            outputTransAL.add(line);
+            String id = line.getRow()[4];
+            outputTransHM.put(id, line);
         }
-        Collections.sort(outputTransAL);
-        return outputTransAL;
+        return outputTransHM;
     }
 
     /**
@@ -270,8 +267,8 @@ public class BulkSecInfoTest {
     @Test
     public void testListTransValuesCumMapAvgCost() {
         boolean errorFound = false;
-        ArrayList<TransLine> transBase;
-        ArrayList<TransLine> transTest;
+        HashMap<String, TransLine> transBase;
+        HashMap<String, TransLine> transTest;
         try {
             BulkSecInfo currentInfo = getBaseSecurityInfoAvgCost();
             transBase = readCSVIntoTransLine(mdTestFileCSVAvgCost);
@@ -294,8 +291,8 @@ public class BulkSecInfoTest {
     @Test
     public void testListTransValuesCumMapLotMatch() {
         boolean errorFound = false;
-        ArrayList<TransLine> transBase;
-        ArrayList<TransLine> transTest;
+        HashMap<String, TransLine> transBase;
+        HashMap<String, TransLine> transTest;
         try {
             BulkSecInfo currentInfo = getBaseSecurityInfoLotMatch();
             transBase = readCSVIntoTransLine(mdTestFileCSVLotMatch);
@@ -351,17 +348,9 @@ public class BulkSecInfoTest {
                         errorFound = true;
                     }
                 } else {
-                    if (i != 4) {// not transaction id
-                        if (!similarElements(compStr, baseStr, decPlaces, limitPrecision)) {
-                            printErrorMessage(compRpt, baseRpt, i);
-                            errorFound = true;
-                        }
-                    } else { // transaction id, print if unequal, but not error because transactions are
-                        // identified by charactaristic 'hash'
-                        if(!baseStr.equals(compStr)){
-                            System.out.println("Inserted Transaction: " + baseRpt.printElements() + " transction Ids not equal");
-
-                        }
+                    if (!similarElements(compStr, baseStr, decPlaces, limitPrecision)) {
+                        printErrorMessage(compRpt, baseRpt, i);
+                        errorFound = true;
                     }
                 }
             }
@@ -373,6 +362,7 @@ public class BulkSecInfoTest {
             }
             return errorFound;
         }
+
 
         private static void printErrorMessage(TransLine compRpt, TransLine baseRpt, int i) {
             System.out.println("Error at " + i + " member of report line"
@@ -388,9 +378,9 @@ public class BulkSecInfoTest {
             // because new uuid's are created for initial balance transactions,
             // must compare by 'hashing' fields together
             String[] rowComp = t.getRow();
-            String idComp = rowComp[0] + rowComp[1] + rowComp[2] + rowComp[5] + rowComp[7];
+            String idComp = rowComp[4];
             String[] rowThis = t.getRow();
-            String idThis = rowThis[0] + rowThis[1] + rowThis[2] + rowThis[5] + rowThis[7];
+            String idThis = rowThis[4];
             return idThis.compareTo(idComp);
         }
 

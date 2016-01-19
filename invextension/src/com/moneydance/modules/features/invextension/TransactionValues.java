@@ -138,9 +138,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
         parentTxn.setDescription(memo);
         parentTxn.setMemo(memo);
         parentTxn.setStatus(AbstractTxn.STATUS_UNRECONCILED);
-        UUID txnProxyUUID = UUID.randomUUID();
-        parentTxn.setParameter("id", txnProxyUUID.toString());
-        this.txnID = txnProxyUUID.toString();
+        String txnProxyUUID = invAcctWrapper.getInvestmentAccount().getParameter("id");
+        parentTxn.setParameter("id", txnProxyUUID);
+        this.txnID = txnProxyUUID;
 
 
         this.referenceAccount = invAcctWrapper.getCashAccountWrapper().getSecurityAccount();
