@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="7 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.8 in: C:\Java\jdk1.8.0_45\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -395,6 +395,10 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
@@ -406,16 +410,12 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.FeatureModuleContext]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.FeatureModuleContext loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
-	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipFile loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.HashMap loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="7 seconds">
+	<target name="invextension" time="8 seconds">
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:43: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist because it already exists.]]></message>
 		</task>
@@ -595,180 +595,6 @@ not part of the command.]]></message>
     E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
 		</task>
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:53: " name="jar" time="0 seconds">
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\InvestmentReportsHelp.html omitted as E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist\invextension.mxt:com/moneydance/modules/features/invextension/InvestmentReportsHelp.html is up to date.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\icon.gif omitted as E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist\invextension.mxt:com/moneydance/modules/features/invextension/icon.gif is up to date.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\meta_info.dict omitted as E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist\invextension.mxt:com/moneydance/modules/features/invextension/meta_info.dict is up to date.]]></message>
-			<message priority="debug"><![CDATA[No sources found.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AggregationController.class added as com/moneydance/modules/features/invextension/AggregationController.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Aggregator.class added as com/moneydance/modules/features/invextension/Aggregator.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AllAggregate.class added as com/moneydance/modules/features/invextension/AllAggregate.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo$1.class added as com/moneydance/modules/features/invextension/BulkSecInfo$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo$2.class added as com/moneydance/modules/features/invextension/BulkSecInfo$2.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo$3.class added as com/moneydance/modules/features/invextension/BulkSecInfo$3.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\BulkSecInfo.class added as com/moneydance/modules/features/invextension/BulkSecInfo.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ComponentReport.class added as com/moneydance/modules/features/invextension/ComponentReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\CompositeReport$1.class added as com/moneydance/modules/features/invextension/CompositeReport$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\CompositeReport$COMPOSITE_TYPE.class added as com/moneydance/modules/features/invextension/CompositeReport$COMPOSITE_TYPE.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\CompositeReport.class added as com/moneydance/modules/features/invextension/CompositeReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\CurrencyWrapper.class added as com/moneydance/modules/features/invextension/CurrencyWrapper.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRange$1.class added as com/moneydance/modules/features/invextension/DateRange$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRange$DATE_RULE.class added as com/moneydance/modules/features/invextension/DateRange$DATE_RULE.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRange$REF_DATE.class added as com/moneydance/modules/features/invextension/DateRange$REF_DATE.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRange.class added as com/moneydance/modules/features/invextension/DateRange.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$1.class added as com/moneydance/modules/features/invextension/DateRangePanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$BoxFocusListener.class added as com/moneydance/modules/features/invextension/DateRangePanel$BoxFocusListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$DateFieldDocumentListener.class added as com/moneydance/modules/features/invextension/DateRangePanel$DateFieldDocumentListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$DateFieldFocusListener.class added as com/moneydance/modules/features/invextension/DateRangePanel$DateFieldFocusListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$Focus.class added as com/moneydance/modules/features/invextension/DateRangePanel$Focus.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel$ItemChangeListener.class added as com/moneydance/modules/features/invextension/DateRangePanel$ItemChangeListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateRangePanel.class added as com/moneydance/modules/features/invextension/DateRangePanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils$intPair.class added as com/moneydance/modules/features/invextension/DateUtils$intPair.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\DateUtils.class added as com/moneydance/modules/features/invextension/DateUtils.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorBase.class added as com/moneydance/modules/features/invextension/ExtractorBase.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorBuy.class added as com/moneydance/modules/features/invextension/ExtractorBuy.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorCoveredShort.class added as com/moneydance/modules/features/invextension/ExtractorCoveredShort.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorDividends$1.class added as com/moneydance/modules/features/invextension/ExtractorDividends$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorDividends.class added as com/moneydance/modules/features/invextension/ExtractorDividends.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorEndPosition.class added as com/moneydance/modules/features/invextension/ExtractorEndPosition.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorEndPrice.class added as com/moneydance/modules/features/invextension/ExtractorEndPrice.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorEndValue.class added as com/moneydance/modules/features/invextension/ExtractorEndValue.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorExpense.class added as com/moneydance/modules/features/invextension/ExtractorExpense.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorGains.class added as com/moneydance/modules/features/invextension/ExtractorGains.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorGainsFT.class added as com/moneydance/modules/features/invextension/ExtractorGainsFT.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorIRR.class added as com/moneydance/modules/features/invextension/ExtractorIRR.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorIncome.class added as com/moneydance/modules/features/invextension/ExtractorIncome.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorLongBasis.class added as com/moneydance/modules/features/invextension/ExtractorLongBasis.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorModifiedDietzReturn.class added as com/moneydance/modules/features/invextension/ExtractorModifiedDietzReturn.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorOrdinaryReturn.class added as com/moneydance/modules/features/invextension/ExtractorOrdinaryReturn.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorPriceChanges.class added as com/moneydance/modules/features/invextension/ExtractorPriceChanges.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorReturnBase$1.class added as com/moneydance/modules/features/invextension/ExtractorReturnBase$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorReturnBase$ReturnValueElement.class added as com/moneydance/modules/features/invextension/ExtractorReturnBase$ReturnValueElement.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorReturnBase$ReturnWindowType.class added as com/moneydance/modules/features/invextension/ExtractorReturnBase$ReturnWindowType.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorReturnBase.class added as com/moneydance/modules/features/invextension/ExtractorReturnBase.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorSell.class added as com/moneydance/modules/features/invextension/ExtractorSell.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorShortBasis.class added as com/moneydance/modules/features/invextension/ExtractorShortBasis.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorShortSell.class added as com/moneydance/modules/features/invextension/ExtractorShortSell.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorStartPosition.class added as com/moneydance/modules/features/invextension/ExtractorStartPosition.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorStartPrice.class added as com/moneydance/modules/features/invextension/ExtractorStartPrice.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ExtractorStartValue.class added as com/moneydance/modules/features/invextension/ExtractorStartValue.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GainsAverageCalc.class added as com/moneydance/modules/features/invextension/GainsAverageCalc.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GainsCalc.class added as com/moneydance/modules/features/invextension/GainsCalc.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GainsLotMatchCalc.class added as com/moneydance/modules/features/invextension/GainsLotMatchCalc.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeek.class added as com/moneydance/modules/features/invextension/GoalSeek.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeekData.class added as com/moneydance/modules/features/invextension/GoalSeekData.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeekFunction.class added as com/moneydance/modules/features/invextension/GoalSeekFunction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\GoalSeekStatus.class added as com/moneydance/modules/features/invextension/GoalSeekStatus.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\HelpFileDisplay$1.class added as com/moneydance/modules/features/invextension/HelpFileDisplay$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\HelpFileDisplay$FileResources.class added as com/moneydance/modules/features/invextension/HelpFileDisplay$FileResources.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\HelpFileDisplay.class added as com/moneydance/modules/features/invextension/HelpFileDisplay.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\IOUtils.class added as com/moneydance/modules/features/invextension/IOUtils.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class added as com/moneydance/modules/features/invextension/InvestmentAccountWrapper.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\LogController$CustomXMLFormatter.class added as com/moneydance/modules/features/invextension/LogController$CustomXMLFormatter.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\LogController.class added as com/moneydance/modules/features/invextension/LogController.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\MDData$MDFileLoader.class added as com/moneydance/modules/features/invextension/MDData$MDFileLoader.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\MDData$ObservableLastTransactionDate.class added as com/moneydance/modules/features/invextension/MDData$ObservableLastTransactionDate.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\MDData$TransactionMonitor.class added as com/moneydance/modules/features/invextension/MDData$TransactionMonitor.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\MDData.class added as com/moneydance/modules/features/invextension/MDData.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Main.class added as com/moneydance/modules/features/invextension/Main.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Prefs.class added as com/moneydance/modules/features/invextension/Prefs.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfig$FrameInfo.class added as com/moneydance/modules/features/invextension/ReportConfig$FrameInfo.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfig.class added as com/moneydance/modules/features/invextension/ReportConfig.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$1.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$AccountCellRenderer.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$AccountCellRenderer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$addAccountsListener.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$addAccountsListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$removeAccountsListener.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$removeAccountsListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$removeHideOnHomePageAccountListener.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$removeHideOnHomePageAccountListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$removeInactiveAccountsListener.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$removeInactiveAccountsListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel$resetListener.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel$resetListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.class added as com/moneydance/modules/features/invextension/ReportConfigAccountChooserPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase$1.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase$ItemCellRender.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase$ItemCellRender.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase$addItemListener.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase$addItemListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase$removeItemListener.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase$removeItemListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase$resetItemListener.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase$resetItemListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigChooserPanelBase.class added as com/moneydance/modules/features/invextension/ReportConfigChooserPanelBase.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$1.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$AddFieldsListener.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$AddFieldsListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveDownListener.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$MoveDownListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$MoveUpListener.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$MoveUpListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$RemoveFieldsListener.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$RemoveFieldsListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel$ResetListener.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel$ResetListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigFieldChooserPanel.class added as com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel$1.class added as com/moneydance/modules/features/invextension/ReportConfigInvestExpenseChooserPanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel$compareAccountNames.class added as com/moneydance/modules/features/invextension/ReportConfigInvestExpenseChooserPanel$compareAccountNames.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel.class added as com/moneydance/modules/features/invextension/ReportConfigInvestExpenseChooserPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel$1.class added as com/moneydance/modules/features/invextension/ReportConfigInvestIncomeChooserPanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel$compareAccountNames.class added as com/moneydance/modules/features/invextension/ReportConfigInvestIncomeChooserPanel$compareAccountNames.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel.class added as com/moneydance/modules/features/invextension/ReportConfigInvestIncomeChooserPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlFrame.class added as com/moneydance/modules/features/invextension/ReportControlFrame.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$1.class added as com/moneydance/modules/features/invextension/ReportControlPanel$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$FolderPanel.class added as com/moneydance/modules/features/invextension/ReportControlPanel$FolderPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$ReportExecutor.class added as com/moneydance/modules/features/invextension/ReportControlPanel$ReportExecutor.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$ReportOptionsPanel.class added as com/moneydance/modules/features/invextension/ReportControlPanel$ReportOptionsPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame$TestWindowListener.class added as com/moneydance/modules/features/invextension/ReportControlPanel$TestFrame$TestWindowListener.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel$TestFrame.class added as com/moneydance/modules/features/invextension/ReportControlPanel$TestFrame.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportControlPanel.class added as com/moneydance/modules/features/invextension/ReportControlPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportSaveControlFrame.class added as com/moneydance/modules/features/invextension/ReportSaveControlFrame.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReportSaveControlPanel.class added as com/moneydance/modules/features/invextension/ReportSaveControlPanel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReturnsAuditDisplayFrame$1.class added as com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\ReturnsAuditDisplayFrame.class added as com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityAccountEditorForm.class added as com/moneydance/modules/features/invextension/SecurityAccountEditorForm.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityAccountWrapper$1.class added as com/moneydance/modules/features/invextension/SecurityAccountWrapper$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityAccountWrapper$DIV_FREQUENCY.class added as com/moneydance/modules/features/invextension/SecurityAccountWrapper$DIV_FREQUENCY.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityAccountWrapper$DividendFrequencyAnalyzer.class added as com/moneydance/modules/features/invextension/SecurityAccountWrapper$DividendFrequencyAnalyzer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityAccountWrapper.class added as com/moneydance/modules/features/invextension/SecurityAccountWrapper.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityFromToReport.class added as com/moneydance/modules/features/invextension/SecurityFromToReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityReport$MetricEntry.class added as com/moneydance/modules/features/invextension/SecurityReport$MetricEntry.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityReport.class added as com/moneydance/modules/features/invextension/SecurityReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecuritySnapshotReport.class added as com/moneydance/modules/features/invextension/SecuritySnapshotReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecuritySubTypeWrapper.class added as com/moneydance/modules/features/invextension/SecuritySubTypeWrapper.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\SecurityTypeWrapper.class added as com/moneydance/modules/features/invextension/SecurityTypeWrapper.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalFromToReport.class added as com/moneydance/modules/features/invextension/TotalFromToReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReport$ReportTableModel.class added as com/moneydance/modules/features/invextension/TotalReport$ReportTableModel.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReport.class added as com/moneydance/modules/features/invextension/TotalReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputFrame$OutputFrameWindowAdapter.class added as com/moneydance/modules/features/invextension/TotalReportOutputFrame$OutputFrameWindowAdapter.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputFrame.class added as com/moneydance/modules/features/invextension/TotalReportOutputFrame.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$1.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$2.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$2.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader$Arrow.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader$Arrow.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ArrowHeader.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ClosedValueRowFilter.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ClosedValueRowFilter.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ColSizeOption.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ColSizeOption.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ColType.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ColType.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$FormattedTable.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$JScrollPaneAdjuster.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$MetricEntryNumberRenderer.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$MetricEntryNumberRenderer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$MultiLineHeaderRenderer.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$MultiLineHeaderRenderer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ObjectTableCellRenderer.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ObjectTableCellRenderer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$PercentTableCellRenderer.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$PercentTableCellRenderer.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$1.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$2.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$2.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$3.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$3.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$4.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$4.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$5.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$5.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$6.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$6.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui$7.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$7.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$RowSortGui.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane$ScrollableSelectFirstColumnCellAction.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollableSelectFirstColumnCellAction.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalReportOutputPane.class added as com/moneydance/modules/features/invextension/TotalReportOutputPane.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TotalSnapshotReport.class added as com/moneydance/modules/features/invextension/TotalSnapshotReport.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Tradeable.class added as com/moneydance/modules/features/invextension/Tradeable.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransactionValues$1.class added as com/moneydance/modules/features/invextension/TransactionValues$1.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransactionValues$2.class added as com/moneydance/modules/features/invextension/TransactionValues$2.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransactionValues$InitialTransactionException.class added as com/moneydance/modules/features/invextension/TransactionValues$InitialTransactionException.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransactionValues$SplitValues.class added as com/moneydance/modules/features/invextension/TransactionValues$SplitValues.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\TransactionValues.class added as com/moneydance/modules/features/invextension/TransactionValues.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRR.class added as com/moneydance/modules/features/invextension/XIRR.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRData.class added as com/moneydance/modules/features/invextension/XIRRData.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\XIRRNPV.class added as com/moneydance/modules/features/invextension/XIRRNPV.class is outdated.]]></message>
-			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension omitted as E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist\invextension.mxt:com/moneydance/modules/features/invextension/ is up to date.]]></message>
 			<message priority="info"><![CDATA[Building jar: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist\invextension.mxt]]></message>
 			<message priority="debug"><![CDATA[adding directory META-INF/]]></message>
 			<message priority="debug"><![CDATA[adding entry META-INF/MANIFEST.MF]]></message>
@@ -784,8 +610,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/Aggregator.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/AllAggregate.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo$2.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo$3.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/BulkSecInfo.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ComponentReport.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/CompositeReport$1.class]]></message>
@@ -891,7 +715,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportControlPanel.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportSaveControlFrame.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReportSaveControlPanel.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecurityAccountEditorForm.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/SecurityAccountWrapper$1.class]]></message>
@@ -910,7 +733,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputFrame$OutputFrameWindowAdapter.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputFrame.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$2.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader$Arrow.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ClosedValueRowFilter.class]]></message>
@@ -918,8 +740,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ColType.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class]]></message>
@@ -927,13 +747,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$MultiLineHeaderRenderer.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ObjectTableCellRenderer.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$PercentTableCellRenderer.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$2.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$3.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$4.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$5.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$6.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$7.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class]]></message>
@@ -952,7 +765,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="2 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="3 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -980,8 +793,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/Aggregator.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/AllAggregate.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo$2.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo$3.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/BulkSecInfo.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ComponentReport.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/CompositeReport$1.class]]></message>
@@ -1087,7 +898,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportControlPanel.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportSaveControlFrame.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReportSaveControlPanel.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/ReturnsAuditDisplayFrame.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecurityAccountEditorForm.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/SecurityAccountWrapper$1.class]]></message>
@@ -1106,7 +916,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputFrame$OutputFrameWindowAdapter.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputFrame.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$2.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader$Arrow.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ArrowHeader.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ClosedValueRowFilter.class]]></message>
@@ -1114,8 +923,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ColType.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable$FormattedTableMouseAdapter.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$FormattedTable.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster$Adjuster.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$JScrollPaneAdjuster.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectLastColumnCellAction.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectNextColumnCellAction.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$LockedTableSelectPreviousColumnCellAction.class]]></message>
@@ -1123,13 +930,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$MultiLineHeaderRenderer.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ObjectTableCellRenderer.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$PercentTableCellRenderer.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$2.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$3.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$4.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$5.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$6.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui$7.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$RowSortGui.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectNextColumnCellAction.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalReportOutputPane$ScrollTableSelectPreviousColumnCellAction.class]]></message>
@@ -1145,7 +945,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 23305 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 21562 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />
