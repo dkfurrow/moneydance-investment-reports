@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public class BulkSecInfo {
 
-    public static class ComparablePair<T extends Comparable>{
+    public static class ComparablePair<T extends Comparable<T>>{
         T c1;
         T c2;
 
@@ -59,8 +59,8 @@ public class BulkSecInfo {
         }
     }
 
-    public static int compareAll(ComparablePair[] comparablePairs){
-        for(ComparablePair comparablePair : comparablePairs){
+    public static int compareAll(ComparablePair<? extends Comparable<?>>[] comparablePairs){
+        for(ComparablePair<? extends Comparable<?>> comparablePair : comparablePairs){
             int compareVal = comparablePair.compare();
             if(compareVal != 0) return compareVal;
         }
@@ -73,11 +73,11 @@ public class BulkSecInfo {
      */
     @SuppressWarnings("unchecked")
     static Comparator<Account> acctComp = (a1, a2) -> {
-        ComparablePair[] comparablePairs = new ComparablePair[3];
+        ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[3];
 
-        comparablePairs[0] = new ComparablePair(a1.getAccountType().code(), a2.getAccountType().code());
-        comparablePairs[1] = new ComparablePair(a1.getAccountName(), a2.getAccountName());
-        comparablePairs[2] = new ComparablePair(a1.getParameter("id"), a2.getParameter("id"));
+        comparablePairs[0] = new ComparablePair<>(a1.getAccountType().code(), a2.getAccountType().code());
+        comparablePairs[1] = new ComparablePair<>(a1.getAccountName(), a2.getAccountName());
+        comparablePairs[2] = new ComparablePair<>(a1.getParameter("id"), a2.getParameter("id"));
 
         return compareAll(comparablePairs);
     };
@@ -88,14 +88,14 @@ public class BulkSecInfo {
      */
     @SuppressWarnings("unchecked")
     static Comparator<ParentTxn> txnComp = (t1, t2) -> {
-        ComparablePair[] comparablePairs = new ComparablePair[4];
+        ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
 
-        comparablePairs[0] = new ComparablePair(t1.getDateInt(), t2.getDateInt());
-        comparablePairs[1] = new ComparablePair(getAssociatedAccount(t1).getParameter("id"),
+        comparablePairs[0] = new ComparablePair<>(t1.getDateInt(), t2.getDateInt());
+        comparablePairs[1] = new ComparablePair<>(getAssociatedAccount(t1).getParameter("id"),
                 getAssociatedAccount(t1).getParameter("id"));
-        comparablePairs[2] = new ComparablePair(getTxnSortOrder(TxnUtil.getInvestTxnType(t1)),
+        comparablePairs[2] = new ComparablePair<>(getTxnSortOrder(TxnUtil.getInvestTxnType(t1)),
                 getTxnSortOrder(TxnUtil.getInvestTxnType(t2)));
-        comparablePairs[3] = new ComparablePair(t1.getParameter("id"), t2.getParameter("id"));
+        comparablePairs[3] = new ComparablePair<>(t1.getParameter("id"), t2.getParameter("id"));
 
         return compareAll(comparablePairs);
 

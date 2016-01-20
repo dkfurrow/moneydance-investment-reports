@@ -58,14 +58,13 @@ public class TransactionValues implements Comparable<TransactionValues> {
     static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
         @Override
         public int compare(TransactionValues t1, TransactionValues t2) {
+            ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
 
-            ComparablePair[] comparablePairs = new ComparablePair[4];
-
-            comparablePairs[0] = new ComparablePair(t1.dateInt, t2.dateInt);
-            comparablePairs[1] = new ComparablePair(t1.referenceAccount.getAccountNum(),
+            comparablePairs[0] = new ComparablePair<>(t1.dateInt, t2.dateInt);
+            comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getAccountNum(),
                     t2.referenceAccount.getAccountNum());
-            comparablePairs[2] = new ComparablePair(t1.getTxnSortOrder(), t2.getTxnSortOrder());
-            comparablePairs[3] = new ComparablePair(t1.txnID, t2.txnID);
+            comparablePairs[2] = new ComparablePair<>(t1.getTxnSortOrder(), t2.getTxnSortOrder());
+            comparablePairs[3] = new ComparablePair<>(t1.txnID, t2.txnID);
 
             return BulkSecInfo.compareAll(comparablePairs);
         }

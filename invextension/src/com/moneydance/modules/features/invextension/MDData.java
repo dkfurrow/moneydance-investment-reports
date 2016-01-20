@@ -331,7 +331,7 @@ public class MDData {
             if (extension != null) {
                 FeatureModuleContext featureModuleContext = extension.getUnprotectedContext();
                 featureModuleContext.showURL("moneydance:fmodule:yahooqt:update");
-                currentInfo = new BulkSecInfo(accountBook, reportConfig); 
+                currentInfo = new BulkSecInfo(accountBook, reportConfig);
             }
         }
 
