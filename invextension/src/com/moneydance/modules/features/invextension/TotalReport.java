@@ -302,7 +302,7 @@ public abstract class TotalReport {
         public void refreshReport(BulkSecInfo newCurrentInfo) throws Exception{
             TotalReport.this.securityReports = new HashSet<>();
             TotalReport.this.compositeReports = new HashSet<>();
-            TotalReport.this.currentInfo = newCurrentInfo;//TODO: Check if needed
+            TotalReport.this.currentInfo = newCurrentInfo;
             TotalReport.this.calcReport();
             Object[][] newData = getReportTable();
             if(!isSameDimension(newData)) throw new Exception("Error on Refresh--different dimensions!");

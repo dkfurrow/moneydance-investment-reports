@@ -42,67 +42,65 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public class BulkSecInfo {
+
+    public static class ComparablePair<T extends Comparable>{
+        T c1;
+        T c2;
+
+        public ComparablePair(T c1, T c2) {
+            this.c1 = c1;
+            this.c2 = c2;
+        }
+
+        public int compare(){
+            return c1.compareTo(c2);
+        }
+    }
+
+    public static int compareAll(ComparablePair[] comparablePairs){
+        for(ComparablePair comparablePair : comparablePairs){
+            int compareVal = comparablePair.compare();
+            if(compareVal != 0) return compareVal;
+        }
+        return comparablePairs[comparablePairs.length - 1].compare();
+    }
 
     /**
      * Comparator to generate ordering of accounts based on type,
      * name and number
      */
+    @SuppressWarnings("unchecked")
     static Comparator<Account> acctComp = (a1, a2) -> {
-        Integer t1 = a1.getAccountType().code();
-        Integer t2 = a2.getAccountType().code();
-        String name1 = a1.getAccountName();
-        String name2 = a1.getAccountName();
-        Integer num1 = a1.getAccountNum();
-        Integer num2 = a2.getAccountNum();
+        ComparablePair[] comparablePairs = new ComparablePair[3];
 
-        if (t1.compareTo(t2) != 0) {// different Account Types
-            // Investment: 3000, Security 4000
-            return t1.compareTo(t2);// sort by Account Type
-        } else { // same account type
-            if (name1.compareTo(name2) != 0) {// different names
-                return name1.compareTo(name2);
-            } else {// same names and account types
-                return num1.compareTo(num2);
-            }
-        }
+        comparablePairs[0] = new ComparablePair(a1.getAccountType().code(), a2.getAccountType().code());
+        comparablePairs[1] = new ComparablePair(a1.getAccountName(), a2.getAccountName());
+        comparablePairs[2] = new ComparablePair(a1.getParameter("id"), a2.getParameter("id"));
+
+        return compareAll(comparablePairs);
     };
-
 
     /**
      * Comparator sorts transaction by date, account number, a custom
      * ordering based on transaction type, finally by transaction ID
      */
+    @SuppressWarnings("unchecked")
     static Comparator<ParentTxn> txnComp = (t1, t2) -> {
+        ComparablePair[] comparablePairs = new ComparablePair[4];
 
-        Integer d1 = t1.getDateInt();
-        Integer d2 = t2.getDateInt();
-        String id1 = t1.getParameter("id");
-        String id2 = t2.getParameter("id");
-        Integer assocAcctNum1 = getAssociatedAccount(t1).getAccountNum();
-        Integer assocAcctNum2 = getAssociatedAccount(t2).getAccountNum();
-        Integer transTypeSort1 = getTxnSortOrder(TxnUtil.getInvestTxnType(t1));
-        Integer transTypeSort2 = getTxnSortOrder(TxnUtil.getInvestTxnType(t2));
+        comparablePairs[0] = new ComparablePair(t1.getDateInt(), t2.getDateInt());
+        comparablePairs[1] = new ComparablePair(getAssociatedAccount(t1).getParameter("id"),
+                getAssociatedAccount(t1).getParameter("id"));
+        comparablePairs[2] = new ComparablePair(getTxnSortOrder(TxnUtil.getInvestTxnType(t1)),
+                getTxnSortOrder(TxnUtil.getInvestTxnType(t2)));
+        comparablePairs[3] = new ComparablePair(t1.getParameter("id"), t2.getParameter("id"));
 
-        if (d1.compareTo(d2) != 0) {// different dates
-            return d1.compareTo(d2); // return date order
-        } else { // same date
-            // if Associated Accounts are different, sort Acct Nums
-            if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
-                return assocAcctNum1.compareTo(assocAcctNum2);
-            } else {
-                // if transaction types are different, sort on custom order
-                if (transTypeSort1.compareTo(transTypeSort2) != 0) {
-                    return transTypeSort1.compareTo(transTypeSort2);
-                } else { // sort on transIDs
-                    return id1.compareTo(id2);
-                } // end transIDs order
-            }// end custom order
-        } // end date order
-    }; // end inner class
+        return compareAll(comparablePairs);
 
-    /* conveys account data here for processing */
-    public Main extension;
+    };
+
     /* Cash Currency Type for uninvested cash */
     private CurrencyWrapper cashCurrencyWrapper;
     /* first transaction date (to price cash currency)*/

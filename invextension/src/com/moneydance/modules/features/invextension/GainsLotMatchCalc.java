@@ -49,7 +49,7 @@ public class GainsLotMatchCalc implements GainsCalc {
     TransactionValues currentTrans;
     TransactionValues prevTransValues;
     long adjPrevPos;
-    Hashtable<String, Long> matchTable;
+
 
 
     public GainsLotMatchCalc() {
@@ -93,6 +93,7 @@ public class GainsLotMatchCalc implements GainsCalc {
         } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) { // subsequent pos smaller than previous
             // implies prev long basis must exist
             double wtAvgUnitCost;
+            Hashtable<String, Long> matchTable = getLotMatchTable();
             if (matchTable == null) {//use average cost
                 wtAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
 
@@ -192,7 +193,6 @@ public class GainsLotMatchCalc implements GainsCalc {
                 prevDateInt, currentRate, currentDateInt) / currentRate);
         this.adjPrevPos = prevTransValues == null ? 0
                 : Math.round(prevTransValues.getPosition() * splitAdjust);
-        this.matchTable = getLotMatchTable();
     }
 
     /**
@@ -202,22 +202,15 @@ public class GainsLotMatchCalc implements GainsCalc {
      * @return lot match table for security
      */
     public Hashtable<String, Long> getLotMatchTable() {
-        Hashtable<String, Long> lotMatchTable = new Hashtable<>();
         SplitTxn securitySplit = currentTrans.getReferenceAccount().getCurrencyType()
                 .equals(currentInfo.getCashCurrencyWrapper().getCurrencyType()) ? null
                 : TxnUtil.getSecurityPart(currentTrans.getParentTxn());
         Hashtable<String, Long> splitTable = null;
         if (securitySplit != null) {
             splitTable = TxnUtil.parseCostBasisTag(securitySplit);
-        }
-        if (splitTable != null) {
-            for (String key : splitTable.keySet()) {
-                Long valueLong = splitTable.get(key);
-                lotMatchTable.put(key, valueLong);
-            }
-        }
-        if (lotMatchTable.size() > 0) {
-            return lotMatchTable;
+    }
+        if (splitTable != null && splitTable.size() > 0) {
+            return splitTable;
         } else {
             return null;
         }

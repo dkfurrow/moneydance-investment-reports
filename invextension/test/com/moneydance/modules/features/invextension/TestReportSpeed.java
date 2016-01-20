@@ -38,6 +38,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 @SuppressWarnings("unused")
@@ -68,19 +69,18 @@ public class TestReportSpeed extends JFrame {
         BulkSecInfoTest.MDFileInfo mdFileInfo = loadRootAccountFromFolder();
         Account root = mdFileInfo.getRootAccount();
         addRecordTime("fileLoaded");
-        BulkSecInfo currentInfo =  new BulkSecInfo(mdFileInfo.getAccountBook(),
-                ReportConfig.getStandardReportConfig(TotalFromToReport.class));
-        addRecordTime("bulkInfoLoaded");
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalSnapshotReport.class);
+//        reportConfig.setUseAverageCostBasis(false); //Was test--revised GainsLotMatchCalc to limit unnecessary calls
+        BulkSecInfo currentInfo =  new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
+        addRecordTime("bulkInfoLoaded");
         reportConfig.setDateRange(testDateRange);
         TotalReport report = new TotalSnapshotReport(reportConfig, currentInfo);
         report.calcReport();
         addRecordTime("reportCalculated");
         report.displayReport();
         addRecordTime("endProcess");
-        displayResults();
         describeBulkSecInfo(currentInfo);
-
+        displayResults();
     }
 
     /**
@@ -127,6 +127,10 @@ public class TestReportSpeed extends JFrame {
             String secondsFromStartStr = !mileStone.equals(startTime) ? getTimeBetween(startDT, thisCurrentDT) : "";
             System.out.println(mileStone + tab + formattedDTStr + tab +  secondsFromStartStr);
         }
+        long diff = recordTimes.get("endProcess").getTime() - recordTimes.get("fileLoaded").getTime();
+        DecimalFormat df = new DecimalFormat("##.##");
+
+        System.out.println("From File Load to End: " + df.format((double) diff / 1000.0)   + " seconds");
     }
 
     public static String getTimeBetween(Date startDT, Date currentDT){

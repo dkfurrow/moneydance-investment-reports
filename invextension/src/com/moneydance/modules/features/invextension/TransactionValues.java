@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
-import java.util.UUID;
+import com.moneydance.modules.features.invextension.BulkSecInfo.ComparablePair;
 
 /**
  * produces basic transaction data
@@ -54,33 +54,20 @@ public class TransactionValues implements Comparable<TransactionValues> {
     private Integer dateInt; // transaction date
     private String txnID; // transaction ID
 
+    @SuppressWarnings("unchecked")
     static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
         @Override
         public int compare(TransactionValues t1, TransactionValues t2) {
-            Integer d1 = t1.dateInt;
-            Integer d2 = t2.dateInt;
-            String id1 = t1.txnID;
-            String id2 = t2.txnID;
-            Integer assocAcctNum1 = t1.referenceAccount.getAccountNum();
-            Integer assocAcctNum2 = t1.referenceAccount.getAccountNum();
-            Integer transTypeSort1 = t1.getTxnSortOrder();
-            Integer transTypeSort2 = t2.getTxnSortOrder();
 
-            if (d1.compareTo(d2) != 0) {// different dates
-                return d1.compareTo(d2); // return date order
-            } else { // same date
-                // if Associated Accounts are different, sort Acct Nums
-                if (assocAcctNum1.compareTo(assocAcctNum2) != 0) {
-                    return assocAcctNum1.compareTo(assocAcctNum2);
-                } else {
-                    // if transaction types are different, sort on custom order
-                    if (transTypeSort1.compareTo(transTypeSort2) != 0) {
-                        return transTypeSort1.compareTo(transTypeSort2);
-                    } else { // sort on transIDs
-                        return id1.compareTo(id2);
-                    } // end transIDs order
-                }// end custom order
-            } // end date order
+            ComparablePair[] comparablePairs = new ComparablePair[4];
+
+            comparablePairs[0] = new ComparablePair(t1.dateInt, t2.dateInt);
+            comparablePairs[1] = new ComparablePair(t1.referenceAccount.getAccountNum(),
+                    t2.referenceAccount.getAccountNum());
+            comparablePairs[2] = new ComparablePair(t1.getTxnSortOrder(), t2.getTxnSortOrder());
+            comparablePairs[3] = new ComparablePair(t1.txnID, t2.txnID);
+
+            return BulkSecInfo.compareAll(comparablePairs);
         }
     }; // end inner class
 
