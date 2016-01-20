@@ -269,7 +269,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     private boolean isLiveReport(){
         Class<? extends TotalReport> reportClass = reportConfig.getReportClass();
         if(reportClass.equals(TotalFromToReport.class)){
-            return DateUtils.isToday(reportConfig.getDateRange().getFromDateInt());
+            return DateUtils.isToday(reportConfig.getDateRange().getToDateInt());
         } else {
             return DateUtils.isToday(reportConfig.getDateRange().getSnapDateInt());
         }

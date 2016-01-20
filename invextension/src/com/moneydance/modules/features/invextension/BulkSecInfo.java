@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 1.0
  */
-@SuppressWarnings("unchecked")
+
 public class BulkSecInfo {
 
     public static class ComparablePair<T extends Comparable<T>>{
@@ -71,7 +71,7 @@ public class BulkSecInfo {
      * Comparator to generate ordering of accounts based on type,
      * name and number
      */
-    @SuppressWarnings("unchecked")
+
     static Comparator<Account> acctComp = (a1, a2) -> {
         ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[3];
 
@@ -86,7 +86,7 @@ public class BulkSecInfo {
      * Comparator sorts transaction by date, account number, a custom
      * ordering based on transaction type, finally by transaction ID
      */
-    @SuppressWarnings("unchecked")
+
     static Comparator<ParentTxn> txnComp = (t1, t2) -> {
         ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
 

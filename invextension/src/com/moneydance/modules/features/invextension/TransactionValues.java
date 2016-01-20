@@ -54,7 +54,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
     private Integer dateInt; // transaction date
     private String txnID; // transaction ID
 
-    @SuppressWarnings("unchecked")
+    
     static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
         @Override
         public int compare(TransactionValues t1, TransactionValues t2) {
