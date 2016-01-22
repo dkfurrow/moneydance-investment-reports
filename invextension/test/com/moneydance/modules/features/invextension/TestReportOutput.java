@@ -49,7 +49,7 @@ public class TestReportOutput extends JFrame {
     private static String testFileStr1 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\TestCurrent.moneydance";
     private static String testFileStr2 = "E:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test-2015.moneydance";
     private static String testFileStr3 = "E:\\\\Temp\\\\TestMD02.moneydance\\\\";
-    public static final File mdTestFolder = new File(testFileStr2);
+    public static final File mdTestFolder = new File(testFileStr);
 
     public static void main(String[] args) throws Exception {
 
