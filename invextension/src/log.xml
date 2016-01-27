@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="9 seconds">
+<build time="8 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 1.8 in: C:\Java\jdk1.8.0_45\jre]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 7]]></message>
@@ -316,10 +316,10 @@
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamTable loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.Writer loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.Writer loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
@@ -344,8 +344,6 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\resources\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
@@ -353,6 +351,8 @@
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
@@ -383,10 +383,6 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
-	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
@@ -398,6 +394,10 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.FeatureModuleContext]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/FeatureModuleContext.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.FeatureModuleContext loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
+	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipFile loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.HashMap loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
@@ -410,7 +410,7 @@
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:44: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\classes because it already exists.]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:48: " name="javac" time="3 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:48: " name="javac" time="4 seconds">
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AggregationController.java added as com\moneydance\modules\features\invextension\AggregationController.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\Aggregator.java added as com\moneydance\modules\features\invextension\Aggregator.class doesn't exist.]]></message>
 			<message priority="debug"><![CDATA[com\moneydance\modules\features\invextension\AllAggregate.java added as com\moneydance\modules\features\invextension\AllAggregate.class doesn't exist.]]></message>
@@ -754,7 +754,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:53: ]]></message>
 		</task>
-		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="4 seconds">
+		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:65: " name="java" time="3 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
