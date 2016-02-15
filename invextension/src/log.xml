@@ -316,15 +316,10 @@
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamTable loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Writer loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.StringReader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringEncodingException]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StringEncodingException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringEncodingException loaded from ant loader]]></message>
@@ -333,6 +328,11 @@
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamVector]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StreamVector.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamVector loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.StringReader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\lib\moneydance.jar com/infinitekind/util/StreamUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamUtil loaded from ant loader]]></message>
@@ -345,16 +345,16 @@
 	<message priority="debug"><![CDATA[Loaded from E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\resources\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.StringBuilder loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
@@ -403,7 +403,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="8 seconds">
+	<target name="invextension" time="7 seconds">
 		<task location="E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\src\build.xml:43: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping E:\DKF\COMPUTER\IntelliJWorkspace\invextension-2015_git\invextension\dist because it already exists.]]></message>
 		</task>
@@ -652,7 +652,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeekData.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeekFunction.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/GoalSeekStatus.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/HelpFileDisplay$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/HelpFileDisplay$FileResources.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/HelpFileDisplay.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/IOUtils.class]]></message>
@@ -836,7 +835,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeekData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeekFunction.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/GoalSeekStatus.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/HelpFileDisplay$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/HelpFileDisplay$FileResources.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/HelpFileDisplay.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/IOUtils.class]]></message>
@@ -935,7 +933,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 21691 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 21571 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />

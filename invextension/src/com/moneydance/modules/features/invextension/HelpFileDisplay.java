@@ -28,122 +28,93 @@
 
 package com.moneydance.modules.features.invextension;
 
-import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Displays Help File for user
  */
-public class HelpFileDisplay extends JFrame {
+public class HelpFileDisplay {
     public static final String fileLocation = "/com/moneydance/modules/features/invextension/InvestmentReportsHelp.html";
-    private static final long serialVersionUID = 2433263830156875464L;
-    private Point location;
 
-    HelpFileDisplay(Point point) {
+
+    private FileResources fileResources;
+
+    HelpFileDisplay() {
         super();
         try {
-
-            FileResources fileResources = new FileResources();
-            String displayString = fileResources.getOutString();
-            location = point;
-            // create jeditorpane
-            JEditorPane editor = new JEditorPane();
-
-            editor.getDocument().putProperty("Ignore-Charset", "true");  // this line makes no difference either way
-            editor.setContentType("text/html");
-            editor.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-            editor.setText(displayString);
-
-            // make it read-only
-            editor.setEditable(false);
-
-            // create a scrollpane; modify its attributes as desired
-            JScrollPane scrollPane = new JScrollPane(editor);
-
-            // now add it all to a frame
-            this.setTitle("Investment Reports: Help/Notes");
-            this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-
-            // make it easy to close the application
-            this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-            // display the frame
-            this.setSize(new Dimension(800, 600));
-
-            // pack it, if you prefer
-            //j.pack();
-
-            // center the jframe, then make it visible
-            editor.setCaretPosition(0);
+            fileResources = new FileResources();
         } catch (Exception e) {
             String message = e.getClass().getSimpleName() +  " thrown in HelpFileDisplay! ";
             LogController.logException(e, message);
-            JOptionPane.showMessageDialog(this, "Error! See " + ReportControlPanel.getOutputDirectoryPath()
-                            +" for details", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public boolean showHelpFile() throws IOException {
+
+
+        File tempFile = fileResources.createTempFile();
+        boolean success = false;
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(tempFile.toURI());
+                    success = true;
+                }
+            } else {
+                success = false;
+            }
+        return success;
+    }
+
 
     public static void main(String[] args) {
-
-        showHelpFile(new ReportConfig.FrameInfo().getPoint());
+        HelpFileDisplay helpFileDisplay = new HelpFileDisplay();
+        try {
+            boolean success = helpFileDisplay.showHelpFile();
+            System.out.println("Helpfile Displayed in Browser -- " + success);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void showHelpFile(final Point locationOnScreen) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                HelpFileDisplay helpFileDisplay = new HelpFileDisplay(locationOnScreen);
-                helpFileDisplay.showDisplay();
 
-            }
-        });
 
-    }
 
-    public void showDisplay() {
-        this.setLocation(location);
-        this.setVisible(true);
-    }
+
 
     static class FileResources {
-        String outString;
+        File tempFile;
 
         FileResources() throws IOException {
-            InputStream in = getClass().getResourceAsStream(fileLocation);
-            outString = getStringFromInputStream(in);
 
+            tempFile = File.createTempFile("helpfile", ".html");
         }
 
-        public String getOutString() {
-            return outString;
-        }
-
-        private String getStringFromInputStream(InputStream is) throws IOException {
-
+        public File createTempFile() throws IOException {
+            InputStream is = getClass().getResourceAsStream(fileLocation);
             BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
+            BufferedWriter bw = null;
 
             String line;
             try {
 
                 br = new BufferedReader(new InputStreamReader(is));
+                bw = new BufferedWriter(new FileWriter(tempFile));
                 while ((line = br.readLine()) != null) {
-                    sb.append(line);
+                    bw.write(line);
                 }
 
             }  finally {
+                if(bw != null){
+                    bw.close();
+                }
                 if (br != null) {
-                        br.close();
-
+                    br.close();
                 }
             }
-            return sb.toString();
+            return tempFile;
         }
-
 
     }
 

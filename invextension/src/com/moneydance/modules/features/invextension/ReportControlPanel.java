@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
@@ -156,12 +157,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
 
 
-        // Set text field width, button color
+        // Set text field width, button color, tool tip
         reportStatusPane.setPreferredSize(new Dimension(textFieldWidth, 54));
         reportStatusText.setWrapStyleWord(true);
         reportStatusText.setLineWrap(true);
         runReportsButton.setForeground(Color.red);
         showHelpFileButton.setForeground(Color.blue);
+        showHelpFileButton.setToolTipText("Display help file in system browser");
 
         // Add action listeners
         runReportsButton.setActionCommand(RUN_REPORTS);
@@ -566,7 +568,15 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 reportConfig.setUseOrdinaryReturn(reportOptionsPanel.useOrdinaryReturnCheckBox.isSelected());
                 break;
             case SHOW_HELP_FILE:
-                HelpFileDisplay.showHelpFile(this.getLocationOnScreen());
+                try {
+                    HelpFileDisplay helpFileDisplay = new HelpFileDisplay();
+                    helpFileDisplay.showHelpFile();
+                    updateStatus(Arrays.asList("\nHelp File Displayed in Browser!"));
+                } catch (IOException e1) {
+                    String msg = "Error on Displaying Help File!";
+                    LogController.logException(e1, msg);
+                    updateStatus(Arrays.asList("\n" + msg));
+                }
                 break;
             default:
                 break;
