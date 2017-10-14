@@ -85,7 +85,7 @@ public class BulkSecInfoTest {
         AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
 
         System.out.println("Doing Initial Load of AccountBook...");
-        wrapper.doInitialLoad(null);
+        wrapper.loadDataModel(null);
         AccountBook accountBook = wrapper.getBook();
         int accountCount = accountBook.getRootAccount().getSubAccounts().size();
         long transactionCount = accountBook.getTransactionSet().getTransactionCount();
