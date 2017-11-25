@@ -635,5 +635,13 @@ public class ReportProdTest {
         public String[] getRow() {
             return this.row;
         }
+
+        public String toString(){
+            StringBuilder sb = new StringBuilder();
+            for(String s : this.getRow()){
+                sb.append(s).append(':');
+            }
+            return sb.toString();
+        }
     }
 }
