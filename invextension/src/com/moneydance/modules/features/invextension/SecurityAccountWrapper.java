@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -121,10 +122,15 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         if (currencyWrapper.isCash) {
             return 100;
         } else {  // Price returned is latest price if requested date is before first snapshot
-                  // Correct that by taking nearest snapshot (i.e. first)
-            CurrencySnapshot firstSnapshot = currencyWrapper.getCurrencyType().getSnapshots().get(0);
-            if(dateInt < firstSnapshot.getDateInt()){
-                return Math.round(1.0 / firstSnapshot.getUserRate() * 100);
+            // Correct that by taking nearest snapshot (i.e. first)
+            List<CurrencySnapshot> snapshots = currencyWrapper.getCurrencyType().getSnapshots();
+            if (snapshots.size() > 0) {
+                CurrencySnapshot firstSnapshot = snapshots.get(0);
+                if (dateInt < firstSnapshot.getDateInt()) {
+                    return Math.round(1.0 / firstSnapshot.getUserRate() * 100);
+                } else {
+                    return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
+                }
             } else {
                 return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
             }

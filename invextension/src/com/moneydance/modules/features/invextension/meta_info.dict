@@ -1,9 +1,9 @@
 {
   "vendor" = "Dale Furrow"
-  "module_build" = "201"
+  "module_build" = "210"
   "minbuild" = "1000"
   "vendor.url" = "https://github.com/dkfurrow/moneydance-investment-reports"
-  "module_name" = "Investment Reports v 2.5"
+  "module_name" = "Investment Reports v 2.6"
   "module_desc" = "<html><body><title>Investment Reports</title><p>Useful reports on security/investment performance</p></body></html>"
-  "desc" = "Reports on investment performance, raw data dump to CSV at user-designated location."
+  "desc" = "Reports on investment performance, raw data dump to CSV at user-designated location. Updatd for md 2017"
 }
