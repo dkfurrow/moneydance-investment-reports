@@ -208,7 +208,7 @@ public class MDData {
         ArrayList<File> folderFiles = new ArrayList<>();
         folderFiles.add(mdFolder);
         AccountBookUtil.INTERNAL_FOLDER_CONTAINERS = folderFiles;
-        wrapper.doInitialLoad(null);
+        wrapper.loadDataModel(null);
         featureModuleContext = null;
         accountBook = wrapper.getBook();
         root = accountBook.getRootAccount();
