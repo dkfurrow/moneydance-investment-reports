@@ -617,6 +617,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
         return txnID;
     }
 
+    public Long getTransfer() { return transfer;}
+
     public Account getReferenceAccount() {
         return referenceAccount;
     }

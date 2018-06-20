@@ -48,11 +48,11 @@ public class TestReportOutput extends JFrame {
     private static String testFileStr = "./invextension/resources/testMD02.moneydance";
     private static String testFileStr1 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\FurrowTest.moneydance";
     private static String testFileStr2 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test-2015.moneydance";
-    private static String testFileStr3 = "D:\\\\Temp\\\\TestMD02.moneydance\\\\";
+    private static String testFileStr3 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\USD-AUD-test.moneydance";
 
 
     public static void main(String[] args) throws Exception {
-        File mdTestFolder = new File(testFileStr1);
+        File mdTestFolder = new File(testFileStr3);
 //        System.out.println(new File(".").getAbsolutePath());
         System.out.println(mdTestFolder.getAbsolutePath());
         System.out.println("Exists: " + mdTestFolder.exists());
