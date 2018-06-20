@@ -21,7 +21,7 @@ The tests verify transaction data and replicate report output from a test data f
 ### Also Useful:
 Within the test folder is a module *TestReportOutput* which will run the reports (by default pointing to the test datafile indicated above) *headless*, i.e. from the development environment, without the need to open moneydance.  This feature is essential for running/debugging any modifications.
 
-And of course, there is a help file accessible from within the application, or [here](src/com/moneydance/modules/features/invextension/InvestmentReportsHelp.html) 
+And of course, there is a help file accessible from within the application, or [here](https://github.com/dkfurrow/moneydance-investment-reports/blob/master/invextension/src/com/moneydance/modules/features/invextension/InvestmentReportsHelp.html) 
 
 ## Built With
 
