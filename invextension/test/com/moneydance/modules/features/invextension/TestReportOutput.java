@@ -35,8 +35,8 @@ import java.io.File;
 @SuppressWarnings("unused")
 public class TestReportOutput extends JFrame {
 
-    public static final DateRange testDateRange = new DateRange(20090601, 20100601, 20100601);
-    public static final File testFile = new File("E:\\Temp\\testFile.csv");
+    public static final DateRange testDateRange = new DateRange(20090601, 20100601,
+            20100601);
     private static final long serialVersionUID = -2315625753772573103L;
     private static final int fromDateInt = 20090601;
     private static final int toDateInt = 20100601;
@@ -52,7 +52,7 @@ public class TestReportOutput extends JFrame {
 
 
     public static void main(String[] args) throws Exception {
-        File mdTestFolder = new File(testFileStr3);
+        File mdTestFolder = new File(testFileStr);
 //        System.out.println(new File(".").getAbsolutePath());
         System.out.println(mdTestFolder.getAbsolutePath());
         System.out.println("Exists: " + mdTestFolder.exists());
