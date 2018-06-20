@@ -235,6 +235,13 @@ public class BulkSecInfo {
                     loadCurrencySnapshotArray(curWrapper.currencyType, snapshot))
                     .collect(Collectors.toList()));
         }
+        for (CurrencyType curType : this.getFXCurrencyTypesFromRoot().values()) {
+            List<CurrencySnapshot> snapshots = curType.getSnapshots();
+            currInfo.addAll(snapshots.stream().map(snapshot ->
+                    loadCurrencySnapshotArray(curType, snapshot))
+                    .collect(Collectors.toList()));
+        }
+
         return currInfo;
     }
 
@@ -397,6 +404,17 @@ public class BulkSecInfo {
                 cashCurrencyWrapper);
 
         return wrapperHashMap;
+    }
+
+    private HashMap<String, CurrencyType> getFXCurrencyTypesFromRoot() {
+        List<CurrencyType> currencies = accountBook.getCurrencies().getAllCurrencies();
+        HashMap<String, CurrencyType> currencyHashMap = new HashMap<>();
+        currencies.stream().filter(currency -> currency.getCurrencyType() ==
+                CurrencyType.Type.CURRENCY).forEach(currency -> {
+            String thisID = currency.getParameter("id");
+            currencyHashMap.put(thisID, currency);
+        });
+        return currencyHashMap;
     }
 
     /**

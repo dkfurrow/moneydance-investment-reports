@@ -218,6 +218,18 @@ public class InvestmentAccountWrapper implements Aggregator {
         return outputList;
     }
 
+    public CurrencyType getBaseCurrency(){
+        return currentInfo.getRoot().getCurrencyType();
+    }
+
+    public CurrencyType getAccountCurrency(){
+        return this.investmentAccount.getCurrencyType();
+    }
+
+    public double getAccountCurrencyUserRateByDateInt(int dateInt){
+        return  this.getAccountCurrency().getUserRateByDateInt(dateInt);
+    }
+
 
     @Override
     public String getAggregateName() {

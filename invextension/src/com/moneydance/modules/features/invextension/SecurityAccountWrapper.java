@@ -118,6 +118,10 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         setTransValuesList(transValuesSet);
     }
 
+    public double getCurrencyRateByDateInt(int dateInt){
+        return this.invAcctWrapper.getAccountCurrencyUserRateByDateInt(dateInt);
+    }
+
     public long getPrice(int dateInt) {
         if (currencyWrapper.isCash) {
             return 100;
@@ -127,12 +131,15 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             if (snapshots.size() > 0) {
                 CurrencySnapshot firstSnapshot = snapshots.get(0);
                 if (dateInt < firstSnapshot.getDateInt()) {
-                    return Math.round(1.0 / firstSnapshot.getUserRate() * 100);
+                    return Math.round((1.0 / firstSnapshot.getUserRate() *
+                            this.getCurrencyRateByDateInt(dateInt))* 100);
                 } else {
-                    return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
+                    return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)
+                            * this.getCurrencyRateByDateInt(dateInt))* 100);
                 }
             } else {
-                return Math.round(1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) * 100);
+                return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) *
+                        this.getCurrencyRateByDateInt(dateInt))  * 100);
             }
 
         }
