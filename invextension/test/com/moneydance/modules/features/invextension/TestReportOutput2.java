@@ -41,6 +41,7 @@ public class TestReportOutput2 {
     public static final int numFrozenColumns = 5; //Irrelevant for testing purposes
     public static final boolean closedPosHidden = true; //Irrelevant for testing purposes
     public static final String reportName = "TestName"; //Irrelevant for testing purposes
+    private static String testFileStr = "./invextension/resources/testMD02.moneydance";
     //
     public static final DateRange testDateRange = new DateRange(20090601, 20100601, 20100601);
 
@@ -48,6 +49,11 @@ public class TestReportOutput2 {
     //
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
+        File mdTestFolder = new File(testFileStr);
+        ReportControlFrame frame = new ReportControlFrame(mdTestFolder);
+        MDData mdData = MDData.getInstance();
+//        mdData.loadMDFile(mdTestFolder, null);
+//        mdData.initializeMDDataHeadless(false);
 //        Account root = FileUtils.readAccountsFromFile(mdTestFolder, null);
 
 //        ReportConfig reportConfig = new ReportConfig(TotalFromToReport.class, "StandardFTTest");

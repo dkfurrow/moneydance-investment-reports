@@ -45,7 +45,7 @@ public class TestReportOutput extends JFrame {
      */
     //
     //
-    private static String testFileStr = "./invextension/resources/testMD02.moneydance";
+    private static String testFileStr = "D:\\\\RECORDS\\\\moneydance\\\\Test\\\\FurrowTest.moneydance";
     private static String testFileStr1 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\FurrowTest.moneydance";
     private static String testFileStr2 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test-2015.moneydance";
     private static String testFileStr3 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\USD-AUD-test.moneydance";
