@@ -315,7 +315,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
             String dateString = " Date: " + DateUtils.convertToShort(dateInt);
             String errorString = "Error in transaction values calculation: " + securityAccountWrapper.getInvAcctWrapper().getName() +
                     " Security: " + securityAccountWrapper.getName() + dateString;
-            LogController.logException(e, errorString);
+            e.printStackTrace();
+//            LogController.logException(e, errorString);
         }
     }
 

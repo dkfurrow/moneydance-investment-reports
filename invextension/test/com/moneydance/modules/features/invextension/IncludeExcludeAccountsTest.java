@@ -77,20 +77,22 @@ public class IncludeExcludeAccountsTest {
         // load base and test balance maps
         for (Object[] objs : baseReportObject) {
             SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) objs[1];
-            assert objs[9] instanceof Double;
-            assert objs[10] instanceof Double;
+            assert objs[9] instanceof SecurityReport.MetricEntry;
+            assert objs[10] instanceof SecurityReport.MetricEntry;
             if (securityAccountWrapper.getName().trim().equals("CASH")) {
                 baseBalances.put(securityAccountWrapper.getFullName(),
-                        new CashBalances((Double) objs[9], (Double) objs[10]));
+                        new CashBalances(((SecurityReport.MetricEntry<?>) objs[9]).getDisplayValue(),
+                                ((SecurityReport.MetricEntry<?>) objs[10]).getDisplayValue()));
             }
         }
         for (Object[] objs : inputObject) {
             SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) objs[1];
-            assert objs[9] instanceof Double;
-            assert objs[10] instanceof Double;
+            assert objs[9] instanceof SecurityReport.MetricEntry;
+            assert objs[10] instanceof SecurityReport.MetricEntry;
             if (securityAccountWrapper.getName().trim().equals("CASH")) {
                 testBalances.put(securityAccountWrapper.getFullName(),
-                        new CashBalances((Double) objs[9], (Double) objs[10]));
+                        new CashBalances(((SecurityReport.MetricEntry<?>) objs[9]).getDisplayValue(),
+                                ((SecurityReport.MetricEntry<?>) objs[10]).getDisplayValue()));
             }
         }
         // compare maps

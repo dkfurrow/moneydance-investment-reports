@@ -133,7 +133,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     public static String getOutputDirectoryPath() {
-        return outputDirectory.getAbsolutePath();
+        if (outputDirectory != null){
+            return outputDirectory.getAbsolutePath();
+        } else {
+            return new File(System.getProperty("user.home")).getAbsolutePath();
+        }
     }
 
 
@@ -754,7 +758,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 System.out.println("getCurrentDirectory(): "
                         + chooser.getSelectedFile().getAbsolutePath());
                 directoryOutputField.setText(chooser.getSelectedFile().getAbsolutePath());
-                outputDirectory = new File(directoryOutputField.getText());
+                if (directoryOutputField != null){
+                    outputDirectory = new File(directoryOutputField.getText());
+                } else {
+                    outputDirectory = new File(System.getProperty("user.home"));
+                }
             } else {
                 System.out.println("No Selection ");
             }
@@ -773,7 +781,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                     directoryOutputField.setText(System.getProperty("user.home"));
                 }
             }
-            outputDirectory = new File(directoryOutputField.getText());
+            if (directoryOutputField != null){
+                outputDirectory = new File(directoryOutputField.getText());
+            } else {
+                outputDirectory = new File(System.getProperty("user.home"));
+            }
+
         }
 
         public void savePreferences() {
