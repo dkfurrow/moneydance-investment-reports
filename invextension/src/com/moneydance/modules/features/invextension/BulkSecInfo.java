@@ -93,8 +93,8 @@ public class BulkSecInfo {
         comparablePairs[0] = new ComparablePair<>(t1.getDateInt(), t2.getDateInt());
         comparablePairs[1] = new ComparablePair<>(getAssociatedAccount(t1).getParameter("id"),
                 getAssociatedAccount(t1).getParameter("id"));
-        comparablePairs[2] = new ComparablePair<>(getTxnSortOrder(TxnUtil.getInvestTxnType(t1)),
-                getTxnSortOrder(TxnUtil.getInvestTxnType(t2)));
+        comparablePairs[2] = new ComparablePair<>(getTxnSortOrder(InvestTxnType.values()[TxnUtil.getInvstTxnType(t1)]),
+                getTxnSortOrder(InvestTxnType.values()[TxnUtil.getInvstTxnType(t2)]));
         comparablePairs[3] = new ComparablePair<>(t1.getParameter("id"), t2.getParameter("id"));
 
         return compareAll(comparablePairs);
@@ -263,7 +263,7 @@ public class BulkSecInfo {
         }
         int todayDate = DateUtils.getLastCurrentDateInt();
         int dateInt = snapshot.getDateInt();
-        double closeRate = snapshot.getUserRate();
+        double closeRate = snapshot.getRate();
         currencyInfo.add(DateUtils.convertToShort(dateInt));
         currencyInfo.add(Double.toString(1 / closeRate));
         currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateInt,
@@ -372,15 +372,15 @@ public class BulkSecInfo {
             cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
             cashCurrencyType.setName("CASH");
             cashCurrencyType.setTickerSymbol("CASH");
-            cashCurrencyType.setRawRate(1.0, false);
+            cashCurrencyType.setRate(1.0, this.accountBook.getCurrencies().getBaseType());
             cashCurrencyType.setDecimalPlaces(4);
             cashCurrencyType.setParameter("asof_dt", firstDateInt);
-            cashCurrencyType.addSnapshotInt(firstDateInt, 1.0);
+            cashCurrencyType.addSnapshotInt(firstDateInt, 1.0, this.accountBook.getCurrencies().getBaseType());
         } else {
             cashCurrencyType = currencyTable.getCurrencyByTickerSymbol("CASH");
         }
         // ensure user rate is 1.0
-        if(cashCurrencyType.getUserRate() != 1.0) cashCurrencyType.setUserRate(1.0);
+        if(cashCurrencyType.getRelativeRate() != 1.0) cashCurrencyType.setRelativeRate(1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
         cashCurrencyWrapper.setCash();
         return cashCurrencyWrapper;

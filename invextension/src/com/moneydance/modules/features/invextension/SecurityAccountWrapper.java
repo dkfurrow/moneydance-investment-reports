@@ -131,7 +131,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             if (snapshots.size() > 0) {
                 CurrencySnapshot firstSnapshot = snapshots.get(0);
                 if (dateInt < firstSnapshot.getDateInt()) {
-                    return Math.round((1.0 / firstSnapshot.getUserRate() *
+                    return Math.round((1.0 / firstSnapshot.getRate() *
                             this.getCurrencyRateByDateInt(dateInt))* 100);
                 } else {
                     return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)

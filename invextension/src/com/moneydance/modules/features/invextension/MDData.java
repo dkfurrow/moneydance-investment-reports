@@ -121,7 +121,7 @@ public class MDData {
             String priceDateStr = currency.getParameter("price_date");
             String currencyID = currency.getParameter("id");
             double decimalPlaces = Math.pow(10.0,(double) currency.getDecimalPlaces());
-            Double userRate = (double) Math.round(currency.getUserRate() * decimalPlaces) / decimalPlaces;
+            Double userRate = (double) Math.round(currency.getRelativeRate() * decimalPlaces) / decimalPlaces;
             if (priceDateStr != null) {
                 Long priceDateLong = Long.parseLong(priceDateStr);
                 maxDateTime = Math.max(maxDateTime, priceDateLong);
