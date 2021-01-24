@@ -61,8 +61,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
             ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
 
             comparablePairs[0] = new ComparablePair<>(t1.dateInt, t2.dateInt);
-            comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getAccountNum(),
-                    t2.referenceAccount.getAccountNum());
+            comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getUUID(),
+                    t2.referenceAccount.getUUID());
             comparablePairs[2] = new ComparablePair<>(t1.getTxnSortOrder(), t2.getTxnSortOrder());
             comparablePairs[3] = new ComparablePair<>(t1.txnID, t2.txnID);
 
@@ -447,7 +447,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         txnInfo.append("Security " + ",");
         txnInfo.append("Ticker " + ",");
         txnInfo.append("DivFrequency " + ",");
-        txnInfo.append("TxnNum " + ",");
+        txnInfo.append("TxnId " + ",");
         txnInfo.append("Date" + ",");
         txnInfo.append("TxnType" + ",");
         txnInfo.append("Desc" + ",");
@@ -935,11 +935,11 @@ public class TransactionValues implements Comparable<TransactionValues> {
     } // end splitValues subClass
 
     private boolean isInvestmentExpense(SplitTxn split) {
-        return BulkSecInfo.getReportConfig().getInvestmentExpenseNums().contains(split.getAccount().getAccountNum());
+        return BulkSecInfo.getReportConfig().getInvestmentExpenseIds().contains(split.getAccount().getUUID());
     }
 
     private boolean isInvestmentIncome(SplitTxn split) {
-        return BulkSecInfo.getReportConfig().getInvestmentIncomeNums().contains(split.getAccount().getAccountNum());
+        return BulkSecInfo.getReportConfig().getInvestmentIncomeIds().contains(split.getAccount().getUUID());
     }
 } // end TransactionValues Class
 

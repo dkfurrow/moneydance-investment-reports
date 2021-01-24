@@ -3,6 +3,11 @@ build file for ant
 http://jakarta.apache.org/ant/index.html
 -->
 
+<!-- Note that current build (as of 01/22/21 uses openjdk version 15 (2020-09-15)
+ which is the same as included in moneydance.  Make sure environmental variable
+ JAVA_HOME is set to the correct root directory for this JDK
+ passcode is 'invest' upon prompt-->
+
 <project name="invextension" default="all" basedir=".">
 	<property name="version"  value="2.2"/>
 	<property name="src" value="."/>
@@ -38,11 +43,11 @@ http://jakarta.apache.org/ant/index.html
 				<fileset dir="${dist}" includes="**/*" />
 			</delete>	
 	</target>
-
+<!-- eliminated javac 'target' -->
 	<target name="invextension" depends="init">
 		<mkdir dir="${dist}"/>
 		<mkdir dir="${build}"/>
-		<javac  target="1.8" srcdir="${src}" debug="${debug}" optimize="${optimize}"
+		<javac  srcdir="${src}" debug="${debug}" optimize="${optimize}"
       classpathref="classpath"  destdir="${build}"
       includes="com/moneydance/modules/features/invextension/**"
       includeantruntime = "false">

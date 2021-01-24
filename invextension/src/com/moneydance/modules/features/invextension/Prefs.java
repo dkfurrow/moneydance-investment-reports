@@ -59,9 +59,9 @@ public class Prefs {
     static final String NUM_FROZEN_COLUMNS = "NUM_FROZEN_COLUMNS";
     static final String CLOSED_POS_HIDDEN = "CLOSED_POS_HIDDEN";
     static final String VIEWHEADER = "VIEWHEADER";
-    static final String EXCLUDEDACCOUNTNUMS = "EXCLUDEDACCOUNTNUMS";
-    static final String INVESTMENTEXPENSENUMS = "INVESTMENTEXPENSENUMS";
-    static final String INVESTMENTINCOMENUMS = "INVESTMENTINCOMENUMS";
+    static final String EXCLUDEDACCOUNTIDS = "EXCLUDEDACCOUNTIDS";
+    static final String INVESTMENTEXPENSEIDS = "INVESTMENTEXPENSEIDS";
+    static final String INVESTMENTINCOMEIDS = "INVESTMENTINCOMEIDS";
     static final String DATERANGE = "DATERANGE";
     static final String ISSTANDARD = "ISSTANDARD";
     static final String FRAMEINFO = "FRAMEINFO";

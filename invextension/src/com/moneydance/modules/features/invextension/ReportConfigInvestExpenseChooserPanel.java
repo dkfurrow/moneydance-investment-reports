@@ -77,20 +77,20 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
 
     @Override
     void populateRightList(ReportConfig reportConfig) {
-        HashSet<Integer> investmentExpenses = reportConfig.getInvestmentExpenseNums(); // Account numbers
+        HashSet<String> investmentExpenseIds = reportConfig.getInvestmentExpenseIds(); // Account numbers
 
-        for (int expenseAccountNumber : investmentExpenses) {
-            int index = findPossibleExpenseByAccountNum(expenseAccountNumber);
+        for (String expenseAccountId : investmentExpenseIds) {
+            int index = findPossibleExpenseByAccountId(expenseAccountId);
             if (index != -1) {
                 moveFromLeftToRight(index);
             }
         }
     }
 
-    private int findPossibleExpenseByAccountNum(int accountNum) {
+    private int findPossibleExpenseByAccountId(String accountId) {
         for (int i = 0; i < leftListModel.size(); i++) {
             Account acct = leftListModel.get(i);
-            if (acct.getAccountNum() == accountNum) {
+            if (acct.getUUID().equals(accountId)) {
                 return i;
             }
         }
@@ -99,14 +99,14 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
 
     @Override
     void updateReportConfig() {
-        HashSet<Integer> investmentExpenseNums = new HashSet<>();
+        HashSet<String> investmentExpenseIds = new HashSet<>();
 
         for (int i = 0; i < rightListModel.size(); i++) {
             Account acct = rightListModel.get(i);
-            investmentExpenseNums.add(acct.getAccountNum());
+            investmentExpenseIds.add(acct.getUUID());
         }
 
-        reportControlPanel.getReportConfig().setInvestmentExpenseNums(investmentExpenseNums);
+        reportControlPanel.getReportConfig().setInvestmentExpenseIds(investmentExpenseIds);
     }
 }
 

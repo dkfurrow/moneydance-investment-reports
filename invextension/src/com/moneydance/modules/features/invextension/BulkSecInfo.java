@@ -425,10 +425,10 @@ public class BulkSecInfo {
      */
     private HashSet<InvestmentAccountWrapper> getInvestmentAccountInfo(ReportConfig reportConfig) throws Exception {
         TreeSet<Account> allSubAccounts = getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);
-        HashSet<Integer> excludedAccountNums = reportConfig.getExcludedAccountNums();
+        HashSet<String> excludedAccountIds = reportConfig.getExcludedAccountIds();
         TreeSet<Account> selectedSubAccounts = new TreeSet<>(acctComp);
         selectedSubAccounts.addAll(allSubAccounts.stream().filter(account ->
-                !excludedAccountNums.contains(account.getAccountNum())).collect(Collectors.toList()));
+                !excludedAccountIds.contains(account.getUUID())).collect(Collectors.toList()));
         HashSet<InvestmentAccountWrapper> invAcctWrappers = new HashSet<>();
         for (Account selectedSubAccount : selectedSubAccounts) {
             //Load investment account into Wrapper Class

@@ -195,11 +195,11 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     }
 
     private void populateIncludedAccountsList(ReportConfig reportConfig) {
-        HashSet<Integer> excludedAccountsSet = reportConfig.getExcludedAccountNums();
+        HashSet<String> excludedAccountsSet = reportConfig.getExcludedAccountIds();
 
         for (int i = availableAccountsListModel.size() - 1; 0 <= i; i--) {
             Account availableAccount = availableAccountsListModel.getElementAt(i);
-            if (!excludedAccountsSet.contains(availableAccount.getAccountNum())) {
+            if (!excludedAccountsSet.contains(availableAccount.getUUID())) {
                 moveFromAvailableToIncluded(i);
             }
         }
@@ -226,13 +226,13 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     }
 
     private void updateReportConfig() {
-        HashSet<Integer> excludedAccountNums = new HashSet<>();
+        HashSet<String> excludedAccountIds = new HashSet<>();
         HashSet<Account> excludedAccounts = getExcludedAccountSet();
 
-        excludedAccountNums.addAll(excludedAccounts.stream()
-                .map(Account::getAccountNum).collect(Collectors.toList()));
+        excludedAccountIds.addAll(excludedAccounts.stream()
+                .map(Account::getUUID).collect(Collectors.toList()));
 
-        reportControlPanel.getReportConfig().setExcludedAccountNums(excludedAccountNums);
+        reportControlPanel.getReportConfig().setExcludedAccountIds(excludedAccountIds);
     }
 
     private LinkedHashSet<Account> getExcludedAccountSet() {
@@ -342,7 +342,7 @@ public class ReportConfigAccountChooserPanel extends JPanel {
 
         public Component getListCellRendererComponent(JList<? extends Account> list, Account value,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
-            String displayText = value.getAccountName().trim() + " (id: " + value.getAccountNum() + ")";
+            String displayText = value.getAccountName().trim() + " (id: " + value.getUUID() + ")";
             setText(displayText);
             ReportConfigChooserPanelBase.setSelectionBehavior(this, isSelected);
             return this;

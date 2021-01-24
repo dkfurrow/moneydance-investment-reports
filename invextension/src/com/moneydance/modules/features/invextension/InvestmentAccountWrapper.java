@@ -34,6 +34,7 @@ import com.infinitekind.moneydance.model.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeSet;
+import java.util.UUID;
 
 /**
  * Wrapper for Moneydance Class Investment Account, adds increased functionality
@@ -52,8 +53,8 @@ public class InvestmentAccountWrapper implements Aggregator {
     BulkSecInfo currentInfo;
     // associated Investment Account
     private Account investmentAccount;
-    // Account Number
-    private int acctNum;
+    // Account Id
+    private String acctId;
     // associated CashAccount
     private SecurityAccountWrapper cashWrapper;
     // Security Account Wrappers
@@ -64,7 +65,7 @@ public class InvestmentAccountWrapper implements Aggregator {
                                     ReportConfig reportConfig) throws Exception {
         this.currentInfo = currentInfo;
         this.investmentAccount = invAcct;
-        this.acctNum = this.investmentAccount.getAccountNum();
+        this.acctId = this.investmentAccount.getUUID();
         this.securityAccountWrappers = new ArrayList<>();
         this.name = investmentAccount.getAccountName().trim();
         //get Security Sub Accounts
@@ -81,12 +82,14 @@ public class InvestmentAccountWrapper implements Aggregator {
         this.securityAccountWrappers.add(cashWrapper);   //add cash wrapper to total securityAccountWrappers
         createCashTransactions(); //populates cash wrapper with synthetic cash transactions
     }
-
+    // constructors associated with aggregation, assign random accountid
     public InvestmentAccountWrapper() {
+        this.acctId = UUID.randomUUID().toString();
     }
 
     public InvestmentAccountWrapper(String name) {
         this.name = name;
+        this.acctId = UUID.randomUUID().toString();
     }
 
 
@@ -143,7 +146,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + acctNum;
+        result = prime * result + acctId.hashCode();
         return result;
     }
 
@@ -156,7 +159,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         if (getClass() != obj.getClass())
             return false;
         InvestmentAccountWrapper other = (InvestmentAccountWrapper) obj;
-        return acctNum == other.acctNum;
+        return acctId == other.acctId;
     }
 
     public BulkSecInfo getBulkSecInfo() {

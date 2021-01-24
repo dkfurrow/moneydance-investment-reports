@@ -92,8 +92,8 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     public void generateTransValues() throws Exception {
         ArrayList<TransactionValues> transValuesSet = new ArrayList<>();
         ArrayList<ParentTxn> assocTrans = new ArrayList<>();
-        Account thisAccount = Objects.equals(currencyWrapper.curID, invAcctWrapper.getBulkSecInfo().getCashCurrencyWrapper().getCurID()) ? invAcctWrapper
-                .getInvestmentAccount() : this.securityAccount;
+        Account thisAccount = Objects.equals(currencyWrapper.curID, invAcctWrapper.getBulkSecInfo()
+                .getCashCurrencyWrapper().getCurID()) ? invAcctWrapper.getInvestmentAccount() : this.securityAccount;
         TxnSet txnSet = invAcctWrapper.getBulkSecInfo().getTransactionSet().getTransactionsForAccount(thisAccount);
         DividendFrequencyAnalyzer dividendFrequencyAnalyzer = new DividendFrequencyAnalyzer();
         for (AbstractTxn abstractTxn : txnSet) {
