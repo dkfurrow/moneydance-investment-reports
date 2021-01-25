@@ -32,16 +32,17 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
+
 
 /**
  * Handle external controls for TotalReportOutputPane
  */
-class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, Observer {
+class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, PropertyChangeListener {
     public static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     public static final String REFRESH_PRICES = "refreshPrices";
     public static final String SORT_ROWS = "sortRows";
@@ -254,14 +255,14 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
         int selectedIndex = refreshPricesComboBox.getSelectedIndex();
         if(selectedIndex == 0){
             updateStatus("Refresh Prices Stopped...");
-            mdData.getObservableLastTransactionDate().deleteObserver(this);
+            mdData.getObservableLastTransactionDate().removePropertyChangeListener(this);
             mdData.stopTransactionMonitorThread();
         } else {
             updateStatus("Refresh Prices Started...");
             reportLatestPriceTime(mdData.getLastPriceUpdateTime());
             if(!isLiveReport()) updateStatus("Warning: Report end date is not today!");
-            long updateFrequencyMins = new Long(refreshPricesInterval[selectedIndex]);
-            mdData.getObservableLastTransactionDate().addObserver(this);
+            long updateFrequencyMins = Long.valueOf(refreshPricesInterval[selectedIndex]);
+            mdData.getObservableLastTransactionDate().addPropertyChangeListener(this);
             mdData.startTransactionMonitorThread(reportConfig, updateFrequencyMins);
         }
     }
@@ -289,9 +290,9 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        try {
-            if(o instanceof MDData.ObservableLastTransactionDate){
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("lastTransactionDate")){
+            try {
                 MDData mdData = MDData.getInstance();
                 HashMap<String, Double> lastUserRateMap = new HashMap<>(mdData.getUserRateMap());
                 mdData.reloadMDData(reportConfig);
@@ -303,10 +304,12 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
                     totalReportOutputPane.repaint();
                     totalReportOutputPane.sortRows();
                 }
+            } catch (Exception e) {
+                LogController.logException(e, "Error on Report Output Pane: ");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
         }
+
     }
 
     class OutputFrameWindowAdapter extends WindowAdapter {

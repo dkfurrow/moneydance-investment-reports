@@ -8,6 +8,8 @@ import com.moneydance.apps.md.controller.FeatureModuleContext;
 import com.moneydance.apps.md.controller.io.AccountBookUtil;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.text.DateFormat;
@@ -15,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Singgleton Class holds all Moneydance Data
+ * Singleton Class holds all Moneydance Data
  */
 public class MDData {
     File mdFolder;
@@ -243,19 +245,30 @@ public class MDData {
         return false;
     }
 
-    public static class ObservableLastTransactionDate extends Observable{
+    public static class ObservableLastTransactionDate {
+        private PropertyChangeSupport support;
         Date lastTransactionDate;
         TreeSet<Date> previousLastTransactionDates = new TreeSet<>();
         
         ObservableLastTransactionDate(Date lastTransactionDate){
+
             this.lastTransactionDate = lastTransactionDate;
+            this.support = new PropertyChangeSupport(this);
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener pcl) {
+            support.addPropertyChangeListener(pcl);
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener pcl) {
+            support.removePropertyChangeListener(pcl);
         }
 
         public void setChanged(Date newLastTransactionDate){
+            support.firePropertyChange("lastTransactionDate",
+                    this.lastTransactionDate, newLastTransactionDate);
             previousLastTransactionDates.add(lastTransactionDate);
             lastTransactionDate = newLastTransactionDate;
-            setChanged();
-            notifyObservers();
         }
 
         public boolean isNewTransactionDate(Date transactionDate){

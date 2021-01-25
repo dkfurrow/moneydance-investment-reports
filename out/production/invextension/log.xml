@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="7 seconds">
+<build time="14 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
-	<message priority="debug"><![CDATA[Detected Java version: 9 in: C:\Java\openjdk-15.0.2]]></message>
+	<message priority="debug"><![CDATA[Detected Java version: 15 in: C:\Java\openjdk-15.0.2]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 10]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.ComponentHelper]]></message>
 	<message priority="debug"><![CDATA[Setting ro project property: ant.file -> D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml]]></message>
@@ -25,7 +25,7 @@
 	<message priority="debug"><![CDATA[ +Target: genkeys]]></message>
 	<message priority="debug"><![CDATA[ +Target: all]]></message>
 	<message priority="debug"><![CDATA[Adding reference: ant.LocalProperties]]></message>
-	<message priority="debug"><![CDATA[parsing buildfile jar:file:/C:/ProgramFiles1/apache-ant-1.10.1/lib/ant.jar!/org/apache/tools/ant/antlib.xml with URI = jar:file:/C:/ProgramFiles1/apache-ant-1.10.1/lib/ant.jar!/org/apache/tools/ant/antlib.xml from a zip file]]></message>
+	<message priority="debug"><![CDATA[parsing buildfile jar:file:/C:/ProgramFiles1/apache-ant-1.10.9/lib/ant.jar!/org/apache/tools/ant/antlib.xml with URI = jar:file:/C:/ProgramFiles1/apache-ant-1.10.9/lib/ant.jar!/org/apache/tools/ant/antlib.xml from a zip file]]></message>
 	<message priority="debug"><![CDATA[Setting project property: version -> 2.2]]></message>
 	<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:12: " name="property" time="0 seconds" />
 	<message priority="debug"><![CDATA[Setting project property: src -> .]]></message>
@@ -66,7 +66,7 @@
 	<message priority="debug"><![CDATA[Setting project property: env.LOCALAPPDATA -> C:\Users\dale\AppData\Local]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.GIT_LFS_PATH -> C:\Program Files\Git LFS]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERDOMAIN_ROAMINGPROFILE -> MAIN-PC]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.ANT_HOME -> C:\ProgramFiles1\apache-ant-1.10.1]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.ANT_HOME -> C:\ProgramFiles1\apache-ant-1.10.9]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PROCESSOR_REVISION -> 7100]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PSModulePath -> %ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\PowerShell\Modules\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\AppvPkgConverter;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\AppvSequencer;C:\Program Files\Intel\Wired Networking\]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.windir -> C:\WINDOWS]]></message>
@@ -278,10 +278,6 @@
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\XIRRData.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\XIRRNPV.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com]]></message>
 		</task>
 		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:42: " name="delete" time="0 seconds">
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist\invextension.mxt]]></message>
@@ -297,6 +293,9 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.SecretKeyCallback]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.SecretKeyCallback loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.BufferedOutputStream loaded from parent loader (parentFirst)]]></message>
@@ -304,10 +303,8 @@
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Exception loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.ByteArrayOutputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.String loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.File loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamTable]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/infinitekind/util/StreamTable.class]]></message>
@@ -316,7 +313,6 @@
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamObject loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamTable loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Writer loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
@@ -344,24 +340,24 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.invoke.StringConcatFactory loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringUtils]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/infinitekind/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringUtils loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.List loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NumberFormatException loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Double loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormatSymbols loaded from parent loader (parentFirst)]]></message>
@@ -410,7 +406,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="7 seconds">
+	<target name="invextension" time="14 seconds">
 		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:48: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist because it already exists.]]></message>
 		</task>
@@ -511,8 +507,8 @@
 
 The ' characters around the executable and arguments are
 not part of the command.]]></message>
-			<message priority="debug"><![CDATA[Files to be compiled:
-    D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\AggregationController.java
+			<message priority="debug"><![CDATA[Files to be compiled:]]></message>
+			<message priority="debug"><![CDATA[    D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\AggregationController.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\Aggregator.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\AllAggregate.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java
@@ -587,118 +583,6 @@ not part of the command.]]></message>
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRR.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRRData.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\BulkSecInfo.java:431: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                !excludedAccountNums.contains(account.getAccountNum())).collect(Collectors.toList()));]]></message>
-			<message priority="warn"><![CDATA[                                                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:64: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getAccountNum(),]]></message>
-			<message priority="warn"><![CDATA[                                                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:65: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    t2.referenceAccount.getAccountNum());]]></message>
-			<message priority="warn"><![CDATA[                                       ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:209: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);]]></message>
-			<message priority="warn"><![CDATA[                                                        ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:222: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    : Math.round(1 / cur.getUserRateByDateInt(currentDateInt) * 100));]]></message>
-			<message priority="warn"><![CDATA[                                        ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:227: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                InvestTxnType transactionType = TxnUtil.getInvestTxnType(parentTxn);]]></message>
-			<message priority="warn"><![CDATA[                                                       ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:237: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    testSubsequentTransaction(TxnUtil.getInvestTxnType(parentTxn), secQuantity, adjPrevPos);]]></message>
-			<message priority="warn"><![CDATA[                                                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:340: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        this.txnID = TxnUtil.getInvestTxnType(transactionValues.parentTxn) ==]]></message>
-			<message priority="warn"><![CDATA[                            ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:353: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        InvestTxnType txnType = TxnUtil.getInvestTxnType(this.parentTxn);]]></message>
-			<message priority="warn"><![CDATA[                                       ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:629: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);]]></message>
-			<message priority="warn"><![CDATA[                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:668: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                TxnUtil.getInvestTxnType(parentTxn) : InvestTxnType.BANK;]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:737: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());]]></message>
-			<message priority="warn"><![CDATA[                                           ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:938: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        return BulkSecInfo.getReportConfig().getInvestmentExpenseNums().contains(split.getAccount().getAccountNum());]]></message>
-			<message priority="warn"><![CDATA[                                                                                                   ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:942: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        return BulkSecInfo.getReportConfig().getInvestmentIncomeNums().contains(split.getAccount().getAccountNum());]]></message>
-			<message priority="warn"><![CDATA[                                                                                                  ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfig.java:659: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            this.investmentExpenseNums = accounts.stream().map(Account::getAccountNum)]]></message>
-			<message priority="warn"><![CDATA[                                                               ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfig.java:667: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            this.investmentIncomeNums = accounts.stream().map(Account::getAccountNum)]]></message>
-			<message priority="warn"><![CDATA[                                                              ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java:67: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        this.acctNum = this.investmentAccount.getAccountNum();]]></message>
-			<message priority="warn"><![CDATA[                                             ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java:230: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        return  this.getAccountCurrency().getUserRateByDateInt(dateInt);]]></message>
-			<message priority="warn"><![CDATA[                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:137: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)]]></message>
-			<message priority="warn"><![CDATA[                                                                              ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:141: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) *]]></message>
-			<message priority="warn"><![CDATA[                                                                          ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:318: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());]]></message>
-			<message priority="warn"><![CDATA[                                                 ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ExtractorBase.java:172: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            double currentRate = currency.getUserRateByDateInt(currentDateInt);]]></message>
-			<message priority="warn"><![CDATA[                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ExtractorDividends.java:65: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            InvestTxnType transType = TxnUtil.getInvestTxnType(transaction.getParentTxn());]]></message>
-			<message priority="warn"><![CDATA[                                             ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsAverageCalc.java:114: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                : cur.getUserRateByDateInt(currentDateInt);]]></message>
-			<message priority="warn"><![CDATA[                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:69: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);]]></message>
-			<message priority="warn"><![CDATA[                                                    ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:189: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                : cur.getUserRateByDateInt(currentDateInt);]]></message>
-			<message priority="warn"><![CDATA[                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\MDData.java:246: warning: [deprecation] Observable in java.util has been deprecated]]></message>
-			<message priority="warn"><![CDATA[    public static class ObservableLastTransactionDate extends Observable{]]></message>
-			<message priority="warn"><![CDATA[                                                              ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.java:202: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            if (!excludedAccountsSet.contains(availableAccount.getAccountNum())) {]]></message>
-			<message priority="warn"><![CDATA[                                                              ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.java:233: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                .map(Account::getAccountNum).collect(Collectors.toList()));]]></message>
-			<message priority="warn"><![CDATA[                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigAccountChooserPanel.java:345: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            String displayText = value.getAccountName().trim() + " (id: " + value.getAccountNum() + ")";]]></message>
-			<message priority="warn"><![CDATA[                                                                                 ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel.java:93: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            if (acct.getAccountNum() == accountNum) {]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigInvestIncomeChooserPanel.java:106: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            investmentIncomeNums.add(acct.getAccountNum());]]></message>
-			<message priority="warn"><![CDATA[                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel.java:93: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            if (acct.getAccountNum() == accountNum) {]]></message>
-			<message priority="warn"><![CDATA[                    ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ReportConfigInvestExpenseChooserPanel.java:106: warning: [deprecation] getAccountNum() in Account has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            investmentExpenseNums.add(acct.getAccountNum());]]></message>
-			<message priority="warn"><![CDATA[                                          ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TotalReportOutputFrame.java:44: warning: [deprecation] Observer in java.util has been deprecated]]></message>
-			<message priority="warn"><![CDATA[class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, Observer {]]></message>
-			<message priority="warn"><![CDATA[                                                                                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TotalReportOutputFrame.java:263: warning: [deprecation] Long(String) in Long has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            long updateFrequencyMins = new Long(refreshPricesInterval[selectedIndex]);]]></message>
-			<message priority="warn"><![CDATA[                                       ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TotalReportOutputFrame.java:292: warning: [deprecation] Observable in java.util has been deprecated]]></message>
-			<message priority="warn"><![CDATA[    public void update(Observable o, Object arg) {]]></message>
-			<message priority="warn"><![CDATA[                       ^]]></message>
-			<message priority="warn"><![CDATA[37 warnings]]></message>
 		</task>
 		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:58: " name="jar" time="0 seconds">
 			<message priority="info"><![CDATA[Building jar: D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist\invextension.mxt]]></message>
@@ -865,7 +749,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:58: ]]></message>
 		</task>
-		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:70: " name="java" time="5 seconds">
+		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:70: " name="java" time="11 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
