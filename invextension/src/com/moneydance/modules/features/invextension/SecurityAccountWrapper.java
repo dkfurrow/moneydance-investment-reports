@@ -315,7 +315,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
         public void analyzeDividend(@NotNull TransactionValues transactionValues) {
             if (transactionValues.getIncome() > 0) {
-                InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());
+                InvestTxnType transType = transactionValues.getParentTxn().getInvestTxnType();
                 switch (transType) {
                     case DIVIDEND:
                     case DIVIDENDXFR:

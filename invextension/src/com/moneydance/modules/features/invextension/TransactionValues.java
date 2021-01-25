@@ -224,7 +224,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
             // position
             if (prevTransLine == null) { // first transaction (buy || shortSell)
                 // if first transaction improper, throw an exception
-                InvestTxnType transactionType = TxnUtil.getInvestTxnType(parentTxn);
+                InvestTxnType transactionType = parentTxn.getInvestTxnType();
                 boolean validStartTransaction = (transactionType == InvestTxnType.BUY
                         || transactionType == InvestTxnType.BUY_XFER
                         || transactionType == InvestTxnType.SHORT);
@@ -234,7 +234,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 this.position = this.secQuantity;
             } else { // subsequent transaction
                 if(securityAccountWrapper.isTradeable()) {
-                    testSubsequentTransaction(TxnUtil.getInvestTxnType(parentTxn), secQuantity, adjPrevPos);
+                    testSubsequentTransaction(parentTxn.getInvestTxnType(), secQuantity, adjPrevPos);
                 }
                 this.position = this.secQuantity + adjPrevPos;
             }
@@ -337,7 +337,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         this.securityAccountWrapper = prevTransValues.getSecurityAccountWrapper();
         this.dateInt = transactionValues.dateInt;
         // adding 0.1 to related transValues id to ensure unique cash id
-        this.txnID = TxnUtil.getInvestTxnType(transactionValues.parentTxn) ==
+        this.txnID = transactionValues.parentTxn.getInvestTxnType() ==
                 InvestTxnType.BANK ? transactionValues.parentTxn.getParameter("id") :
                 transactionValues.parentTxn.getParameter("id") + "_1";
         this.desc = "INSERTED: " + parentTxn.getDescription();
@@ -350,7 +350,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         long prevPos = prevTransValues.position;
         long prevVal = prevPos / 100;
         
-        InvestTxnType txnType = TxnUtil.getInvestTxnType(this.parentTxn);
+        InvestTxnType txnType = this.parentTxn.getInvestTxnType();
 
         switch (txnType) {
             case BANK: // transfer in/out, account-level income or expense
@@ -626,7 +626,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
     public String[] listInfo() {
         ArrayList<String> txnInfo = new ArrayList<>();
-        InvestTxnType transType = TxnUtil.getInvestTxnType(parentTxn);
+        InvestTxnType transType = parentTxn.getInvestTxnType();
         txnInfo.add(referenceAccount.getParentAccount().getAccountName());
         txnInfo.add(referenceAccount.getAccountName());
         txnInfo.add(securityAccountWrapper.getCurrencyWrapper().getName() == null ? "NoTicker" : securityAccountWrapper.getCurrencyWrapper().getName());
@@ -665,7 +665,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
      */
     public Integer getTxnSortOrder() {
         InvestTxnType transType = this.parentTxn != null ?
-                TxnUtil.getInvestTxnType(parentTxn) : InvestTxnType.BANK;
+                parentTxn.getInvestTxnType() : InvestTxnType.BANK;
         return BulkSecInfo.getTxnSortOrder(transType);
     }
 
@@ -734,7 +734,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         public SplitValues(SplitTxn thisSplit, Account accountRef) {
             this.split = thisSplit;
             thisSplit.getDateInt();
-            InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());
+            InvestTxnType txnType = thisSplit.getParentTxn().getInvestTxnType();
             Account.AccountType acctType = thisSplit.getAccount().getAccountType();
             Account.AccountType parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
             long amountLong = -thisSplit.getAmount(); //added minus sign for 2015

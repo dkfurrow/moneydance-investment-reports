@@ -62,7 +62,7 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
         }
 
         if (startDateInt < transactionDateInt && transactionDateInt <= endDateInt) {
-            InvestTxnType transType = TxnUtil.getInvestTxnType(transaction.getParentTxn());
+            InvestTxnType transType = transaction.getParentTxn().getInvestTxnType();
             updateBasisTransactions(transaction);
             if (isDividendType(transType) && transaction.getIncome() != 0) {
                 updateDividendTransactions(transaction);
