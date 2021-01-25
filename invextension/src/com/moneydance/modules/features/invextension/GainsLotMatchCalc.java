@@ -66,7 +66,7 @@ public class GainsLotMatchCalc implements GainsCalc {
                                         TransactionValues priorTrans) {
         int currentDateInt = thisTrans.getParentTxn().getDateInt();
         CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
-        double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);
+        double currentRate = cur == null ? 1.0 : cur.getRate(null, currentDateInt);
         int prevDateInt = priorTrans == null ? Integer.MIN_VALUE
                 : priorTrans.getParentTxn().getDateInt();
         double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
@@ -186,7 +186,7 @@ public class GainsLotMatchCalc implements GainsCalc {
         int currentDateInt = thisTrans.getParentTxn().getDateInt();
         CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
         double currentRate = cur == null ? 1.0
-                : cur.getUserRateByDateInt(currentDateInt);
+                : cur.getRate(null, currentDateInt);
         int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
                 : prevTransValues.getParentTxn().getDateInt();
         double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(

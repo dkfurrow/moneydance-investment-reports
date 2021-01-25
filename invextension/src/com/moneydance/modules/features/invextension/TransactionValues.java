@@ -206,7 +206,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                     prevTransLines.get(prevTransLines.size() - 1);
             CurrencyType cur = this.referenceAccount.getCurrencyType();
             int currentDateInt = this.parentTxn.getDateInt();
-            double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);
+            double currentRate = cur == null ? 1.0 : cur.getRate(null, currentDateInt);
             int prevDateInt = prevTransLine == null ? Integer.MIN_VALUE
                     : prevTransLine.parentTxn.getDateInt();
             double splitAdjust = (cur == null ? 1.0
@@ -219,7 +219,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
             }
             // mktPrice (Set to 1 if cur is null: Implies (Cash) Investment Account
             this.mktPrice = (cur == null ? 100
-                    : Math.round(1 / cur.getUserRateByDateInt(currentDateInt) * 100));
+                    : Math.round(1 / cur.getRate(null, currentDateInt) * 100));
 
             // position
             if (prevTransLine == null) { // first transaction (buy || shortSell)

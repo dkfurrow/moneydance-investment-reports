@@ -230,7 +230,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     }
 
     public double getAccountCurrencyUserRateByDateInt(int dateInt){
-        return  this.getAccountCurrency().getUserRateByDateInt(dateInt);
+        return  this.getAccountCurrency().getRate(null, dateInt);
     }
 
 

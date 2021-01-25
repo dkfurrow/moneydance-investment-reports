@@ -583,11 +583,11 @@ not part of the command.]]></message>
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRR.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRRData.java
     D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\XIRRNPV.java]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:209: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:209: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[            double currentRate = cur == null ? 1.0 : cur.getRate(currentDateInt);]]></message>
 			<message priority="warn"><![CDATA[                                                        ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:222: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    : Math.round(1 / cur.getUserRateByDateInt(currentDateInt) * 100));]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:222: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[                    : Math.round(1 / cur.getRate(currentDateInt) * 100));]]></message>
 			<message priority="warn"><![CDATA[                                        ^]]></message>
 			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:227: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
 			<message priority="warn"><![CDATA[                InvestTxnType transactionType = TxnUtil.getInvestTxnType(parentTxn);]]></message>
@@ -610,32 +610,32 @@ not part of the command.]]></message>
 			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\TransactionValues.java:737: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
 			<message priority="warn"><![CDATA[            InvestTxnType txnType = TxnUtil.getInvestTxnType(thisSplit.getParentTxn());]]></message>
 			<message priority="warn"><![CDATA[                                           ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java:233: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        return  this.getAccountCurrency().getUserRateByDateInt(dateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.java:233: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[        return  this.getAccountCurrency().getRate(dateInt);]]></message>
 			<message priority="warn"><![CDATA[                                         ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:137: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                    return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:137: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[                    return Math.round((1.0 / currencyWrapper.getCurrencyType().getRate(dateInt)]]></message>
 			<message priority="warn"><![CDATA[                                                                              ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:141: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                return Math.round((1.0 / currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt) *]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:141: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[                return Math.round((1.0 / currencyWrapper.getCurrencyType().getRate(dateInt) *]]></message>
 			<message priority="warn"><![CDATA[                                                                          ^]]></message>
 			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\SecurityAccountWrapper.java:318: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
 			<message priority="warn"><![CDATA[                InvestTxnType transType = TxnUtil.getInvestTxnType(transactionValues.getParentTxn());]]></message>
 			<message priority="warn"><![CDATA[                                                 ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ExtractorBase.java:172: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[            double currentRate = currency.getUserRateByDateInt(currentDateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ExtractorBase.java:172: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[            double currentRate = currency.getRate(currentDateInt);]]></message>
 			<message priority="warn"><![CDATA[                                         ^]]></message>
 			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\ExtractorDividends.java:65: warning: [deprecation] getInvestTxnType(ParentTxn) in TxnUtil has been deprecated]]></message>
 			<message priority="warn"><![CDATA[            InvestTxnType transType = TxnUtil.getInvestTxnType(transaction.getParentTxn());]]></message>
 			<message priority="warn"><![CDATA[                                             ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsAverageCalc.java:114: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                : cur.getUserRateByDateInt(currentDateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsAverageCalc.java:114: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[                : cur.getRate(currentDateInt);]]></message>
 			<message priority="warn"><![CDATA[                     ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:69: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[        double currentRate = cur == null ? 1.0 : cur.getUserRateByDateInt(currentDateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:69: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[        double currentRate = cur == null ? 1.0 : cur.getRate(currentDateInt);]]></message>
 			<message priority="warn"><![CDATA[                                                    ^]]></message>
-			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:189: warning: [deprecation] getUserRateByDateInt(int) in CurrencyType has been deprecated]]></message>
-			<message priority="warn"><![CDATA[                : cur.getUserRateByDateInt(currentDateInt);]]></message>
+			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\GainsLotMatchCalc.java:189: warning: [deprecation] getRate(int) in CurrencyType has been deprecated]]></message>
+			<message priority="warn"><![CDATA[                : cur.getRate(currentDateInt);]]></message>
 			<message priority="warn"><![CDATA[                     ^]]></message>
 			<message priority="warn"><![CDATA[D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\com\moneydance\modules\features\invextension\MDData.java:246: warning: [deprecation] Observable in java.util has been deprecated]]></message>
 			<message priority="warn"><![CDATA[    public static class ObservableLastTransactionDate extends Observable{]]></message>

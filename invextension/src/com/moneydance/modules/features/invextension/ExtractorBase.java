@@ -169,7 +169,7 @@ public class ExtractorBase<R> {
         CurrencyType currency = currencyWrapper.getCurrencyType();
         double splitAdjust = 1.0;
         if (currency != null) {
-            double currentRate = currency.getUserRateByDateInt(currentDateInt);
+            double currentRate = currency.getRate(null, currentDateInt);
             splitAdjust = currency.adjustRateForSplitsInt(referenceDateInt, currentRate, currentDateInt) / currentRate;
         }
         return Math.round(referencePosition * splitAdjust);

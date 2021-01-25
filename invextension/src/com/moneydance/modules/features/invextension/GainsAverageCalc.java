@@ -111,7 +111,7 @@ public class GainsAverageCalc implements GainsCalc {
         int currentDateInt = thisTrans.getParentTxn().getDateInt();
         CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
         double currentRate = cur == null ? 1.0
-                : cur.getUserRateByDateInt(currentDateInt);
+                : cur.getRate(null, currentDateInt);
         int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
                 : prevTransValues.getParentTxn().getDateInt();
         double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
