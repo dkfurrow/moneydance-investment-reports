@@ -122,10 +122,10 @@ public class MDData {
         for (CurrencyType currency : currencies) {
             String priceDateStr = currency.getParameter("price_date");
             String currencyID = currency.getParameter("id");
-            double decimalPlaces = Math.pow(10.0,(double) currency.getDecimalPlaces());
+            double decimalPlaces = Math.pow(10.0, currency.getDecimalPlaces());
             Double userRate = (double) Math.round(currency.getRelativeRate() * decimalPlaces) / decimalPlaces;
             if (priceDateStr != null) {
-                Long priceDateLong = Long.parseLong(priceDateStr);
+                long priceDateLong = Long.parseLong(priceDateStr);
                 maxDateTime = Math.max(maxDateTime, priceDateLong);
             }
             if(currencyID != null){
@@ -136,7 +136,7 @@ public class MDData {
     }
 
     public void generateLastYahooUpdateDate(){
-        Integer lastUpdateDate = root.getIntParameter("yahooqt.quoteLastUpdate",0);
+        int lastUpdateDate = root.getIntParameter("yahooqt.quoteLastUpdate",0);
         if (lastUpdateDate == 0){
             lastYahooqtUpdateDate = null;
         } else {
@@ -152,6 +152,7 @@ public class MDData {
             FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(".txn");
             File[] files = syncOutFolder.listFiles(filter);
             long tempModifedTxn = 0L;
+            assert files != null;
             for(File file: files){
                 tempModifedTxn = Math.max(tempModifedTxn, file.lastModified());
             }
@@ -360,7 +361,7 @@ public class MDData {
         }
 
         @Override
-        protected Void doInBackground() throws Exception {
+        protected Void doInBackground() {
             try {
                 publish("Loading " + mdFolder.getName());
                 initializeMDDataHeadless(true);

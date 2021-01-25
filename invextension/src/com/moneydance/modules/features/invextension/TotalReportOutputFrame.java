@@ -34,6 +34,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serial;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public static final String SORT_ROWS = "sortRows";
     public static final String COPY_CLIPBOARD = "copyClipboard";
     public static final String SWITCH_RETURN_TYPE = "switchReturnType";
+    @Serial
     private static final long serialVersionUID = 2199471200123995601L;
     public static final int textFieldWidth = 305;
     public static final int textFieldHeight = 60;
@@ -261,7 +263,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
             updateStatus("Refresh Prices Started...");
             reportLatestPriceTime(mdData.getLastPriceUpdateTime());
             if(!isLiveReport()) updateStatus("Warning: Report end date is not today!");
-            long updateFrequencyMins = Long.valueOf(refreshPricesInterval[selectedIndex]);
+            long updateFrequencyMins = Long.parseLong(refreshPricesInterval[selectedIndex]);
             mdData.getObservableLastTransactionDate().addPropertyChangeListener(this);
             mdData.startTransactionMonitorThread(reportConfig, updateFrequencyMins);
         }
