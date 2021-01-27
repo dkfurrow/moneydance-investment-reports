@@ -2,6 +2,7 @@ package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
 import com.infinitekind.moneydance.model.AccountBook;
+import com.infinitekind.moneydance.model.CurrencySnapshot;
 import com.infinitekind.moneydance.model.CurrencyType;
 import com.moneydance.apps.md.controller.AccountBookWrapper;
 import com.moneydance.apps.md.controller.FeatureModuleContext;
@@ -19,19 +20,20 @@ import java.util.*;
 /**
  * Singleton Class holds all Moneydance Data
  */
-public class MDData {
+class MDData {
     File mdFolder;
     private FeatureModuleContext featureModuleContext;
     private AccountBook accountBook;
     private Account root;
     private BulkSecInfo currentInfo;
     private ObservableLastTransactionDate observableLastTransactionDate;
-    private Calendar lastYahooqtUpdateDate;
     private Date lastPriceUpdateTime;
     private HashMap<String, Double> userRateMap = new HashMap<>();
     private Main extension;
     private Thread transactionMonitorThread;
     private TransactionMonitor transactionMonitor;
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:mm:ss z");
+
 
     private static MDData uniqueInstance;
     public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
@@ -79,8 +81,8 @@ public class MDData {
         this.currentInfo = new BulkSecInfo(accountBook, reportConfig);
     }
 
-    public void startTransactionMonitorThread(ReportConfig reportConfig, long updateFrequencyMins){
-        transactionMonitor = new TransactionMonitor(reportConfig, updateFrequencyMins);
+    public void startTransactionMonitorThread(TotalReportOutputFrame totalReportOutputFrame, long updateFrequencyMins){
+        transactionMonitor = new TransactionMonitor(totalReportOutputFrame, updateFrequencyMins);
         transactionMonitorThread = new Thread(transactionMonitor);
         transactionMonitorThread.start();
     }
@@ -118,33 +120,23 @@ public class MDData {
     public void generateCurrentPriceData() {
         java.util.List<CurrencyType> currencies = accountBook
                 .getCurrencies().getAllCurrencies();
-        long maxDateTime = 0L;
+        GregorianCalendar mingc = new GregorianCalendar();
+        mingc.setTime(new Date(Long.MIN_VALUE));
+        Date maxDate = mingc.getTime();
         for (CurrencyType currency : currencies) {
-            String priceDateStr = currency.getParameter("price_date");
-            String currencyID = currency.getParameter("id");
-            double decimalPlaces = Math.pow(10.0, currency.getDecimalPlaces());
-            Double userRate = (double) Math.round(currency.getRelativeRate() * decimalPlaces) / decimalPlaces;
-            if (priceDateStr != null) {
-                long priceDateLong = Long.parseLong(priceDateStr);
-                maxDateTime = Math.max(maxDateTime, priceDateLong);
-            }
-            if(currencyID != null){
+            if (currency.getCurrencyType() == CurrencyType.Type.SECURITY && currency.getSnapshots().size() > 0) {
+                CurrencySnapshot currencySnapshot = currency.getSnapshots().get(currency.getSnapshots().size() - 1);
+                Double userRate = currencySnapshot.getRate();
+                int snapshotDateInt = currencySnapshot.getDateInt();
+                Date snapshotDate = DateUtils.convertToDate(snapshotDateInt);
+                String currencyID = currency.getParameter("id");
                 userRateMap.put(currencyID, userRate);
+                if (snapshotDate.after(maxDate)) maxDate = snapshotDate;
             }
         }
-        lastPriceUpdateTime =  new Date(maxDateTime);
+        lastPriceUpdateTime = maxDate;
     }
 
-    public void generateLastYahooUpdateDate(){
-        int lastUpdateDate = root.getIntParameter("yahooqt.quoteLastUpdate",0);
-        if (lastUpdateDate == 0){
-            lastYahooqtUpdateDate = null;
-        } else {
-            Calendar gc = Calendar.getInstance();
-            gc.setTime(DateUtils.convertToDate(lastUpdateDate));
-            lastYahooqtUpdateDate = gc;
-        }
-    }
 
     public Date getLastTransactionModified(){
         if(accountBook != null){
@@ -174,14 +166,9 @@ public class MDData {
         List<String> msgs = new ArrayList<>();
         msgs.add("MD last modified: " + DATE_PATTERN_MEDIUM.format
                 (observableLastTransactionDate.getLastTransactionDate()));
-        if(lastYahooqtUpdateDate != null){
-            msgs.add("YahooQuote updated on: " + DATE_PATTERN_SHORT.format(lastYahooqtUpdateDate.getTime()));
-            generateCurrentPriceData();
-            msgs.add("latest security price: " +
-                    DATE_PATTERN_MEDIUM.format(lastPriceUpdateTime));
-        } else {
-            msgs.add("YahooQuote last Update: " + "NOT USED");
-        }
+        generateCurrentPriceData();
+        msgs.add("latest security price: " +
+                DATE_PATTERN_MEDIUM.format(lastPriceUpdateTime));
         return msgs;
     }
 
@@ -200,8 +187,8 @@ public class MDData {
         root = accountBook.getRootAccount();
         if (newObservable) observableLastTransactionDate =
                 new ObservableLastTransactionDate(getLastTransactionModified());
-        generateLastYahooUpdateDate();
-        if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
+
+        generateCurrentPriceData();
 
     }
 
@@ -217,8 +204,7 @@ public class MDData {
         root = accountBook.getRootAccount();
         if(newObservable) observableLastTransactionDate =
                 new ObservableLastTransactionDate(getLastTransactionModified());
-        generateLastYahooUpdateDate();
-        if(lastYahooqtUpdateDate != null) generateCurrentPriceData();
+        generateCurrentPriceData();
     }
 
     public void loadMDFile(File mdFolder, ReportControlPanel reportControlPanel) {
@@ -235,16 +221,6 @@ public class MDData {
         }
     }
 
-    public boolean hasNewUserRate(HashMap<String, Double> lastUserRateMap) {
-        for (String id: userRateMap.keySet()){
-            Double lastUserRate = lastUserRateMap.get(id);
-            Double currentUserRate = userRateMap.get(id);
-            if(lastUserRate != null && currentUserRate != null){
-                if(!Objects.equals(currentUserRate, lastUserRate)) return true;
-            }
-        }
-        return false;
-    }
 
     public static class ObservableLastTransactionDate {
         private PropertyChangeSupport support;
@@ -288,44 +264,36 @@ public class MDData {
         private TreeSet<Date> newTransactionDateQueue = new TreeSet<>();
         private  Date lastRefreshTime;
         private long updateFrequencyMins;
-        private ReportConfig reportConfig;
+        private TotalReportOutputFrame totalReportOutputFrame;
         private volatile boolean shutdown = false;
 
-        TransactionMonitor(ReportConfig reportConfig, long updateFrequencyMins){
-            this.reportConfig = reportConfig;
+        TransactionMonitor(TotalReportOutputFrame totalReportOutputFrame, long updateFrequencyMins){
+            this.totalReportOutputFrame = totalReportOutputFrame;
             this.updateFrequencyMins = updateFrequencyMins;
         }
 
+
+
         @Override
         public void run() {
+            totalReportOutputFrame.updateStatus(String.format("Starting transaction monitor with frequency %d minutes",
+                    updateFrequencyMins));
+            if(!totalReportOutputFrame.isLiveReport()) totalReportOutputFrame
+                    .updateStatus("Warning: Report end date is not today!");
             while (!shutdown) {
-                Date latestTransactionDate = getLastTransactionModified();
-                boolean newTransaction = observableLastTransactionDate.isNewTransactionDate(latestTransactionDate);
+
                 try {
-                    // refresh Yahoo quote extension
+                    // refresh Data, if update extension is used, it will go in the refreshData method
                     if(lastRefreshTime == null){ //refresh immediately
                         lastRefreshTime = new Date();
-                        refreshPrices();
+                        refreshData(true);
                     } else {
                         if(isTimeToRefresh()){// refresh after interval
                             lastRefreshTime = new Date();
-                            refreshPrices();
+                            refreshData(false);
                         }
                     }
-                    //check for new transactions
-                    if (newTransaction) {
-                        boolean notSeenBefore = newTransactionDateQueue.add(latestTransactionDate);
-                        if (notSeenBefore) { // wait for another cycle
-                            Thread.sleep(transactionWaitTimeMills);
-                        } else { // seen before
-                            if (new Date().getTime() - newTransactionDateQueue.last().getTime() >= transactionWaitTimeMills) {
-                                observableLastTransactionDate.setChanged(latestTransactionDate);
-                                newTransactionDateQueue.clear();
-                            }
-                        }
-                    } else {
-                        Thread.sleep(transactionWaitTimeMills);
-                    }
+
                 } catch (Exception e) {
                     LogController.logException(e, "Error in Transaction Monitor");
                 }
@@ -341,14 +309,15 @@ public class MDData {
             return diff > updateFrequencyMins * 60000;
         }
 
-        public void refreshPrices() throws Exception {
-            if (extension != null) {
-                FeatureModuleContext featureModuleContext = extension.getUnprotectedContext();
-                featureModuleContext.showURL("moneydance:fmodule:yahooqt:update");
-                currentInfo = new BulkSecInfo(accountBook, reportConfig);
+        public void refreshData(boolean initial) throws Exception {
+            Date latestTransactionDate = getLastTransactionModified();
+            boolean newTransaction = observableLastTransactionDate.isNewTransactionDate(latestTransactionDate);
+            //check for new transactions
+            if (newTransaction) {
+                observableLastTransactionDate.setChanged(latestTransactionDate);
             }
-        }
 
+        }
     }
 
     private class MDFileLoader extends SwingWorker<Void, String> {
