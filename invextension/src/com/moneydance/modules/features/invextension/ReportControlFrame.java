@@ -34,7 +34,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.prefs.BackingStoreException;
+import java.io.Serial;
 
 /**
  * Main controller frame which controls report generation
@@ -43,14 +43,14 @@ public class ReportControlFrame
         extends JFrame
 
 {
+    @Serial
     private static final long serialVersionUID = 334888425056725292L;
-    private ReportControlPanel reportControlPanel;
-    private boolean runInApplication;
+    private final ReportControlPanel reportControlPanel;
+    private final boolean runInApplication;
 
 
     /**
      * Constructor which initiates from application
-     * @throws Exception
      */
     public ReportControlFrame() throws Exception {
         super("Investment Reports/Raw Data Downloads"); // sets text on JFrame
@@ -63,9 +63,6 @@ public class ReportControlFrame
      * Constructor which initiates from saved MD data
      *
      * @param mdFolder valid MD files
-     * @throws IllegalAccessException
-     * @throws BackingStoreException
-     * @throws NoSuchFieldException
      */
     public ReportControlFrame(File mdFolder) throws Exception {
         super("Investment Reports/Raw Data Downloads"); // sets text on JFrame

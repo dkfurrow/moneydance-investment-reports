@@ -61,8 +61,6 @@ public class HelpFileDisplay {
                     desktop.browse(tempFile.toURI());
                     success = true;
                 }
-            } else {
-                success = false;
             }
         return success;
     }
@@ -93,25 +91,14 @@ public class HelpFileDisplay {
 
         public File createTempFile() throws IOException {
             InputStream is = getClass().getResourceAsStream(fileLocation);
-            BufferedReader br = null;
-            BufferedWriter bw = null;
 
             String line;
-            try {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is)); BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
 
-                br = new BufferedReader(new InputStreamReader(is));
-                bw = new BufferedWriter(new FileWriter(tempFile));
                 while ((line = br.readLine()) != null) {
                     bw.write(line);
                 }
 
-            }  finally {
-                if(bw != null){
-                    bw.close();
-                }
-                if (br != null) {
-                    br.close();
-                }
             }
             return tempFile;
         }

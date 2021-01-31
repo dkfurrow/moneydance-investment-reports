@@ -39,6 +39,7 @@ import java.util.*;
  * @version 1.0
  * @since 1.0
  */
+@SuppressWarnings("ALL")
 public final class DateUtils {
     private static class intPair implements Comparable<intPair> {
         public int v1;
@@ -55,13 +56,13 @@ public final class DateUtils {
     }
 
     private static final long MillisPerDay = (24 * 60 * 60 * 1000);
-    private static final GregorianCalendar dateStart = new GregorianCalendar(1899, 11, 31);
+    private static final GregorianCalendar dateStart = new GregorianCalendar(1899, Calendar.DECEMBER, 31);
     private static final transient Map<Integer, List<Date>> computedDates = new HashMap<>();
 
     private DateUtils() {
     }
 
-    private static HashMap<Integer, Boolean> ibdMemo = new HashMap<>();
+    private static final HashMap<Integer, Boolean> ibdMemo = new HashMap<>();
 
     /*
      * This method will calculate the next business day after the one input.
@@ -133,7 +134,7 @@ public final class DateUtils {
         }
     }
 
-    private static HashMap<Integer, Integer> gpbdMemo = new HashMap<>();
+    private static final HashMap<Integer, Integer> gpbdMemo = new HashMap<>();
 
     public static int getPrevBusinessDay(int startDateInt) {
         Integer result = gpbdMemo.get(startDateInt);
@@ -152,7 +153,7 @@ public final class DateUtils {
         }
     }
 
-    private static HashMap<Integer, Integer> glbdMemo = new HashMap<>();
+    private static final HashMap<Integer, Integer> glbdMemo = new HashMap<>();
 
     public static int getLatestBusinessDay(int startDateInt) {
         Integer result = glbdMemo.get(startDateInt);
@@ -171,7 +172,7 @@ public final class DateUtils {
         }
     }
 
-    private static HashMap<Integer, Integer> gsyMemo = new HashMap<>();
+    private static final HashMap<Integer, Integer> gsyMemo = new HashMap<>();
 
     public static int getStartYear(int startDateInt) {
         Integer result = gsyMemo.get(startDateInt);
@@ -187,7 +188,7 @@ public final class DateUtils {
         return result;
     }
 
-    private static HashMap<Integer, Integer> gsmMemo = new HashMap<>();
+    private static final HashMap<Integer, Integer> gsmMemo = new HashMap<>();
 
     public static int getStartMonth(int startDateInt) {
         Integer result = gsmMemo.get(startDateInt);
@@ -204,8 +205,8 @@ public final class DateUtils {
         return result;
     }
 
-    private static HashMap<Integer, Integer> gsqMemo = new HashMap<>();
-    private static int[] quarterStarts = {1, 1, 1, 3, 3, 3, 6, 6, 6, 9, 9, 9};
+    private static final HashMap<Integer, Integer> gsqMemo = new HashMap<>();
+    private static final int[] quarterStarts = {1, 1, 1, 3, 3, 3, 6, 6, 6, 9, 9, 9};
 
     public static int getStartQuarter(int startDateInt) {
         Integer result = gsqMemo.get(startDateInt);
@@ -300,21 +301,22 @@ public final class DateUtils {
         if (nEasterDay <= 3 && nEasterMonth == 3) // Check if <= April 3rd
         {
             switch (nEasterDay) {
-                case 3:
+                case 3 -> {
                     nGoodFridayMonth = nEasterMonth - 1;
                     nGoodFridayDay = nEasterDay - 2;
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     nGoodFridayMonth = nEasterMonth - 1;
                     nGoodFridayDay = 31;
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     nGoodFridayMonth = nEasterMonth - 1;
                     nGoodFridayDay = 31;
-                    break;
-                default:
+                }
+                default -> {
                     nGoodFridayMonth = nEasterMonth;
                     nGoodFridayDay = nEasterDay - 2;
+                }
             }
         } else {
             nGoodFridayMonth = nEasterMonth;
@@ -483,7 +485,7 @@ public final class DateUtils {
         return tempCal.getTime();
     }
 
-    private static HashMap<intPair, Integer> adiMemo = new HashMap<>();
+    private static final HashMap<intPair, Integer> adiMemo = new HashMap<>();
 
     public static int addDaysInt(int dateIntToAdd, int numberOfDays) {
         if (dateIntToAdd == 0) throw new IllegalArgumentException("Date can't be zero!");
@@ -503,7 +505,7 @@ public final class DateUtils {
         return result;
     }
 
-    private static HashMap<intPair, Integer> admMemo = new HashMap<>();
+    private static final HashMap<intPair, Integer> admMemo = new HashMap<>();
 
     public static int addMonthsInt(int dateIntToAdd, int numberOfMonths) {
         if (dateIntToAdd == 0) {
@@ -567,7 +569,7 @@ public final class DateUtils {
         return sdf.format(date);
     }
 
-    private static HashMap<Integer, Calendar> ctcMemo = new HashMap<>();
+    private static final HashMap<Integer, Calendar> ctcMemo = new HashMap<>();
 
     /**
      * converts dateInt to Calendar
@@ -602,7 +604,7 @@ public final class DateUtils {
         return Math.round(Math.abs(di1.getTimeInMillis() - di2.getTimeInMillis()) / (float) MillisPerDay);
     }
 
-    private static HashMap<Integer, Long> gedvMemo = new HashMap<>();
+    private static final HashMap<Integer, Long> gedvMemo = new HashMap<>();
 
     /**
      * converts dateInt to excel date

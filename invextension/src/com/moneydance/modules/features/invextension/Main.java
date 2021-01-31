@@ -73,7 +73,7 @@ public class Main
                     cl.getResourceAsStream("/com/moneydance/modules/features/myextension/icon.gif");
             if (in != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream(1000);
-                byte buf[] = new byte[256];
+                byte[] buf = new byte[256];
                 int n;
                 while ((n = in.read(buf, 0, buf.length)) >= 0)
                     bout.write(buf, 0, n);

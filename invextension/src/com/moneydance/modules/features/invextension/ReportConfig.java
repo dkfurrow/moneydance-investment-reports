@@ -37,6 +37,7 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
  * Controller for Report Configuration Options
  */
 public class ReportConfig {
-    private Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
+    private final Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
     private Class<? extends TotalReport> reportClass;
     private String reportTypeName;
     private String reportName;
@@ -98,8 +99,6 @@ public class ReportConfig {
      * @param viewHeader            irrelevant for testing
      * @param excludedAccountIds   irrelevant for testing
      * @param dateRange             date range to use for testing
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
      */
     public ReportConfig(Class<? extends TotalReport> reportClass, String reportName, boolean useAverageCostBasis,
                         boolean useOrdinaryReturn, AggregationController aggregationController, boolean outputSingle,
@@ -130,8 +129,6 @@ public class ReportConfig {
      *
      * @param reportClass type of report
      * @param reportName  name of report
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
      */
     public ReportConfig(Class<? extends TotalReport> reportClass, String reportName) throws NoSuchFieldException,
             IllegalAccessException, BackingStoreException {
@@ -171,9 +168,6 @@ public class ReportConfig {
      *
      * @param reportClassSimpleName report type
      * @param reportName            name of report
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws ClassNotFoundException
      */
 
     public ReportConfig(String reportClassSimpleName, String reportName) throws NoSuchFieldException,
@@ -192,10 +186,6 @@ public class ReportConfig {
      *
      * @param reportClass Class which extends total report
      * @return "type name" of report e.g. "snapshot report"
-     * @throws SecurityException
-     * @throws NoSuchFieldException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
      */
     public static String getReportTypeName(Class<? extends TotalReport> reportClass)
             throws SecurityException, NoSuchFieldException,
@@ -221,14 +211,11 @@ public class ReportConfig {
     /**
      * clears individual preference node
      *
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws BackingStoreException
      */
     @SuppressWarnings("unused")
     public static void clearConfigNode()
-            throws NoSuchFieldException,
-            IllegalAccessException, BackingStoreException {
+            throws
+            BackingStoreException {
         Prefs.REPORT_CONFIG_PREFS.removeNode();
 
     }
@@ -318,8 +305,6 @@ public class ReportConfig {
      * Prints node for given report
      *
      * @param reportClass type of report
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
      */
     @SuppressWarnings("unused")
     public static void printPrefNode(Class<? extends TotalReport> reportClass)
@@ -327,21 +312,19 @@ public class ReportConfig {
         Preferences thisPrefNode = Prefs.REPORT_CONFIG_PREFS.node(getReportTypeName(reportClass));
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             thisPrefNode.exportSubtree(baos);
-            String outString = baos.toString("UTF-8");
+            String outString = baos.toString(StandardCharsets.UTF_8);
             System.out.println(outString);
         }
     }
 
     /**
      * prints configuration node for all reports
-     * @throws IOException
-     * @throws BackingStoreException
      */
     @SuppressWarnings("unused")
     public static void printConfigNode() throws IOException, BackingStoreException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             Prefs.REPORT_CONFIG_PREFS.exportSubtree(baos);
-            String outString = baos.toString("UTF-8");
+            String outString = baos.toString(StandardCharsets.UTF_8);
             System.out.println(outString);
         }
     }
@@ -418,7 +401,7 @@ public class ReportConfig {
     }
 
     public void clearReportConfigFromPrefs()
-            throws NoSuchFieldException, IllegalAccessException, BackingStoreException, ClassNotFoundException {
+            throws NoSuchFieldException, IllegalAccessException, BackingStoreException {
         Class<? extends TotalReport> reportClass = this.reportClass;
         Preferences reportNode = prefs.node(ReportConfig.getReportTypeName(reportClass)).node(reportName);
         reportNode.removeNode();

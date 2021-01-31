@@ -39,6 +39,7 @@ import java.util.prefs.Preferences;
  *
  * @author Dale Furrow
  */
+@SuppressWarnings("ALL")
 public class Prefs {
 
 

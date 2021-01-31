@@ -37,7 +37,7 @@ import java.util.logging.*;
  * Class which controls in-program instantiation of logger functionality
  */
 public class LogController {
-    private Logger logger;
+    private final Logger logger;
     private static final Level loggerConfigLevel = Level.WARNING;
     private static final String logFileNamePattern = "investment_reports_error%g.xml";
     private Handler fileHandler;
@@ -94,8 +94,8 @@ public class LogController {
         }
     }
 
-    class CustomXMLFormatter extends XMLFormatter{
-        boolean partialFormat = true;
+    static class CustomXMLFormatter extends XMLFormatter{
+        boolean partialFormat;
 
         CustomXMLFormatter(boolean partialFormat){
             this.partialFormat = partialFormat;

@@ -46,10 +46,7 @@ public abstract class ComponentReport {
 
     /**
      * @return produces report line for output from ComponentReport
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
+     *
      */
     public abstract Object[] toTableRow() throws SecurityException, IllegalArgumentException,
             NoSuchFieldException, IllegalAccessException;

@@ -68,6 +68,7 @@ public class GainsAverageCalc implements GainsCalc {
         } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
             // subsequent pos smaller than previous
             // implies prev long basis must exist
+            assert prevTransValues != null;
             double histAvgUnitCost = ((double)prevTransValues.getLongBasis()) / adjPrevPos;
             return prevTransValues.getLongBasis()
                     + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());
@@ -94,6 +95,7 @@ public class GainsAverageCalc implements GainsCalc {
         } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
+            assert prevTransValues != null;
             double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return prevTransValues.getShortBasis()
                     + Math.round(histAvgUnitCost * currentTrans.getSecQuantity());

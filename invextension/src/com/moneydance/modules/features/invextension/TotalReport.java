@@ -32,6 +32,7 @@ import com.moneydance.modules.features.invextension.CompositeReport.COMPOSITE_TY
 import com.moneydance.modules.features.invextension.TotalReportOutputPane.ColType;
 
 import javax.swing.table.AbstractTableModel;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -52,14 +53,14 @@ public abstract class TotalReport {
     AggregationController aggregationController;
     private HashSet<SecurityReport> securityReports;
     private HashSet<CompositeReport> compositeReports;
-    private DateRange dateRange;
-    private Boolean isHierarchy = false; // indicates if second aggregate is a subset of the first aggregate
-    private Boolean outputSingle; // indicates a composite report with only one security report will print
-    private LinkedList<String> modelHeader;
-    private LinkedList<Integer> viewHeader;
+    private final DateRange dateRange;
+    private final Boolean isHierarchy; // indicates if second aggregate is a subset of the first aggregate
+    private final Boolean outputSingle; // indicates a composite report with only one security report will print
+    private final LinkedList<String> modelHeader;
+    private final LinkedList<Integer> viewHeader;
     protected ReportConfig reportConfig;
     private BulkSecInfo currentInfo;
-    private ColType[] colTypes;
+    private final ColType[] colTypes;
 
     public TotalReport(ReportConfig reportConfig, BulkSecInfo currentInfo, ColType[] colTypes,
                        LinkedList<String> modelHeader) throws Exception {
@@ -118,17 +119,12 @@ public abstract class TotalReport {
      * Generates array of report line objects
      *
      * @return report table 2d array
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
      */
     public Object[][] getReportTable() throws NoSuchFieldException, IllegalAccessException {
         if (securityReports.isEmpty()) {
             return new Object[0][0];
         } else {
-            HashSet<ComponentReport> allReports = new HashSet<>();
-            allReports.addAll(securityReports);
+            HashSet<ComponentReport> allReports = new HashSet<>(securityReports);
             if (outputSingle) {
                 allReports.addAll(compositeReports);
             } else {
@@ -166,7 +162,6 @@ public abstract class TotalReport {
      * Generates "All-Securities" Composite Report
      * @return composite for all security reports
      */
-    @SuppressWarnings("unchecked")
     public abstract CompositeReport getAllCompositeReport(DateRange dateRange,
                                                           AggregationController aggregationController);
 
@@ -221,12 +216,12 @@ public abstract class TotalReport {
      */
     public abstract String getReportTitle();
 
-    public int getFirstSortColumn() throws NoSuchFieldException, IllegalAccessException {
+    public int getFirstSortColumn() {
         return getModelHeader().indexOf(aggregationController.getFirstAggregator().getColumnName());
     }
 
 
-    public int getSecondSortColumn() throws NoSuchFieldException, IllegalAccessException {
+    public int getSecondSortColumn() {
         return getModelHeader().indexOf(aggregationController.getSecondAggregator().getColumnName());
     }
 
@@ -285,6 +280,7 @@ public abstract class TotalReport {
          * reporting methods above.
          */
     public class ReportTableModel extends AbstractTableModel {
+        @Serial
         private static final long serialVersionUID = -3662731131946834218L;
         public String[] columnNames;
         public Object[][] data;
@@ -293,9 +289,8 @@ public abstract class TotalReport {
             super();
 
             assert (body != null);
-            assert (columnNames != null);
 
-            this.columnNames = colNameList.toArray(new String[colNameList.size()]);
+            this.columnNames = colNameList.toArray(new String[0]);
             this.data = body;
         }
 
@@ -319,9 +314,12 @@ public abstract class TotalReport {
             if(newData.length != data.length){
                 return false;
             } else {
-                for (int i = 0; i < data.length; i++){
-                    if(data[i].length != newData[i].length) sameDimension = false;
-                }
+                for (int i = 0; i < data.length; i++)
+                    if
+                    (data[i].length != newData[i].length) {
+                        sameDimension = false;
+                        break;
+                    }
                 return  sameDimension;
             }
         }
@@ -346,7 +344,7 @@ public abstract class TotalReport {
             return data[row][col];
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"rawtypes"})
         @Override
         public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();

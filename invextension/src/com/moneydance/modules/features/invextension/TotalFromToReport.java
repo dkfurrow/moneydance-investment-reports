@@ -46,7 +46,7 @@ public class TotalFromToReport extends TotalReport {
             "Sell", "Short\nSell", "Cover\nShort", "Income", "Expense", "Long\nBasis", "Short\nBasis", "Realized\nGain",
             "Unrealized\nGain", "Period\nReturn", "TotPct\nReturn", "AnnPct\nReturn", "Stub-TotPct\nReturn", "Stub-AnnPct\nReturn"));
     public static String reportTypeName = "'From-To' Report";
-    private static ColType[] COL_TYPES = new ColType[]{ColType.OBJECT,
+    private static final ColType[] COL_TYPES = new ColType[]{ColType.OBJECT,
             ColType.OBJECT, ColType.OBJECT, ColType.OBJECT, ColType.OBJECT,
             ColType.DOUBLE3, ColType.DOUBLE3, ColType.DOUBLE2, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2, ColType.DOUBLE2,

@@ -30,6 +30,6 @@ package com.moneydance.modules.features.invextension;
  */
 public interface GoalSeekFunction {
 
-    public GoalSeekStatus f(double rate, Object userData);
+    GoalSeekStatus f(double rate, Object userData);
 
 }   /*  End of the GoalSeekFunction interface. */

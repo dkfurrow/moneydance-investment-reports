@@ -34,16 +34,18 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 /**
  * Diplays contents of ExtractorTotalReturn or ExtractorIRR
  */
 public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
+    @Serial
     private static final long serialVersionUID = -3102906929058309264L;
     public static final String COPY_CLIPBOARD = "copyClipboard";
-    private String auditString;
-    private Point location;
-    private int maximumHeight;
+    private final String auditString;
+    private final Point location;
+    private final int maximumHeight;
 
     public static void showReturnsAuditDisplay(final ExtractorReturnBase extractor,
                                                final Point location, final int maximumHeight){
@@ -110,7 +112,7 @@ public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
 
     }
 
-    public void copyAuditStringToClipboard() throws Exception {
+    public void copyAuditStringToClipboard() {
 
         StringSelection stsel = new StringSelection(auditString);
         Clipboard system = Toolkit.getDefaultToolkit().getSystemClipboard();

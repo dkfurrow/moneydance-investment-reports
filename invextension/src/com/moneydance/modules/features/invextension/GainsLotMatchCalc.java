@@ -138,7 +138,7 @@ public class GainsLotMatchCalc implements GainsCalc {
 
             //get unit cost (transaction amt + commission divided by adjusted shares)
             long secQtyUnAdjust = allocationTransValues.getSecQuantity();
-            Double secQtyAdjust = secQtyUnAdjust * splitAdjust;
+            double secQtyAdjust = secQtyUnAdjust * splitAdjust;
             Double unitCostAdjust = (-allocationTransValues.getBuy() -
                     allocationTransValues.getCommission() - allocationTransValues.getExpense())
                     / secQtyAdjust;
@@ -168,6 +168,7 @@ public class GainsLotMatchCalc implements GainsCalc {
         } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
+            assert prevTransValues != null;
             double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return (prevTransValues.getShortBasis()
                     + Math.round(histAvgUnitCost * currentTrans.getSecQuantity()));

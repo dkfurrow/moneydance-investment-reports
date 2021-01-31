@@ -31,6 +31,7 @@ package com.moneydance.modules.features.invextension;
 import com.infinitekind.moneydance.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
@@ -47,30 +48,27 @@ public class TransactionValues implements Comparable<TransactionValues> {
     
     // cumulative total gain after completion of transaction
     private long cumTotalGain;
-    private ParentTxn parentTxn; // parentTxn account
+    private final ParentTxn parentTxn; // parentTxn account
     // reference account (to determine correct sign for transfers)
-    private Account referenceAccount;
-    private SecurityAccountWrapper securityAccountWrapper;
-    private Integer dateInt; // transaction date
-    private String txnID; // transaction ID
+    private final Account referenceAccount;
+    private final SecurityAccountWrapper securityAccountWrapper;
+    private final Integer dateInt; // transaction date
+    private final String txnID; // transaction ID
 
     
-    static Comparator<TransactionValues> transComp = new Comparator<TransactionValues>() {
-        @Override
-        public int compare(TransactionValues t1, TransactionValues t2) {
-            ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
+    static Comparator<TransactionValues> transComp = (t1, t2) -> {
+        ComparablePair<? extends Comparable<?>>[] comparablePairs = new ComparablePair<?>[4];
 
-            comparablePairs[0] = new ComparablePair<>(t1.dateInt, t2.dateInt);
-            comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getUUID(),
-                    t2.referenceAccount.getUUID());
-            comparablePairs[2] = new ComparablePair<>(t1.getTxnSortOrder(), t2.getTxnSortOrder());
-            comparablePairs[3] = new ComparablePair<>(t1.txnID, t2.txnID);
+        comparablePairs[0] = new ComparablePair<>(t1.dateInt, t2.dateInt);
+        comparablePairs[1] = new ComparablePair<>(t1.referenceAccount.getUUID(),
+                t2.referenceAccount.getUUID());
+        comparablePairs[2] = new ComparablePair<>(t1.getTxnSortOrder(), t2.getTxnSortOrder());
+        comparablePairs[3] = new ComparablePair<>(t1.txnID, t2.txnID);
 
-            return BulkSecInfo.compareAll(comparablePairs);
-        }
+        return BulkSecInfo.compareAll(comparablePairs);
     }; // end inner class
 
-    private String desc; // transaction description
+    private final String desc; // transaction description
     private long buy = 0; // buy amount
     private long sell = 0; // sell amount
     private long shortSell = 0; // short sell amount
@@ -109,7 +107,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
      * Constructor to create a cash transaction for an Investment Account initial balance
      *
      * @param invAcctWrapper Investment Account
-     * @throws Exception
      */
     public TransactionValues(InvestmentAccountWrapper invAcctWrapper, int firstDateInt)
             throws Exception {
@@ -315,8 +312,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
             String dateString = " Date: " + DateUtils.convertToShort(dateInt);
             String errorString = "Error in transaction values calculation: " + securityAccountWrapper.getInvAcctWrapper().getName() +
                     " Security: " + securityAccountWrapper.getName() + dateString;
-            e.printStackTrace();
-//            LogController.logException(e, errorString);
+            LogController.getInstance();
+            LogController.logMessage(Level.WARNING, errorString);
         }
     }
 
@@ -327,7 +324,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
      * @param transactionValues TransactionValues from Investment or Security Account
      * @param prevTransValues   previous TransactionValues (to get position)
      * @param invAcctWrapper    Investment Account
-     * @throws Exception
      */
     public TransactionValues(TransactionValues transactionValues, TransactionValues prevTransValues,
                              InvestmentAccountWrapper invAcctWrapper) throws Exception {
@@ -475,7 +471,8 @@ public class TransactionValues implements Comparable<TransactionValues> {
     }
 
 
-    class InitialTransactionException extends Exception {
+    static class InitialTransactionException extends Exception {
+        @Serial
         private static final long serialVersionUID = 7055848337870560480L;
         public InitialTransactionException(String message){
             super(message);
@@ -489,7 +486,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         throw new InitialTransactionException(errorString);
     }
 
-    private void testSubsequentTransaction(InvestTxnType investTxnType, long secQuantity, long adjPrevPos) throws Exception {
+    private void testSubsequentTransaction(InvestTxnType investTxnType, long secQuantity, long adjPrevPos) {
         String warningStr = "";
         String dateString = " Date: " + DateUtils.convertToShort(dateInt);
         long thisPosition = this.secQuantity + adjPrevPos;
@@ -655,7 +652,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         txnInfo.add(Double.toString(perIncomeExpense / 100.0));
         txnInfo.add(Double.toString(perTotalGain / 100.0));
         txnInfo.add(Double.toString(cumTotalGain / 100.0));
-        return txnInfo.toArray(new String[txnInfo.size()]);
+        return txnInfo.toArray(new String[0]);
     }
 
     /**
@@ -733,7 +730,6 @@ public class TransactionValues implements Comparable<TransactionValues> {
 
         public SplitValues(SplitTxn thisSplit, Account accountRef) {
             this.split = thisSplit;
-            thisSplit.getDateInt();
             InvestTxnType txnType = thisSplit.getParentTxn().getInvestTxnType();
             Account.AccountType acctType = thisSplit.getAccount().getAccountType();
             Account.AccountType parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
@@ -848,87 +844,61 @@ public class TransactionValues implements Comparable<TransactionValues> {
                 case DIVIDEND:
                 case DIVIDENDXFR: // income/expense transactions
                     switch (acctType) {
-                        case EXPENSE:
-                                this.splitExpense = amountLong;
-                            break;
-                        case INCOME:
-                                this.splitIncome = amountLong;
-                            break;
-                        default:
-                            this.splitTransfer = split.getAccount() == accountRef ?
-                                    -amountLong : amountLong;
-                            break;
+                        case EXPENSE -> this.splitExpense = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
+                        default -> this.splitTransfer = split.getAccount() == accountRef ?
+                                -amountLong : amountLong;
                     }
                     break;
                 case SHORT: // short sales + commission
                     switch (acctType) {
-                        case SECURITY:
+                        case SECURITY -> {
                             this.splitShortSell = amountLong;
                             this.splitSecQuantity = valueLong;
-                            break;
-                        case EXPENSE:
-                            this.splitCommission = amountLong;
-                            break;
-                        case INCOME:
-                            this.splitIncome = amountLong;
-                            break;
+                        }
+                        case EXPENSE -> this.splitCommission = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
                     }
                     break;
                 case COVER:// short covers + commission
                     switch (acctType) {
-                        case SECURITY:
+                        case SECURITY -> {
                             this.splitCoverShort = amountLong;
                             this.splitSecQuantity = valueLong;
-                            break;
-                        case EXPENSE:
-                            this.splitCommission = amountLong;
-                            break;
-                        case INCOME:
-                            this.splitIncome = amountLong;
-                            break;
+                        }
+                        case EXPENSE -> this.splitCommission = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
                     }
                     break;
                 case MISCINC: // misc income and expense
                     switch (acctType) {
-                        case EXPENSE:
-                                this.splitExpense = amountLong;
-                            break;
-                        case INCOME:
-                                this.splitIncome = amountLong;
-                            break;
-                        case SECURITY:
+                        case EXPENSE -> this.splitExpense = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
+                        case SECURITY -> {
                             this.splitBuy = amountLong; // provides for return of capital
                             this.splitSecQuantity = valueLong;
-                            break;
+                        }
                     }
                     break;
                 case MISCEXP: // misc income and expense
+                    //possible treatment of dividend payment of short
                     switch (acctType) {
-                        case EXPENSE:
-                            this.splitExpense = amountLong;
-                            break;
-                        case INCOME:
-                            this.splitIncome = amountLong;
-                            break;
-                        case SECURITY:
+                        case EXPENSE -> this.splitExpense = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
+                        case SECURITY -> {
                             this.splitShortSell = amountLong; // provides for reduction
                             this.splitSecQuantity = valueLong;//of capital
-                            //possible treatment of dividend payment of short
-                            break;
+                        }
                     }
                     break;
                 case DIVIDEND_REINVEST: // income and buy with no net cash effect
                     switch (acctType) {
-                        case EXPENSE:
-                            this.splitCommission = amountLong;
-                            break;
-                        case INCOME:
-                            this.splitIncome = amountLong;
-                            break;
-                        case SECURITY:
+                        case EXPENSE -> this.splitCommission = amountLong;
+                        case INCOME -> this.splitIncome = amountLong;
+                        case SECURITY -> {
                             this.splitBuy = amountLong;
                             this.splitSecQuantity = valueLong;
-                            break;
+                        }
                     }
             } // end txnType Switch Statement
         } // end splitValues Constructor

@@ -58,14 +58,9 @@ public class SecurityTypeWrapper implements Aggregator {
         this.name = name;
     }
 
-    public SecurityTypeWrapper(SecurityAccountWrapper securityAccountWrapper) throws Exception {
+    public SecurityTypeWrapper(SecurityAccountWrapper securityAccountWrapper) {
 
-        SecurityType securityType = securityAccountWrapper.getSecurityType();
-        if (securityType == null) {
-            this.securityType = null;
-        } else {
-            this.securityType = securityType;
-        }
+        this.securityType = securityAccountWrapper.getSecurityType();
         assert this.securityType != null;
         this.name = this.securityType.name().trim();
     }

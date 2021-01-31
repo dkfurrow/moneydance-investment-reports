@@ -32,6 +32,7 @@ package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
 
+import java.io.Serial;
 import java.util.*;
 
 /**
@@ -39,6 +40,7 @@ import java.util.*;
  */
 public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPanelBase<Account> {
 
+    @Serial
     private static final long serialVersionUID = 5799086825356016359L;
 
     public ReportConfigInvestExpenseChooserPanel(ReportControlPanel reportControlPanel) {
@@ -54,9 +56,8 @@ public class ReportConfigInvestExpenseChooserPanel extends ReportConfigChooserPa
         Account root = MDData.getInstance().getRoot();
         if (root != null) {
             TreeSet<Account> expenseAccounts = BulkSecInfo.getSelectedSubAccounts(root, Account.AccountType.EXPENSE);
-            ArrayList<Account> sortedExpenseAccounts = new ArrayList<>();
-            sortedExpenseAccounts.addAll(expenseAccounts);
-            Collections.sort(sortedExpenseAccounts, new compareAccountNames());
+            ArrayList<Account> sortedExpenseAccounts = new ArrayList<>(expenseAccounts);
+            sortedExpenseAccounts.sort(new compareAccountNames());
 
             sortedExpenseAccounts.forEach(leftListModel::addElement);
         }

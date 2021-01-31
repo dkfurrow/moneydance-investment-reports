@@ -28,14 +28,8 @@
 
 package com.moneydance.modules.features.invextension;
 
-/**
- * Created by larus on 11/28/14.
- */
-
-
 
 import com.infinitekind.moneydance.model.InvestTxnType;
-import com.infinitekind.moneydance.model.TxnUtil;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -43,6 +37,7 @@ import java.util.List;
 import java.util.Stack;
 
 
+@SuppressWarnings("ALL")
 public class ExtractorDividends extends ExtractorBase<List<Number>> {
     private TransactionValues firstTransactionBasis;
     private TransactionValues lastTransactionBasis;
@@ -90,11 +85,11 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
                 long annualizedDivPerShare = pDq(annualizedDivTotal, splitAdjustReferencePos);
                 double dividendYield = (double) annualizedDivPerShare / lastPrice;
                 double yieldOnBasis = (longBasis > 0) ? annualizedDividend / longBasis : 0.0;
-                return Arrays.asList((Number) annualizedDividend, dividendYield, yieldOnBasis);
+                return Arrays.asList(annualizedDividend, dividendYield, yieldOnBasis);
             }
         }
 
-        return Arrays.asList((Number) 0L, 0.0, 0.0);    // Default
+        return Arrays.asList(0L, 0.0, 0.0);    // Default
     }
 
 
@@ -118,16 +113,10 @@ public class ExtractorDividends extends ExtractorBase<List<Number>> {
     }
 
     private boolean isDividendType(InvestTxnType transType) {
-        switch (transType) {
-            case DIVIDEND:
-            case DIVIDEND_REINVEST:
-            case DIVIDENDXFR:
-            case BANK:
-                return true;
-
-            default:
-                return false;
-        }
+        return switch (transType) {
+            case DIVIDEND, DIVIDEND_REINVEST, DIVIDENDXFR, BANK -> true;
+            default -> false;
+        };
     }
 
     /**

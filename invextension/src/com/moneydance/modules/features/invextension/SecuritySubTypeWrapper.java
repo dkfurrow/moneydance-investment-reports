@@ -56,7 +56,7 @@ public class SecuritySubTypeWrapper implements Aggregator {
     static String reportingName = "Security Sub Type";
     // column name for sorting
     static String columnName = "SecSubType";
-    private static HashMap<SecurityType, LinkedHashSet<String>> securitySubtypeMap = new HashMap<>();
+    private static final HashMap<SecurityType, LinkedHashSet<String>> securitySubtypeMap = new HashMap<>();
     static {
         securitySubtypeMap.put(SecurityType.STOCK, new LinkedHashSet<>(Arrays.asList(stockSubsetVals)));
         securitySubtypeMap.put(SecurityType.MUTUAL, new LinkedHashSet<>(Arrays.asList(mutualSubsetVals)));
@@ -82,14 +82,13 @@ public class SecuritySubTypeWrapper implements Aggregator {
         this.securitySubType = name;
     }
 
-    public SecuritySubTypeWrapper(SecurityAccountWrapper securityAccountWrapper)
-            throws Exception {
+    public SecuritySubTypeWrapper(SecurityAccountWrapper securityAccountWrapper) {
         this.securityAccountWrapper = securityAccountWrapper;
         securityType = securityAccountWrapper.getSecurityType();
         String subtypeStr = securityAccountWrapper.getSecuritySubType().trim();
         this.securitySubType = getModifiedSecuritySubType(subtypeStr);
         // if not null add to securitySubTypeMap
-        if (securityType != null && securitySubType != null) {
+        if (securityType != null) {
             LinkedHashSet<String> securitySubTypes = securitySubtypeMap.get(securityType);
             securitySubTypes.add(securitySubType);
         }
@@ -127,11 +126,8 @@ public class SecuritySubTypeWrapper implements Aggregator {
             return false;
         SecuritySubTypeWrapper other = (SecuritySubTypeWrapper) obj;
         if (securitySubType == null) {
-            if (other.securitySubType != null)
-                return false;
-        } else if (!securitySubType.equals(other.securitySubType))
-            return false;
-        return true;
+            return other.securitySubType == null;
+        } else return securitySubType.equals(other.securitySubType);
     }
 
     public String getName() {

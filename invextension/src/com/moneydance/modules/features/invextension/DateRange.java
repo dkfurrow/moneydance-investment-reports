@@ -38,17 +38,17 @@ class DateRange {
     private int fromDateInt;
     private int toDateInt;
     private int snapDateInt;
-    private REF_DATE refDate;
-    private DATE_RULE dateRule;
-    private Boolean snapDateIsRefDate;
+    private final REF_DATE refDate;
+    private final DATE_RULE dateRule;
+    private final Boolean snapDateIsRefDate;
 
     public DateRange() {
         this.refDate = REF_DATE.NONE;
         this.dateRule = DATE_RULE.NONE;
         this.snapDateIsRefDate = null;
         this.setFromDateInt(nullDateInt);
-        this.setToDateInt(nullDateInt);
-        this.setSnapDateInt(nullDateInt);
+        this.setToDateInt();
+        this.setSnapDateInt();
 
     }
 
@@ -67,40 +67,19 @@ class DateRange {
         int refDateInt = DateUtils.convertToDateInt(new Date());
         if (refDate == REF_DATE.LAST_TRADE_DATE) refDateInt = DateUtils.getLastCurrentDateInt();
         this.snapDateIsRefDate = snapDateIsRefDate;
-        int startDateInt = refDateInt;
-        switch (dateRule) {
-            case ONE_DAY:
-                startDateInt = DateUtils.getPrevBusinessDay(refDateInt);
-                break;
-            case ONE_WEEK:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addDaysInt(refDateInt, -7));
-                break;
-            case ONE_MONTH:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -1));
-                break;
-            case ONE_YEAR:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -12));
-                break;
-            case MONTH_TO_DATE:
-                startDateInt = DateUtils.getStartMonth(refDateInt);
-                break;
-            case QUARTER_TO_DATE:
-                startDateInt = DateUtils.getStartQuarter(refDateInt);
-                break;
-            case YEAR_TO_DATE:
-                startDateInt = DateUtils.getStartYear(refDateInt);
-                break;
-            case THREE_YEARS:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -36));
-                break;
-            case FIVE_YEARS:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -60));
-                break;
-            case TEN_YEARS:
-                startDateInt = DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -120));
-                break;
-
-        }
+        int startDateInt = switch (dateRule) {
+            case ONE_DAY -> DateUtils.getPrevBusinessDay(refDateInt);
+            case ONE_WEEK -> DateUtils.getLatestBusinessDay(DateUtils.addDaysInt(refDateInt, -7));
+            case ONE_MONTH -> DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -1));
+            case ONE_YEAR -> DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -12));
+            case MONTH_TO_DATE -> DateUtils.getStartMonth(refDateInt);
+            case QUARTER_TO_DATE -> DateUtils.getStartQuarter(refDateInt);
+            case YEAR_TO_DATE -> DateUtils.getStartYear(refDateInt);
+            case THREE_YEARS -> DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -36));
+            case FIVE_YEARS -> DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -60));
+            case TEN_YEARS -> DateUtils.getLatestBusinessDay(DateUtils.addMonthsInt(refDateInt, -120));
+            default -> refDateInt;
+        };
         this.fromDateInt = startDateInt;
         this.toDateInt = refDateInt;
         this.snapDateInt = snapDateIsRefDate ? refDateInt : startDateInt;
@@ -175,8 +154,8 @@ class DateRange {
         return snapDateInt;
     }
 
-    void setSnapDateInt(int snapDateInt) {
-        this.snapDateInt = snapDateInt;
+    void setSnapDateInt() {
+        this.snapDateInt = DateRange.nullDateInt;
     }
 
     public int getFromDateInt() {
@@ -191,8 +170,8 @@ class DateRange {
         return toDateInt;
     }
 
-    void setToDateInt(int toDateInt) {
-        this.toDateInt = toDateInt;
+    void setToDateInt() {
+        this.toDateInt = DateRange.nullDateInt;
     }
 
     public REF_DATE getRefDate() {
@@ -209,9 +188,9 @@ class DateRange {
                 refDate + "," + dateRule + "," + snapDateIsRefDate;
     }
 
-    public static enum REF_DATE {NONE, TODAY, LAST_TRADE_DATE}
+    public enum REF_DATE {NONE, TODAY, LAST_TRADE_DATE}
 
-    public static enum DATE_RULE {
+    public enum DATE_RULE {
         NONE, ONE_DAY, ONE_WEEK, ONE_MONTH, ONE_YEAR, MONTH_TO_DATE,
         QUARTER_TO_DATE, YEAR_TO_DATE, THREE_YEARS, FIVE_YEARS, TEN_YEARS
     }

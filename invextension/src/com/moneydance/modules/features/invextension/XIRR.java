@@ -69,7 +69,7 @@ public class XIRR {
         }
 
 //		System.out.println( "XIRR Result - " + result ) ; //commented out to improve speed
-        return (result != Double.NaN) ? (result - 1) : result;
+        return (!Double.isNaN(result)) ? (result - 1) : result;
     }
 
 }   /*  End of the XIRR class. */

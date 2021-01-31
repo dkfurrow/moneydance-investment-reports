@@ -34,11 +34,13 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 /**
  * Field chooser panel to identify which expenses are investment expenses.
  */
 public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
+    @Serial
     private static final long serialVersionUID = -8990699863699414946L;
     protected final ReportControlPanel reportControlPanel;
 
@@ -68,7 +70,7 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
         JPanel expenseControlPanel = new JPanel();
         JPanel rightPanel = new JPanel();
 
-        String titles[] = {leftLabel, middleLabel, rightLabel};
+        String[] titles = {leftLabel, middleLabel, rightLabel};
         JPanel[] panels = {leftPanel, expenseControlPanel, rightPanel};
         for (int i = 0; i < panels.length; i++) {
             TitledBorder titledBorder = BorderFactory.createTitledBorder(titles[i]);
@@ -203,6 +205,7 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
 
 
     private class ItemCellRender extends JLabel implements ListCellRenderer<ItemType> {
+        @Serial
         private static final long serialVersionUID = 7586072864239449518L;
 
 

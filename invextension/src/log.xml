@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="14 seconds">
+<build time="11 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 15 in: C:\Java\openjdk-15.0.2]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 10]]></message>
@@ -62,7 +62,7 @@
 	<message priority="debug"><![CDATA[Setting project property: env.PROMPT -> $P$G]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.SESSIONNAME -> Console]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env._JAVACMD -> C:\Java\openjdk-15.0.2\bin\java.exe]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.IDEA_INITIAL_DIRECTORY -> C:\Users\dale\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\203.6682.168\bin]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.IDEA_INITIAL_DIRECTORY -> C:\Users\dale\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\203.7148.57\bin]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.LOCALAPPDATA -> C:\Users\dale\AppData\Local]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.GIT_LFS_PATH -> C:\Program Files\Git LFS]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERDOMAIN_ROAMINGPROFILE -> MAIN-PC]]></message>
@@ -142,7 +142,6 @@
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRange$DATE_RULE.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRange$REF_DATE.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRange.class]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRangePanel$1.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRangePanel$BoxFocusListener.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldDocumentListener.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\DateRangePanel$DateFieldFocusListener.class]]></message>
@@ -270,7 +269,6 @@
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TotalSnapshotReport.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\Tradeable.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TransactionValues$1.class]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TransactionValues$2.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TransactionValues$InitialTransactionException.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TransactionValues$SplitValues.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\TransactionValues.class]]></message>
@@ -293,18 +291,17 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.SecretKeyCallback]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\extadmin.jar com/moneydance/security/SecretKeyCallback.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.SecretKeyCallback loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.FileOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.BufferedOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.ByteArrayOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Throwable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Exception loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.ByteArrayOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.Key loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.InputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.FileInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.String loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.File loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StreamTable]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/infinitekind/util/StreamTable.class]]></message>
@@ -313,15 +310,16 @@
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamObject loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Hashtable loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StreamTable loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PrivateKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Writer loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.OutputStreamWriter loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.Reader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.IOException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringReader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringEncodingException]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/infinitekind/util/StringEncodingException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringEncodingException loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.io.InputStreamReader loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.StringWriter loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.PrintStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.Vector loaded from parent loader (parentFirst)]]></message>
@@ -344,20 +342,20 @@
 	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.invoke.StringConcatFactory loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.infinitekind.util.StringUtils]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/infinitekind/util/StringUtils.class]]></message>
 	<message priority="debug"><![CDATA[Class com.infinitekind.util.StringUtils loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.List loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.NumberFormatException loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.CharSequence loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.Double loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormat loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.text.DecimalFormatSymbols loaded from parent loader (parentFirst)]]></message>
@@ -406,7 +404,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="14 seconds">
+	<target name="invextension" time="10 seconds">
 		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:48: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist because it already exists.]]></message>
 		</task>
@@ -611,7 +609,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRange$DATE_RULE.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRange$REF_DATE.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRange.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRangePanel$1.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRangePanel$BoxFocusListener.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRangePanel$DateFieldDocumentListener.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/DateRangePanel$DateFieldFocusListener.class]]></message>
@@ -739,7 +736,6 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TotalSnapshotReport.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/Tradeable.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransactionValues$1.class]]></message>
-			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransactionValues$2.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransactionValues$InitialTransactionException.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransactionValues$SplitValues.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/TransactionValues.class]]></message>
@@ -749,7 +745,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:58: ]]></message>
 		</task>
-		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:70: " name="java" time="11 seconds">
+		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:70: " name="java" time="8 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -788,7 +784,6 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRange$DATE_RULE.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRange$REF_DATE.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRange.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRangePanel$1.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRangePanel$BoxFocusListener.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRangePanel$DateFieldDocumentListener.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/DateRangePanel$DateFieldFocusListener.class]]></message>
@@ -916,14 +911,13 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TotalSnapshotReport.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/Tradeable.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransactionValues$1.class]]></message>
-			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransactionValues$2.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransactionValues$InitialTransactionException.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransactionValues$SplitValues.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/TransactionValues.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 20833 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 20592 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />

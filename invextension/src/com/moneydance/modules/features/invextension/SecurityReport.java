@@ -303,8 +303,7 @@ public abstract class SecurityReport extends ComponentReport {
     public abstract SecurityReport getAggregateSecurityReport(CompositeReport compositeReport);
 
     @Override
-    public Object[] toTableRow() throws SecurityException, IllegalArgumentException,
-            NoSuchFieldException, IllegalAccessException {
+    public Object[] toTableRow() throws SecurityException, IllegalArgumentException {
         recordMetrics();
         return outputLine.toArray();
     }
@@ -320,8 +319,8 @@ public abstract class SecurityReport extends ComponentReport {
         outputLine.add(simpleMetric.get(name).displayObject(positionScale));
     }
 
-    protected void outputSimpleValue(String name) {
-        outputLine.add(simpleMetric.get(name).displayObject(null));
+    protected void outputSimpleValue() {
+        outputLine.add(simpleMetric.get(SecurityReport.SMPctPriceChange).displayObject(null));
     }
 
     protected void outputReturn(String name) {
@@ -494,7 +493,7 @@ public abstract class SecurityReport extends ComponentReport {
 
 
     // For each metric, we have its current value and an extractor (which has its own state).
-    public class MetricEntry<V> implements Comparable<MetricEntry<V>>{
+    public static class MetricEntry<V> implements Comparable<MetricEntry<V>>{
         public V value;
         public ExtractorBase<?> extractor;
         public Double scalingFactor = null;

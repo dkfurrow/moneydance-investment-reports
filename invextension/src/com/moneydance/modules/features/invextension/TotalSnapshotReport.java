@@ -50,7 +50,7 @@ public class TotalSnapshotReport extends TotalReport {
             "Ann.\nDiv", "Div\nYield", "Yield On\nBasis", "Rlzd\nGain", "Unrlzd\nGain",
             "Total\nGain"));
     public static String reportTypeName = "Snapshot Report";
-    private static ColType[] COL_TYPES = new ColType[]{ColType.OBJECT, ColType.OBJECT, ColType.OBJECT,
+    private static final ColType[] COL_TYPES = new ColType[]{ColType.OBJECT, ColType.OBJECT, ColType.OBJECT,
             ColType.OBJECT, ColType.OBJECT, ColType.DOUBLE2, ColType.DOUBLE3, ColType.DOUBLE2,
             ColType.DOUBLE2, ColType.DOUBLE2, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1,
             ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1, ColType.PERCENT1,
