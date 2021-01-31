@@ -108,9 +108,9 @@ public class SecuritySnapshotReport extends SecurityReport {
         ExtractorDividends eDividends = new ExtractorDividends(securityAccount, fromDateInt, snapDateInt);      // x 3
         ExtractorGains eGains = new ExtractorGains(securityAccount, fromDateInt, snapDateInt);              // x 3
 
-        multipleMetrics.put(MMPriceChange, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0.0), ePriceChange));
-        multipleMetrics.put(MMDividends, new MetricEntry<>(Arrays.asList((Number) 0L, 0.0, 0.0), eDividends));
-        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
+        multipleMetrics.put(MMPriceChange, new MetricEntry<>(Arrays.asList(0L, 0L, 0.0), ePriceChange));
+        multipleMetrics.put(MMDividends, new MetricEntry<>(Arrays.asList(0L, 0.0, 0.0), eDividends));
+        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList(0L, 0L, 0L), eGains));
 
         // Extractors for return calculations. Cannot point to same as above, since they have state.
         ReturnWindowType windowType = ExtractorReturnBase.ReturnWindowType.DEFAULT;
@@ -213,7 +213,6 @@ public class SecuritySnapshotReport extends SecurityReport {
         // retain current values --return
     }
 
-    @SuppressWarnings("unchecked")
     public void outputDividendYield(String stringMetric){
         double annualizedDividend = simpleMetric.get(SMAnnualizedDividend).value.doubleValue();
         if(stringMetric.equals(SMDividendYield)){
@@ -235,7 +234,7 @@ public class SecuritySnapshotReport extends SecurityReport {
 
         outputSimplePrice(SMAbsPriceChange);
         outputSimplePrice(SMAbsValueChange);
-        outputSimpleValue(SMPctPriceChange);
+        outputSimpleValue();
 
         outputReturn(RMDayReturn);
         outputReturn(RMWeekReturn);

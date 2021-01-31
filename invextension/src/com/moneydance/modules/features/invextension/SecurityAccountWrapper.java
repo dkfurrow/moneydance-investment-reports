@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,9 +40,8 @@ import java.util.stream.Collectors;
  * Adds functionality to
  */
 public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
-    private Account securityAccount;
+    private final Account securityAccount;
     private CurrencyWrapper currencyWrapper;
-    private ReportConfig reportConfig;
     private Tradeable tradeable;
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
@@ -53,11 +51,9 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     private ArrayList<TransactionValues> transValuesList;
     private DIV_FREQUENCY divFrequency = DIV_FREQUENCY.UNKNOWN;
 
-    public SecurityAccountWrapper(@NotNull Account secAcct, @NotNull InvestmentAccountWrapper invAcct,
-                                  ReportConfig reportConfig) throws Exception {
+    public SecurityAccountWrapper(@NotNull Account secAcct, @NotNull InvestmentAccountWrapper invAcct) throws Exception {
         this.securityAccount = secAcct;
         this.invAcctWrapper = invAcct;
-        this.reportConfig = reportConfig;
         this.transValuesList = new ArrayList<>();
         this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers()
                 .get(secAcct.getCurrencyType().getParameter("id"));
@@ -104,7 +100,7 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             }
 
         }
-        Collections.sort(assocTrans, BulkSecInfo.txnComp);
+        assocTrans.sort(BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
                     thisAccount, this, transValuesSet, this.getBulkSecInfo());
@@ -147,11 +143,9 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     @NotNull
     public ArrayList<String[]> listTransValuesInfo() {
-        ArrayList<String[]> outputList = new ArrayList<>();
         assert transValuesList != null;
-        outputList.addAll(transValuesList.stream().map(TransactionValues::listInfo)
-                .collect(Collectors.toList()));
-        return outputList;
+        return transValuesList.stream().map(TransactionValues::listInfo)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public AccountBook getAccountBook(){
@@ -331,12 +325,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
                             } else {//dividend frequency is annual unless we observe more frequent distributions
                                 if (daysBetweenDivs <= MINIMUM_EX_DIV_DAYS) return; //ignore--probable correction of
                                 // previous transaction
-                                if (daysBetweenDivs > MINIMUM_EX_DIV_DAYS && daysBetweenDivs < DIV_FREQUENCY_INCREMENT) {
+                                if (daysBetweenDivs < DIV_FREQUENCY_INCREMENT) {
                                     setDivFrequency(DIV_FREQUENCY.MONTHLY);
-                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT && daysBetweenDivs < DIV_FREQUENCY_INCREMENT * 2) {
+                                } else if (daysBetweenDivs < DIV_FREQUENCY_INCREMENT * 2) {
                                     setDivFrequency(DIV_FREQUENCY.QUARTERLY);
-                                } else if (daysBetweenDivs >= DIV_FREQUENCY_INCREMENT * 2 && daysBetweenDivs <
-                                        DIV_FREQUENCY_INCREMENT * 4) {
+                                } else if (daysBetweenDivs < DIV_FREQUENCY_INCREMENT * 4) {
                                     setDivFrequency(DIV_FREQUENCY.BIANNUAL);
                                 } else {
                                     // else dividend frequency still assumed to be annual

@@ -38,15 +38,15 @@ import java.util.HashSet;
  */
 public class CompositeReport extends ComponentReport {
 
-    private AggregationController aggregationController;
+    private final AggregationController aggregationController;
     private Aggregator firstAggregator; //aggregator value of first Aggregate Type
     private Aggregator secondAggregator;//aggregator value of first Aggregate Type
-    private COMPOSITE_TYPE compositeType; //composite type
+    private final COMPOSITE_TYPE compositeType; //composite type
     // security report which contains aggregated values
     private SecurityReport aggregateReport;
     // Hash set which contains references to SecurityReports aggregated by
     // this composite
-    private HashSet<SecurityReport> securityReports;
+    private final HashSet<SecurityReport> securityReports;
 
     /**
      * Constructor which creates composite from "seed" SecurityReport
@@ -61,20 +61,23 @@ public class CompositeReport extends ComponentReport {
         this.compositeType = compositeType;
 
         switch (compositeType) {
-            case FIRST: //aggregate first value only
+            //aggregate first value only
+            case FIRST -> {
                 this.firstAggregator = securityReport.getAggregator(aggregationController.getFirstAggregator());
                 this.secondAggregator = aggregationController.getSecondAggregator();
-                break;
-            case SECOND://aggregate second value only
+            }
+            //aggregate second value only
+            case SECOND -> {
                 this.firstAggregator = aggregationController.getFirstAggregator();
                 this.secondAggregator = securityReport.getAggregator(aggregationController.getSecondAggregator());
-                break;
-            case BOTH://aggregate by both first and second value
+            }
+            //aggregate by both first and second value
+            case BOTH -> {
                 this.firstAggregator = securityReport.getAggregator(aggregationController.getFirstAggregator());
                 this.secondAggregator = securityReport.getAggregator(aggregationController.getSecondAggregator());
-                break;
-            case ALL: //used for All-Security aggregate
-                throw new UnsupportedOperationException();
+            }
+            //used for All-Security aggregate
+            case ALL -> throw new UnsupportedOperationException();
         }
         this.securityReports = new HashSet<>();
         securityReports.add(securityReport);
@@ -173,11 +176,8 @@ public class CompositeReport extends ComponentReport {
         } else if (!firstAggregator.equals(other.firstAggregator))
             return false;
         if (secondAggregator == null) {
-            if (other.secondAggregator != null)
-                return false;
-        } else if (!secondAggregator.equals(other.secondAggregator))
-            return false;
-        return true;
+            return other.secondAggregator == null;
+        } else return secondAggregator.equals(other.secondAggregator);
     }
 
     public String getName() throws SecurityException, IllegalArgumentException,
@@ -254,8 +254,7 @@ public class CompositeReport extends ComponentReport {
 
     @Override
     public Object[] toTableRow() throws SecurityException,
-            IllegalArgumentException, NoSuchFieldException,
-            IllegalAccessException {
+            IllegalArgumentException {
 
         return aggregateReport.toTableRow();
     }

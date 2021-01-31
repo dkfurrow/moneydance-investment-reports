@@ -102,25 +102,25 @@ public class BulkSecInfo {
     };
 
     /* Cash Currency Type for uninvested cash */
-    private CurrencyWrapper cashCurrencyWrapper;
+    private final CurrencyWrapper cashCurrencyWrapper;
     /* first transaction date (to price cash currency)*/
-    private int firstDateInt;
+    private final int firstDateInt;
     /* HashSet of CurrencyWrappers */
-    private HashMap<String, CurrencyWrapper> currencyWrappers;
+    private final HashMap<String, CurrencyWrapper> currencyWrappers;
     /* all transactions in root */
-    private TransactionSet transactionSet;
+    private final TransactionSet transactionSet;
     /*TreeMap of Transvalues for leaf-level security Accounts */
-    private HashMap<String, TransactionValues> securityTransactionValues;
+    private final HashMap<String, TransactionValues> securityTransactionValues;
     /* root account */
-    private Account root;
+    private final Account root;
     /* Account Book */
-    private AccountBook accountBook;
+    private final AccountBook accountBook;
     /* GainsCalc Type */
-    private GainsCalc gainsCalc;
+    private final GainsCalc gainsCalc;
     /* ReportConfig from panel or from test code */
     private static ReportConfig reportConfig;
     /* HashSet of InvestmentAccount Wrappers */
-    private HashSet<InvestmentAccountWrapper> investmentWrappers;
+    private final HashSet<InvestmentAccountWrapper> investmentWrappers;
 
     public BulkSecInfo(AccountBook accountBook, ReportConfig reportConfig) throws Exception {
         this.accountBook = accountBook;
@@ -179,46 +179,20 @@ public class BulkSecInfo {
      * @return Integer which represents sort order
      */
     public static Integer getTxnSortOrder(InvestTxnType transType) {
-        Integer txnOrder = 0;
-        switch (transType) {
-            case BUY:
-                txnOrder = 0;
-                break;
-            case BUY_XFER:
-                txnOrder = 1;
-                break;
-            case DIVIDEND_REINVEST:
-                txnOrder = 2;
-                break;
-            case SELL:
-                txnOrder = 3;
-                break;
-            case SELL_XFER:
-                txnOrder = 4;
-                break;
-            case SHORT:
-                txnOrder = 5;
-                break;
-            case COVER:
-                txnOrder = 6;
-                break;
-            case MISCINC:
-                txnOrder = 7;
-                break;
-            case MISCEXP:
-                txnOrder = 8;
-                break;
-            case DIVIDEND:
-                txnOrder = 9;
-                break;
-            case DIVIDENDXFR:
-                txnOrder = 10;
-                break;
-            case BANK:
-                txnOrder = 11;
-                break;
-        }
-        return txnOrder;
+        return switch (transType) {
+            case BUY_XFER -> 1;
+            case DIVIDEND_REINVEST -> 2;
+            case SELL -> 3;
+            case SELL_XFER -> 4;
+            case SHORT -> 5;
+            case COVER -> 6;
+            case MISCINC -> 7;
+            case MISCEXP -> 8;
+            case DIVIDEND -> 9;
+            case DIVIDENDXFR -> 10;
+            case BANK -> 11;
+            default -> 0;
+        };
     }
 
     /**
@@ -268,7 +242,7 @@ public class BulkSecInfo {
         currencyInfo.add(Double.toString(1 / closeRate));
         currencyInfo.add(Double.toString(1 / cur.adjustRateForSplitsInt(dateInt,
                 closeRate, todayDate)));
-        return currencyInfo.toArray(new String[currencyInfo.size()]);
+        return currencyInfo.toArray(new String[0]);
     }
 
     public static StringBuffer listCurrencySnapshotHeader() {
@@ -346,9 +320,8 @@ public class BulkSecInfo {
      * lists all TransactionValues in InvestmentAccountWrappers
      *
      * @return ArrayList of String Arrays with values
-     * @throws Exception
      */
-    public ArrayList<String[]> listAllTransValues() throws Exception {
+    public ArrayList<String[]> listAllTransValues() {
         ArrayList<String[]> transactionsInfo = new ArrayList<>();
 
         for (InvestmentAccountWrapper investmentAccountWrapper : investmentWrappers) {
@@ -421,7 +394,7 @@ public class BulkSecInfo {
      * @param reportConfig Report Config from display
      * @return Completed InvestmentAccountWrappers with interpreted transaction
      * information
-     * @throws Exception
+     * @throws Exception general exception
      */
     private HashSet<InvestmentAccountWrapper> getInvestmentAccountInfo(ReportConfig reportConfig) throws Exception {
         TreeSet<Account> allSubAccounts = getSelectedSubAccounts(root, Account.AccountType.INVESTMENT);

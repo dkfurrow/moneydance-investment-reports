@@ -34,6 +34,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.util.prefs.BackingStoreException;
 
 
@@ -45,24 +46,23 @@ import java.util.prefs.BackingStoreException;
  * @since 1.0
  */
 public class ReportSaveControlPanel extends JPanel implements ActionListener {
+    @Serial
     private static final long serialVersionUID = -1521332923539321021L;
     private static final String SAVE_CONFIG = "saveConfig";
     ReportControlFrame reportControlFrame;
-    private JFrame reportSaveControlFrame; //implements ActionListener
+    private final JFrame reportSaveControlFrame; //implements ActionListener
 
-    private JLabel reportTypeLabel = new JLabel("Report Type");
-    private JTextField reportTypeText = new JTextField(30);
-    private JLabel reportNameLabel = new JLabel("Report Name");
-    private JTextField reportNameText = new JTextField(30);
+    private final JLabel reportTypeLabel = new JLabel("Report Type");
+    private final JTextField reportTypeText = new JTextField(30);
+    private final JLabel reportNameLabel = new JLabel("Report Name");
+    private final JTextField reportNameText = new JTextField(30);
     JButton saveConfigButton;
 
 
     /**
      * Creates new form NewJPanel
      */
-    public ReportSaveControlPanel(JFrame reportSaveControlFrame, ReportControlFrame reportControlFrame)
-            throws IllegalAccessException, BackingStoreException,
-            NoSuchFieldException {
+    public ReportSaveControlPanel(JFrame reportSaveControlFrame, ReportControlFrame reportControlFrame) {
         this.reportSaveControlFrame = reportSaveControlFrame;
         this.reportControlFrame = reportControlFrame;
         initComponents();
@@ -74,7 +74,7 @@ public class ReportSaveControlPanel extends JPanel implements ActionListener {
         frame.addPanel(testPanel);
     }
 
-    private void initComponents() throws IllegalAccessException, BackingStoreException, NoSuchFieldException {
+    private void initComponents() {
 
 
         // Create and format sub-panels to load into main panel
@@ -134,9 +134,6 @@ public class ReportSaveControlPanel extends JPanel implements ActionListener {
 
     /**
      * Saves Report Config (subject to validation checks)
-     * @throws IllegalAccessException
-     * @throws java.util.prefs.BackingStoreException
-     * @throws NoSuchFieldException
      */
     private void saveSelectedReportConfig() throws IllegalAccessException, BackingStoreException,
             NoSuchFieldException {

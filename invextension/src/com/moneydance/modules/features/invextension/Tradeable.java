@@ -82,11 +82,8 @@ public class Tradeable implements Aggregator {
             return false;
         Tradeable other = (Tradeable) obj;
         if (isTradeableCurrency == null) {
-            if (other.isTradeableCurrency != null)
-                return false;
-        } else if (!isTradeableCurrency.equals(other.isTradeableCurrency))
-            return false;
-        return true;
+            return other.isTradeableCurrency == null;
+        } else return isTradeableCurrency.equals(other.isTradeableCurrency);
     }
 
     @Override

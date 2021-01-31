@@ -20,6 +20,7 @@ import java.util.*;
 /**
  * Singleton Class holds all Moneydance Data
  */
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 class MDData {
     File mdFolder;
     private FeatureModuleContext featureModuleContext;
@@ -28,16 +29,13 @@ class MDData {
     private BulkSecInfo currentInfo;
     private ObservableLastTransactionDate observableLastTransactionDate;
     private Date lastPriceUpdateTime;
-    private HashMap<String, Double> userRateMap = new HashMap<>();
+    private final HashMap<String, Double> userRateMap = new HashMap<>();
     private Main extension;
     private Thread transactionMonitorThread;
     private TransactionMonitor transactionMonitor;
-    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:mm:ss z");
 
 
     private static MDData uniqueInstance;
-    public static final DateFormat DATE_PATTERN_SHORT =  DateFormat.getDateInstance
-            (DateFormat.SHORT, Locale.getDefault());
     public static final DateFormat DATE_PATTERN_MEDIUM =  new SimpleDateFormat("HH:mm, dd-MMM-yyyy");
 
 
@@ -158,10 +156,6 @@ class MDData {
         return lastPriceUpdateTime;
     }
 
-    public HashMap<String, Double> getUserRateMap() {
-        return userRateMap;
-    }
-
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
         msgs.add("MD last modified: " + DATE_PATTERN_MEDIUM.format
@@ -214,16 +208,15 @@ class MDData {
     public void reloadMDData(ReportConfig reportConfig) throws Exception {
         if(featureModuleContext != null){
             initializeMDDataInApplication(false);
-            currentInfo = new BulkSecInfo(accountBook, reportConfig);
         } else {
             initializeMDDataHeadless(false);
-            currentInfo = new BulkSecInfo(accountBook, reportConfig);
         }
+        currentInfo = new BulkSecInfo(accountBook, reportConfig);
     }
 
 
     public static class ObservableLastTransactionDate {
-        private PropertyChangeSupport support;
+        private final PropertyChangeSupport support;
         Date lastTransactionDate;
         TreeSet<Date> previousLastTransactionDates = new TreeSet<>();
         
@@ -260,11 +253,9 @@ class MDData {
     
 
     private class TransactionMonitor implements Runnable {
-        private long transactionWaitTimeMills = 60000;
-        private TreeSet<Date> newTransactionDateQueue = new TreeSet<>();
         private  Date lastRefreshTime;
-        private long updateFrequencyMins;
-        private TotalReportOutputFrame totalReportOutputFrame;
+        private final long updateFrequencyMins;
+        private final TotalReportOutputFrame totalReportOutputFrame;
         private volatile boolean shutdown = false;
 
         TransactionMonitor(TotalReportOutputFrame totalReportOutputFrame, long updateFrequencyMins){
@@ -286,11 +277,11 @@ class MDData {
                     // refresh Data, if update extension is used, it will go in the refreshData method
                     if(lastRefreshTime == null){ //refresh immediately
                         lastRefreshTime = new Date();
-                        refreshData(true);
+                        refreshData();
                     } else {
                         if(isTimeToRefresh()){// refresh after interval
                             lastRefreshTime = new Date();
-                            refreshData(false);
+                            refreshData();
                         }
                     }
 
@@ -309,7 +300,7 @@ class MDData {
             return diff > updateFrequencyMins * 60000;
         }
 
-        public void refreshData(boolean initial) throws Exception {
+        public void refreshData() {
             Date latestTransactionDate = getLastTransactionModified();
             boolean newTransaction = observableLastTransactionDate.isNewTransactionDate(latestTransactionDate);
             //check for new transactions

@@ -29,11 +29,10 @@
 package com.moneydance.modules.features.invextension;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.util.LinkedList;
 import java.util.prefs.BackingStoreException;
 
@@ -43,6 +42,7 @@ import java.util.prefs.BackingStoreException;
  */
 public class ReportConfigFieldChooserPanel extends JPanel {
 
+    @Serial
     private static final long serialVersionUID = -8990699863699414946L;
     private ReportControlPanel reportControlPanel;
     private LinkedList<String> orderedHeadersFromModel;

@@ -100,7 +100,7 @@ public class SecurityFromToReport extends SecurityReport {
         // These extractors return multiple values, which are exploded into values in the normal metrics
         ExtractorGains eGains = new ExtractorGainsFT(securityAccount, fromDateInt, toDateInt);              // x 3
 
-        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList((Number) 0L, 0L, 0L), eGains));
+        multipleMetrics.put(MMGains, new MetricEntry<>(Arrays.asList(0L, 0L, 0L), eGains));
 
         // Extractors for return calculations.
         ExtractorReturnBase aggregatedWindowTotalReturn = ExtractorReturnBase.factory(securityAccount, this,fromDateInt,

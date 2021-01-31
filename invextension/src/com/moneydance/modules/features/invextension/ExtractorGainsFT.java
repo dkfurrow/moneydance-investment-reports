@@ -65,11 +65,10 @@ public class ExtractorGainsFT extends ExtractorGains {
                 endUnrealizedGain = endValue - lastTransactionWithinDateRange.getShortBasis();
             }
         } else {
-            long endPosition = startPosition;
-            long endValue = qXp(endPosition, securityAccount.getPrice(endDateInt));
-            if (endPosition > 0) {
+            long endValue = qXp(startPosition, securityAccount.getPrice(endDateInt));
+            if (startPosition > 0) {
                 endUnrealizedGain = endValue - lastTransactionBeforeStartDate.getLongBasis();
-            } else if (endPosition < 0) {
+            } else if (startPosition < 0) {
                 endUnrealizedGain = endValue - lastTransactionBeforeStartDate.getShortBasis();
             }
         }

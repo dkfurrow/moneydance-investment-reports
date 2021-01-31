@@ -63,8 +63,8 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     JButton copyToClipboardButton;
     JComboBox<String> refreshTransactionsComboBox;
     String[] refreshTransactionsInterval = new String[]{"NA", "5", "10", "15", "60"};
-    private JTextArea reportStatusText = new javax.swing.JTextArea();
-    private JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
+    private final JTextArea reportStatusText = new javax.swing.JTextArea();
+    private final JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
     private boolean returnTypeSwitched = false;
 
 

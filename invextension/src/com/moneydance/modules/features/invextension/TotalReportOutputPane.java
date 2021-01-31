@@ -38,6 +38,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -49,14 +50,16 @@ import java.util.List;
  *
  * @author Dale Furrow
  */
+@SuppressWarnings("rawtypes")
 public class TotalReportOutputPane extends JScrollPane {
+    @Serial
     private static final long serialVersionUID = 353638079867239526L;
     private static final Color LIGHT_LIGHT_GRAY = new Color(230, 230, 230);
 
     private final FormattedTable lockedTable;
     private final FormattedTable scrollTable;
-    public int firstSort = 0;
-    public int secondSort = 0;
+    public int firstSort;
+    public int secondSort;
     public int thirdSort = 0;
     public SortOrder firstOrder = SortOrder.ASCENDING;
     public SortOrder secondOrder = SortOrder.ASCENDING;
@@ -64,10 +67,10 @@ public class TotalReportOutputPane extends JScrollPane {
     public ReportTableModel model;
     public boolean closedPosHidden;
     public int closedPosColumn;
-    int frozenColumns = 0;
-    int firstAggregateColumnIndex = 0;
-    int secondAggregateColumnIndex = 0;
-    private ReportConfig reportConfig;
+    int frozenColumns;
+    int firstAggregateColumnIndex;
+    int secondAggregateColumnIndex;
+    private final ReportConfig reportConfig;
     TotalReport totalReport;
 
 
@@ -176,9 +179,9 @@ public class TotalReportOutputPane extends JScrollPane {
     }
 
     public static void setColumnOrder(JTable table, LinkedList<Integer> viewHeader) {
-        Integer[] viewHeaderArray = viewHeader.toArray(new Integer[viewHeader.size()]);
+        Integer[] viewHeaderArray = viewHeader.toArray(new Integer[0]);
         TableColumnModel columnModel = table.getColumnModel();
-        TableColumn column[] = new TableColumn[viewHeaderArray.length];
+        TableColumn[] column = new TableColumn[viewHeaderArray.length];
 
         for (int i = 0; i < column.length; i++) {
             column[i] = columnModel.getColumn(viewHeaderArray[i]);
@@ -300,9 +303,8 @@ public class TotalReportOutputPane extends JScrollPane {
     }
 
     private Action getAction(JComponent component, int keyCode, int modifiers) {
-        final int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         final KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
-        Object object = component.getInputMap(condition).get(keyStroke);
+        Object object = component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(keyStroke);
         if (object == null) {
             if (component.getParent() instanceof JComponent) {
                 return getAction((JComponent) component.getParent(), keyCode,
@@ -531,7 +533,6 @@ public class TotalReportOutputPane extends JScrollPane {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void switchExtractor(MetricEntry<Number> metricEntry, Class<? extends ExtractorReturnBase> extractorToSwitch) {
         assert metricEntry.extractor != null;
         if(extractorToSwitch.equals(ExtractorModifiedDietzReturn.class)){
@@ -645,10 +646,11 @@ public class TotalReportOutputPane extends JScrollPane {
 
 
     public static class MetricEntryNumberRenderer extends DefaultTableCellRenderer {
+        @Serial
         private static final long serialVersionUID = -1219099935272135292L;
 
 
-        private DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
+        private final DecimalFormat doubleFormat = new DecimalFormat("#,##0;(#,##0)");
 
         public MetricEntryNumberRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
@@ -688,6 +690,7 @@ public class TotalReportOutputPane extends JScrollPane {
     }
 
     static class ObjectTableCellRenderer extends DefaultTableCellRenderer {
+        @Serial
         private static final long serialVersionUID = -7152447480811826901L;
 
         public ObjectTableCellRenderer() {
@@ -724,9 +727,10 @@ public class TotalReportOutputPane extends JScrollPane {
     }
 
     static class PercentTableCellRenderer extends DefaultTableCellRenderer {
+        @Serial
         private static final long serialVersionUID = 8743892160294317814L;
 
-        private DecimalFormat pctFormat = new DecimalFormat("#.#%");
+        private final DecimalFormat pctFormat = new DecimalFormat("#.#%");
 
         public PercentTableCellRenderer(int minDecPlaces, int maxDecPlaces) {
             super();
@@ -756,6 +760,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class LockedTableSelectLastColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = -7498538141653234651L;
 
         private LockedTableSelectLastColumnCellAction() {
@@ -774,6 +779,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class ScrollableSelectFirstColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = 7004700943224579977L;
 
         private ScrollableSelectFirstColumnCellAction() {
@@ -792,6 +798,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class LockedTableSelectNextColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = 2820241653505999596L;
 
         private final Action lockedTableNextColumnCellAction;
@@ -816,6 +823,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class ScrollTableSelectNextColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = 135412121274189994L;
 
         private final Action scrollTableNextColumnCellAction;
@@ -840,6 +848,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class ScrollTableSelectPreviousColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = -6293074638490971318L;
         private final Action scrollTablePrevColumnCellAction;
 
@@ -863,6 +872,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
     private final class LockedTableSelectPreviousColumnCellAction extends
             AbstractAction {
+        @Serial
         private static final long serialVersionUID = -290336911634305126L;
 
         private final Action lockedTablePrevColumnCellAction;
@@ -887,14 +897,9 @@ public class TotalReportOutputPane extends JScrollPane {
 
     class FormattedTable extends JTable {
 
+        @Serial
         private static final long serialVersionUID = -3558604379360713628L;
-        private LinkedList<Integer> viewHeader;
-
-        private TableCellRenderer double0Render = new MetricEntryNumberRenderer(0, 0);
-        private TableCellRenderer double2Render = new MetricEntryNumberRenderer(2, 2);
-        private TableCellRenderer double3Render = new MetricEntryNumberRenderer(3, 3);
-        private TableCellRenderer percent1Render = new PercentTableCellRenderer(1, 1);
-        private TableCellRenderer defaultRender = new ObjectTableCellRenderer();
+        private final LinkedList<Integer> viewHeader;
 
 
         private FormattedTable(TableModel model, ColType[] colFormats,
@@ -905,26 +910,17 @@ public class TotalReportOutputPane extends JScrollPane {
             for (int i = 0; i < colFormats.length; i++) {
                 ColType colType = colFormats[i];
                 tableColumn = this.getColumnModel().getColumn(i);
+                TableCellRenderer double0Render = new MetricEntryNumberRenderer(0, 0);
+                TableCellRenderer double2Render = new MetricEntryNumberRenderer(2, 2);
+                TableCellRenderer double3Render = new MetricEntryNumberRenderer(3, 3);
+                TableCellRenderer percent1Render = new PercentTableCellRenderer(1, 1);
+                TableCellRenderer defaultRender = new ObjectTableCellRenderer();
                 switch (colType) {
-                    case DOUBLE0:
-                        tableColumn.setCellRenderer(double0Render);
-                        break;
-
-                    case DOUBLE2:
-                        tableColumn.setCellRenderer(double2Render);
-                        break;
-
-                    case DOUBLE3:
-                        tableColumn.setCellRenderer(double3Render);
-                        break;
-
-                    case PERCENT1:
-                        tableColumn.setCellRenderer(percent1Render);
-                        break;
-
-                    default:
-                        tableColumn.setCellRenderer(defaultRender);
-                        break;
+                    case DOUBLE0 -> tableColumn.setCellRenderer(double0Render);
+                    case DOUBLE2 -> tableColumn.setCellRenderer(double2Render);
+                    case DOUBLE3 -> tableColumn.setCellRenderer(double3Render);
+                    case PERCENT1 -> tableColumn.setCellRenderer(percent1Render);
+                    default -> tableColumn.setCellRenderer(defaultRender);
                 }
             }
             setColumnOrder(this, viewHeader);
@@ -1034,6 +1030,7 @@ public class TotalReportOutputPane extends JScrollPane {
     }
 
     private class RowSortGui extends JPanel {
+        @Serial
         private static final long serialVersionUID = -8349629256510555172L;
 
         public TotalReportOutputPane tablePane;
@@ -1114,7 +1111,8 @@ public class TotalReportOutputPane extends JScrollPane {
 
     }
 
-    class ArrowHeader extends JLabel implements TableCellRenderer {
+    static class ArrowHeader extends JLabel implements TableCellRenderer {
+        @Serial
         private static final long serialVersionUID = -1175683155743555445L;
 
         JTable table;
@@ -1168,10 +1166,10 @@ public class TotalReportOutputPane extends JScrollPane {
             return new Arrow(descending, size, priority);
         }
 
-        private class Arrow implements Icon {
+        private static class Arrow implements Icon {
 
-            private boolean descending;
-            private int priority;
+            private final boolean descending;
+            private final int priority;
             private int size;
 
             public Arrow(boolean descending, int size, int priority) {
@@ -1230,7 +1228,8 @@ public class TotalReportOutputPane extends JScrollPane {
         }
     } // end ArrowHeader Class
 
-    class MultiLineHeaderRenderer extends JList<String> implements TableCellRenderer {
+    static class MultiLineHeaderRenderer extends JList<String> implements TableCellRenderer {
+        @Serial
         private static final long serialVersionUID = 8768337573084136892L;
 
         public MultiLineHeaderRenderer() {

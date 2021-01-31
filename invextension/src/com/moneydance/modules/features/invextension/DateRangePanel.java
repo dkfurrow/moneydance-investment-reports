@@ -42,6 +42,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serial;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -58,20 +59,20 @@ public class DateRangePanel extends JPanel {
             .toPattern();
     public static final CustomDateFormat THIS_DATE_FORMAT = new CustomDateFormat(DATE_PATTERN);
     public static final String DATE_RANGE_CHANGED = "dateRangeChanged";
-    private List<PropertyChangeListener> listeners = new ArrayList<>();
-    private JDateField snapDateField = new JDateField(THIS_DATE_FORMAT);
-    private JDateField fromDateField = new JDateField(THIS_DATE_FORMAT);
-    private JDateField toDateField = new JDateField(THIS_DATE_FORMAT);
+    private final List<PropertyChangeListener> listeners = new ArrayList<>();
+    private final JDateField snapDateField = new JDateField(THIS_DATE_FORMAT);
+    private final JDateField fromDateField = new JDateField(THIS_DATE_FORMAT);
+    private final JDateField toDateField = new JDateField(THIS_DATE_FORMAT);
+    @Serial
     private static final long serialVersionUID = -5752555026802594107L;
     private DateRange dateRange;
-    private JComboBox<DateRange.REF_DATE> refDateComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.REF_DATE.values()));
-    private JComboBox<DateRange.DATE_RULE> dateRuleComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.DATE_RULE.values()));
-    private JCheckBox isSnapDateRefDateCheckbox = new JCheckBox("Snapshot Date = 'To' Date (else 'From' Date)",
+    private final JComboBox<DateRange.REF_DATE> refDateComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.REF_DATE.values()));
+    private final JComboBox<DateRange.DATE_RULE> dateRuleComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.DATE_RULE.values()));
+    private final JCheckBox isSnapDateRefDateCheckbox = new JCheckBox("Snapshot Date = 'To' Date (else 'From' Date)",
             true);
     private final Color notReadyColor = Color.RED;
     private final Color readyColor = new Color(0, 102, 0);
-    private TitledBorder masterBorder;
-    private JPanel masterPanel;
+    private final TitledBorder masterBorder;
     private Focus focus;
     private enum Focus{DATE_RULE, DATE_INPUT}
 
@@ -85,13 +86,10 @@ public class DateRangePanel extends JPanel {
         toDateField.setReformatOnFocusLost(false);
         //set up listeners
         JButton resetButton = new JButton("Reset Dates");
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int lastCurrentDateInt = DateUtils.getLastCurrentDateInt();
-                populateDateRangePanel(new DateRange(19700101, lastCurrentDateInt,
-                        lastCurrentDateInt));
-            }
+        resetButton.addActionListener(e -> {
+            int lastCurrentDateInt = DateUtils.getLastCurrentDateInt();
+            populateDateRangePanel(new DateRange(19700101, lastCurrentDateInt,
+                    lastCurrentDateInt));
         });
         ItemChangeListener itemChangeListener = new ItemChangeListener();
         refDateComboBox.addItemListener(itemChangeListener);
@@ -115,7 +113,7 @@ public class DateRangePanel extends JPanel {
         //initialize sub-panels
         JPanel ruleInputPanel = new JPanel();
         JPanel directInputPanel = new JPanel();
-        masterPanel = new JPanel();
+        JPanel masterPanel = new JPanel();
         //format sub-panels
         String masterTitle = "Date Range--Initial Title";
         String[] titles = {"Rule Input", "Direct Input", masterTitle};
@@ -230,12 +228,11 @@ public class DateRangePanel extends JPanel {
         if((hasValidDateRule() || hasValidEnteredDates()) && dateRange != null){
             masterBorder.setTitleColor(readyColor);
             masterBorder.setTitle("Date Range--Valid Range Entered");
-            repaint();
         } else {
             masterBorder.setTitleColor(notReadyColor);
             masterBorder.setTitle("Date Range--Choose Input Method");
-            repaint();
         }
+        repaint();
 
     }
 
@@ -247,9 +244,7 @@ public class DateRangePanel extends JPanel {
      * Test method for DateRangePanel
      *
      * @param args unused
-     * @throws IllegalAccessException
-     * @throws java.util.prefs.BackingStoreException
-     * @throws NoSuchFieldException
+     *
      */
     public static void main(String[] args) throws IllegalAccessException, BackingStoreException,
             NoSuchFieldException {
@@ -259,15 +254,9 @@ public class DateRangePanel extends JPanel {
     }
 
 
-
-    DateRange getDateRange() {
-        refreshInputDates();
-        return dateRange;
-    }
-
-    private void notifyListeners(String property, DateRange oldValue, DateRange newValue) {
+    private void notifyListeners(DateRange oldValue, DateRange newValue) {
         for (PropertyChangeListener listener : listeners) {
-            listener.propertyChange(new PropertyChangeEvent(this, property, oldValue, newValue));
+            listener.propertyChange(new PropertyChangeEvent(this, DateRangePanel.DATE_RANGE_CHANGED, oldValue, newValue));
         }
     }
 
@@ -277,7 +266,9 @@ public class DateRangePanel extends JPanel {
     public void populateDateRangePanel(DateRange dateRange) {
         this.dateRange = dateRange == null ? new DateRange() : dateRange;
         //initialize fields
-        if (dateRange.getRefDate() != DateRange.REF_DATE.NONE && dateRange.getRefDate() != DateRange.REF_DATE.NONE) {
+        assert dateRange != null;
+        if (dateRange.getRefDate() != DateRange.REF_DATE.NONE &&
+                dateRange.getRefDate() != DateRange.REF_DATE.NONE) {
             refDateComboBox.setSelectedItem(dateRange.getRefDate());
             dateRuleComboBox.setSelectedItem(dateRange.getDateRule());
             refreshInputDates();
@@ -336,7 +327,7 @@ public class DateRangePanel extends JPanel {
             snapDateField.setDateInt(newDateRange.getSnapDateInt());
             dateRange = newDateRange;
             setStatus();
-            notifyListeners(DATE_RANGE_CHANGED, oldDateRange, newDateRange);
+            notifyListeners(oldDateRange, newDateRange);
         } else {
             if(focus == Focus.DATE_RULE && !isDateInputNulled()){
                 nullDateInputs();
@@ -364,20 +355,20 @@ public class DateRangePanel extends JPanel {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            checkAndRefresh(e);
+            checkAndRefresh();
         }
         @Override
         public void removeUpdate(DocumentEvent e) {  }
         @Override
         public void changedUpdate(DocumentEvent e) { }
-        void checkAndRefresh(DocumentEvent e) {
+        void checkAndRefresh() {
             if(hasValidEnteredDates()) {
                 DateRange oldDateRange = dateRange;
                 dateRange = new DateRange(fromDateField.getDateInt(),
                         toDateField.getDateInt(), snapDateField.getDateInt());
-                notifyListeners(DATE_RANGE_CHANGED, oldDateRange, dateRange);
+                notifyListeners(oldDateRange, dateRange);
             } else {
-                notifyListeners(DATE_RANGE_CHANGED, new DateRange(), new DateRange());
+                notifyListeners(new DateRange(), new DateRange());
             }
             setStatus();
         }

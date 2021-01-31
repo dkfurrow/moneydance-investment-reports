@@ -36,6 +36,7 @@ import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.util.LinkedHashSet;
 
 /**
@@ -43,6 +44,7 @@ import java.util.LinkedHashSet;
  * on report output
  */
 public class SecurityAccountEditorForm extends JFrame implements ActionListener {
+    @Serial
     private static final long serialVersionUID = 4955951732443697372L;
     private static final String SECURITY_TYPE_CHANGED = "securityTypeChanged";
     private static final String ADD_SECURITY_SUBTYPE = "addSecuritySubType";
@@ -55,8 +57,8 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
     JButton addSecuritySubTypeButton = new BasicArrowButton(BasicArrowButton.EAST, Color.BLACK,
             Color.lightGray, Color.WHITE, Color.WHITE);
     JButton updateSecurityButton = new JButton("Update Security");
-    private SecurityAccountWrapper securityAccountWrapper;
-    private TotalReportOutputPane.FormattedTable table;
+    private final SecurityAccountWrapper securityAccountWrapper;
+    private final TotalReportOutputPane.FormattedTable table;
 
 
     public SecurityAccountEditorForm(SecurityAccountWrapper securityAccountWrapper, TotalReportOutputPane.FormattedTable table) {
@@ -180,6 +182,7 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
      */
     private void addSecuritySubType() {
         SecurityType securityType = (SecurityType) securityTypeComboBox.getSelectedItem();
+        assert securityType != null;
         String msg = "Add security sub type for: " + securityType.name();
         String newSecuritySubType = (String) JOptionPane.showInputDialog(this, msg, "Add Security Sub Type",
                 JOptionPane.PLAIN_MESSAGE, null, null, "");

@@ -40,6 +40,7 @@ import java.util.logging.Logger;
  * @version 1.0
  * @since 1.0
  */
+@SuppressWarnings("ALL")
 public final class IOUtils {
 
     private IOUtils() {
@@ -63,14 +64,12 @@ public final class IOUtils {
                 readArray.add(parsedNewLine);
             }
             return readArray;
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (java.io.IOException ex1) {
-            Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, ex1);
             return null;
         } finally {
             try {
+                assert csvRead != null;
                 csvRead.close();
             } catch (IOException ex) {
                 Logger.getLogger(IOUtils.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,9 +127,9 @@ public final class IOUtils {
     public static void writeArrayListToScreen(ArrayList<String[]> readArrrayList) {
 
         for (String[] tempStrings : readArrrayList) {
-            String outputString = "";
+            StringBuilder outputString = new StringBuilder();
             for (String eachString : tempStrings) {
-                outputString = outputString + eachString + " ";
+                outputString.append(eachString).append(" ");
             }
             System.out.println(outputString);
         }
@@ -160,16 +159,16 @@ public final class IOUtils {
      * @return string w/ commas placed between elements
      */
     public static String writeCSVLine(String[] inputStrings) {
-        String outputString = "";
+        StringBuilder outputString = new StringBuilder();
 
         for (int i = 0; i < inputStrings.length; i++) {
             if (i == inputStrings.length - 1) {
-                outputString = outputString + inputStrings[i]; // + "\b\n"
+                outputString.append(inputStrings[i]); // + "\b\n"
             } else {
-                outputString = outputString + inputStrings[i] + ",";
+                outputString.append(inputStrings[i]).append(",");
             }
         }
-        return outputString;
+        return outputString.toString();
     }
 
     /**

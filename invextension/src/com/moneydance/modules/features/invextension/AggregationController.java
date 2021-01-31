@@ -36,8 +36,8 @@ public enum AggregationController {
     TICKER("Ticker", new CurrencyWrapper(), new InvestmentAccountWrapper()),
     SECTYPE("Security Type, then Security SubType", new SecurityTypeWrapper(), new SecuritySubTypeWrapper());
     private final String description;
-    private Aggregator firstAggregator;
-    private Aggregator secondAggregator;
+    private final Aggregator firstAggregator;
+    private final Aggregator secondAggregator;
     AggregationController(String description, Aggregator firstAggregator, Aggregator secondAggregator) {
         this.description = description;
         this.firstAggregator = firstAggregator;

@@ -48,6 +48,6 @@ public class ExtractorPriceChanges extends ExtractorBase<List<Number>> {
         long valueChange = qXp(endPosition, priceChange);
         double percentPriceChange = (prevPrice != 0) ? ((double) lastPrice) / prevPrice - 1.0 : 0;
 
-        return Arrays.asList((Number) priceChange, valueChange, percentPriceChange);
+        return Arrays.asList(priceChange, valueChange, percentPriceChange);
     }
 }

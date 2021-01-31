@@ -28,11 +28,12 @@
 package com.moneydance.modules.features.invextension;
 
 
-
-import com.infinitekind.moneydance.model.*;
+import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
+import com.infinitekind.moneydance.model.CurrencyType;
+import com.infinitekind.moneydance.model.SecurityType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     // associated Investment Account
     private Account investmentAccount;
     // Account Id
-    private String acctId;
+    private final String acctId;
     // associated CashAccount
     private SecurityAccountWrapper cashWrapper;
     // Security Account Wrappers
@@ -74,11 +75,11 @@ public class InvestmentAccountWrapper implements Aggregator {
         //Loop through Security Sub Accounts
         for (Account subSecAcct : subSecAccts) {
             //Load Security Account into Wrapper Class
-            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct, this, reportConfig);
+            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct, this);
             // add Security Account to Investment Account
             this.securityAccountWrappers.add(secAcctWrapper);
         }
-        createCashWrapper(reportConfig);  //creates basic cash wrapper
+        createCashWrapper();  //creates basic cash wrapper
         this.securityAccountWrappers.add(cashWrapper);   //add cash wrapper to total securityAccountWrappers
         createCashTransactions(); //populates cash wrapper with synthetic cash transactions
     }
@@ -96,14 +97,12 @@ public class InvestmentAccountWrapper implements Aggregator {
     /**
      * Populate Synthetic Cash Transactions for a given Investment Account
      *
-     * @throws Exception
      */
     public void createCashTransactions() throws Exception {
-        ArrayList<TransactionValues> tempTransValues = new ArrayList<>();
         // add to tempTransValues all Security and Account-Level Cash
         // transactions for this InvestmentAccountWrapper
-        tempTransValues.addAll(this.getTransactionValues());
-        ArrayList<TransactionValues> cashTransactions = new ArrayList<>();
+        ArrayList<TransactionValues> tempTransValues = new ArrayList<>(this.getTransactionValues());
+        var cashTransactions = new ArrayList<TransactionValues>();
 
         // add initial balance as a transValues object (use day before first
         // transaction date if available, creation date if not
@@ -127,9 +126,8 @@ public class InvestmentAccountWrapper implements Aggregator {
     /**
      * creates CashWrapper as a money market mutual fund
      *
-     * @throws Exception
      */
-    private void createCashWrapper(ReportConfig reportConfig) throws Exception {
+    private void createCashWrapper() throws Exception {
         Account cashAccount = new Account(null);
         cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
@@ -137,7 +135,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         cashAccount.setSecuritySubType("Money Market");
         cashAccount.setCurrencyType(currentInfo.getCashCurrencyWrapper().getCurrencyType());
         cashAccount.setParentAccount(this.investmentAccount);
-        this.cashWrapper = new SecurityAccountWrapper(cashAccount, this, reportConfig);
+        this.cashWrapper = new SecurityAccountWrapper(cashAccount, this);
         currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
         cashWrapper.generateTransValues();
     }
@@ -159,7 +157,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         if (getClass() != obj.getClass())
             return false;
         InvestmentAccountWrapper other = (InvestmentAccountWrapper) obj;
-        return acctId == other.acctId;
+        return acctId.equals(other.acctId);
     }
 
     public BulkSecInfo getBulkSecInfo() {
@@ -193,7 +191,6 @@ public class InvestmentAccountWrapper implements Aggregator {
      * Returns sorted transaction value lines for this investment account
      *
      * @return sorted transaction values list
-     * @throws Exception
      */
     public ArrayList<TransactionValues> getTransactionValues() throws Exception {
         ArrayList<TransactionValues> outputTransactionValues = new ArrayList<>();
@@ -209,7 +206,7 @@ public class InvestmentAccountWrapper implements Aggregator {
                 }
             }
         }
-        Collections.sort(outputTransactionValues, TransactionValues.transComp);
+        outputTransactionValues.sort(TransactionValues.transComp);
         return outputTransactionValues;
     }
 
@@ -219,10 +216,6 @@ public class InvestmentAccountWrapper implements Aggregator {
             outputList.addAll(securityAccountWrapper.listTransValuesInfo());
         }
         return outputList;
-    }
-
-    public CurrencyType getBaseCurrency(){
-        return currentInfo.getRoot().getCurrencyType();
     }
 
     public CurrencyType getAccountCurrency(){

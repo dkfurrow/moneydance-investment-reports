@@ -38,11 +38,11 @@ import java.util.ArrayList;
  */
 public interface GainsCalc {
 
-    public void initializeGainsCalc(BulkSecInfo currentInfo,
-                                    TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses);
+    void initializeGainsCalc(BulkSecInfo currentInfo,
+                             TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses);
 
-    public long getLongBasis();
+    long getLongBasis();
 
-    public long getShortBasis();
+    long getShortBasis();
 
 }

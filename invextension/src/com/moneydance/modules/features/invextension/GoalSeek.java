@@ -279,15 +279,7 @@ public class GoalSeek {
         return new GoalSeekStatus(GoalSeekStatus.GOAL_SEEK_ERROR, null);
     }
 
-    /**
-     *
-     *  @param f
-     *  @param xmin
-     *  @param xmax
-     *  @param points
-     *  @return
-     */
-//	GoalSeekStatus goal_seek_trawl_uniformly( GoalSeekFunction f,
+    //	GoalSeekStatus goal_seek_trawl_uniformly( GoalSeekFunction f,
 //	                                          GoalSeekData data,
 //	                                          Object userData, double xmin,
 //	                                          double xmax, int points ) {
@@ -331,17 +323,7 @@ public class GoalSeek {
 //		return GoalSeekStatus.GOAL_SEEK_ERROR;
 //	}
 
-    /**
-     *
-     *  @param f
-     *  @param data
-     *  @param userData
-     *  @param mu
-     *  @param sigma
-     *  @param points
-     *  @return
-     */
-//	GoalSeekStatus goal_seek_trawl_normally ( GoalSeekFunction f,
+    //	GoalSeekStatus goal_seek_trawl_normally ( GoalSeekFunction f,
 //	                                          GoalSeekData data,
 //	                                          Object userData,
 //	                                          double mu, double sigma,

@@ -37,12 +37,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
@@ -56,6 +54,7 @@ import java.util.prefs.BackingStoreException;
  */
 public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
         ItemListener {
+    @Serial
     private static final long serialVersionUID = -7581739722392109525L;
     public static final Dimension OPTIONS_BOX_DIMENSION = new Dimension(400, 20);
     public static final int textFieldWidth = 400;
@@ -74,32 +73,32 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
     private static File outputDirectory;
     private static Level logLevel = Level.INFO;
-    private ReportControlFrame reportControlFrame;
+    private final ReportControlFrame reportControlFrame;
 
-    private static MDData mdData = MDData.getInstance();
+    private static final MDData mdData = MDData.getInstance();
 
-    private JLabel snapReportLabel = new JLabel("Snapshot Reports");
-    private JComboBox<String> snapReportComboBox = new JComboBox<>();
-    private JLabel fromToReportLabel = new JLabel("'From-To' Reports");
-    private JComboBox<String> fromToReportComboBox = new JComboBox<>();
-    private JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transactions");
-    private JCheckBox secPricesCheckbox = new javax.swing.JCheckBox("Securities Prices");
-    private JButton runReportsButton = new javax.swing.JButton("Run Reports");
-    private JButton saveCustomReportsButton = new javax.swing.JButton("Save Custom Report");
-    private JButton removeCustomReportButton = new JButton("Remove Custom Report");
-    private JButton showHelpFileButton = new JButton("Help");
-    private JButton removeAllCustomReportsButton = new JButton("Remove All Custom Reports and Reset");
+    private final JLabel snapReportLabel = new JLabel("Snapshot Reports");
+    private final JComboBox<String> snapReportComboBox = new JComboBox<>();
+    private final JLabel fromToReportLabel = new JLabel("'From-To' Reports");
+    private final JComboBox<String> fromToReportComboBox = new JComboBox<>();
+    private final JCheckBox transActivityCheckbox = new javax.swing.JCheckBox("Transactions");
+    private final JCheckBox secPricesCheckbox = new javax.swing.JCheckBox("Securities Prices");
+    private final JButton runReportsButton = new javax.swing.JButton("Run Reports");
+    private final JButton saveCustomReportsButton = new javax.swing.JButton("Save Custom Report");
+    private final JButton removeCustomReportButton = new JButton("Remove Custom Report");
+    private final JButton showHelpFileButton = new JButton("Help");
+    private final JButton removeAllCustomReportsButton = new JButton("Remove All Custom Reports and Reset");
 
 
-    private JTextArea reportStatusText = new javax.swing.JTextArea();
-    private JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
-    private ReportOptionsPanel reportOptionsPanel = new ReportOptionsPanel();
+    private final JTextArea reportStatusText = new javax.swing.JTextArea();
+    private final JScrollPane reportStatusPane = new JScrollPane(reportStatusText);
+    private final ReportOptionsPanel reportOptionsPanel = new ReportOptionsPanel();
     private DateRangePanel dateRangePanel;
     private ReportConfigFieldChooserPanel fieldChooserPanel;
     private ReportConfigAccountChooserPanel accountChooserPanel;
     private ReportConfigInvestIncomeChooserPanel investmentIncomeChooserPanel;
     private ReportConfigInvestExpenseChooserPanel investmentExpenseChooserPanel;
-    private FolderPanel folderPanel = new FolderPanel();
+    private final FolderPanel folderPanel = new FolderPanel();
     private ReportConfig reportConfig;
 
 
@@ -133,11 +132,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     public static String getOutputDirectoryPath() {
-        if (outputDirectory != null){
-            return outputDirectory.getAbsolutePath();
-        } else {
-            return new File(System.getProperty("user.home")).getAbsolutePath();
-        }
+        return Objects.requireNonNullElseGet(outputDirectory, () -> new File(System.getProperty("user.home"))).getAbsolutePath();
     }
 
 
@@ -494,12 +489,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     void updateStatus(java.util.List<String> msgs) {
-        String output = reportStatusText.getText();
+        StringBuilder output = new StringBuilder(reportStatusText.getText());
         for (String msg : msgs) {
             String newLine = msgs.indexOf(msg) < msgs.size() - 1 ? "\n" : "";
-            output += (msg + newLine);
+            output.append(msg).append(newLine);
         }
-        reportStatusText.setText(output);
+        reportStatusText.setText(output.toString());
     }
 
     @Override
@@ -575,11 +570,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 try {
                     HelpFileDisplay helpFileDisplay = new HelpFileDisplay();
                     helpFileDisplay.showHelpFile();
-                    updateStatus(Arrays.asList("\nHelp File Displayed in Browser!"));
+                    updateStatus(Collections.singletonList("\nHelp File Displayed in Browser!"));
                 } catch (IOException e1) {
                     String msg = "Error on Displaying Help File!";
                     LogController.logException(e1, msg);
-                    updateStatus(Arrays.asList("\n" + msg));
+                    updateStatus(Collections.singletonList("\n" + msg));
                 }
                 break;
             default:
@@ -670,6 +665,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
     public static class TestFrame extends JFrame {
 
+        @Serial
         private static final long serialVersionUID = 2202318227772787528L;
 
         public TestFrame() {
@@ -690,7 +686,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             this.setVisible(true);
         }
 
-        class TestWindowListener implements WindowListener {
+        static class TestWindowListener implements WindowListener {
             @Override
             public void windowOpened(WindowEvent e) {
             }
@@ -726,13 +722,14 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
 
-    public class FolderPanel extends JPanel{
+    public static class FolderPanel extends JPanel{
+        @Serial
         private static final long serialVersionUID = 3037092760394483468L;
-        private JButton dirChooserButton = new javax.swing.JButton("Set output folder");
-        private JTextField directoryOutputField = new javax.swing.JTextField();
+        private final JTextField directoryOutputField = new javax.swing.JTextField();
 
         public FolderPanel(){
             // set Action Listener
+            JButton dirChooserButton = new JButton("Set output folder");
             dirChooserButton.addActionListener(e -> showFileChooser());
             setPanelTitle(this, "Download Location");
             directoryOutputField.setPreferredSize(new Dimension(textFieldWidth, 24));
@@ -758,11 +755,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 System.out.println("getCurrentDirectory(): "
                         + chooser.getSelectedFile().getAbsolutePath());
                 directoryOutputField.setText(chooser.getSelectedFile().getAbsolutePath());
-                if (directoryOutputField != null){
-                    outputDirectory = new File(directoryOutputField.getText());
-                } else {
-                    outputDirectory = new File(System.getProperty("user.home"));
-                }
+                outputDirectory = new File(directoryOutputField.getText());
             } else {
                 System.out.println("No Selection ");
             }
@@ -781,11 +774,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                     directoryOutputField.setText(System.getProperty("user.home"));
                 }
             }
-            if (directoryOutputField != null){
-                outputDirectory = new File(directoryOutputField.getText());
-            } else {
-                outputDirectory = new File(System.getProperty("user.home"));
-            }
+            outputDirectory = new File(directoryOutputField.getText());
 
         }
 
@@ -808,9 +797,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         public static final long serialVersionUID = 2476680585088267452L;
         public Integer[] numFrozenColumnsOptions = {0, 1, 2, 3, 4, 5};
 
-        private JButton resetReportOptions = new javax.swing.JButton(
-                "Reset To Default");
-
         public JLabel aggregationOptionsLabel = new JLabel("Aggregate by");
         public JComboBox<AggregationController> aggregationOptionsComboBox =
                 new JComboBox<>(new DefaultComboBoxModel<>(AggregationController.values()));
@@ -831,6 +817,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         public ReportOptionsPanel() {
             //set action commands
+            JButton resetReportOptions = new JButton(
+                    "Reset To Default");
             resetReportOptions.setActionCommand(RESET_REPORT_OPTIONS);
             aggregationOptionsComboBox.setActionCommand(SET_AGGREGATOR);
             costBasisOptionsComboBox.setActionCommand(SET_COST_BASIS);
@@ -1000,11 +988,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         @Override
         protected void process(java.util.List<String> msgs) {
-            String output = "";
+            StringBuilder output = new StringBuilder();
             for (String msg : msgs) {
-                output += (msg + " ");
+                output.append(msg).append(" ");
             }
-            reportStatusText.setText(output);
+            reportStatusText.setText(output.toString());
         }
 
     }

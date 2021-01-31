@@ -34,6 +34,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.TreeSet;
@@ -46,8 +47,9 @@ import java.util.stream.Collectors;
  */
 public class ReportConfigAccountChooserPanel extends JPanel {
 
+    @Serial
     private static final long serialVersionUID = -8990699863699414946L;
-    private ReportControlPanel reportControlPanel;
+    private final ReportControlPanel reportControlPanel;
 
     //JLists
     private final DefaultListModel<Account> availableAccountsListModel = new DefaultListModel<>();
@@ -130,13 +132,12 @@ public class ReportConfigAccountChooserPanel extends JPanel {
                 checkBox.equals(removeInactiveAccountsBox) ?
                         Account::getAccountIsInactive : Account::getHideOnHomePage;
         boolean hideAccountsRemoved = true;
-        HashSet<Account> hideAccounts = new HashSet<>();
         TreeSet<Account> investmentAccountSet
                 = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance()
                 .getRoot(), Account.AccountType.INVESTMENT);
 
-        hideAccounts.addAll(investmentAccountSet.stream()
-                .filter(hideFunction).collect(Collectors.toList()));
+        HashSet<Account> hideAccounts = investmentAccountSet.stream()
+                .filter(hideFunction).collect(Collectors.toCollection(HashSet::new));
         for (int i = 0; i < includedAccountsListModel.size(); i++) {
             Account account = includedAccountsListModel.getElementAt(i);
             if (hideAccounts.contains(account)) {
@@ -226,11 +227,10 @@ public class ReportConfigAccountChooserPanel extends JPanel {
     }
 
     private void updateReportConfig() {
-        HashSet<String> excludedAccountIds = new HashSet<>();
         HashSet<Account> excludedAccounts = getExcludedAccountSet();
 
-        excludedAccountIds.addAll(excludedAccounts.stream()
-                .map(Account::getUUID).collect(Collectors.toList()));
+        HashSet<String> excludedAccountIds = excludedAccounts.stream()
+                .map(Account::getUUID).collect(Collectors.toCollection(HashSet::new));
 
         reportControlPanel.getReportConfig().setExcludedAccountIds(excludedAccountIds);
     }
@@ -334,7 +334,8 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         }
     }
 
-    class AccountCellRenderer extends JLabel implements ListCellRenderer<Account> {
+    static class AccountCellRenderer extends JLabel implements ListCellRenderer<Account> {
+        @Serial
         private static final long serialVersionUID = 7586072864239449518L;
         public AccountCellRenderer() {
             setOpaque(true);

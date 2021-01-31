@@ -65,22 +65,22 @@ public class XIRRData {
      */
     public String toString() {
         String text;
-        String valuesStr;
-        String datesStr;
+        StringBuilder valuesStr;
+        StringBuilder datesStr;
 
         text = "XIRRData - n = " + n + ", Guess = " + this.guess;
-        valuesStr = ", Values = ";
-        datesStr = ", Dates = ";
+        valuesStr = new StringBuilder(", Values = ");
+        datesStr = new StringBuilder(", Dates = ");
         for (int i = 0; i < this.values.length; i++) {
-            valuesStr = valuesStr + this.values[i];
+            valuesStr.append(this.values[i]);
             if (i < this.values.length - 1) {
-                valuesStr = valuesStr + ",";
+                valuesStr.append(",");
             }
         }
         for (int i = 0; i < this.dates.length; i++) {
-            datesStr = datesStr + this.dates[i];
+            datesStr.append(this.dates[i]);
             if (i < this.dates.length - 1) {
-                datesStr = datesStr + ",";
+                datesStr.append(",");
             }
         }
         return text + valuesStr + datesStr;

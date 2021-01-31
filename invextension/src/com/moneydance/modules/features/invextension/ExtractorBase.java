@@ -68,12 +68,8 @@ public class ExtractorBase<R> {
             CurrencyWrapper securityCurrencyWrapper = securityAccount.getCurrencyWrapper();
             CurrencyType securityCurrency = securityCurrencyWrapper.getCurrencyType();
             int securityDecimalPlaces = securityCurrency.getDecimalPlaces();
-
-            //CurrencyTable currencyTable = securityCurrencyWrapper.getCurrencyType().getTable();
-            //CurrencyType baseCurrency = currencyTable.getBaseType();
-            //int cashDecimalPlaces = baseCurrency.getDecimalPlaces();
-            int cashDecimalPlaces = 2;  // No need to compute: it cancels out of scale factors to produce currency result
-
+            int cashDecimalPlaces = 2;
+            // No need to compute: it cancels out of scale factors to produce currency result
             pXqScale = (long) Math.pow(10.0, cashDecimalPlaces + securityDecimalPlaces - cashDecimalPlaces);
             qDpScale = (long) Math.pow(10.0, securityDecimalPlaces - cashDecimalPlaces + cashDecimalPlaces);  // 1/pDqScale to avoid fraction
         }
