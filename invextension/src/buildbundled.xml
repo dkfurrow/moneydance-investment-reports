@@ -55,7 +55,7 @@ http://jakarta.apache.org/ant/index.html
 			<compilerarg value = "-Xlint:all"/>
 		</javac>
 
-		<jar destfile="${dist}/invextension.mxt">
+		<jar destfile="${dist}/invextension_bundled.mxt">
 			<fileset dir="${src}" includes="
              com/moneydance/modules/features/invextension/meta_info.dict
              com/moneydance/modules/features/invextension/*.gif
@@ -64,7 +64,7 @@ http://jakarta.apache.org/ant/index.html
              com/moneydance/modules/features/invextension/InvestmentReportsHelp.html"/>
 			<fileset dir="${build}" includes="com/moneydance/modules/features/invextension/**"/>
 			<!--uncomment the following to include all the classes in moneydance.jar -->
-			<!-- <zipgroupfileset dir="${lib}" includes="moneydance.jar"/> -->
+			<zipgroupfileset dir="${lib}" includes="moneydance.jar"/>
 		</jar>
 
 		<java newenvironment="true" 

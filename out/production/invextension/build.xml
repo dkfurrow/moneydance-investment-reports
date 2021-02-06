@@ -63,6 +63,8 @@ http://jakarta.apache.org/ant/index.html
              com/moneydance/modules/features/invextension/*.jpeg
              com/moneydance/modules/features/invextension/InvestmentReportsHelp.html"/>
 			<fileset dir="${build}" includes="com/moneydance/modules/features/invextension/**"/>
+			<!--uncomment the following to include all the classes in moneydance.jar -->
+			<!-- <zipgroupfileset dir="${lib}" includes="moneydance.jar"/> -->
 		</jar>
 
 		<java newenvironment="true" 

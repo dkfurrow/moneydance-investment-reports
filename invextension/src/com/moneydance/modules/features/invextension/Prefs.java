@@ -70,7 +70,7 @@ public class Prefs {
     private Prefs() {
     }
 
-    static void clearAllPrefs() throws BackingStoreException {
+    public static void clearAllPrefs() throws BackingStoreException {
         REPORT_PREFS.removeNode();
         REPORT_CONFIG_PREFS.removeNode();
         REPORT_PREFS.flush();

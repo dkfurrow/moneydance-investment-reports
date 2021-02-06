@@ -104,14 +104,10 @@ public class TestReportOutput2 {
 
 
     //
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void main(String[] args) throws Exception {
         TestReportOutput2.MDFileInfo mdFileInfo = loadRootAccountFromFolder();
         Account root = mdFileInfo.getRootAccount();
-        ReportConfig reportConfig = ReportConfig.getStandardReportConfig(TotalFromToReport.class);
-        reportConfig.setAllExpenseAccountsToInvestment(root);
-        reportConfig.setAllIncomeAccountsToInvestment(root);
-        reportConfig.setUseAverageCostBasis(false);
+        ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         ArrayList<String[]> transActivityReport =  currentInfo.listAllTransValues();
 

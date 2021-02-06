@@ -33,7 +33,7 @@ import java.util.Date;
  * Full Date information for a report, to include
  * specific dates and an optional date rule
  */
-class DateRange {
+public class DateRange {
     private static final int nullDateInt = 19000101;
     private int fromDateInt;
     private int toDateInt;

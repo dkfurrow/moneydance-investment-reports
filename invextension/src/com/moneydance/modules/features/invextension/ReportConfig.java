@@ -223,6 +223,29 @@ public class ReportConfig {
     /*
     returns default ReportConfig
      */
+    public static ReportConfig getTestReportConfig(Account root, boolean useAverageCostBasis)
+            throws NoSuchFieldException, IllegalAccessException {
+        String reportName = Prefs.STANDARD_NAME;
+        AggregationController defaultAggregationController = AggregationController.INVACCT;
+        Class<TotalFromToReport> reportClass = TotalFromToReport.class;
+        LinkedList<Integer> viewHeader = getDefaultViewHeader(getModelHeader(TotalFromToReport.class));
+        DateRange defaultDateRange = DateRange.getDefaultDateRange();
+        HashSet<String> excludedAccountIds = new HashSet<>();
+        HashSet<String> investmentExpenseIds = new HashSet<>();
+        HashSet<String> investmentIncomeIds = new HashSet<>();
+        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true, false,
+                defaultAggregationController, false, 5, true, viewHeader, excludedAccountIds,
+                investmentExpenseIds, investmentIncomeIds, defaultDateRange);
+        standardConfig.setAllExpenseAccountsToInvestment(root);
+        standardConfig.setAllIncomeAccountsToInvestment(root);
+        standardConfig.setUseAverageCostBasis(useAverageCostBasis);
+        standardConfig.setIsDefaultConfig(true);
+        return standardConfig;
+    }
+
+    /*
+    returns default ReportConfig
+     */
     public static ReportConfig getStandardReportConfig(Class<? extends TotalReport> reportClass)
             throws NoSuchFieldException, IllegalAccessException {
         String reportName = Prefs.STANDARD_NAME;
