@@ -93,7 +93,6 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         ReportConfigChooserPanelBase.setPanelBorders(titles, panels);
         //available fields
         if (reportConfig != null) {
-            orderedHeadersFromModel = ReportConfig.getModelHeader(reportConfig.getReportClass());
             populateFieldChooser(reportConfig);
         }
 
@@ -157,7 +156,8 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         }
     }
 
-    public void populateFieldChooser(ReportConfig reportConfig) {
+    public void populateFieldChooser(ReportConfig reportConfig) throws NoSuchFieldException, IllegalAccessException {
+        orderedHeadersFromModel = ReportConfig.getModelHeader(reportConfig.getReportClass());
         modelHeaderListModel.removeAllElements();
         viewedFieldsListModel.removeAllElements();
 
