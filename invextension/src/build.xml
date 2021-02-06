@@ -40,7 +40,7 @@ http://jakarta.apache.org/ant/index.html
 				<fileset dir="${build}" includes="**/*" />
 			</delete>
 			<delete includeemptydirs="true" verbose = "true" quiet = "true">
-				<fileset dir="${dist}" includes="**/*" />
+				<fileset dir="${dist}" includes="**/*.mxt" />
 			</delete>	
 	</target>
 <!-- eliminated javac 'target' -->
