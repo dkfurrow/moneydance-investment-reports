@@ -42,7 +42,6 @@ import java.util.logging.*;
  */
 public class LogController {
     private final Logger logger;
-    private static final Level loggerConfigLevel = Level.WARNING;
     private static final String errorLogFilenamePattern = "investment_reports_error%g.xml";
     private Handler errorFileHandler;
     private static final String verboseLogFilenamePattern = "investment_reports_log%g.txt";
@@ -61,16 +60,17 @@ public class LogController {
             String separator = File.separator;
             String errorFilePattern = ReportControlPanel.getOutputDirectoryPath() + separator + errorLogFilenamePattern;
             errorFileHandler = new FileHandler(errorFilePattern, 1000000, 5, true);
-            errorFileHandler.setLevel(loggerConfigLevel);
+            errorFileHandler.setLevel(Level.WARNING);
             Formatter errorFormatter = new CustomXMLFormatter(true);
             errorFileHandler.setFormatter(errorFormatter);
             logger.addHandler(errorFileHandler);
 
             if (this.isVerbose) {
+                logger.setLevel(Level.FINEST);
                 String verboseFilePattern =
                         ReportControlPanel.getOutputDirectoryPath() + separator + verboseLogFilenamePattern;
                 verboseFileHandler = new FileHandler(verboseFilePattern, 1000000, 5, true);
-                verboseFileHandler.setLevel(Level.FINE);
+                verboseFileHandler.setLevel(Level.FINEST);
                 Formatter verboseFormatter = new SingleLineFormatter();
                 verboseFileHandler.setFormatter(verboseFormatter);
                 logger.addHandler(verboseFileHandler);

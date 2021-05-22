@@ -926,7 +926,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.INFO, "Verbose logging initiated");
+                LogController.logMessage(Level.FINE, "Verbose logging initiated");
             } else {
                 LogController.getInstance();
             }
