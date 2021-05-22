@@ -70,6 +70,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     private static final String HIDE_CLOSED_POSITIONS = "hideClosedPositions";
     private static final String USE_ORDINARY_RETURN = "useOrdinaryReturn";
+    private static final String VERBOSE_LOGGING = "verboseLogging";
 
     private static File outputDirectory;
     private static Level logLevel = Level.INFO;
@@ -812,6 +813,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         public JComboBox<Integer> numFrozenColumnsComboBox = new JComboBox<>(numFrozenColumnsOptions);
         public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Positions with Zero Value", true);
         public JCheckBox useOrdinaryReturnCheckBox = new JCheckBox("Use Ordinary Return Calculation", false);
+        public JCheckBox verboseLoggingCheckBox = new JCheckBox("Verbose Logging", false);
 
 
 
@@ -826,6 +828,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             numFrozenColumnsComboBox.setActionCommand(SET_FROZEN_COLUMNS);
             hideClosedPosCheckBox.setActionCommand(HIDE_CLOSED_POSITIONS);
             useOrdinaryReturnCheckBox.setActionCommand(USE_ORDINARY_RETURN);
+            verboseLoggingCheckBox.setActionCommand(VERBOSE_LOGGING);
             // add action listeners
             resetReportOptions.addActionListener(ReportControlPanel.this);
             aggregationOptionsComboBox.addActionListener(ReportControlPanel.this);
@@ -834,6 +837,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             numFrozenColumnsComboBox.addActionListener(ReportControlPanel.this);
             hideClosedPosCheckBox.addActionListener(ReportControlPanel.this);
             useOrdinaryReturnCheckBox.addActionListener(ReportControlPanel.this);
+            verboseLoggingCheckBox.addActionListener(ReportControlPanel.this);
 
 
             String ordinaryReturnsCBToolTip = "<html> If checked, uses non-time-weighted ('Ordinary') returns" +
@@ -869,6 +873,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             c.gridx = 1;
             c.gridy++;
             topPanel.add(useOrdinaryReturnCheckBox, c);
+            c.gridx = 1;
+            c.gridy++;
+            topPanel.add(verboseLoggingCheckBox, c);
             c.gridx = 0;
             c.gridy++;
             topPanel.add(numFrozenColumnsLabel, c);
@@ -917,6 +924,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         @Override
         protected Void doInBackground() throws Exception {
+            if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
+                LogController.setVerbose();
+                LogController.logMessage(Level.INFO, "Verbose logging initiated");
+            } else {
+                LogController.getInstance();
+            }
             if (logLevel.intValue() == Level.SEVERE.intValue()) {
                 publish(showErrorMessage("Cannot run reports!"));
                 return null;
