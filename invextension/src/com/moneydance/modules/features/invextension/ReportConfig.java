@@ -63,6 +63,7 @@ public class ReportConfig {
     private HashSet<String> investmentIncomeIds;
     private DateRange dateRange;
     private boolean isDefaultConfig = false;
+    private boolean isVerbose = false;
     private FrameInfo frameInfo;
 
     public ReportConfig() {
@@ -273,6 +274,10 @@ public class ReportConfig {
         }
     }
 
+    public void setVerbose(){
+        this.isVerbose = true;
+    }
+
     /*
     Returns model header as default view header
      */
@@ -433,6 +438,10 @@ public class ReportConfig {
 
     public LinkedList<Integer> getViewHeader() {
         return viewHeader;
+    }
+
+    public boolean getVerbose(){
+        return this.isVerbose;
     }
 
     public void setViewHeader(LinkedList<Integer> viewHeader) {

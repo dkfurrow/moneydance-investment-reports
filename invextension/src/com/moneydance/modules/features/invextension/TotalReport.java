@@ -36,6 +36,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 
@@ -234,6 +235,8 @@ public abstract class TotalReport {
                 securityReports.add(thisReport);
             }
         }
+        LogController.logMessage(Level.FINE, String.format("Producing %d leaf security reports",
+                securityReports.size()));
 
         // generate "All Securities" composite, add to composite reports
         CompositeReport allRept = getAllCompositeReport(dateRange, aggregationController);
@@ -259,6 +262,8 @@ public abstract class TotalReport {
                             COMPOSITE_TYPE.SECOND));
             }
         }
+        LogController.logMessage(Level.FINE, String.format("Producing %d composite security reports",
+                compositeReports.size()));
     }
 
     public void displayReport() throws SecurityException,

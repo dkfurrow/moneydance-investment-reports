@@ -938,9 +938,20 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             publish(reportConfig.getDescription() + " is running...\n");
             if(transActivityCheckbox.isSelected()) publish("writing transaction data to file\n");
             if(secPricesCheckbox.isSelected()) publish("writing security price data to file\n");
+            if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
+                LogController.logMessage(Level.FINE, "Running Following Report Config");
+                String[] lines = reportConfig.toString().split(System.lineSeparator());
+                for(String line: lines){
+                    LogController.logMessage(Level.FINE, line);
+                }
+                LogController.logMessage(Level.FINE, "Report Config Description Ended...");
+                reportConfig.setVerbose();
+            }
             //load BulkSecInfo...
             if (mdData.getRoot() != null) {
                 try {
+                    LogController.logMessage(Level.FINE, "Loading All Currencies, Investment Accounts, Security " +
+                            "Accounts...");
                     mdData.generateCurrentInfo(reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
@@ -949,14 +960,17 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             }
             //Now Run Reports...
             if (logLevel != Level.SEVERE && mdData.getCurrentInfo() != null) {
+                LogController.logMessage(Level.FINE, "Proceeding to run reports...");
                 try {
                     if (snapReportComboBox.getSelectedIndex() != 0) {
+                        LogController.logMessage(Level.FINE, "Running Snapshot Report...");
                         TotalReport report = new TotalSnapshotReport(reportConfig, MDData
                                 .getInstance().getCurrentInfo());
                         report.calcReport();
                         report.displayReport();
                     }
                     if (fromToReportComboBox.getSelectedIndex() != 0) {
+                        LogController.logMessage(Level.FINE, "Running From-To Report...");
                         TotalReport report = new TotalFromToReport(reportConfig, MDData.
                                 getInstance().getCurrentInfo());
                         report.calcReport();
@@ -996,6 +1010,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 ReportControlPanel.this.getReportControlFrame().toFront();
                 ReportControlPanel.this.getReportControlFrame().repaint();
             }
+            LogController.logMessage(Level.FINE, "All Report and Download operations complete");
             return null;
         }
 
