@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="log.xsl"?>
 
-<build time="12 seconds">
+<build time="10 seconds">
 	<message priority="debug"><![CDATA[Adding reference: ant.PropertyHelper]]></message>
 	<message priority="debug"><![CDATA[Detected Java version: 15 in: C:\Java\openjdk-15.0.2]]></message>
 	<message priority="debug"><![CDATA[Detected OS: Windows 10]]></message>
@@ -62,7 +62,7 @@
 	<message priority="debug"><![CDATA[Setting project property: env.PROMPT -> $P$G]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.SESSIONNAME -> Console]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env._JAVACMD -> C:\Java\openjdk-15.0.2\bin\java.exe]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.IDEA_INITIAL_DIRECTORY -> C:\Users\dale\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\203.7148.57\bin]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.IDEA_INITIAL_DIRECTORY -> C:\Users\dale\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\211.7142.45\bin]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.LOCALAPPDATA -> C:\Users\dale\AppData\Local]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.GIT_LFS_PATH -> C:\Program Files\Git LFS]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERDOMAIN_ROAMINGPROFILE -> MAIN-PC]]></message>
@@ -87,13 +87,13 @@
 	<message priority="debug"><![CDATA[Setting project property: env.ProgramData -> C:\ProgramData]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.USERNAME -> dale]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.PROCESSOR_LEVEL -> 23]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.Path -> C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Java\openjdk-15.0.2\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Acronis\VirtualFile\;C:\Program Files (x86)\Common Files\Acronis\VirtualFile64\;C:\Program Files (x86)\Common Files\Acronis\SnapAPI\;C:\Program Files\SlikSvn\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\AWSCLI\;C:\ProgramFiles1\apache-ant-1.10.1\bin;C:\WINDOWS\System32\OpenSSH\;C:\ProgramFiles1\geckodriver\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\ProgramData\chocolatey\bin;C:\Program Files\Calibre2\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\WPy64-3830\python-3.8.3.amd64;C:\Program Files\Git\cmd;C:\Program Files\Git LFS;C:\Users\dale\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Nmap;C:\Users\dale\AppData\Local\GitHubDesktop\bin;C:\Users\dale\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\PDF2JSON]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.Path -> C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Java\openjdk-15.0.2\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Acronis\VirtualFile\;C:\Program Files (x86)\Common Files\Acronis\VirtualFile64\;C:\Program Files (x86)\Common Files\Acronis\SnapAPI\;C:\Program Files\SlikSvn\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\AWSCLI\;C:\ProgramFiles1\apache-ant-1.10.1\bin;C:\WINDOWS\System32\OpenSSH\;C:\ProgramFiles1\geckodriver\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\ProgramData\chocolatey\bin;C:\Program Files\Calibre2\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\WPy64-3880\python-3.8.8.amd64;C:\Program Files\Git\cmd;C:\Program Files\Git LFS;C:\Users\dale\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Nmap;C:\Users\dale\AppData\Local\GitHubDesktop\bin;C:\Users\dale\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\PDF2JSON]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.HOMEDRIVE -> C:]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.TMP -> C:\Users\dale\AppData\Local\Temp]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.=D: -> D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ProgramFiles(x86) -> C:\Program Files (x86)]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.LOGONSERVER -> \\MAIN-PC]]></message>
-	<message priority="debug"><![CDATA[Setting project property: env.TOOLBOX_VERSION -> 1.20.7940]]></message>
+	<message priority="debug"><![CDATA[Setting project property: env.TOOLBOX_VERSION -> 1.20.8352]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.ChocolateyInstall -> C:\ProgramData\chocolatey]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.TEMP -> C:\Users\dale\AppData\Local\Temp]]></message>
 	<message priority="debug"><![CDATA[Setting project property: env.OneDrive -> C:\Users\dale\OneDrive]]></message>
@@ -188,6 +188,7 @@
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\IOUtils.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\InvestmentAccountWrapper.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\LogController$CustomXMLFormatter.class]]></message>
+			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\LogController$SingleLineFormatter.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\LogController.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\MDData$MDFileLoader.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\MDData$ObservableLastTransactionDate.class]]></message>
@@ -275,12 +276,10 @@
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\XIRRData.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension\XIRRNPV.class]]></message>
 			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features\invextension]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules\features]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance\modules]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com\moneydance]]></message>
-			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\classes\com]]></message>
 		</task>
-		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:42: " name="delete" time="0 seconds" />
+		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:42: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist\invextension.mxt]]></message>
+		</task>
 	</target>
 	<message priority="debug"><![CDATA[fileset: Setup scanner in dir D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/**] excludes: [] }]]></message>
 	<message priority="debug"><![CDATA[fileset: Setup scanner in dir D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src with patternSet{ includes: [com/moneydance/modules/features/invextension/meta_info.dict, com/moneydance/modules/features/invextension/*.gif, com/moneydance/modules/features/invextension/*.jpg, com/moneydance/modules/features/invextension/*.jpeg, com/moneydance/modules/features/invextension/InvestmentReportsHelp.html] excludes: [] }]]></message>
@@ -339,15 +338,15 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.security.KeyUtil]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\extadmin.jar com/moneydance/security/KeyUtil.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.security.KeyUtil loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataOutputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherOutputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.spec.KeySpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.spec.AlgorithmParameterSpec loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.io.DataInputStream loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class javax.crypto.CipherInputStream loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.interfaces.DSAParams loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class javax.crypto.SecretKey loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Class java.security.PublicKey loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.math.BigInteger loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.System loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.invoke.StringConcatFactory loaded from parent loader (parentFirst)]]></message>
@@ -376,6 +375,10 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader loaded from ant loader]]></message>
+	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
+	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
+	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
+	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Class java.lang.SecurityException loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.MDException]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/MDException.class]]></message>
@@ -384,10 +387,6 @@
 	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.OutdatedExtensionException]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/OutdatedExtensionException.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.OutdatedExtensionException loaded from ant loader]]></message>
-	<message priority="debug"><![CDATA[Class java.lang.ClassLoader loaded from parent loader (parentFirst)]]></message>
-	<message priority="debug"><![CDATA[Finding class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader]]></message>
-	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib\moneydance.jar com/moneydance/apps/md/controller/ModuleLoader$FMClassLoader.class]]></message>
-	<message priority="debug"><![CDATA[Class com.moneydance.apps.md.controller.ModuleLoader$FMClassLoader loaded from ant loader]]></message>
 	<message priority="debug"><![CDATA[Finding class com.moneydance.util.StreamTable]]></message>
 	<message priority="debug"><![CDATA[Loaded from D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\extadmin.jar com/moneydance/util/StreamTable.class]]></message>
 	<message priority="debug"><![CDATA[Class com.moneydance.util.StreamTable loaded from ant loader]]></message>
@@ -405,7 +404,7 @@
 	<message priority="debug"><![CDATA[Class java.util.Enumeration loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.util.zip.ZipEntry loaded from parent loader (parentFirst)]]></message>
 	<message priority="debug"><![CDATA[Class java.security.Signature loaded from parent loader (parentFirst)]]></message>
-	<target name="invextension" time="11 seconds">
+	<target name="invextension" time="10 seconds">
 		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:48: " name="mkdir" time="0 seconds">
 			<message priority="debug"><![CDATA[Skipping D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\dist because it already exists.]]></message>
 		</task>
@@ -657,6 +656,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/IOUtils.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/InvestmentAccountWrapper.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/LogController$CustomXMLFormatter.class]]></message>
+			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/LogController$SingleLineFormatter.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/LogController.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$MDFileLoader.class]]></message>
 			<message priority="debug"><![CDATA[adding entry com/moneydance/modules/features/invextension/MDData$ObservableLastTransactionDate.class]]></message>
@@ -746,7 +746,7 @@ not part of the command.]]></message>
 			<message priority="debug"><![CDATA[No Implementation-Title set.No Implementation-Version set.No Implementation-Vendor set.
 Location: D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:58: ]]></message>
 		</task>
-		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:72: " name="java" time="9 seconds">
+		<task location="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src\build.xml:72: " name="java" time="7 seconds">
 			<message priority="warn"><![CDATA[Changes to environment variables are ignored when same JVM is used.]]></message>
 			<message priority="debug"><![CDATA[running com.moneydance.admin.KeyAdmin with default permissions (exit forbidden)]]></message>
 			<message priority="debug"><![CDATA[Running in same VM Executing 'com.moneydance.admin.KeyAdmin' with arguments:
@@ -832,6 +832,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/IOUtils.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/InvestmentAccountWrapper.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/LogController$CustomXMLFormatter.class]]></message>
+			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/LogController$SingleLineFormatter.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/LogController.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$MDFileLoader.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/MDData$ObservableLastTransactionDate.class]]></message>
@@ -918,7 +919,7 @@ not part of the command.]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRR.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRData.class]]></message>
 			<message priority="info"><![CDATA[  com/moneydance/modules/features/invextension/XIRRNPV.class]]></message>
-			<message priority="info"><![CDATA[writing 20592 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
+			<message priority="info"><![CDATA[writing 20728 bytes of meta data for com/moneydance/modules/features/invextension/meta_info.dict]]></message>
 		</task>
 	</target>
 	<target name="all" time="0 seconds" />

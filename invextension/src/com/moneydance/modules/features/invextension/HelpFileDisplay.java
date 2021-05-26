@@ -93,8 +93,8 @@ public class HelpFileDisplay {
             InputStream is = getClass().getResourceAsStream(fileLocation);
 
             String line;
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is)); BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
-
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                 BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
                 while ((line = br.readLine()) != null) {
                     bw.write(line);
                 }

@@ -44,6 +44,8 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
+import static java.lang.Math.max;
+
 
 /**
  * produces panel for reports
@@ -73,7 +75,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private static final String VERBOSE_LOGGING = "verboseLogging";
 
     private static File outputDirectory;
-    private static Level logLevel = Level.INFO;
+    private static int logLevel = Level.INFO.intValue();
     private final ReportControlFrame reportControlFrame;
 
     private static final MDData mdData = MDData.getInstance();
@@ -140,7 +142,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
 
     public static void setLogLevel(Level logLevel) {
-        ReportControlPanel.logLevel = logLevel;
+        int logLevelInt = logLevel.intValue();
+        ReportControlPanel.logLevel = max(logLevelInt, ReportControlPanel.logLevel);
     }
 
 
@@ -926,11 +929,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, "Verbose logging initiated");
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "215"));
+//                FIXME read meta_info.dict to get build
             } else {
                 LogController.getInstance();
             }
-            if (logLevel.intValue() == Level.SEVERE.intValue()) {
+            if (logLevel == Level.SEVERE.intValue()) {
                 publish(showErrorMessage("Cannot run reports!"));
                 return null;
             }
@@ -959,7 +963,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 }
             }
             //Now Run Reports...
-            if (logLevel != Level.SEVERE && mdData.getCurrentInfo() != null) {
+            if (logLevel != Level.SEVERE.intValue() && mdData.getCurrentInfo() != null) {
                 LogController.logMessage(Level.FINE, "Proceeding to run reports...");
                 try {
                     if (snapReportComboBox.getSelectedIndex() != 0) {
@@ -1002,9 +1006,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             } else {
                 publish(showErrorMessage("Error--Reports not run! "));
             }
-            if (logLevel.intValue() < Level.WARNING.intValue()) {
+            if (logLevel < Level.WARNING.intValue()) {
                 publish("Reports have been run!");
-            } else if ((logLevel.intValue() == Level.WARNING.intValue())) {
+            } else if ((logLevel == Level.WARNING.intValue())) {
                 publish(showErrorMessage("Reports run with WARNINGS!  " +
                         "Transaction data may not have validated. "));
                 ReportControlPanel.this.getReportControlFrame().toFront();

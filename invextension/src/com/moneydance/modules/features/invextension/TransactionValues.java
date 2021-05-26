@@ -310,8 +310,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
                     this.perTotalGain + prevTransLine.cumTotalGain;
         } catch (Exception e) {
             String dateString = " Date: " + DateUtils.convertToShort(dateInt);
-            String errorString = "Error in transaction values calculation: " + securityAccountWrapper.getInvAcctWrapper().getName() +
-                    " Security: " + securityAccountWrapper.getName() + dateString;
+            String errorString = "Error in transaction values calculation, cash account: "
+                    + securityAccountWrapper.getInvAcctWrapper().getName() +
+                    " Security: " + securityAccountWrapper.getName() + dateString + " " + e.toString();
             LogController.getInstance();
             LogController.logMessage(Level.WARNING, errorString);
         }

@@ -62,6 +62,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         LogController.logMessage(Level.FINE, String.format("load Security Acct: %s | %s of currency type %s",
                 this.securityAccount.getAccountName(), this.securityAccount.getUUID(),
                 currencyWrapper.getCurrencyType().getUUID()));
+        if(this.currencyWrapper == null){  // FIXME: remove after problem fixed
+            LogController.logMessage(Level.WARNING, String.format("Security Acct: %s  in investment account %s has " +
+                            "null currency type!",
+                    this.securityAccount.getAccountName(), this.invAcctWrapper.getName()));
+        }
         this.tradeable = new Tradeable(this.currencyWrapper);
         this.securityTypeWrapper = new SecurityTypeWrapper(this);
         this.securitySubTypeWrapper = new SecuritySubTypeWrapper(this);
