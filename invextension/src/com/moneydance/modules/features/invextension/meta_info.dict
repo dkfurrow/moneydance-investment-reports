@@ -1,6 +1,6 @@
 {
   "vendor" = "Dale Furrow"
-  "module_build" = "215"
+  "module_build" = "216"
   "minbuild" = "1000"
   "vendor.url" = "https://github.com/dkfurrow/moneydance-investment-reports"
   "module_name" = "Investment Reports v 2.74"

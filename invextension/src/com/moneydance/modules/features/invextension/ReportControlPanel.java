@@ -419,7 +419,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private void getLastReportRun() throws Exception {
 
         String lastReportTypeName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_TYPE_RUN,
-                ReportConfig.getReportTypeName(TotalSnapshotReport.class));
+                ReportConfig.getReportTypeName(TotalFromToReport.class));
         String lastReportClassSimpleName = TotalReport.getClassSimpleNameFromReportTypeName(lastReportTypeName);
         String lastReportName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_NAME_RUN,
                 Prefs.STANDARD_NAME);
@@ -929,7 +929,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "215"));
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "216"));
 //                FIXME read meta_info.dict to get build
             } else {
                 LogController.getInstance();
