@@ -42,9 +42,9 @@ import java.util.logging.*;
  */
 public class LogController {
     private final Logger logger;
-    private static final String errorLogFilenamePattern = "investment_reports_error%g.xml";
+    private static final String errorLogFilenamePattern = "investment_reports_error.%u.%g.xml";
     private Handler errorFileHandler;
-    private static final String verboseLogFilenamePattern = "investment_reports_log%g.txt";
+    private static final String verboseLogFilenamePattern = "investment_reports_log.%u.%g.txt";
     private boolean isVerbose;
     private Handler verboseFileHandler;
     private static LogController instance;

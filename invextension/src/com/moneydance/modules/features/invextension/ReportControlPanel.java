@@ -929,7 +929,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "216"));
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "217"));
 //                FIXME read meta_info.dict to get build
             } else {
                 LogController.getInstance();

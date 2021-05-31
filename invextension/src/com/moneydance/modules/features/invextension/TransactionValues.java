@@ -505,11 +505,21 @@ public class TransactionValues implements Comparable<TransactionValues> {
         } else {
             if (secQuantity > 0) {
                 boolean validTradeType = (investTxnType == InvestTxnType.BUY
-                        || investTxnType == InvestTxnType.BUY_XFER);
+                        || investTxnType == InvestTxnType.BUY_XFER || investTxnType == InvestTxnType.DIVIDEND_REINVEST);
                 if (!validTradeType)
                     warningStr = "Error in investment account: " + securityAccountWrapper.getInvAcctWrapper().getName() +
-                            " Security: " + securityAccountWrapper.getName() + dateString + " takes position from flat to long, " +
+                            " Security: " + securityAccountWrapper.getName() + dateString +
+                            " takes position from flat to long, " +
                             "so must be a BUY or BUYXFER, " + "but instead is a " + investTxnType.name();
+                if (validTradeType && investTxnType == InvestTxnType.DIVIDEND_REINVEST){
+                    String noteStr =
+                            "Check investment account: " + securityAccountWrapper.getInvAcctWrapper().getName() +
+                            " Security: " + securityAccountWrapper.getName() + dateString +
+                                    " takes position from flat to long, " +
+                            "so should be a BUY or BUYXFER, " + "but instead is a " + investTxnType.name() + " " +
+                                    "so check ex-dividend dates.";
+                    LogController.logMessage(Level.INFO, noteStr);
+                }
             } else if (secQuantity < 0) {
                 boolean validTradeType = (investTxnType == InvestTxnType.SHORT);
                 if (!validTradeType)
