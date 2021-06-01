@@ -487,7 +487,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    public String showErrorMessage(String message) {
+    public String showLogMessage(String message) {
         return message + " See Log in " + folderPanel.getDirectoryOutputField()
                 + " for details";
     }
@@ -511,7 +511,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (Exception e1) {
                     String msg = "Error on removing selected report";
                     LogController.logException(e1, msg);
-                    showErrorMessage(msg);
+                    showLogMessage(msg);
                 }
                 break;
             case REMOVE_ALL_REPORTS:
@@ -520,7 +520,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (Exception e1){
                     String msg = "Error on removing all reports";
                     LogController.logException(e1, msg);
-                    showErrorMessage(msg);
+                    showLogMessage(msg);
                 }
                 break;
             case SAVE_CUSTOM_REPORT:
@@ -533,7 +533,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (IllegalAccessException | NoSuchFieldException | BackingStoreException e1) {
                     String msg = " Exception on Report Save: ";
                     LogController.logException(e1, msg);
-                    setReportStatusFieldText(showErrorMessage(msg));
+                    setReportStatusFieldText(showLogMessage(msg));
                 }
                 break;
             case RUN_REPORTS:
@@ -602,7 +602,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             } catch (Exception e) {
                 String msg = "Error on loading new report config";
                 LogController.logException(e, msg);
-                showErrorMessage(msg);
+                showLogMessage(msg);
             }
         } else { //user sets to NONE,  set report to standard config of other type
             reportClass = otherComboBox.equals(fromToReportComboBox) ? TotalFromToReport.class : TotalSnapshotReport.class;
@@ -613,7 +613,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             } catch (Exception e) {
                 String msg = "Error on loading new report config";
                 LogController.logException(e, msg);
-                showErrorMessage(msg);
+                showLogMessage(msg);
             }
         }
         selectedComboBox.setSelectedItem(reportName);
@@ -929,13 +929,13 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "217"));
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "219"));
 //                FIXME read meta_info.dict to get build
             } else {
                 LogController.getInstance();
             }
             if (logLevel == Level.SEVERE.intValue()) {
-                publish(showErrorMessage("Cannot run reports!"));
+                publish(showLogMessage("Initial Error! Cannot run reports!"));
                 return null;
             }
             saveLastReportRun();
@@ -943,12 +943,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             if(transActivityCheckbox.isSelected()) publish("writing transaction data to file\n");
             if(secPricesCheckbox.isSelected()) publish("writing security price data to file\n");
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
-                LogController.logMessage(Level.FINE, "Running Following Report Config");
-                String[] lines = reportConfig.toString().split(System.lineSeparator());
-                for(String line: lines){
-                    LogController.logMessage(Level.FINE, line);
-                }
-                LogController.logMessage(Level.FINE, "Report Config Description Ended...");
+                reportConfig.logReportConfig();
                 reportConfig.setVerbose();
             }
             //load BulkSecInfo...
@@ -959,10 +954,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                     mdData.generateCurrentInfo(reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
-                    publish(showErrorMessage("Error--Could not load securities from data file!"));
+                    publish(showLogMessage("Error--Could not load securities from data file!"));
                 }
             }
             //Now Run Reports...
+//            reportConfig.setViewHeader(ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER));  // TODO
+            // Remove after debug!!
             if (logLevel != Level.SEVERE.intValue() && mdData.getCurrentInfo() != null) {
                 LogController.logMessage(Level.FINE, "Proceeding to run reports...");
                 try {
@@ -971,6 +968,12 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                         TotalReport report = new TotalSnapshotReport(reportConfig, MDData
                                 .getInstance().getCurrentInfo());
                         report.calcReport();
+                        if (reportConfig.validateReportConfig() == false){
+                            report.setViewHeader(reportConfig.getViewHeader());
+                            LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
+                                    report.writeViewHeaderToString());
+
+                        }
                         report.displayReport();
                     }
                     if (fromToReportComboBox.getSelectedIndex() != 0) {
@@ -978,6 +981,11 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                         TotalReport report = new TotalFromToReport(reportConfig, MDData.
                                 getInstance().getCurrentInfo());
                         report.calcReport();
+                        if (reportConfig.validateReportConfig() == false){
+                            report.setViewHeader(reportConfig.getViewHeader());
+                            LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
+                                    report.writeViewHeaderToString());
+                        }
                         report.displayReport();
                     }
                     if (transActivityCheckbox.isSelected()) {
@@ -1001,20 +1009,21 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
                 } catch (Exception e) {
                     LogController.logException(e, "Error on running reports: ");
-                    publish(showErrorMessage("Error--Could not run reports!"));
+                    publish(showLogMessage("Error--Could not run reports!"));
                 }
             } else {
-                publish(showErrorMessage("Error--Reports not run! "));
+                publish(showLogMessage("Error--Reports not run! "));
             }
             if (logLevel < Level.WARNING.intValue()) {
                 publish("Reports have been run!");
             } else if ((logLevel == Level.WARNING.intValue())) {
-                publish(showErrorMessage("Reports run with WARNINGS!  " +
+                publish(showLogMessage("Reports run with WARNINGS!  " +
                         "Transaction data may not have validated. "));
                 ReportControlPanel.this.getReportControlFrame().toFront();
                 ReportControlPanel.this.getReportControlFrame().repaint();
             }
             LogController.logMessage(Level.FINE, "All Report and Download operations complete");
+            publish(showLogMessage("Verbose logging indicated, "));
             return null;
         }
 

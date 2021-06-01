@@ -58,7 +58,7 @@ public abstract class TotalReport {
     private final Boolean isHierarchy; // indicates if second aggregate is a subset of the first aggregate
     private final Boolean outputSingle; // indicates a composite report with only one security report will print
     private final LinkedList<String> modelHeader;
-    private final LinkedList<Integer> viewHeader;
+    private LinkedList<Integer> viewHeader;
     protected ReportConfig reportConfig;
     private BulkSecInfo currentInfo;
     private final ColType[] colTypes;
@@ -209,6 +209,24 @@ public abstract class TotalReport {
     public LinkedList<Integer> getViewHeader() {
         return viewHeader;
     }
+
+    public void setViewHeader(LinkedList<Integer> viewHeader){
+        this.viewHeader = viewHeader;
+    }
+
+    /**
+     * writes view header to a string where integers are separated by commas
+     *
+     * @return string to be saved to preferences
+     */
+    public String writeViewHeaderToString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < this.viewHeader.size(); i++) {
+            sb.append(i == viewHeader.size() - 1 ? viewHeader.get(i) : viewHeader.get(i) + ",");
+        }
+        return sb.toString();
+    }
+
 
     /**
      * Generates GUI title

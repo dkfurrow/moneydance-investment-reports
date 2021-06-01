@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
@@ -163,6 +164,58 @@ public class ReportConfig {
         this.isDefaultConfig = thisReportPrefs.getBoolean(Prefs.ISSTANDARD, standardConfig.isOutputSingle());
         this.frameInfo = getFrameInfoFromPrefs(thisReportPrefs);
     }
+
+    public void logReportConfig(){
+        String[] lines = this.toString().split(System.lineSeparator());
+        LogController.logMessage(Level.FINE, "Printing this Report Config");
+        for(String line: lines){
+            LogController.logMessage(Level.FINE, line);
+        }
+        LogController.logMessage(Level.FINE, "Report Config Description Ended...");
+    }
+
+    public int getMaxViewHeaderIndex(){
+        int maxHeaderInd = 0;
+        for(int headerInd: viewHeader){
+            maxHeaderInd = Math.max(maxHeaderInd, headerInd);
+        }
+        return maxHeaderInd;
+    }
+
+    /**
+     * Validates report config (esepcially view header)
+     * replaces view header if invalid
+     */
+    public boolean validateReportConfig(){
+        LogController.logMessage(Level.FINE, "Validating Report Config...");
+        LinkedList<Integer> defaultViewHeader = null;
+        boolean isValid = true;
+        try {
+            defaultViewHeader = getDefaultViewHeader(ReportConfig.getModelHeader(this.reportClass));
+        } catch (NoSuchFieldException e) {
+            LogController.logMessage(Level.SEVERE, "Error on validateReportConfig, no such field");
+            LogController.logMessage(Level.SEVERE, e.toString());
+        } catch (IllegalAccessException e) {
+            LogController.logMessage(Level.SEVERE, "Error on validateReportConfig, Illegal Access");
+            LogController.logMessage(Level.SEVERE, e.toString());
+        }
+        if(this.viewHeader.size() > defaultViewHeader.size()){
+            LogController.logMessage(Level.INFO, "Header size > default index size, reverting to standard...");
+            this.viewHeader = defaultViewHeader;
+            this.logReportConfig();
+            isValid = false;
+        }
+        if(this.getMaxViewHeaderIndex() > defaultViewHeader.size() - 1){
+            LogController.logMessage(Level.INFO,
+                    "Max Header index > default index maximum, reverting to standard...");
+            this.viewHeader = defaultViewHeader;
+            this.logReportConfig();
+            isValid = false;
+            }
+        return isValid;
+
+    }
+
 
     /**
      * Similar constructor to above, accepts simple name for report type
