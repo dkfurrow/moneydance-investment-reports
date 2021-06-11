@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
@@ -63,6 +64,7 @@ public class ReportConfig {
     private HashSet<String> investmentIncomeIds;
     private DateRange dateRange;
     private boolean isDefaultConfig = false;
+    private boolean isVerbose = false;
     private FrameInfo frameInfo;
 
     public ReportConfig() {
@@ -135,8 +137,16 @@ public class ReportConfig {
         initReportConfig(reportClass, reportName);
     }
 
-    private void initReportConfig(Class<? extends TotalReport> reportClass, String reportName) throws NoSuchFieldException,
-            IllegalAccessException, BackingStoreException {
+    /**
+     * initiates report config from class and name
+     * @param reportClass total report class
+     * @param reportName name of report (defaults to standard if doesn't exist)
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws BackingStoreException
+     */
+    private void initReportConfig(Class<? extends TotalReport> reportClass, String reportName)
+            throws NoSuchFieldException, IllegalAccessException, BackingStoreException {
         this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
         boolean nodeExists = prefs.node(reportTypeName).nodeExists(reportName);
         Preferences thisReportPrefs = prefs.node(reportTypeName).node(nodeExists ? reportName : Prefs.STANDARD_NAME);
@@ -162,6 +172,58 @@ public class ReportConfig {
         this.isDefaultConfig = thisReportPrefs.getBoolean(Prefs.ISSTANDARD, standardConfig.isOutputSingle());
         this.frameInfo = getFrameInfoFromPrefs(thisReportPrefs);
     }
+
+    public void logReportConfig(){
+        String[] lines = this.toString().split(System.lineSeparator());
+        LogController.logMessage(Level.FINE, "Printing this Report Config");
+        for(String line: lines){
+            LogController.logMessage(Level.FINE, line);
+        }
+        LogController.logMessage(Level.FINE, "Report Config Description Ended...");
+    }
+
+    public int getMaxViewHeaderIndex(){
+        int maxHeaderInd = 0;
+        for(int headerInd: viewHeader){
+            maxHeaderInd = Math.max(maxHeaderInd, headerInd);
+        }
+        return maxHeaderInd;
+    }
+
+    /**
+     * Validates report config (esepcially view header)
+     * replaces view header if invalid
+     */
+    public boolean validateReportConfig(){
+        LogController.logMessage(Level.FINE, "Validating Report Config...");
+        LinkedList<Integer> defaultViewHeader = null;
+        boolean isValid = true;
+        try {
+            defaultViewHeader = getDefaultViewHeader(ReportConfig.getModelHeader(this.reportClass));
+        } catch (NoSuchFieldException e) {
+            LogController.logMessage(Level.SEVERE, "Error on validateReportConfig, no such field");
+            LogController.logMessage(Level.SEVERE, e.toString());
+        } catch (IllegalAccessException e) {
+            LogController.logMessage(Level.SEVERE, "Error on validateReportConfig, Illegal Access");
+            LogController.logMessage(Level.SEVERE, e.toString());
+        }
+        if(this.viewHeader.size() > defaultViewHeader.size()){
+            LogController.logMessage(Level.INFO, "Header size > default index size, reverting to standard...");
+            this.viewHeader = defaultViewHeader;
+            this.logReportConfig();
+            isValid = false;
+        }
+        if(this.getMaxViewHeaderIndex() > defaultViewHeader.size() - 1){
+            LogController.logMessage(Level.INFO,
+                    "Max Header index > default index maximum, reverting to standard...");
+            this.viewHeader = defaultViewHeader;
+            this.logReportConfig();
+            isValid = false;
+            }
+        return isValid;
+
+    }
+
 
     /**
      * Similar constructor to above, accepts simple name for report type
@@ -255,9 +317,10 @@ public class ReportConfig {
         HashSet<String> excludedAccountIds = new HashSet<>();
         HashSet<String> investmentExpenseIds = new HashSet<>();
         HashSet<String> investmentIncomeIds = new HashSet<>();
-        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true, false,
-                defaultAggregationController, false, 5, true, viewHeader, excludedAccountIds,
-                investmentExpenseIds, investmentIncomeIds, defaultDateRange);
+        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true,
+                false, defaultAggregationController, false, 5,
+                true, viewHeader, excludedAccountIds, investmentExpenseIds, investmentIncomeIds,
+                defaultDateRange);
         standardConfig.setIsDefaultConfig(true);
         return standardConfig;
     }
@@ -267,10 +330,15 @@ public class ReportConfig {
         Preferences reportClassNode = Prefs.REPORT_CONFIG_PREFS.node(getReportTypeName(reportClass));
         String[] childrenNames = reportClassNode.childrenNames();
         if (childrenNames.length == 0 || !Arrays.asList(childrenNames).contains(Prefs.STANDARD_NAME)) {
+            // clear all report configs, set standard config and save prefs
             clearAllReportConfigsForClass(reportClass);
             ReportConfig reportConfig = getStandardReportConfig(reportClass);
             reportConfig.saveReportConfig();
         }
+    }
+
+    public void setVerbose(){
+        this.isVerbose = true;
     }
 
     /*
@@ -433,6 +501,10 @@ public class ReportConfig {
 
     public LinkedList<Integer> getViewHeader() {
         return viewHeader;
+    }
+
+    public boolean getVerbose(){
+        return this.isVerbose;
     }
 
     public void setViewHeader(LinkedList<Integer> viewHeader) {

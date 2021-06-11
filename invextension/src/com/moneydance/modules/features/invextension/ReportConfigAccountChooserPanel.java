@@ -188,7 +188,6 @@ public class ReportConfigAccountChooserPanel extends JPanel {
         if (MDData.getInstance().getRoot() != null) {
             TreeSet<Account> investmentAccountSet
                     = BulkSecInfo.getSelectedSubAccounts(MDData.getInstance().getRoot(), Account.AccountType.INVESTMENT);
-
             investmentAccountSet.forEach(availableAccountsListModel::addElement);
         } else {
             throw new Exception("Cannot obtain account list");

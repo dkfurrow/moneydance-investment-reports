@@ -36,6 +36,7 @@ import com.infinitekind.moneydance.model.SecurityType;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * Wrapper for Moneydance Class Investment Account, adds increased functionality
@@ -128,6 +129,8 @@ public class InvestmentAccountWrapper implements Aggregator {
      *
      */
     private void createCashWrapper() throws Exception {
+        LogController.logMessage(Level.FINE, String.format("Creating Cash Account for %s",
+                this.getInvestmentAccount().getAccountName()));
         Account cashAccount = new Account(null);
         cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
@@ -135,9 +138,11 @@ public class InvestmentAccountWrapper implements Aggregator {
         cashAccount.setSecuritySubType("Money Market");
         cashAccount.setCurrencyType(currentInfo.getCashCurrencyWrapper().getCurrencyType());
         cashAccount.setParentAccount(this.investmentAccount);
+        LogController.logMessage(Level.FINE, String.format("Cash account created: %s, %s, with currency type %s",
+                cashAccount.getAccountName(), cashAccount.getUUID(), cashAccount.getCurrencyType().getUUID()));
         this.cashWrapper = new SecurityAccountWrapper(cashAccount, this);
         currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
-        cashWrapper.generateTransValues();
+//        cashWrapper.generateTransValues();  Don't need to call this twice!
     }
 
     @Override

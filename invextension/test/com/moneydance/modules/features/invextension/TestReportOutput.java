@@ -48,13 +48,13 @@ public class TestReportOutput extends JFrame {
     private static String testFileStr = "D:\\\\RECORDS\\\\moneydance\\\\Test\\\\FurrowTest.moneydance";
     private static String testFileStr1 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\FurrowTest.moneydance";
     private static String testFileStr2 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\20141014test-2015.moneydance";
-    private static String testFileStr3 = "D:\\\\RECORDS\\moneydance\\\\Test\\\\USD-AUD-test.moneydance";
+    private static String testFileStr3 = "D:\\\\RECORDS\\moneydance\\test\\testMD02.moneydance";
     private static String testFileStr4 = "invextension\\resources\\testMD02.moneydance";
 
 
     public static void main(String[] args) throws Exception {
 //        Prefs.clearAllPrefs();  // Clear all prefs, delete if not wanted...
-        File mdTestFolder = new File(testFileStr4);
+        File mdTestFolder = new File(testFileStr3);
 //        System.out.println(new File(".").getAbsolutePath());
         System.out.println(mdTestFolder.getAbsolutePath());
         System.out.println("Exists: " + mdTestFolder.exists());

@@ -31,6 +31,7 @@ package com.moneydance.modules.features.invextension;
 import com.infinitekind.moneydance.model.*;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -130,9 +131,13 @@ public class BulkSecInfo {
         transactionSet = accountBook.getTransactionSet();
         securityTransactionValues = new HashMap<>();
         firstDateInt = getFirstDateInt(transactionSet);
+        LogController.logMessage(Level.FINE, String.format("First Date Defined for Transaction Set %s", firstDateInt));
         cashCurrencyWrapper = defineCashCurrency();
+        LogController.logMessage(Level.FINE, "Loading all currencies of SECURITY type...");
         currencyWrappers = getCurrencyWrappersFromRoot();
+        LogController.logMessage(Level.FINE, "SECURITY type currencies loaded, loading investment accounts...");
         investmentWrappers = getInvestmentAccountInfo(reportConfig);
+        LogController.logMessage(Level.FINE, "All investment accounts, security acounts, and transactions loaded");
     }
 
     public int getFirstDateInt(TransactionSet transactionSet){
@@ -341,6 +346,7 @@ public class BulkSecInfo {
         boolean cashCurrencyAbsent = currencyTable.getCurrencyByTickerSymbol("CASH") == null &&
                 currencyTable.getCurrencyByName("CASH") == null;
         if(cashCurrencyAbsent){
+            LogController.logMessage(Level.FINE, "Cash currency absent, creating...");
             cashCurrencyType = new CurrencyType(currencyTable);
             cashCurrencyType.setCurrencyType(CurrencyType.Type.SECURITY);
             cashCurrencyType.setName("CASH");
@@ -351,11 +357,27 @@ public class BulkSecInfo {
             cashCurrencyType.addSnapshotInt(firstDateInt, 1.0, this.accountBook.getCurrencies().getBaseType());
         } else {
             cashCurrencyType = currencyTable.getCurrencyByTickerSymbol("CASH");
+            LogController.logMessage(Level.FINE, "Cash currency already present, do not create...");
         }
         // ensure user rate is 1.0
         if(cashCurrencyType.getRelativeRate() != 1.0) cashCurrencyType.setRelativeRate(1.0);
         CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
         cashCurrencyWrapper.setCash();
+        // if verbose, report...
+        if (reportConfig.getVerbose()){
+            LogController.logMessage(Level.FINE, String.format("Base Type is %s",
+                    this.accountBook.getCurrencies().getBaseType().getName()));
+            LogController.logMessage(Level.FINE, String.format("Cash Currency Name is %s",
+                    cashCurrencyType.getName()));
+            LogController.logMessage(Level.FINE, String.format("Cash Currency Relative Type is %s",
+                    cashCurrencyType.getRelativeCurrency().getName()));
+            LogController.logMessage(Level.FINE, String.format("Cash Currency Type is %s",
+                    cashCurrencyType.getCurrencyType().toString()));
+            LogController.logMessage(Level.FINE, String.format("Currency Asof Date is %s",
+                    cashCurrencyType.getParameter("asof_dt")));
+            LogController.logMessage(Level.FINE, String.format("Cash Currency Relative Rate is %s",
+                    cashCurrencyType.getRelativeRate()));
+        }
         return cashCurrencyWrapper;
     }
 
@@ -370,6 +392,7 @@ public class BulkSecInfo {
         currencies.stream().filter(currency -> currency.getCurrencyType() ==
                 CurrencyType.Type.SECURITY).forEach(currency -> {
             String thisID = currency.getParameter("id");
+            LogController.logMessage(Level.FINE, String.format("load currency: %s | %s", currency.getName(), thisID));
             wrapperHashMap.put(thisID, new CurrencyWrapper(currency, this));
         });
         // make sure new Currency is added!
@@ -404,6 +427,8 @@ public class BulkSecInfo {
                 !excludedAccountIds.contains(account.getUUID())).collect(Collectors.toList()));
         HashSet<InvestmentAccountWrapper> invAcctWrappers = new HashSet<>();
         for (Account selectedSubAccount : selectedSubAccounts) {
+            LogController.logMessage(Level.FINE, String.format("load Investment Acct: %s | %s",
+                    selectedSubAccount.getAccountName(), selectedSubAccount.getUUID()));
             //Load investment account into Wrapper Class
             InvestmentAccountWrapper invAcctWrapper =
                     new InvestmentAccountWrapper(selectedSubAccount, this, reportConfig);

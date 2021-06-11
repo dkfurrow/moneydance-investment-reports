@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -55,12 +56,23 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         this.securityAccount = secAcct;
         this.invAcctWrapper = invAcct;
         this.transValuesList = new ArrayList<>();
+
         this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers()
                 .get(secAcct.getCurrencyType().getParameter("id"));
+        LogController.logMessage(Level.FINE, String.format("load Security Acct: %s | %s of currency type %s",
+                this.securityAccount.getAccountName(), this.securityAccount.getUUID(),
+                currencyWrapper.getCurrencyType().getUUID()));
+        if(this.currencyWrapper == null){  // FIXME: remove after problem fixed
+            LogController.logMessage(Level.WARNING, String.format("Security Acct: %s  in investment account %s has " +
+                            "null currency type!",
+                    this.securityAccount.getAccountName(), this.invAcctWrapper.getName()));
+        }
         this.tradeable = new Tradeable(this.currencyWrapper);
         this.securityTypeWrapper = new SecurityTypeWrapper(this);
         this.securitySubTypeWrapper = new SecuritySubTypeWrapper(this);
         this.name = secAcct.getAccountName().trim();
+        LogController.logMessage(Level.FINE, String.format("Generating Transaction Lines for Security Acct: %s",
+                this.getName()));
         generateTransValues();
         CurrencyWrapper thisCurWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct
                 .getCurrencyType().getParameter("id"));
@@ -109,8 +121,12 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
             if (thisAccount.getAccountType() == Account.AccountType.SECURITY)
                 invAcctWrapper.getBulkSecInfo().getSecurityTransactionValues().put(transValuesToAdd.getTxnID(),
                         transValuesToAdd);
-
         }
+        if (thisAccount.getAccountType() == Account.AccountType.INVESTMENT)
+            LogController.logMessage(Level.FINE, String.format("Adding Cash Transactions for %s",
+                    thisAccount.getAccountName()));
+        LogController.logMessage(Level.FINE, String.format("For %s, Adding %d transaction lines",
+                thisAccount.getAccountName(),transValuesSet.size()));
         setTransValuesList(transValuesSet);
     }
 

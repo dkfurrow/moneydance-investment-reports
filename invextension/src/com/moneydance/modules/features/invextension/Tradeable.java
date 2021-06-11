@@ -27,6 +27,8 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Tradeable class is a derivative of Currency.
  * Main member: Boolean isTradeableCurrency: true for Securities of all currencies
@@ -46,7 +48,7 @@ public class Tradeable implements Aggregator {
     CurrencyWrapper currencyWrapper;
     Boolean isTradeableCurrency;
 
-    public Tradeable(CurrencyWrapper currencyWrapper) {
+    public Tradeable(@NotNull CurrencyWrapper currencyWrapper) {
         this.currencyWrapper = currencyWrapper;
         this.isTradeableCurrency = this.currencyWrapper.currencyType
                 != this.currencyWrapper.getBulkSecInfo().getCashCurrencyWrapper().getCurrencyType();

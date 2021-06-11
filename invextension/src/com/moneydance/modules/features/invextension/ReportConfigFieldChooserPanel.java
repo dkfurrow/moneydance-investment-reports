@@ -75,7 +75,7 @@ public class ReportConfigFieldChooserPanel extends JPanel {
     }
 
     public static void main(String[] args) throws IllegalAccessException, BackingStoreException, NoSuchFieldException {
-        Class<? extends TotalReport> reportClass = TotalSnapshotReport.class;
+        Class<? extends TotalReport> reportClass = TotalFromToReport.class;
         ReportConfig reportConfig = ReportConfig.getStandardReportConfig(reportClass);
         ReportConfigFieldChooserPanel testPanel = new ReportConfigFieldChooserPanel(reportConfig);
         @SuppressWarnings("unused")
@@ -164,9 +164,12 @@ public class ReportConfigFieldChooserPanel extends JPanel {
         populateModelHeaderList(reportConfig);
         populateViewedFieldsList(reportConfig);
 
-        Dimension dimension = reportControlPanel.getRelatedDimension(modelHeaderPane);
-        modelHeaderPane.setPreferredSize(dimension);
-        viewedFieldsPane.setPreferredSize(dimension);
+        if(reportControlPanel != null){
+            Dimension dimension = reportControlPanel.getRelatedDimension(modelHeaderPane);
+            modelHeaderPane.setPreferredSize(dimension);
+            viewedFieldsPane.setPreferredSize(dimension);
+        }
+
     }
 
     private void updateReportConfig() {

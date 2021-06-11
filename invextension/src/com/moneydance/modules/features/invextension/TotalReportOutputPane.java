@@ -43,6 +43,7 @@ import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * An extended and formatted of CoolTable by Kurt Riede added multi sort,
@@ -182,7 +183,7 @@ public class TotalReportOutputPane extends JScrollPane {
         Integer[] viewHeaderArray = viewHeader.toArray(new Integer[0]);
         TableColumnModel columnModel = table.getColumnModel();
         TableColumn[] column = new TableColumn[viewHeaderArray.length];
-
+        LogController.logMessage(Level.FINE, String.format("Setting Column Order, length: %d", viewHeaderArray.length));
         for (int i = 0; i < column.length; i++) {
             column[i] = columnModel.getColumn(viewHeaderArray[i]);
         }

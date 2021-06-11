@@ -44,6 +44,8 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 
+import static java.lang.Math.max;
+
 
 /**
  * produces panel for reports
@@ -70,9 +72,10 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     private static final String HIDE_CLOSED_POSITIONS = "hideClosedPositions";
     private static final String USE_ORDINARY_RETURN = "useOrdinaryReturn";
+    private static final String VERBOSE_LOGGING = "verboseLogging";
 
     private static File outputDirectory;
-    private static Level logLevel = Level.INFO;
+    private static int logLevel = Level.INFO.intValue();
     private final ReportControlFrame reportControlFrame;
 
     private static final MDData mdData = MDData.getInstance();
@@ -139,7 +142,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
 
     public static void setLogLevel(Level logLevel) {
-        ReportControlPanel.logLevel = logLevel;
+        int logLevelInt = logLevel.intValue();
+        ReportControlPanel.logLevel = max(logLevelInt, ReportControlPanel.logLevel);
     }
 
 
@@ -151,11 +155,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     private void initComponents() throws Exception {
-
-        populateReportNames();
-
-
-
+        populateReportNamesAndSetReportConfig();  // populate saved report combo box with names, if any
         // Set text field width, button color, tool tip
         reportStatusPane.setPreferredSize(new Dimension(textFieldWidth, 54));
         reportStatusText.setWrapStyleWord(true);
@@ -175,15 +175,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         removeCustomReportButton.addActionListener(this);
         removeAllCustomReportsButton.setActionCommand(REMOVE_ALL_REPORTS);
         removeAllCustomReportsButton.addActionListener(this);
-
-
-
         // Combo Box Action Listeners
-
         fromToReportComboBox.addItemListener(this);
         snapReportComboBox.addItemListener(this);
-
-
         // Create and format sub-panels to load into main panel
         dateRangePanel = new DateRangePanel(new DateRange());
         dateRangePanel.addChangeListener(this);
@@ -241,8 +235,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx++;
         downloadsPanel.add(secPricesCheckbox, c);
 
-
-
         // run sub-panel (for program results)
         runPanel.setLayout(new GridBagLayout());
         JPanel runButtonPanel = new JPanel(new GridBagLayout());
@@ -265,7 +257,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         runPanel.add(runButtonPanel, c);
         c.gridy++;
         runPanel.add(reportStatusPane, c);
-
         //button panel
         buttonPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
@@ -283,11 +274,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx = 0;
         c.gridy++;
         buttonPanel.add(removeAllCustomReportsButton, c);
-
-
         // lay out main panel
         mainReportPanel.setLayout(new GridBagLayout());
-
         // lay out left/right panels
         JComponent[] leftPanelComponents = {reportOptionsPanel, folderPanel, reportsToRunPanel, downloadsPanel};
         JComponent[] rightPanelComponents = {dateRangePanel, buttonPanel};
@@ -317,8 +305,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         if(mdData.getRoot() != null) {
             setAccountAndFolderSubPanels();
         }
-
-
     }
 
     public void setAccountAndFolderSubPanels() throws Exception {
@@ -345,7 +331,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         return panel;
     }
 
-    private void populateReportNames() throws Exception {
+    private void populateReportNamesAndSetReportConfig() throws Exception {
         ArrayList<Class<? extends TotalReport>> reportClasses = new ArrayList<>();
         reportClasses.add(TotalFromToReport.class);
         reportClasses.add(TotalSnapshotReport.class);
@@ -361,7 +347,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 comboBoxes.get(i).addItem(reportName);
             }
         }
-        getLastReportRun();
+        getLastReportAndSetReportConfig();
     }
 
     private void removeSelectedReport() throws Exception {
@@ -384,7 +370,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         fromToReportComboBox.removeAllItems();
         snapReportComboBox.removeAllItems();
 
-        populateReportNames();
+        populateReportNamesAndSetReportConfig();
 
         fromToReportComboBox.addItemListener(this);
         snapReportComboBox.addItemListener(this);
@@ -412,15 +398,21 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    private void getLastReportRun() throws Exception {
+    /**
+     * Gets last report run, sets report config
+     * @throws Exception
+     */
+    private void getLastReportAndSetReportConfig() throws Exception {
 
+        //get last Report Type Name -- if null, return From-To Report Type
         String lastReportTypeName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_TYPE_RUN,
-                ReportConfig.getReportTypeName(TotalSnapshotReport.class));
+                ReportConfig.getReportTypeName(TotalFromToReport.class));
         String lastReportClassSimpleName = TotalReport.getClassSimpleNameFromReportTypeName(lastReportTypeName);
         String lastReportName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_NAME_RUN,
                 Prefs.STANDARD_NAME);
         boolean reportConfigExists = Prefs.REPORT_CONFIG_PREFS.node(lastReportTypeName).nodeExists(lastReportName);
-        String validReportName = reportConfigExists ? lastReportName : Prefs.STANDARD_NAME;
+        String validReportName = reportConfigExists ? lastReportName : Prefs.STANDARD_NAME;  //either last report or
+        // Standard
         reportConfig = new ReportConfig(lastReportClassSimpleName, validReportName);
         JComboBox<String> comboBoxToSelect = lastReportClassSimpleName.equals(TotalFromToReport.class.getSimpleName())
                 ? fromToReportComboBox : snapReportComboBox;
@@ -483,7 +475,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    public String showErrorMessage(String message) {
+    public String showLogMessage(String message) {
         return message + " See Log in " + folderPanel.getDirectoryOutputField()
                 + " for details";
     }
@@ -507,7 +499,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (Exception e1) {
                     String msg = "Error on removing selected report";
                     LogController.logException(e1, msg);
-                    showErrorMessage(msg);
+                    showLogMessage(msg);
                 }
                 break;
             case REMOVE_ALL_REPORTS:
@@ -516,7 +508,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (Exception e1){
                     String msg = "Error on removing all reports";
                     LogController.logException(e1, msg);
-                    showErrorMessage(msg);
+                    showLogMessage(msg);
                 }
                 break;
             case SAVE_CUSTOM_REPORT:
@@ -529,7 +521,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 } catch (IllegalAccessException | NoSuchFieldException | BackingStoreException e1) {
                     String msg = " Exception on Report Save: ";
                     LogController.logException(e1, msg);
-                    setReportStatusFieldText(showErrorMessage(msg));
+                    setReportStatusFieldText(showLogMessage(msg));
                 }
                 break;
             case RUN_REPORTS:
@@ -598,7 +590,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             } catch (Exception e) {
                 String msg = "Error on loading new report config";
                 LogController.logException(e, msg);
-                showErrorMessage(msg);
+                showLogMessage(msg);
             }
         } else { //user sets to NONE,  set report to standard config of other type
             reportClass = otherComboBox.equals(fromToReportComboBox) ? TotalFromToReport.class : TotalSnapshotReport.class;
@@ -609,7 +601,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             } catch (Exception e) {
                 String msg = "Error on loading new report config";
                 LogController.logException(e, msg);
-                showErrorMessage(msg);
+                showLogMessage(msg);
             }
         }
         selectedComboBox.setSelectedItem(reportName);
@@ -812,6 +804,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         public JComboBox<Integer> numFrozenColumnsComboBox = new JComboBox<>(numFrozenColumnsOptions);
         public JCheckBox hideClosedPosCheckBox = new JCheckBox("Hide Positions with Zero Value", true);
         public JCheckBox useOrdinaryReturnCheckBox = new JCheckBox("Use Ordinary Return Calculation", false);
+        public JCheckBox verboseLoggingCheckBox = new JCheckBox("Verbose Logging", false);
 
 
 
@@ -826,6 +819,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             numFrozenColumnsComboBox.setActionCommand(SET_FROZEN_COLUMNS);
             hideClosedPosCheckBox.setActionCommand(HIDE_CLOSED_POSITIONS);
             useOrdinaryReturnCheckBox.setActionCommand(USE_ORDINARY_RETURN);
+            verboseLoggingCheckBox.setActionCommand(VERBOSE_LOGGING);
             // add action listeners
             resetReportOptions.addActionListener(ReportControlPanel.this);
             aggregationOptionsComboBox.addActionListener(ReportControlPanel.this);
@@ -834,6 +828,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             numFrozenColumnsComboBox.addActionListener(ReportControlPanel.this);
             hideClosedPosCheckBox.addActionListener(ReportControlPanel.this);
             useOrdinaryReturnCheckBox.addActionListener(ReportControlPanel.this);
+            verboseLoggingCheckBox.addActionListener(ReportControlPanel.this);
 
 
             String ordinaryReturnsCBToolTip = "<html> If checked, uses non-time-weighted ('Ordinary') returns" +
@@ -869,6 +864,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             c.gridx = 1;
             c.gridy++;
             topPanel.add(useOrdinaryReturnCheckBox, c);
+            c.gridx = 1;
+            c.gridy++;
+            topPanel.add(verboseLoggingCheckBox, c);
             c.gridx = 0;
             c.gridy++;
             topPanel.add(numFrozenColumnsLabel, c);
@@ -917,36 +915,67 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
         @Override
         protected Void doInBackground() throws Exception {
-            if (logLevel.intValue() == Level.SEVERE.intValue()) {
-                publish(showErrorMessage("Cannot run reports!"));
+            if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
+                LogController.setVerbose();
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "220"));
+//                FIXME read meta_info.dict to get build
+            } else {
+                LogController.getInstance();
+            }
+            if (logLevel == Level.SEVERE.intValue()) {
+                publish(showLogMessage("Initial Error! Cannot run reports!"));
                 return null;
             }
             saveLastReportRun();
             publish(reportConfig.getDescription() + " is running...\n");
             if(transActivityCheckbox.isSelected()) publish("writing transaction data to file\n");
             if(secPricesCheckbox.isSelected()) publish("writing security price data to file\n");
+            if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
+                reportConfig.logReportConfig();
+                reportConfig.setVerbose();
+            }
             //load BulkSecInfo...
             if (mdData.getRoot() != null) {
                 try {
+                    LogController.logMessage(Level.FINE, "Loading All Currencies, Investment Accounts, Security " +
+                            "Accounts...");
                     mdData.generateCurrentInfo(reportConfig);
                 } catch (Exception e) {
                     LogController.logException(e, "Error on loading security information from datafile: ");
-                    publish(showErrorMessage("Error--Could not load securities from data file!"));
+                    publish(showLogMessage("Error--Could not load securities from data file!"));
                 }
             }
             //Now Run Reports...
-            if (logLevel != Level.SEVERE && mdData.getCurrentInfo() != null) {
+//            reportConfig.setViewHeader(ReportConfig.getDefaultViewHeader(TotalSnapshotReport.MODEL_HEADER));  // TODO
+            // Remove after debug!!
+            if (logLevel != Level.SEVERE.intValue() && mdData.getCurrentInfo() != null) {
+                LogController.logMessage(Level.FINE, "Proceeding to run reports...");
                 try {
                     if (snapReportComboBox.getSelectedIndex() != 0) {
+                        LogController.logMessage(Level.FINE, "Running Snapshot Report...");
                         TotalReport report = new TotalSnapshotReport(reportConfig, MDData
                                 .getInstance().getCurrentInfo());
                         report.calcReport();
+                        if (reportConfig.validateReportConfig() == false){
+                            publish("invalid report columns, reverting to standard...");
+                            report.setViewHeader(reportConfig.getViewHeader());
+                            LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
+                                    report.writeViewHeaderToString());
+
+                        }
                         report.displayReport();
                     }
                     if (fromToReportComboBox.getSelectedIndex() != 0) {
+                        LogController.logMessage(Level.FINE, "Running From-To Report...");
                         TotalReport report = new TotalFromToReport(reportConfig, MDData.
                                 getInstance().getCurrentInfo());
                         report.calcReport();
+                        if (reportConfig.validateReportConfig() == false){
+                            publish("invalid report columns, reverting to standard...");
+                            report.setViewHeader(reportConfig.getViewHeader());
+                            LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
+                                    report.writeViewHeaderToString());
+                        }
                         report.displayReport();
                     }
                     if (transActivityCheckbox.isSelected()) {
@@ -970,19 +999,21 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
 
                 } catch (Exception e) {
                     LogController.logException(e, "Error on running reports: ");
-                    publish(showErrorMessage("Error--Could not run reports!"));
+                    publish(showLogMessage("Error--Could not run reports!"));
                 }
             } else {
-                publish(showErrorMessage("Error--Reports not run! "));
+                publish(showLogMessage("Error--Reports not run! "));
             }
-            if (logLevel.intValue() < Level.WARNING.intValue()) {
+            if (logLevel < Level.WARNING.intValue()) {
                 publish("Reports have been run!");
-            } else if ((logLevel.intValue() == Level.WARNING.intValue())) {
-                publish(showErrorMessage("Reports run with WARNINGS!  " +
+            } else if ((logLevel == Level.WARNING.intValue())) {
+                publish(showLogMessage("Reports run with WARNINGS!  " +
                         "Transaction data may not have validated. "));
                 ReportControlPanel.this.getReportControlFrame().toFront();
                 ReportControlPanel.this.getReportControlFrame().repaint();
             }
+            LogController.logMessage(Level.FINE, "All Report and Download operations complete");
+            publish(showLogMessage("Verbose logging indicated, "));
             return null;
         }
 
