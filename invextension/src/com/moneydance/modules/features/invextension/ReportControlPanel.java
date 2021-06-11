@@ -155,11 +155,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
     private void initComponents() throws Exception {
-
-        populateReportNames();
-
-
-
+        populateReportNamesAndSetReportConfig();  // populate saved report combo box with names, if any
         // Set text field width, button color, tool tip
         reportStatusPane.setPreferredSize(new Dimension(textFieldWidth, 54));
         reportStatusText.setWrapStyleWord(true);
@@ -179,15 +175,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         removeCustomReportButton.addActionListener(this);
         removeAllCustomReportsButton.setActionCommand(REMOVE_ALL_REPORTS);
         removeAllCustomReportsButton.addActionListener(this);
-
-
-
         // Combo Box Action Listeners
-
         fromToReportComboBox.addItemListener(this);
         snapReportComboBox.addItemListener(this);
-
-
         // Create and format sub-panels to load into main panel
         dateRangePanel = new DateRangePanel(new DateRange());
         dateRangePanel.addChangeListener(this);
@@ -245,8 +235,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx++;
         downloadsPanel.add(secPricesCheckbox, c);
 
-
-
         // run sub-panel (for program results)
         runPanel.setLayout(new GridBagLayout());
         JPanel runButtonPanel = new JPanel(new GridBagLayout());
@@ -269,7 +257,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         runPanel.add(runButtonPanel, c);
         c.gridy++;
         runPanel.add(reportStatusPane, c);
-
         //button panel
         buttonPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
@@ -287,11 +274,8 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         c.gridx = 0;
         c.gridy++;
         buttonPanel.add(removeAllCustomReportsButton, c);
-
-
         // lay out main panel
         mainReportPanel.setLayout(new GridBagLayout());
-
         // lay out left/right panels
         JComponent[] leftPanelComponents = {reportOptionsPanel, folderPanel, reportsToRunPanel, downloadsPanel};
         JComponent[] rightPanelComponents = {dateRangePanel, buttonPanel};
@@ -321,8 +305,6 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         if(mdData.getRoot() != null) {
             setAccountAndFolderSubPanels();
         }
-
-
     }
 
     public void setAccountAndFolderSubPanels() throws Exception {
@@ -349,7 +331,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         return panel;
     }
 
-    private void populateReportNames() throws Exception {
+    private void populateReportNamesAndSetReportConfig() throws Exception {
         ArrayList<Class<? extends TotalReport>> reportClasses = new ArrayList<>();
         reportClasses.add(TotalFromToReport.class);
         reportClasses.add(TotalSnapshotReport.class);
@@ -365,7 +347,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 comboBoxes.get(i).addItem(reportName);
             }
         }
-        getLastReportRun();
+        getLastReportAndSetReportConfig();
     }
 
     private void removeSelectedReport() throws Exception {
@@ -388,7 +370,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         fromToReportComboBox.removeAllItems();
         snapReportComboBox.removeAllItems();
 
-        populateReportNames();
+        populateReportNamesAndSetReportConfig();
 
         fromToReportComboBox.addItemListener(this);
         snapReportComboBox.addItemListener(this);
@@ -416,15 +398,21 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    private void getLastReportRun() throws Exception {
+    /**
+     * Gets last report run, sets report config
+     * @throws Exception
+     */
+    private void getLastReportAndSetReportConfig() throws Exception {
 
+        //get last Report Type Name -- if null, return From-To Report Type
         String lastReportTypeName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_TYPE_RUN,
                 ReportConfig.getReportTypeName(TotalFromToReport.class));
         String lastReportClassSimpleName = TotalReport.getClassSimpleNameFromReportTypeName(lastReportTypeName);
         String lastReportName = Prefs.REPORT_PREFS.get(Prefs.LAST_REPORT_NAME_RUN,
                 Prefs.STANDARD_NAME);
         boolean reportConfigExists = Prefs.REPORT_CONFIG_PREFS.node(lastReportTypeName).nodeExists(lastReportName);
-        String validReportName = reportConfigExists ? lastReportName : Prefs.STANDARD_NAME;
+        String validReportName = reportConfigExists ? lastReportName : Prefs.STANDARD_NAME;  //either last report or
+        // Standard
         reportConfig = new ReportConfig(lastReportClassSimpleName, validReportName);
         JComboBox<String> comboBoxToSelect = lastReportClassSimpleName.equals(TotalFromToReport.class.getSimpleName())
                 ? fromToReportComboBox : snapReportComboBox;
@@ -929,7 +917,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "219"));
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "220"));
 //                FIXME read meta_info.dict to get build
             } else {
                 LogController.getInstance();
@@ -969,6 +957,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                                 .getInstance().getCurrentInfo());
                         report.calcReport();
                         if (reportConfig.validateReportConfig() == false){
+                            publish("invalid report columns, reverting to standard...");
                             report.setViewHeader(reportConfig.getViewHeader());
                             LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
                                     report.writeViewHeaderToString());
@@ -982,6 +971,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                                 getInstance().getCurrentInfo());
                         report.calcReport();
                         if (reportConfig.validateReportConfig() == false){
+                            publish("invalid report columns, reverting to standard...");
                             report.setViewHeader(reportConfig.getViewHeader());
                             LogController.logMessage(Level.FINE, "Confirm ViewHeader: " +
                                     report.writeViewHeaderToString());

@@ -137,8 +137,16 @@ public class ReportConfig {
         initReportConfig(reportClass, reportName);
     }
 
-    private void initReportConfig(Class<? extends TotalReport> reportClass, String reportName) throws NoSuchFieldException,
-            IllegalAccessException, BackingStoreException {
+    /**
+     * initiates report config from class and name
+     * @param reportClass total report class
+     * @param reportName name of report (defaults to standard if doesn't exist)
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws BackingStoreException
+     */
+    private void initReportConfig(Class<? extends TotalReport> reportClass, String reportName)
+            throws NoSuchFieldException, IllegalAccessException, BackingStoreException {
         this.reportTypeName = ReportConfig.getReportTypeName(reportClass);
         boolean nodeExists = prefs.node(reportTypeName).nodeExists(reportName);
         Preferences thisReportPrefs = prefs.node(reportTypeName).node(nodeExists ? reportName : Prefs.STANDARD_NAME);
@@ -309,9 +317,10 @@ public class ReportConfig {
         HashSet<String> excludedAccountIds = new HashSet<>();
         HashSet<String> investmentExpenseIds = new HashSet<>();
         HashSet<String> investmentIncomeIds = new HashSet<>();
-        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true, false,
-                defaultAggregationController, false, 5, true, viewHeader, excludedAccountIds,
-                investmentExpenseIds, investmentIncomeIds, defaultDateRange);
+        ReportConfig standardConfig = new ReportConfig(reportClass, reportName, true,
+                false, defaultAggregationController, false, 5,
+                true, viewHeader, excludedAccountIds, investmentExpenseIds, investmentIncomeIds,
+                defaultDateRange);
         standardConfig.setIsDefaultConfig(true);
         return standardConfig;
     }
@@ -321,6 +330,7 @@ public class ReportConfig {
         Preferences reportClassNode = Prefs.REPORT_CONFIG_PREFS.node(getReportTypeName(reportClass));
         String[] childrenNames = reportClassNode.childrenNames();
         if (childrenNames.length == 0 || !Arrays.asList(childrenNames).contains(Prefs.STANDARD_NAME)) {
+            // clear all report configs, set standard config and save prefs
             clearAllReportConfigsForClass(reportClass);
             ReportConfig reportConfig = getStandardReportConfig(reportClass);
             reportConfig.saveReportConfig();
