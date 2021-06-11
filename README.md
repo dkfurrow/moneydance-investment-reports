@@ -8,7 +8,7 @@ To download the executable (*.mxt) file from its official source, got to the "Ex
 
 ### Prerequisites
 
-Any version of Java above 8 (current build) 1.8.0_161 will build the .mxt file 
+The current java version I used to build the .mxt file for this project is OpenJDK 15.0.2.  build.xml will build the invextension.mxt file, buildbundled.xml will build the invextension_bundled.jar file which is useful in 'headless' operation.
 
 ## Running the tests
 

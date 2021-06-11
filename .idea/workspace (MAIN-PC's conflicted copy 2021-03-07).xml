@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="53d46814-2cbf-48bd-a921-567fb455ab81" name="Default" comment="change meta_info.dict version to 2.73, updated readme file, change bundled build to a 'jar' file">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/invextension/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/invextension/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/invextension/log.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/invextension/log.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="2017_Update" />
+      </map>
+    </option>
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1SROP67wGm70nRtnQXIOWOfLGW1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542726268958" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/invextension/src" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src" />
+      <recent name="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib" />
+      <recent name="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources" />
+      <recent name="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources\testMD02.moneydance" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\resources" />
+      <recent name="D:\DKF\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\lib" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.moneydance.modules.features.invextension" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Batch.BUILD_ANT_LOCAL">
+    <configuration default="true" type="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Prefs" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.Prefs" />
+      <module name="invextension" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestReportOutputSpecific" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.moneydance.modules.features.invextension.TestReportOutputSpecific" />
+      <module name="invextension" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.moneydance.modules.features.invextension.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BUILD_ANT_LOCAL" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="invextension" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="BUILD_ANT_LOCAL.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BUILD_ANT_LOCAL_BUNDLED" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="invextension" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="D:\Dropbox\DEV\IntelliJWorkspace\moneydance-investment-reports\invextension\src" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="BUILD_ANT_LOCAL_BUNDLED.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="InvestmentReportsHelp.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/moneydance-investment-reports/invextension/com/moneydance/modules/features/invextension/InvestmentReportsHelp.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.TestReportOutputSpecific" />
+      <item itemvalue="Application.Prefs" />
+      <item itemvalue="Batch.BUILD_ANT_LOCAL" />
+      <item itemvalue="Batch.BUILD_ANT_LOCAL_BUNDLED" />
+      <item itemvalue="JavaScript Debug.InvestmentReportsHelp.html" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Batch.BUILD_ANT_LOCAL" />
+        <item itemvalue="Batch.BUILD_ANT_LOCAL_BUNDLED" />
+        <item itemvalue="JavaScript Debug.InvestmentReportsHelp.html" />
+        <item itemvalue="Application.TestReportOutputSpecific" />
+        <item itemvalue="Application.Prefs" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="53d46814-2cbf-48bd-a921-567fb455ab81" name="Default" comment="" />
+      <created>1507762571848</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1507762571848</updated>
+      <workItem from="1507762573280" duration="1873000" />
+      <workItem from="1507765379463" duration="833000" />
+      <workItem from="1508005970043" duration="2671000" />
+      <workItem from="1511236813058" duration="2018000" />
+      <workItem from="1511633911911" duration="41000" />
+      <workItem from="1511634131606" duration="10043000" />
+      <workItem from="1511648506296" duration="3510000" />
+      <workItem from="1512503463830" duration="1954000" />
+      <workItem from="1512509096379" duration="30000" />
+      <workItem from="1512509374403" duration="42000" />
+      <workItem from="1512510121017" duration="1830000" />
+      <workItem from="1512750995305" duration="12000" />
+      <workItem from="1512754358838" duration="25000" />
+      <workItem from="1512754425140" duration="304000" />
+      <workItem from="1512754767682" duration="25000" />
+      <workItem from="1521402015781" duration="9600000" />
+      <workItem from="1521474633905" duration="211000" />
+      <workItem from="1521474945536" duration="704000" />
+      <workItem from="1521475954610" duration="4799000" />
+      <workItem from="1521992402016" duration="608000" />
+      <workItem from="1522864464318" duration="288000" />
+      <workItem from="1522864860818" duration="335000" />
+      <workItem from="1522865793578" duration="117000" />
+      <workItem from="1522866593240" duration="327000" />
+      <workItem from="1522867971348" duration="9000" />
+      <workItem from="1523928805508" duration="126000" />
+      <workItem from="1523928981714" duration="618000" />
+      <workItem from="1528901390084" duration="10000" />
+      <workItem from="1529513570088" duration="940000" />
+      <workItem from="1529514788832" duration="39000" />
+      <workItem from="1529515442378" duration="98000" />
+      <workItem from="1529515570328" duration="102000" />
+      <workItem from="1529516624813" duration="1337000" />
+      <workItem from="1529518724358" duration="1381000" />
+      <workItem from="1529686783774" duration="18000" />
+      <workItem from="1533405865425" duration="8000" />
+      <workItem from="1542724729299" duration="1988000" />
+      <workItem from="1545156665760" duration="20000" />
+      <workItem from="1549478000609" duration="1308000" />
+      <workItem from="1555096780912" duration="11000" />
+      <workItem from="1559653152512" duration="19000" />
+      <workItem from="1571522923228" duration="75000" />
+      <workItem from="1578083252358" duration="28000" />
+      <workItem from="1591374373462" duration="4526000" />
+      <workItem from="1591388962760" duration="601000" />
+      <workItem from="1591651800778" duration="945000" />
+      <workItem from="1591717278794" duration="6000" />
+      <workItem from="1591718147023" duration="928000" />
+      <workItem from="1591719844794" duration="1161000" />
+      <workItem from="1591730809551" duration="615000" />
+      <workItem from="1591811461616" duration="67000" />
+      <workItem from="1591813004043" duration="715000" />
+      <workItem from="1611337301116" duration="2461000" />
+      <workItem from="1611340151692" duration="28000" />
+      <workItem from="1611344136914" duration="24000" />
+      <workItem from="1611344637759" duration="657000" />
+      <workItem from="1611349041248" duration="3992000" />
+      <workItem from="1611354528800" duration="1558000" />
+      <workItem from="1611369476903" duration="9985000" />
+      <workItem from="1611426149097" duration="14893000" />
+      <workItem from="1611514115812" duration="14684000" />
+      <workItem from="1611613520622" duration="5495000" />
+      <workItem from="1611619098628" duration="181000" />
+      <workItem from="1611676137086" duration="1125000" />
+      <workItem from="1611678002252" duration="6509000" />
+      <workItem from="1611766179912" duration="12857000" />
+      <workItem from="1611779908110" duration="5737000" />
+      <workItem from="1611785960060" duration="2606000" />
+      <workItem from="1611849535656" duration="707000" />
+      <workItem from="1612108376082" duration="4312000" />
+      <workItem from="1612113910061" duration="133000" />
+      <workItem from="1612114111276" duration="140000" />
+      <workItem from="1612114448189" duration="82000" />
+      <workItem from="1612114566014" duration="127000" />
+      <workItem from="1612465806681" duration="14468000" />
+      <workItem from="1612494973973" duration="1731000" />
+      <workItem from="1612551055310" duration="6646000" />
+      <workItem from="1612566177186" duration="1512000" />
+      <workItem from="1612582907811" duration="10332000" />
+      <workItem from="1612627220055" duration="3401000" />
+      <workItem from="1612631104451" duration="1488000" />
+      <workItem from="1612732126335" duration="6000" />
+      <workItem from="1613167472987" duration="955000" />
+      <workItem from="1613594254749" duration="5195000" />
+      <workItem from="1613605107012" duration="602000" />
+      <workItem from="1613673885654" duration="7719000" />
+      <workItem from="1613684103431" duration="4242000" />
+      <workItem from="1614875319743" duration="2411000" />
+    </task>
+    <task id="LOCAL-00001" summary="Minor update, restart">
+      <created>1508006042499</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1508006042499</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Updated to 2017 MD Jar, fixed minor issue preventing reports from running &quot;headless&quot;  From-To Report Test failed...it appears prices are being drawn from latest instead of the correct time period">
+      <created>1508008515578</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1508008515578</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Changed pricing method to pick up first price if requested date is before&#10;first snapshot date (currently picking up *last* price)">
+      <created>1511647535364</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1511647535364</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated for pricing issue with 2017, tested on test database and personal...wrote test of ft report against snapshot to its own file (was causing problem if run before ft test).  Updated version">
+      <created>1512504758026</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1512504758026</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated to handle use case where currency of the investment account is&#10;different from the base currency of MD root account.  Previous editions assumed&#10;that it was the same...">
+      <created>1529514175600</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1529514175600</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changed a few lines in test files">
+      <created>1591816754173</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1591816754173</updated>
+    </task>
+    <task id="LOCAL-00007" summary="minor changes fixed test files">
+      <created>1611339748098</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1611339748098</updated>
+    </task>
+    <task id="LOCAL-00008" summary="updated meta_info.dict to version 2.71">
+      <created>1611345292032</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1611345292032</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated userrates to supported methods (eliminate deprecated methods)">
+      <created>1611373572325</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1611373572326</updated>
+    </task>
+    <task id="LOCAL-00010" summary="updated jar files to latest version, adjusted build file, added comments">
+      <created>1611379767732</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1611379767732</updated>
+    </task>
+    <task id="LOCAL-00011" summary="updated classes to account for deprecation of getAccountNum that method has been deprecated.  Had to change two files in test (transActivityReportAvgCost.csv, transActivityReportLotMatch.csv.csv) because transactions occuring on the same date now had a different order because UUID text string was ordered differently than account number integer values.  All tests passed, also checked to make sure investment expenses and incomes, and exlcuded accounts showed up correctly">
+      <created>1611528910695</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1611528910696</updated>
+    </task>
+    <task id="LOCAL-00012" summary="replaced deprecated getUserRateByDateIn with getRate(null, dt)...null for relative currency implies base currency all tests passed">
+      <created>1611614875216</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1611614875216</updated>
+    </task>
+    <task id="LOCAL-00013" summary="replaced TxnUtil.getInvestTxnType with instance method of Parent Transaction, getInvestTxType().  All test passed">
+      <created>1611615276410</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1611615276410</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Observer/Observable is deprecated, updated to PropertyChangeSupport and PropertyChangeListener model">
+      <created>1611618456783</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1611618456783</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Cleanup of warnings from Intellij inspection">
+      <created>1611618634651</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1611618634651</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Eliminated references to yahoo.qt, as this service has been discontinued.  Kept transaction monitor thread in case someone is keeping window open while entering prices or new transactions.">
+      <created>1611788661065</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1611788661065</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Cleanup of intellij warnings in various classes.">
+      <created>1612114683046</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1612114683046</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Minor changes to accomodate bundling of investment reports and moneydance for python headless output">
+      <created>1612582755083</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1612582755083</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Updated a few classes used to run investment reports in headless mode.">
+      <created>1612627335283</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1612627335284</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fixed small problem with GUI that caused issues when switching from 'FromTo' reports to 'Shapshot' reports and vice versa">
+      <created>1612627423997</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1612627423997</updated>
+    </task>
+    <task id="LOCAL-00021" summary="change meta_info.dict version to 2.73, updated readme file, change bundled build to a 'jar' file">
+      <created>1612631121975</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1612631121975</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="AllTests - 2018.03.19 at 11h 10m 56s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.03.19 at 12h 03m 15s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ReportProdTest - 2017.12.08 at 11h 38m 29s.xml">
+      <configuration name="ReportProdTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ReportProdTest - 2018.03.19 at 10h 56m 00s.xml">
+      <configuration name="ReportProdTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.06.20 at 11h 53m 26s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.06.20 at 12h 13m 42s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.06.20 at 12h 26m 30s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.06.20 at 12h 48m 32s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.11.20 at 08h 40m 31s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AllTests - 2018.11.20 at 08h 55m 57s.xml">
+      <configuration name="AllTests" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:D:/Dropbox/DEV/IntelliJWorkspace/moneydance-investment-reports/invextension" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="1" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Minor update, restart" />
+    <MESSAGE value="Updated to 2017 MD Jar, fixed minor issue preventing reports from running &quot;headless&quot;  From-To Report Test failed...it appears prices are being drawn from latest instead of the correct time period" />
+    <MESSAGE value="Changed pricing method to pick up first price if requested date is before&#10;first snapshot date (currently picking up *last* price)" />
+    <MESSAGE value="Updated for pricing issue with 2017, tested on test database and personal...wrote test of ft report against snapshot to its own file (was causing problem if run before ft test).  Updated version" />
+    <MESSAGE value="Updated to handle use case where currency of the investment account is&#10;different from the base currency of MD root account.  Previous editions assumed&#10;that it was the same..." />
+    <MESSAGE value="Changed a few lines in test files" />
+    <MESSAGE value="minor changes fixed test files" />
+    <MESSAGE value="updated meta_info.dict to version 2.71" />
+    <MESSAGE value="updated userrates to supported methods (eliminate deprecated methods)" />
+    <MESSAGE value="updated jar files to latest version, adjusted build file, added comments" />
+    <MESSAGE value="updated classes to account for deprecation of getAccountNum that method has been deprecated.  Had to change two files in test (transActivityReportAvgCost.csv, transActivityReportLotMatch.csv.csv) because transactions occuring on the same date now had a different order because UUID text string was ordered differently than account number integer values.  All tests passed, also checked to make sure investment expenses and incomes, and exlcuded accounts showed up correctly" />
+    <MESSAGE value="replaced deprecated getUserRateByDateIn with getRate(null, dt)...null for relative currency implies base currency all tests passed" />
+    <MESSAGE value="replaced TxnUtil.getInvestTxnType with instance method of Parent Transaction, getInvestTxType().  All test passed" />
+    <MESSAGE value="Observer/Observable is deprecated, updated to PropertyChangeSupport and PropertyChangeListener model" />
+    <MESSAGE value="Cleanup of warnings from Intellij inspection" />
+    <MESSAGE value="Eliminated references to yahoo.qt, as this service has been discontinued.  Kept transaction monitor thread in case someone is keeping window open while entering prices or new transactions." />
+    <MESSAGE value="Cleanup of intellij warnings in various classes." />
+    <MESSAGE value="Minor changes to accomodate bundling of investment reports and moneydance for python headless output" />
+    <MESSAGE value="Updated a few classes used to run investment reports in headless mode." />
+    <MESSAGE value="Fixed small problem with GUI that caused issues when switching from 'FromTo' reports to 'Shapshot' reports and vice versa" />
+    <MESSAGE value="added mxt and jar files to get, change meta_info.dict version to 2.73, updated readme file, change bundled build to a 'jar' file" />
+    <MESSAGE value="change meta_info.dict version to 2.73, updated readme file, change bundled build to a 'jar' file" />
+    <option name="LAST_COMMIT_MESSAGE" value="change meta_info.dict version to 2.73, updated readme file, change bundled build to a 'jar' file" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/invextension/src/com/moneydance/modules/features/invextension/ReportConfigFieldChooserPanel.java</url>
+          <line>160</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="compRpt" language="JAVA" />
+        <watch expression="compRpt.getRow()" language="JAVA" />
+        <watch expression="compRpt.getRow()[4]" language="JAVA" />
+        <watch expression="baseRpt.getRow()[4]" language="JAVA" />
+        <watch expression="outputTransactionValues[0]" language="JAVA" />
+        <watch expression="outputTransactionValues.get(0)" language="JAVA" />
+        <watch expression="outputTransactionValues.get(0).getAccountRef().getParameterKeys()" language="JAVA" />
+        <watch expression="outputTransactionValues.get(0).getAccountRef().getParameter(&quot;old_id&quot;)" language="JAVA" />
+      </configuration>
+      <configuration name="Application">
+        <watch expression="modelHeaderListModel.size()" language="JAVA" />
+        <watch expression="viewedFieldsListModel.size()" language="JAVA" />
+        <watch expression="viewedFieldsListModel" language="JAVA" />
+        <watch expression="orderedHeadersFromModel.size()" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>this.getCurrencyRateByDateInt(dateInt)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>currencyWrapper.getCurrencyType().getUserRateByDateInt(dateInt)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>invAcct.getInvestmentAccount().getCurrencyType().getUserRateByDateInt(20171214)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>invAcct.getInvestmentAccount().getCurrencyType()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>securityAccount.getCurrencyType().getCurrencyType()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>secAcct.getCurrencyType()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>invAcct.getCurrencyType().getUserRateByDateInt(20171214)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>invAcct.getCurrencyType()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>securityAccountWrapper</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>referenceAccount</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>invextension</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>extadmin</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
