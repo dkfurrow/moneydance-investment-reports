@@ -104,7 +104,8 @@ public class TestReportOutputSpecific {
     public static void main(String[] args) throws Exception {
         TestReportOutputSpecific.MDFileInfo mdFileInfo = loadRootAccountFromFolder();
         Account root = mdFileInfo.getRootAccount();
-        ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false);
+        ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false,
+                AggregationController.INVACCT);
         reportConfig.setDateRange(testDateRange);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         TotalReport report = new TotalFromToReport(reportConfig, currentInfo);

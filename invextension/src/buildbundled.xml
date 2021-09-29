@@ -36,6 +36,7 @@ http://jakarta.apache.org/ant/index.html
 	<target name="init">
 			<!--i.e. "clean"...gets rid of old build files/directories -->
 			<echo message="JAVA_HOME is set to = ${env.JAVA_HOME}" />
+			<echo message="Default password is 'invest'..." />
 			<delete includeemptydirs="true" verbose = "true" quiet = "true">
 				<fileset dir="${build}" includes="**/*" />
 			</delete>

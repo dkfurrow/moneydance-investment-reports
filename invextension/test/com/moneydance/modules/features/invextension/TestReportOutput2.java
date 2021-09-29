@@ -107,7 +107,8 @@ public class TestReportOutput2 {
     public static void main(String[] args) throws Exception {
         TestReportOutput2.MDFileInfo mdFileInfo = loadRootAccountFromFolder();
         Account root = mdFileInfo.getRootAccount();
-        ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false);
+        ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false,
+                AggregationController.INVACCT);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         ArrayList<String[]> transActivityReport =  currentInfo.listAllTransValues();
 
