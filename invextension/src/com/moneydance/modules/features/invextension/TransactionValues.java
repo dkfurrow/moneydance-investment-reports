@@ -729,6 +729,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
     private class SplitValues {
 
         SplitTxn split;
+         /*Account Reference is parentTxn account in the case of a security,
+          investment account (i.e. itself) in the case of an investment account*/
+        Account accountRef;
         long splitBuy = 0;
         long splitSell = 0;
         long splitShortSell = 0;
@@ -740,7 +743,9 @@ public class TransactionValues implements Comparable<TransactionValues> {
         long splitSecQuantity = 0;
 
         public SplitValues(SplitTxn thisSplit, Account accountRef) {
+
             this.split = thisSplit;
+            this.accountRef = accountRef;
             InvestTxnType txnType = thisSplit.getParentTxn().getInvestTxnType();
             Account.AccountType acctType = thisSplit.getAccount().getAccountType();
             Account.AccountType parentAcctType = thisSplit.getParentTxn().getAccount().getAccountType();
@@ -767,12 +772,12 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             if (isInvestmentIncome(thisSplit)) {
                                 this.splitIncome = amountLong;
                             } else {
-                                this.splitTransfer = split.getAccount() == accountRef
+                                this.splitTransfer = split.getAccount() == this.accountRef
                                         ? -amountLong : amountLong;
                             }
                             break;
                         default:
-                            this.splitTransfer = split.getAccount() == accountRef
+                            this.splitTransfer = split.getAccount() == this.accountRef
                                     ? -amountLong : amountLong;
                             break;
                     }
@@ -792,7 +797,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                                 if(isInvestmentExpense(thisSplit)){
                                     this.splitExpense = amountLong;
                                 } else {
-                                    this.splitTransfer = split.getAccount() == accountRef
+                                    this.splitTransfer = split.getAccount() == this.accountRef
                                             ? -amountLong : amountLong;
                                 }
                                 break;
@@ -801,12 +806,12 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             if (isInvestmentIncome(thisSplit)) {
                                 this.splitIncome = amountLong;
                             } else {
-                                this.splitTransfer = split.getAccount() == accountRef
+                                this.splitTransfer = split.getAccount() == this.accountRef
                                         ? -amountLong : amountLong;
                             }
                             break;
                         default:
-                            this.splitTransfer = split.getAccount() == accountRef
+                            this.splitTransfer = split.getAccount() == this.accountRef
                                     ? -amountLong : amountLong;
                             break;
                     }
@@ -818,7 +823,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                                 if (isInvestmentExpense(thisSplit)) {
                                     this.splitExpense = amountLong;
                                 } else {
-                                    if (split.getAccount() == accountRef) {
+                                    if (split.getAccount() == this.accountRef) {
                                         this.splitTransfer = -amountLong;
                                     } else {
                                         this.splitTransfer = amountLong;
@@ -831,7 +836,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                                 if (isInvestmentIncome(thisSplit)) {
                                     this.splitIncome = amountLong;
                                 } else {
-                                    if (split.getAccount() == accountRef) {
+                                    if (split.getAccount() == this.accountRef) {
                                         this.splitTransfer = -amountLong;
                                     } else {
                                         this.splitTransfer = amountLong;
@@ -840,14 +845,17 @@ public class TransactionValues implements Comparable<TransactionValues> {
                             }
                             break;
                         // next cases cover transfer between Assets/Investments, Bank.
+                        // splitAcctType is transferable asset, need to test split to see if relevant
                         case INVESTMENT:
                         case BANK:
                         case ASSET:
                         case LIABILITY:
-                            if (split.getAccount() == accountRef) {
+                            if (split.getAccount() == this.accountRef) {
                                 this.splitTransfer = -amountLong;
-                            } else {
+                            } else if (parentTxn.getAccount() == this.accountRef) {
                                 this.splitTransfer = amountLong;
+                            } else {
+                                ;  // ignore split
                             }
                             break;
                     }
@@ -857,7 +865,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
                     switch (acctType) {
                         case EXPENSE -> this.splitExpense = amountLong;
                         case INCOME -> this.splitIncome = amountLong;
-                        default -> this.splitTransfer = split.getAccount() == accountRef ?
+                        default -> this.splitTransfer = split.getAccount() == this.accountRef ?
                                 -amountLong : amountLong;
                     }
                     break;

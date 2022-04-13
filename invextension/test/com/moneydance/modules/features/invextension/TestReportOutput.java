@@ -54,7 +54,7 @@ public class TestReportOutput extends JFrame {
 
     public static void main(String[] args) throws Exception {
 //        Prefs.clearAllPrefs();  // Clear all prefs, delete if not wanted...
-        File mdTestFolder = new File(testFileStr3);
+        File mdTestFolder = new File(testFileStr4);
 //        System.out.println(new File(".").getAbsolutePath());
         System.out.println(mdTestFolder.getAbsolutePath());
         System.out.println("Exists: " + mdTestFolder.exists());

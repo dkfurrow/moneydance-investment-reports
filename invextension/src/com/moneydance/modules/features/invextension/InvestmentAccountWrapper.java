@@ -74,6 +74,7 @@ public class InvestmentAccountWrapper implements Aggregator {
         TreeSet<Account> subSecAccts = BulkSecInfo.getSelectedSubAccounts(invAcct,
                 Account.AccountType.SECURITY);
         //Loop through Security Sub Accounts
+        // FIXME: potential problem here if no tradeable securities defined for investment account
         for (Account subSecAcct : subSecAccts) {
             //Load Security Account into Wrapper Class
             SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct, this);
@@ -117,7 +118,8 @@ public class InvestmentAccountWrapper implements Aggregator {
         for (TransactionValues transactionValues : tempTransValues) {
             TransactionValues prevCashTransValues = cashTransactions.get(cashTransactions.size() - 1);
             // add synthetic cash transaction to overall cashTransactions set
-            TransactionValues newTransactionValues = new TransactionValues(transactionValues, prevCashTransValues, this);
+            TransactionValues newTransactionValues = new TransactionValues(transactionValues,
+                    prevCashTransValues, this);
             cashTransactions.add(newTransactionValues);
             //Collections.sort(cashTransactions, TransactionValues.transComp);
         }

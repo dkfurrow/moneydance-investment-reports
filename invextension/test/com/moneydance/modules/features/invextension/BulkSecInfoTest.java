@@ -210,6 +210,12 @@ public class BulkSecInfoTest {
     private static boolean compareTransactions(HashMap<String, TransLine> compRpt,
                                                HashMap<String, TransLine> baseRpt, int decPlaces) throws ParseException {
         boolean errorFound = false;
+        if(compRpt.values().size() != baseRpt.values().size()){
+            errorFound = true;
+            System.out.println(String.format("Error: CompRpt size %d, BaseRpt size %d",
+                    compRpt.values().size(), baseRpt.values().size()));
+            return errorFound;
+        }
         System.out.println("Comparing Transactions-- ");
         for (TransLine compLine : compRpt.values()) {
             String idCompLine = compLine.getRow()[4];

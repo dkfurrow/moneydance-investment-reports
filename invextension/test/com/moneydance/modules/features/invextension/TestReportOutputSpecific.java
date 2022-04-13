@@ -109,8 +109,9 @@ public class TestReportOutputSpecific {
         reportConfig.setDateRange(testDateRange);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
         TotalReport report = new TotalFromToReport(reportConfig, currentInfo);
-        report.calcReport();
-        report.displayReport();
+        System.out.println("All data is loaded!  Exiting");
+//        report.calcReport();
+//        report.displayReport();
     }
 
 
