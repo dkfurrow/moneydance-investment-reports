@@ -224,6 +224,25 @@ public class BulkSecInfo {
         return currInfo;
     }
 
+    public ArrayList<HashMap<String, String>> ListLastCurrencyUpdates() {
+        HashMap<String, CurrencyWrapper> currencyWrappers = this.getCurrencyWrappers();
+        ArrayList<HashMap<String, String>> outputList = new ArrayList<>();
+        int dateInt = DateUtils.convertToDateInt(new Date());
+        for (HashMap.Entry<String, CurrencyWrapper> entry : currencyWrappers.entrySet()) {
+            CurrencySnapshot snapshot = entry.getValue().getSnapshotForDate(dateInt);
+            if (snapshot != null) {
+                outputList.add(new HashMap<>() {{
+                    put("ticker", entry.getValue().getName());
+                    put("long_name", entry.getValue().getCurrencyType().getName());
+                    put("id", entry.getKey());
+                    put("date", DateUtils.convertToStandard(snapshot.getDateInt()));
+                    put("price", Double.toString(1.0 / snapshot.getRate()));
+                }});
+            }
+        }
+        return outputList;
+    }
+
     /**
      * loads data from individual currency snapshot
      *

@@ -569,6 +569,12 @@ public final class DateUtils {
         return sdf.format(date);
     }
 
+    public static String convertToStandard(int dateInt) {
+        Date date = convertToDate(dateInt);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
     private static final HashMap<Integer, Calendar> ctcMemo = new HashMap<>();
 
     /**

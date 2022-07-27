@@ -27,6 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
+import com.infinitekind.moneydance.model.CurrencySnapshot;
 import com.infinitekind.moneydance.model.CurrencyType;
 
 import java.util.LinkedHashSet;
@@ -154,6 +155,10 @@ public class CurrencyWrapper implements Aggregator {
             return ticker;
         }
 
+    }
+
+    public CurrencySnapshot getSnapshotForDate(int dateInt){
+        return this.currencyType.getSnapshotForDate(dateInt);
     }
 
     public void setTicker(String ticker) {

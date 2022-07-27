@@ -30,14 +30,15 @@ package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
 import com.infinitekind.moneydance.model.AccountBook;
+import com.infinitekind.moneydance.model.CurrencySnapshot;
 import com.moneydance.apps.md.controller.AccountBookWrapper;
 import com.moneydance.apps.md.controller.io.AccountBookUtil;
 import com.moneydance.apps.md.controller.io.FileUtils;
-
+import com.moneydance.modules.features.invextension.DateUtils;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 
 
 /**
@@ -48,7 +49,8 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class TestReportOutput2 {
     public static final String mdTestFolderStr = "./resources/testMD02.moneydance";
-    public static final File mdTestFolder = new File(mdTestFolderStr);
+    private static String mdTestFolderStr2 = "D:\\\\RECORDS\\\\moneydance\\\\Test\\\\FurrowTest.moneydance";
+    public static final File mdTestFolder = new File(mdTestFolderStr2);
     // Stored Test Database
     public static final int numFrozenColumns = 5; //Irrelevant for testing purposes
     public static final boolean closedPosHidden = true; //Irrelevant for testing purposes
@@ -110,16 +112,21 @@ public class TestReportOutput2 {
         ReportConfig reportConfig = ReportConfig.getTestReportConfig(root, false,
                 AggregationController.INVACCT);
         BulkSecInfo currentInfo = new BulkSecInfo(mdFileInfo.getAccountBook(), reportConfig);
-        ArrayList<String[]> transActivityReport =  currentInfo.listAllTransValues();
-
-
-        File transActivityReportFile = getOutputFile("transActivityReport.csv");
-        IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
-                transActivityReport, transActivityReportFile);
-        Desktop desktop = Desktop.getDesktop();
-        if (desktop.isSupported(Desktop.Action.BROWSE)) {
-            desktop.browse(new File(TestReportOutput2.outputDirectory).toURI());
+        ArrayList<HashMap<String, String>> outputList = currentInfo.ListLastCurrencyUpdates();
+        for (HashMap<String, String> listElement: outputList){
+            System.out.println(listElement.toString());
         }
+
+
+
+//        ArrayList<String[]> transActivityReport =  currentInfo.listAllTransValues();
+//        File transActivityReportFile = getOutputFile("transActivityReport.csv");
+//        IOUtils.writeArrayListToCSV(TransactionValues.listTransValuesHeader(),
+//                transActivityReport, transActivityReportFile);
+//        Desktop desktop = Desktop.getDesktop();
+//        if (desktop.isSupported(Desktop.Action.BROWSE)) {
+//            desktop.browse(new File(TestReportOutput2.outputDirectory).toURI());
+//        }
 
 //        mdData.loadMDFile(mdTestFolder, null);
 //        mdData.initializeMDDataHeadless(false);
