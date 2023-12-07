@@ -32,6 +32,8 @@ import com.infinitekind.moneydance.model.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
@@ -114,7 +116,24 @@ public class TransactionValues implements Comparable<TransactionValues> {
         String memo = "Inserted for Initial Balance: "
                 + invAcctWrapper.getInvestmentAccount().getAccountName();
         this.securityAccountWrapper = invAcctWrapper.getCashAccountWrapper();
-        this.parentTxn = new ParentTxn(AccountBook.nullAccountBook());
+        /* runaround to ensure backwards compatiblity */
+        ParentTxn parentTxnTemp = null;
+        try {
+            Class<AccountBook> clazz = AccountBook.class;
+            Method method = clazz.getMethod("nullAccountBook");
+            AccountBook nullAccountBook = (AccountBook) method.invoke(null, null);
+            parentTxnTemp = new ParentTxn(nullAccountBook);
+        } catch (NoSuchMethodException e) {
+            parentTxnTemp = new ParentTxn(null);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        this.parentTxn = parentTxnTemp;
+        /* end of runaround to ensure backwards compatiblity */
         parentTxn.setDateInt(firstDateInt);
         parentTxn.setTaxDateInt(firstDateInt);
         parentTxn.setDateEntered(0L);

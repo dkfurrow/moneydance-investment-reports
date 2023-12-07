@@ -64,7 +64,7 @@ public class GenericTestMethods {
 //        gc.setTimeInMillis(0L);
 
 //        System.out.println("Long time: " + gc.getTime());
-        Account account = new Account(AccountBook.nullAccountBook());
+//        Account account = new Account(AccountBook.nullAccountBook());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

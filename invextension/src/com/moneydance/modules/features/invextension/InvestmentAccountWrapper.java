@@ -33,6 +33,8 @@ import com.infinitekind.moneydance.model.AccountBook;
 import com.infinitekind.moneydance.model.CurrencyType;
 import com.infinitekind.moneydance.model.SecurityType;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -133,7 +135,25 @@ public class InvestmentAccountWrapper implements Aggregator {
     private void createCashWrapper() throws Exception {
         LogController.logMessage(Level.FINE, String.format("Creating Cash Account for %s",
                 this.getInvestmentAccount().getAccountName()));
-        Account cashAccount = new Account(AccountBook.nullAccountBook());
+        /* runaround to ensure backwards compatiblity */
+
+        Account cashAccount = null;
+        try {
+            Class<AccountBook> clazz = AccountBook.class;
+            Method method = clazz.getMethod("nullAccountBook");
+            AccountBook nullAccountBook = (AccountBook) method.invoke(null, null);
+            cashAccount = new Account(nullAccountBook);
+        } catch (NoSuchMethodException e) {
+            cashAccount = new Account(null);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        /* end of runaround to ensure backwards compatiblity */
+
         cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);
