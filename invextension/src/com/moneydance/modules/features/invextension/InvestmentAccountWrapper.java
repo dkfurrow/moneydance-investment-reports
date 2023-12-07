@@ -133,7 +133,7 @@ public class InvestmentAccountWrapper implements Aggregator {
     private void createCashWrapper() throws Exception {
         LogController.logMessage(Level.FINE, String.format("Creating Cash Account for %s",
                 this.getInvestmentAccount().getAccountName()));
-        Account cashAccount = new Account(null);
+        Account cashAccount = new Account(AccountBook.nullAccountBook());
         cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);

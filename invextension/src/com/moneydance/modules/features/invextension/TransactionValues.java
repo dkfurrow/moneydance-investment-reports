@@ -114,7 +114,7 @@ public class TransactionValues implements Comparable<TransactionValues> {
         String memo = "Inserted for Initial Balance: "
                 + invAcctWrapper.getInvestmentAccount().getAccountName();
         this.securityAccountWrapper = invAcctWrapper.getCashAccountWrapper();
-        this.parentTxn = new ParentTxn(null);
+        this.parentTxn = new ParentTxn(AccountBook.nullAccountBook());
         parentTxn.setDateInt(firstDateInt);
         parentTxn.setTaxDateInt(firstDateInt);
         parentTxn.setDateEntered(0L);
