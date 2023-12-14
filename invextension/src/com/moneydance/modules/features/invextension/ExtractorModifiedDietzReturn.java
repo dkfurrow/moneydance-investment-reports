@@ -50,6 +50,8 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
 
     public ExtractorModifiedDietzReturn(ExtractorOrdinaryReturn extractorOrdinaryReturn){
         super(extractorOrdinaryReturn);
+        /*review: is next line necessary?  Causes compilation warning
+        possible 'this' escape before subclass is fully initialized */
         getResult();
     }
 

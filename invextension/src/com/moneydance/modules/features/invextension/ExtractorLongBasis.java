@@ -31,7 +31,7 @@ package com.moneydance.modules.features.invextension;
 /**
  * Created by larus on 11/28/14.
  */
-public class ExtractorLongBasis extends ExtractorBase<Long> {
+public final class ExtractorLongBasis extends ExtractorBase<Long> {
     public ExtractorLongBasis(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt);
     }

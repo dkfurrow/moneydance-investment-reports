@@ -39,7 +39,7 @@ import java.io.Serial;
 /**
  * Main controller frame which controls report generation
  */
-public class ReportControlFrame
+public final class ReportControlFrame
         extends JFrame
 
 {

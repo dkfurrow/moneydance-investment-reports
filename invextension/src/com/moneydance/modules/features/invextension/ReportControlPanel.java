@@ -54,7 +54,7 @@ import static java.lang.Math.max;
  * @version 1.0
  * @since 1.0
  */
-public class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
+public final class ReportControlPanel extends javax.swing.JPanel implements ActionListener, PropertyChangeListener,
         ItemListener {
     @Serial
     private static final long serialVersionUID = -7581739722392109525L;
@@ -102,7 +102,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     private ReportConfigInvestIncomeChooserPanel investmentIncomeChooserPanel;
     private ReportConfigInvestExpenseChooserPanel investmentExpenseChooserPanel;
     private final FolderPanel folderPanel = new FolderPanel();
-    private ReportConfig reportConfig;
+    private transient ReportConfig reportConfig;
 
 
 
@@ -487,6 +487,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
             output.append(msg).append(newLine);
         }
         reportStatusText.setText(output.toString());
+        reportStatusText.setCaretPosition(0);
     }
 
     @Override
@@ -655,7 +656,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         }
     }
 
-    public static class TestFrame extends JFrame {
+    public final static class TestFrame extends JFrame {
 
         @Serial
         private static final long serialVersionUID = 2202318227772787528L;
@@ -714,7 +715,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
     }
 
 
-    public static class FolderPanel extends JPanel{
+    public final static class FolderPanel extends JPanel{
         @Serial
         private static final long serialVersionUID = 3037092760394483468L;
         private final JTextField directoryOutputField = new javax.swing.JTextField();
@@ -917,8 +918,7 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
         protected Void doInBackground() throws Exception {
             if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
                 LogController.setVerbose();
-                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated version %s", "220"));
-//                FIXME read meta_info.dict to get build
+                LogController.logMessage(Level.FINE, String.format("Verbose logging initiated","..."));
             } else {
                 LogController.getInstance();
             }
@@ -1013,7 +1013,9 @@ public class ReportControlPanel extends javax.swing.JPanel implements ActionList
                 ReportControlPanel.this.getReportControlFrame().repaint();
             }
             LogController.logMessage(Level.FINE, "All Report and Download operations complete");
-            publish(showLogMessage("Verbose logging indicated, "));
+            if(reportOptionsPanel.verboseLoggingCheckBox.isSelected()){
+                publish(showLogMessage("Verbose logging indicated, "));
+            }
             return null;
         }
 

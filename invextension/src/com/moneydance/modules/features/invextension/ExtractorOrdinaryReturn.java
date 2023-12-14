@@ -32,7 +32,7 @@ package com.moneydance.modules.features.invextension;
  * Created by larus on 3/1/15.
  */
 @SuppressWarnings("ALL")
-public class ExtractorOrdinaryReturn extends ExtractorReturnBase {
+public final class ExtractorOrdinaryReturn extends ExtractorReturnBase {
 
     // Returns are not defined over an range in which the underlying security is not held, except for the
     // all returns and annual returns calculations, where we use the largest interval that the position is

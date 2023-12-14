@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 //Suppressed warnings because of static field name use in method getDeclaredField
-public class Tradeable implements Aggregator {
+public final class Tradeable implements Aggregator {
     // name of aggregation method
     static String reportingName = "Tradeable Security/Uninvested Cash";
     // column name for sorting
@@ -48,10 +48,10 @@ public class Tradeable implements Aggregator {
     CurrencyWrapper currencyWrapper;
     Boolean isTradeableCurrency;
 
-    public Tradeable(@NotNull CurrencyWrapper currencyWrapper) {
+    public Tradeable(@NotNull CurrencyWrapper currencyWrapper, @NotNull CurrencyWrapper cashCurrencyWrapper) {
         this.currencyWrapper = currencyWrapper;
         this.isTradeableCurrency = this.currencyWrapper.currencyType
-                != this.currencyWrapper.getBulkSecInfo().getCashCurrencyWrapper().getCurrencyType();
+                != cashCurrencyWrapper.getCurrencyType();
     }
 
     public Tradeable(Boolean isTradeableCurrency) {

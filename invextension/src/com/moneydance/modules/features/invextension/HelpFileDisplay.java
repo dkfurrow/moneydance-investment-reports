@@ -34,7 +34,7 @@ import java.io.*;
 /**
  * Displays Help File for user
  */
-public class HelpFileDisplay {
+public final class HelpFileDisplay {
     public static final String fileLocation = "/com/moneydance/modules/features/invextension/InvestmentReportsHelp.html";
 
 
@@ -65,22 +65,6 @@ public class HelpFileDisplay {
         return success;
     }
 
-
-    public static void main(String[] args) {
-        HelpFileDisplay helpFileDisplay = new HelpFileDisplay();
-        try {
-            boolean success = helpFileDisplay.showHelpFile();
-            System.out.println("Helpfile Displayed in Browser -- " + success);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-
     static class FileResources {
         File tempFile;
 
@@ -93,6 +77,7 @@ public class HelpFileDisplay {
             InputStream is = getClass().getResourceAsStream(fileLocation);
 
             String line;
+            assert is != null;
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is));
                  BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
                 while ((line = br.readLine()) != null) {
@@ -102,7 +87,16 @@ public class HelpFileDisplay {
             }
             return tempFile;
         }
+    }
 
+    public static void main(String[] args) {
+        HelpFileDisplay helpFileDisplay = new HelpFileDisplay();
+        try {
+            boolean success = helpFileDisplay.showHelpFile();
+            System.out.println("Helpfile Displayed in Browser -- " + success);
+        } catch (IOException e) {
+            LogController.logException(e, "Error in diplaying help file");
+        }
     }
 
 }

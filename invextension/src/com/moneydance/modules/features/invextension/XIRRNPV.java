@@ -28,7 +28,7 @@ package com.moneydance.modules.features.invextension;
  * @author : gsatpath
  * @version : 1.0.0 Date: Oct 19, 2005, Time: 9:32:57 AM
  */
-public class XIRRNPV implements GoalSeekFunction {
+public final class XIRRNPV implements GoalSeekFunction {
 
     /**
      * Default Constructor.

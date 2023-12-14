@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 /**
  * Controller for Report Configuration Options
  */
-public class ReportConfig {
+public final class ReportConfig {
     private final Preferences prefs = Prefs.REPORT_CONFIG_PREFS;
     private Class<? extends TotalReport> reportClass;
     private String reportTypeName;

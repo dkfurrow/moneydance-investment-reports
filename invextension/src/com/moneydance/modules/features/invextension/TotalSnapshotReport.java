@@ -40,7 +40,7 @@ import java.util.LinkedList;
  * @since 1.0
  */
 
-public class TotalSnapshotReport extends TotalReport {
+public final class TotalSnapshotReport extends TotalReport {
 
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "Last\nPrice", "End\nPos", "End\nValue",

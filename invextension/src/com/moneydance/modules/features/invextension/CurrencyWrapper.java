@@ -41,7 +41,7 @@ import java.util.Objects;
  * @author Dale Furrow
  */
 
-public class CurrencyWrapper implements Aggregator {
+public final class CurrencyWrapper implements Aggregator {
     static String columnName = "Ticker";
     static String reportingName = "Ticker";
     CurrencyType currencyType;
@@ -49,10 +49,9 @@ public class CurrencyWrapper implements Aggregator {
     String ticker;
     boolean isCash = false; //true if Currency represents uninvested cash
     LinkedHashSet<SecurityAccountWrapper> secAccts;
-    BulkSecInfo currentInfo;
 
-    public CurrencyWrapper(CurrencyType currencyType, BulkSecInfo currentInfo) {
-        this.currentInfo = currentInfo;
+    public CurrencyWrapper(CurrencyType currencyType) {
+
         this.currencyType = currencyType;
         this.secAccts = new LinkedHashSet<>();
         this.curID = this.currencyType.getParameter("id");
@@ -163,10 +162,6 @@ public class CurrencyWrapper implements Aggregator {
 
     public void setTicker(String ticker) {
         this.ticker = ticker;
-    }
-
-    public BulkSecInfo getBulkSecInfo() {
-        return currentInfo;
     }
 
 }

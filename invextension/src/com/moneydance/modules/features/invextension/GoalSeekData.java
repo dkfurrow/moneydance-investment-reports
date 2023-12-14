@@ -31,7 +31,7 @@ package com.moneydance.modules.features.invextension;
  * @author : gsatpath
  * @version : 1.0.0 Date: Oct 19, 2005, Time: 7:51:55 AM
  */
-public class GoalSeekData {
+public final class GoalSeekData {
 
     public double xmin;             /* Minimum allowed values for x.  */
     public double xmax;             /* Maximum allowed values for x.  */

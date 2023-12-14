@@ -36,10 +36,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Serial;
-import java.io.StringReader;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
@@ -52,7 +49,7 @@ import java.util.logging.Level;
  * @author Dale Furrow
  */
 @SuppressWarnings("rawtypes")
-public class TotalReportOutputPane extends JScrollPane {
+public final class TotalReportOutputPane extends JScrollPane {
     @Serial
     private static final long serialVersionUID = 353638079867239526L;
     private static final Color LIGHT_LIGHT_GRAY = new Color(230, 230, 230);
@@ -71,8 +68,8 @@ public class TotalReportOutputPane extends JScrollPane {
     int frozenColumns;
     int firstAggregateColumnIndex;
     int secondAggregateColumnIndex;
-    private final ReportConfig reportConfig;
-    TotalReport totalReport;
+    private final transient ReportConfig reportConfig;
+    transient TotalReport totalReport;
 
 
     public TotalReportOutputPane(TotalReport totalReport) throws NoSuchFieldException, IllegalAccessException {
@@ -199,21 +196,17 @@ public class TotalReportOutputPane extends JScrollPane {
 
     public static String getDisplayValueFromObject(Object o) throws Exception {
         String outputName;
-        if (o instanceof MetricEntry) {
-            Double value = ((MetricEntry) o).getDisplayValue();
-            outputName = value.equals(SecurityReport.UndefinedReturn) ? "" : value.toString();
-        } else if (o instanceof InvestmentAccountWrapper) {
-            outputName = ((InvestmentAccountWrapper) o).getName();
-        } else if (o instanceof SecurityAccountWrapper) {
-            outputName = ((SecurityAccountWrapper) o).getName();
-        } else if (o instanceof SecurityTypeWrapper) {
-            outputName = ((SecurityTypeWrapper) o).getName();
-        } else if (o instanceof SecuritySubTypeWrapper) {
-            outputName = ((SecuritySubTypeWrapper) o).getName();
-        } else if (o instanceof CurrencyWrapper) {
-            outputName = ((CurrencyWrapper) o).getName();
-        } else {
-            throw new Exception("invalid attempt to get name from object");
+        switch (o) {
+            case MetricEntry metricEntry -> {
+                Double value = metricEntry.getDisplayValue();
+                outputName = value.equals(SecurityReport.UndefinedReturn) ? "" : value.toString();
+            }
+            case InvestmentAccountWrapper investmentAccountWrapper -> outputName = investmentAccountWrapper.getName();
+            case SecurityAccountWrapper securityAccountWrapper -> outputName = securityAccountWrapper.getName();
+            case SecurityTypeWrapper securityTypeWrapper -> outputName = securityTypeWrapper.getName();
+            case SecuritySubTypeWrapper securitySubTypeWrapper -> outputName = securitySubTypeWrapper.getName();
+            case CurrencyWrapper currencyWrapper -> outputName = currencyWrapper.getName();
+            case null, default -> throw new Exception("invalid attempt to get name from object");
         }
         return outputName;
     }
@@ -564,38 +557,32 @@ public class TotalReportOutputPane extends JScrollPane {
             if (j < frozenColumns) {
 
                 columnHeader = replaceLineBreak(lockedTable.getColumnName(j));
-                copyIn.append(columnHeader);
-                if (j < numCols - 1) {
-                    copyIn.append("\t");
-                }
             } else {
                 columnHeader = replaceLineBreak(scrollTable.getColumnName(j - frozenColumns));
-                copyIn.append(columnHeader);
-                // System.out.println("j: " + j + " ViewCol: " + viewCol +
-                // " Value: " + scrollTable.getColumnName(j - frozenColumns));
-                if (j < numCols - 1) {
-                    copyIn.append("\t");
-                }
+            }
+            copyIn.append(columnHeader);
+            if (j < numCols - 1) {
+                copyIn.append("\t");
             }
         }
         copyIn.append("\n");
 
         for (int i = 0; i < numRowsView; i++) {
             for (int j = 0; j < numCols; j++) {
+                int modelRow;
+                int modelCol;
                 if (j < frozenColumns) {
-                    int modelRow = lockedTable.convertRowIndexToModel(i);
-                    int modelCol = lockedTable.convertColumnIndexToModel(j);
+                    modelRow = lockedTable.convertRowIndexToModel(i);
+                    modelCol = lockedTable.convertColumnIndexToModel(j);
                     copyIn.append(lockedTable.getDisplayStringFromCell(modelRow, modelCol));
-                    if (j < numCols - 1)
-                        copyIn.append("\t");
 
                 } else {
-                    int modelRow = scrollTable.convertRowIndexToModel(i);
-                    int modelCol = scrollTable.convertColumnIndexToModel(j - frozenColumns);
+                    modelRow = scrollTable.convertRowIndexToModel(i);
+                    modelCol = scrollTable.convertColumnIndexToModel(j - frozenColumns);
                     copyIn.append(scrollTable.getDisplayStringFromCell(modelRow, modelCol));
-                    if (j < numCols - 1)
-                        copyIn.append("\t");
                 }
+                if (j < numCols - 1)
+                    copyIn.append("\t");
 
             }
             copyIn.append("\n");
@@ -606,7 +593,7 @@ public class TotalReportOutputPane extends JScrollPane {
         system.setContents(stsel, stsel);
     }
 
-    Comparator<Object> objectComp = (o1, o2) -> {
+    transient Comparator<Object> objectComp = (o1, o2) -> {
         try {
             String o1Str = getDisplayValueFromObject(o1);
             String o2Str = getDisplayValueFromObject(o2);
@@ -646,7 +633,7 @@ public class TotalReportOutputPane extends JScrollPane {
     public enum ColSizeOption {NORESIZE, MAXCONTRESIZE, MAXCONTCOLRESIZE}
 
 
-    public static class MetricEntryNumberRenderer extends DefaultTableCellRenderer {
+    public static final class MetricEntryNumberRenderer extends DefaultTableCellRenderer {
         @Serial
         private static final long serialVersionUID = -1219099935272135292L;
 
@@ -802,7 +789,7 @@ public class TotalReportOutputPane extends JScrollPane {
         @Serial
         private static final long serialVersionUID = 2820241653505999596L;
 
-        private final Action lockedTableNextColumnCellAction;
+        private transient final Action lockedTableNextColumnCellAction;
 
         private LockedTableSelectNextColumnCellAction(
                 Action lockedTableNextColumnCellAction) {
@@ -827,7 +814,7 @@ public class TotalReportOutputPane extends JScrollPane {
         @Serial
         private static final long serialVersionUID = 135412121274189994L;
 
-        private final Action scrollTableNextColumnCellAction;
+        private transient final Action scrollTableNextColumnCellAction;
 
         private ScrollTableSelectNextColumnCellAction(
                 Action scrollTableNextColumnCellAction) {
@@ -851,7 +838,7 @@ public class TotalReportOutputPane extends JScrollPane {
             AbstractAction {
         @Serial
         private static final long serialVersionUID = -6293074638490971318L;
-        private final Action scrollTablePrevColumnCellAction;
+        private transient final Action scrollTablePrevColumnCellAction;
 
         private ScrollTableSelectPreviousColumnCellAction(
                 Action scrollTablePrevColumnCellAction) {
@@ -876,7 +863,7 @@ public class TotalReportOutputPane extends JScrollPane {
         @Serial
         private static final long serialVersionUID = -290336911634305126L;
 
-        private final Action lockedTablePrevColumnCellAction;
+        private transient final Action lockedTablePrevColumnCellAction;
 
         private LockedTableSelectPreviousColumnCellAction(
                 Action lockedTablePrevColumnCellAction) {
@@ -1001,8 +988,7 @@ public class TotalReportOutputPane extends JScrollPane {
 
                     if (columnModelIndex <= 4) {
                         Object obj = model.getValueAt(rowModelIndex, 1);
-                        if (obj instanceof SecurityAccountWrapper) {
-                            SecurityAccountWrapper securityAccountWrapper = (SecurityAccountWrapper) obj;
+                        if (obj instanceof SecurityAccountWrapper securityAccountWrapper) {
                             if (securityAccountWrapper.isTradeable()) {
                                 SecurityAccountEditorForm.createAndShowSecurityEditorForm(securityAccountWrapper, FormattedTable.this);
                             }
@@ -1120,7 +1106,7 @@ public class TotalReportOutputPane extends JScrollPane {
         int column;
         int sortPriority;
         boolean descending;
-        TableCellRenderer renderer;
+        transient TableCellRenderer renderer;
 
         public ArrowHeader(JTable table, int sortPriority, boolean descending) {
             this.table = table;
@@ -1255,15 +1241,13 @@ public class TotalReportOutputPane extends JScrollPane {
                     v.addElement(line);
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                LogController.logException(ex, "Error in TotalOutputPane");
             }
             setListData(v);
             return this;
         }
     }// End MultiLineHeader
 
-
-    // public static void main(String[] args) {
     //
     // }
 } // end EnTable1 Class

@@ -31,7 +31,7 @@ package com.moneydance.modules.features.invextension;
 /**
  * Created by larus on 11/28/14.
  */
-public class ExtractorIncome extends ExtractorBase<Long> {
+public final class ExtractorIncome extends ExtractorBase<Long> {
     private long income;
 
     public ExtractorIncome(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {

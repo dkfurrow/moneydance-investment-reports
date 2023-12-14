@@ -30,7 +30,7 @@ package com.moneydance.modules.features.invextension;
  * @author : gsatpath
  * @version : 1.0.0 Date: Oct 19, 2005, Time: 9:29:49 AM
  */
-public class XIRRData {
+public final class XIRRData {
 
     public int n;
     public double guess;

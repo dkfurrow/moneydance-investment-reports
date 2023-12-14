@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * Field chooser panel to control the order and identity of fields to be included
  * in a given report
  */
-public class ReportConfigAccountChooserPanel extends JPanel {
+public final class ReportConfigAccountChooserPanel extends JPanel {
 
     @Serial
     private static final long serialVersionUID = -8990699863699414946L;

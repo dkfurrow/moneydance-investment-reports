@@ -43,7 +43,7 @@ import java.io.ByteArrayOutputStream;
  * @since 1.0
  */
 
-public class Main
+public final class Main
         extends FeatureModule {
     private ReportControlFrame reportWindow = null;
 

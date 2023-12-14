@@ -29,12 +29,11 @@ package com.moneydance.modules.features.invextension;
 
 
 import com.infinitekind.moneydance.model.CurrencyType;
-import com.infinitekind.moneydance.model.ParentTxn;
 import com.infinitekind.moneydance.model.SplitTxn;
 import com.infinitekind.moneydance.model.TxnUtil;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 /**
  * Implementation of Lot Matching Method
@@ -43,10 +42,9 @@ import java.util.Hashtable;
  *
  * @author Dale Furrow
  */
-public class GainsLotMatchCalc implements GainsCalc {
+public final class GainsLotMatchCalc implements GainsCalc {
     private static final double positionThreshold = 0.00001;
-    BulkSecInfo currentInfo;
-    TransactionValues currentTrans;
+    TransactionValues currentTransValues;
     TransactionValues prevTransValues;
     long adjPrevPos;
 
@@ -56,23 +54,26 @@ public class GainsLotMatchCalc implements GainsCalc {
     }
 
     /**
-     * Split adjust prior transvalue with respect to current trans value
+     * Split adjust prior TransValue with respect to current trans value
      *
      * @param thisTrans  current transaction
-     * @param priorTrans prior transaction
+     * @param prevTransValues prior transaction
      * @return split adjust factor as ratio
      */
     public static Double getSplitAdjust(TransactionValues thisTrans,
-                                        TransactionValues priorTrans) {
+                                        TransactionValues prevTransValues) {
+        double splitAdjust = calcSplitAdjust(thisTrans, prevTransValues);
+        return prevTransValues == null ? 0.0 : splitAdjust;
+
+    }
+
+    private static double calcSplitAdjust(TransactionValues thisTrans, TransactionValues prevTransValues) {
         int currentDateInt = thisTrans.getParentTxn().getDateInt();
         CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
-        double currentRate = cur == null ? 1.0 : cur.getRate(null, currentDateInt);
-        int prevDateInt = priorTrans == null ? Integer.MIN_VALUE
-                : priorTrans.getParentTxn().getDateInt();
-        double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
-                prevDateInt, currentRate, currentDateInt) / currentRate);
-        return priorTrans == null ? 0.0 : splitAdjust;
-
+        double currentRate = cur.getRate(null, currentDateInt);
+        int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
+                : prevTransValues.getParentTxn().getDateInt();
+        return cur.adjustRateForSplitsInt( prevDateInt, currentRate, currentDateInt) / currentRate;
     }
 
     /* (non-Javadoc)
@@ -80,17 +81,17 @@ public class GainsLotMatchCalc implements GainsCalc {
      */
     @Override
     public long getLongBasis() {
-        if (currentTrans.getPosition() <= positionThreshold) {// position short or closed
+        if (currentTransValues.getPosition() <= positionThreshold) {// position short or closed
             return 0;
-        } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
+        } else if (currentTransValues.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger position
             // add current buy to previous long basis
-            return -currentTrans.getBuy()
-                    - currentTrans.getCommission()
-                    - currentTrans.getExpense()
+            return -currentTransValues.getBuy()
+                    - currentTransValues.getCommission()
+                    - currentTransValues.getExpense()
                     + (prevTransValues == null ? 0
                     : prevTransValues.getLongBasis());
-        } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) { // subsequent pos smaller than previous
+        } else if (currentTransValues.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) { // subsequent pos smaller than previous
             // implies prev long basis must exist
             double wtAvgUnitCost;
             Hashtable<String, Long> matchTable = getLotMatchTable();
@@ -102,7 +103,7 @@ public class GainsLotMatchCalc implements GainsCalc {
             }
 
             return prevTransValues.getLongBasis()
-                    + Math.round(wtAvgUnitCost * currentTrans.getSecQuantity());
+                    + Math.round(wtAvgUnitCost * currentTransValues.getSecQuantity());
         }
         else {
             return prevTransValues == null ? 0 : prevTransValues.getLongBasis();
@@ -119,17 +120,11 @@ public class GainsLotMatchCalc implements GainsCalc {
         double totWeightedNumerator = 0.0;
         double totalAllocatedQtyAdjust = 0.0;
         for (String allocationSplitTransId : thisMatchTable.keySet()) {
-            //split transaction number
-            //parent transaction of associated split
-            ParentTxn allocationParentTrans = currentInfo.getTransactionSet()
-                    .getTxnByID(allocationSplitTransId).getParentTxn();
-            //parent transaction id
-            String allocationParentTransId = allocationParentTrans.getParameter("id");
             //Transvalue associated with parent transaction number
-            TransactionValues allocationTransValues = currentInfo.getSecurityTransactionValues()
-                    .get(allocationParentTransId);
+            TransactionValues allocationTransValues = currentTransValues.getSecurityAccountWrapper()
+                    .getParentTransValuesFromSplitId(allocationSplitTransId);
             //Split-adjustment for shares (adjusts previous shares to current)
-            Double splitAdjust = getSplitAdjust(currentTrans,
+            Double splitAdjust = getSplitAdjust(currentTransValues,
                     allocationTransValues);
             //Lots to include in weighted average
             Long allocationQtyAdjust = thisMatchTable.get(allocationSplitTransId);
@@ -155,43 +150,34 @@ public class GainsLotMatchCalc implements GainsCalc {
     //short basis is same as average calc--no provision in MD for short positions
     @Override
     public long getShortBasis() {
-        if (currentTrans.getPosition() >= -positionThreshold) { // position long or closed
+        if (currentTransValues.getPosition() >= -positionThreshold) { // position long or closed
             return 0;
-        } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
+        } else if (currentTransValues.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger (more negative) position
             // add current short sale to previous short basis
-            return -currentTrans.getShortSell()
-                    - currentTrans.getCommission()
-                    - currentTrans.getExpense()
+            return -currentTransValues.getShortSell()
+                    - currentTransValues.getCommission()
+                    - currentTransValues.getExpense()
                     + (prevTransValues == null ? 0
                     : +prevTransValues.getShortBasis());
-        } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
+        } else if (currentTransValues.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // subsequent pos smaller (closer to 0) than previous
             // implies previous short basis must exist
             assert prevTransValues != null;
             double histAvgUnitCost = ((double)prevTransValues.getShortBasis()) / adjPrevPos;
             return (prevTransValues.getShortBasis()
-                    + Math.round(histAvgUnitCost * currentTrans.getSecQuantity()));
+                    + Math.round(histAvgUnitCost * currentTransValues.getSecQuantity()));
         } else {
             return prevTransValues == null ? 0 : prevTransValues.getShortBasis();
         }
     }
 
     @Override
-    public void initializeGainsCalc(BulkSecInfo thisCurrentInfo,
-                                    TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses) {
-        this.currentInfo = thisCurrentInfo;
-        this.currentTrans = thisTrans;
-        this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.get(prevTranses.size() - 1);
-
-        int currentDateInt = thisTrans.getParentTxn().getDateInt();
-        CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
-        double currentRate = cur == null ? 1.0
-                : cur.getRate(null, currentDateInt);
-        int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
-                : prevTransValues.getParentTxn().getDateInt();
-        double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
-                prevDateInt, currentRate, currentDateInt) / currentRate);
+    public void initializeGainsCalc(TransactionValues thisTrans,
+                                    LinkedHashMap<String, TransactionValues> prevTranses) {
+        this.currentTransValues = thisTrans;
+        this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.lastEntry().getValue();
+        double splitAdjust = calcSplitAdjust(thisTrans, prevTransValues);
         this.adjPrevPos = prevTransValues == null ? 0
                 : Math.round(prevTransValues.getPosition() * splitAdjust);
     }
@@ -203,14 +189,13 @@ public class GainsLotMatchCalc implements GainsCalc {
      * @return lot match table for security
      */
     public Hashtable<String, Long> getLotMatchTable() {
-        SplitTxn securitySplit = currentTrans.getReferenceAccount().getCurrencyType()
-                .equals(currentInfo.getCashCurrencyWrapper().getCurrencyType()) ? null
-                : TxnUtil.getSecurityPart(currentTrans.getParentTxn());
+        SplitTxn securitySplit = currentTransValues.isCash() ? null
+                : TxnUtil.getSecurityPart(currentTransValues.getParentTxn());
         Hashtable<String, Long> splitTable = null;
         if (securitySplit != null) {
             splitTable = TxnUtil.parseCostBasisTag(securitySplit);
     }
-        if (splitTable != null && splitTable.size() > 0) {
+        if (splitTable != null && !splitTable.isEmpty()) {
             return splitTable;
         } else {
             return null;

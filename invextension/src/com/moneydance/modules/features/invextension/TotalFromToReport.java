@@ -39,7 +39,7 @@ import java.util.LinkedList;
  *
  * @author Dale Furrow
  */
-public class TotalFromToReport extends TotalReport {
+public final class TotalFromToReport extends TotalReport {
 
     public static final LinkedList<String> MODEL_HEADER = new LinkedList<>(Arrays.asList("InvAcct", "Security", "SecType",
             "SecSubType", "Ticker", "StartPos", "EndPos", "Start\nPrice", "End\nPrice", "Start\nValue", "End\nValue", "Buy",

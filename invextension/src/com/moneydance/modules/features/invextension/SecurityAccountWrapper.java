@@ -31,50 +31,68 @@ import com.infinitekind.moneydance.model.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
  * Adds functionality to
  */
-public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
+public final class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAccountWrapper> {
     private final Account securityAccount;
     private CurrencyWrapper currencyWrapper;
+
+    private TxnSet txnSet;
+
+    private InvestmentAccountWrapper invAcctWrapper;
+
+    private GainsCalc gainsCalc;
+
+    private AccountBook accountBook;
+
+    private CurrencyWrapper cashCurrencyWrapper;
+    private boolean isCash;
     private Tradeable tradeable;
     private SecurityTypeWrapper securityTypeWrapper;
     private SecuritySubTypeWrapper securitySubTypeWrapper;
-    private InvestmentAccountWrapper invAcctWrapper;
+
     private String name;
     @Nullable
-    private ArrayList<TransactionValues> transValuesList;
+    private LinkedHashMap<String, TransactionValues> transValueMap;
+    private LinkedHashMap<String, String> idMap;
     private DIV_FREQUENCY divFrequency = DIV_FREQUENCY.UNKNOWN;
 
-    public SecurityAccountWrapper(@NotNull Account secAcct, @NotNull InvestmentAccountWrapper invAcct) throws Exception {
+    public SecurityAccountWrapper(@NotNull Account secAcct,
+                                  CurrencyWrapper currencyWrapper, TxnSet txnSet,
+                                  @NotNull InvestmentAccountWrapper invAcctWrapper,
+                                  GainsCalc gainsCalc, AccountBook accountBook) throws Exception {
         this.securityAccount = secAcct;
-        this.invAcctWrapper = invAcct;
-        this.transValuesList = new ArrayList<>();
-
-        this.currencyWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers()
-                .get(secAcct.getCurrencyType().getParameter("id"));
+        this.transValueMap = new LinkedHashMap<>();
+        this.currencyWrapper = currencyWrapper;
+        this.txnSet = txnSet;
+        this.invAcctWrapper = invAcctWrapper;
+        this.gainsCalc = gainsCalc;
+        this.accountBook = accountBook;
+        this.cashCurrencyWrapper = this.getInvAcctWrapper().getCashCurrencyWrapper();
+        this.isCash = Objects.equals(this.currencyWrapper.curID, this.invAcctWrapper.getBulkSecInfo()
+                .getCashCurrencyWrapper().getCurID());
         LogController.logMessage(Level.FINE, String.format("load Security Acct: %s | %s of currency type %s",
                 this.securityAccount.getAccountName(), this.securityAccount.getUUID(),
-                currencyWrapper.getCurrencyType().getUUID()));
+                this.currencyWrapper.getCurrencyType().getUUID()));
         if(this.currencyWrapper == null){  // FIXME: remove after problem fixed
             LogController.logMessage(Level.WARNING, String.format("Security Acct: %s  in investment account %s has " +
                             "null currency type!",
                     this.securityAccount.getAccountName(), this.invAcctWrapper.getName()));
         }
-        this.tradeable = new Tradeable(this.currencyWrapper);
+        this.tradeable = new Tradeable(this.currencyWrapper, cashCurrencyWrapper);
         this.securityTypeWrapper = new SecurityTypeWrapper(this);
         this.securitySubTypeWrapper = new SecuritySubTypeWrapper(this);
-        this.name = secAcct.getAccountName().trim();
+        this.name = Objects.requireNonNull(secAcct.getAccountName()).trim();
         LogController.logMessage(Level.FINE, String.format("Generating Transaction Lines for Security Acct: %s",
                 this.getName()));
+        this.idMap = new LinkedHashMap<>();
         generateTransValues();
-        CurrencyWrapper thisCurWrapper = invAcct.getBulkSecInfo().getCurrencyWrappers().get(secAcct
+        CurrencyWrapper thisCurWrapper = invAcctWrapper.getBulkSecInfo().getCurrencyWrappers().get(secAcct
                 .getCurrencyType().getParameter("id"));
         // add account to list of accounts in currencyWrapper
         thisCurWrapper.secAccts.add(this);
@@ -98,11 +116,9 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
      * with Investment Account cash
      */
     public void generateTransValues() throws Exception {
-        ArrayList<TransactionValues> transValuesSet = new ArrayList<>();
+        this.transValueMap = new LinkedHashMap<>();
         ArrayList<ParentTxn> assocTrans = new ArrayList<>();
-        Account thisAccount = Objects.equals(currencyWrapper.curID, invAcctWrapper.getBulkSecInfo()
-                .getCashCurrencyWrapper().getCurID()) ? invAcctWrapper.getInvestmentAccount() : this.securityAccount;
-        TxnSet txnSet = invAcctWrapper.getBulkSecInfo().getTransactionSet().getTransactionsForAccount(thisAccount);
+        Account thisAccount = isCash ? invAcctWrapper.getInvestmentAccount() : this.securityAccount;
         DividendFrequencyAnalyzer dividendFrequencyAnalyzer = new DividendFrequencyAnalyzer();
         for (AbstractTxn abstractTxn : txnSet) {
             if (BulkSecInfo.getAssociatedAccount(abstractTxn) == thisAccount) {
@@ -115,19 +131,19 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
         assocTrans.sort(BulkSecInfo.txnComp);
         for (ParentTxn parentTxn : assocTrans) {
             TransactionValues transValuesToAdd = new TransactionValues(parentTxn,
-                    thisAccount, this, transValuesSet, this.getBulkSecInfo());
+                    thisAccount, this, gainsCalc, this.transValueMap);
             dividendFrequencyAnalyzer.analyzeDividend(transValuesToAdd);
-            transValuesSet.add(transValuesToAdd);
-            if (thisAccount.getAccountType() == Account.AccountType.SECURITY)
-                invAcctWrapper.getBulkSecInfo().getSecurityTransactionValues().put(transValuesToAdd.getTxnID(),
-                        transValuesToAdd);
+            assert this.transValueMap != null;
+            this.transValueMap.put(transValuesToAdd.getTxnID(), transValuesToAdd);
+            idMap.putAll(transValuesToAdd.getIdMap());
         }
         if (thisAccount.getAccountType() == Account.AccountType.INVESTMENT)
             LogController.logMessage(Level.FINE, String.format("Adding Cash Transactions for %s",
                     thisAccount.getAccountName()));
+        assert this.transValueMap != null;
         LogController.logMessage(Level.FINE, String.format("For %s, Adding %d transaction lines",
-                thisAccount.getAccountName(),transValuesSet.size()));
-        setTransValuesList(transValuesSet);
+                thisAccount.getAccountName(),this.transValueMap.size()));
+//        setTransValuesMap(prevTransValuesMap);
     }
 
     public double getCurrencyRateByDateInt(int dateInt){
@@ -137,11 +153,11 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     public long getPrice(int dateInt) {
         if (currencyWrapper.isCash) {
             return 100;
-        } else {  // Price returned is latest price if requested date is before first snapshot
+        } else {  // Price returned is the latest price if requested date is before first snapshot
             // Correct that by taking nearest snapshot (i.e. first)
             List<CurrencySnapshot> snapshots = currencyWrapper.getCurrencyType().getSnapshots();
-            if (snapshots.size() > 0) {
-                CurrencySnapshot firstSnapshot = snapshots.get(0);
+            if (!snapshots.isEmpty()) {
+                CurrencySnapshot firstSnapshot = snapshots.getFirst();
                 if (dateInt < firstSnapshot.getDateInt()) {
                     return Math.round((1.0 / firstSnapshot.getRate() *
                             this.getCurrencyRateByDateInt(dateInt))* 100);
@@ -159,22 +175,20 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     @NotNull
     public ArrayList<String[]> listTransValuesInfo() {
-        assert transValuesList != null;
-        return transValuesList.stream().map(TransactionValues::listInfo)
+        assert transValueMap != null;
+        return transValueMap.values().stream().map(TransactionValues::listInfo)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public AccountBook getAccountBook(){
-        return this.invAcctWrapper.getAccountBook();
-    }
-
-    private BulkSecInfo getBulkSecInfo() {
-        return this.invAcctWrapper.getBulkSecInfo();
+        return this.accountBook;
     }
 
     public CurrencyWrapper getCurrencyWrapper() {
         return this.currencyWrapper;
     }
+
+    public CurrencyWrapper getCashCurrencyWrapper(){ return this.cashCurrencyWrapper;}
 
     public void setCurrencyWrapper(CurrencyWrapper currWrapper) {
         this.currencyWrapper = currWrapper;
@@ -206,21 +220,25 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     public String getName() {
         if (securityAccount != null) {
-            return securityAccount.getAccountName().trim();
+            return Objects.requireNonNull(securityAccount.getAccountName()).trim();
         } else {
             return this.name;
         }
-
     }
 
     public String getFullName(){
         if (securityAccount != null) {
-            return securityAccount.getParentAccount().getAccountName() + ":" +
-                    securityAccount.getAccountName().trim();
+            return Objects.requireNonNull(securityAccount.getParentAccount()).getAccountName() + ":" +
+                    Objects.requireNonNull(securityAccount.getAccountName()).trim();
         } else {
             return this.name;
         }
     }
+
+    public String getInvestmentAccountName(){
+        return invAcctWrapper.getInvestmentAccount().getAccountName();
+    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -240,13 +258,13 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     }
 
     @Nullable
-    public ArrayList<TransactionValues> getTransactionValues() {
-        return this.transValuesList;
+    public LinkedHashMap<String, TransactionValues> getTransactionValues() {
+        return this.transValueMap;
     }
 
-    public void setAllTransactionValues(@Nullable ArrayList<TransactionValues> transValuesSet) {
-        if (transValuesSet != null) {
-            this.transValuesList = transValuesSet;
+    public void setAllTransactionValues(@Nullable LinkedHashMap<String, TransactionValues> transValueMap) {
+        if (transValueMap != null) {
+            this.transValueMap = transValueMap;
         }
 
     }
@@ -258,10 +276,6 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
 
     public InvestmentAccountWrapper getInvAcctWrapper() {
         return invAcctWrapper;
-    }
-
-    public void setTransValuesList(@Nullable ArrayList<TransactionValues> transValuesList) {
-        this.transValuesList = transValuesList;
     }
 
     public SecurityType getSecurityType() {
@@ -294,6 +308,16 @@ public class SecurityAccountWrapper implements Aggregator, Comparable<SecurityAc
     @Override
     public String getReportingName() {
         return null;
+    }
+
+    public TransactionValues getParentTransValuesFromSplitId(String splitId){
+        if (idMap.containsKey(splitId)){
+            String parentId = idMap.get(splitId);
+            assert transValueMap != null;
+            return transValueMap.getOrDefault(parentId, null);
+        } else {
+            return null;
+        }
     }
 
 

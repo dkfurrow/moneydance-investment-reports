@@ -42,8 +42,13 @@ import java.io.Serial;
 public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
     @Serial
     private static final long serialVersionUID = -8990699863699414946L;
-    protected final ReportControlPanel reportControlPanel;
-
+    protected final ReportControlPanel reportControlPanel;    
+    private String removeButtonLabel;    
+    private String addButtonLabel;
+    private String resetButtonLabel;
+    private String leftLabel;
+    private String middleLabel;
+    private String rightLabel;
     // JLists
     protected final DefaultListModel<ItemType> leftListModel = new DefaultListModel<>();
     private final JList<ItemType> leftList = new JList<>(leftListModel);
@@ -59,7 +64,15 @@ public abstract class ReportConfigChooserPanelBase<ItemType> extends JPanel {
                                         String removeButtonLabel, String addButtonLabel, String resetButtonLabel,
                                         String leftLabel, String middleLabel, String rightLabel) {
         this.reportControlPanel = reportControlPanel;
+        this.removeButtonLabel = removeButtonLabel;
+        this.addButtonLabel = addButtonLabel;
+        this.resetButtonLabel = resetButtonLabel;
+        this.leftLabel = leftLabel;
+        this.middleLabel = middleLabel;
+        this.rightLabel = rightLabel;
+    }
 
+    public void setupGui() {
         // Buttons
         JButton removeButton = new JButton(removeButtonLabel);
         JButton addButton = new JButton(addButtonLabel);

@@ -52,20 +52,20 @@ import java.util.prefs.BackingStoreException;
 /**
  * Panel to allow user input for DateRange
  */
-public class DateRangePanel extends JPanel {
+public final class DateRangePanel extends JPanel {
 
     public static final String DATE_PATTERN = ((SimpleDateFormat) DateFormat
             .getDateInstance(DateFormat.SHORT, Locale.getDefault()))
             .toPattern();
     public static final CustomDateFormat THIS_DATE_FORMAT = new CustomDateFormat(DATE_PATTERN);
     public static final String DATE_RANGE_CHANGED = "dateRangeChanged";
-    private final List<PropertyChangeListener> listeners = new ArrayList<>();
+    private final transient List<PropertyChangeListener> listeners = new ArrayList<>();
     private final JDateField snapDateField = new JDateField(THIS_DATE_FORMAT);
     private final JDateField fromDateField = new JDateField(THIS_DATE_FORMAT);
     private final JDateField toDateField = new JDateField(THIS_DATE_FORMAT);
     @Serial
     private static final long serialVersionUID = -5752555026802594107L;
-    private DateRange dateRange;
+    private transient DateRange dateRange;
     private final JComboBox<DateRange.REF_DATE> refDateComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.REF_DATE.values()));
     private final JComboBox<DateRange.DATE_RULE> dateRuleComboBox = new JComboBox<>(new DefaultComboBoxModel<>(DateRange.DATE_RULE.values()));
     private final JCheckBox isSnapDateRefDateCheckbox = new JCheckBox("Snapshot Date = 'To' Date (else 'From' Date)",

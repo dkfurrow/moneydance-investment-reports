@@ -30,7 +30,7 @@ package com.moneydance.modules.features.invextension;
  * @author : gsatpath
  * @version : 1.0.0 Date: Oct 19, 2005, Time: 7:56:38 AM
  */
-public class GoalSeek {
+public final class GoalSeek {
 
     private static final boolean DEBUG_GOAL_SEEK = false;
 

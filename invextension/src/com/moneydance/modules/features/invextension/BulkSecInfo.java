@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 
-public class BulkSecInfo {
+public final class BulkSecInfo {
 
     public static class ComparablePair<T extends Comparable<T>>{
         T c1;
@@ -111,7 +111,6 @@ public class BulkSecInfo {
     /* all transactions in root */
     private final TransactionSet transactionSet;
     /*TreeMap of Transvalues for leaf-level security Accounts */
-    private final HashMap<String, TransactionValues> securityTransactionValues;
     /* root account */
     private final Account root;
     /* Account Book */
@@ -129,7 +128,6 @@ public class BulkSecInfo {
         BulkSecInfo.reportConfig = reportConfig;
         this.gainsCalc = reportConfig.useAverageCostBasis() ? new GainsAverageCalc() : new GainsLotMatchCalc();
         transactionSet = accountBook.getTransactionSet();
-        securityTransactionValues = new HashMap<>();
         firstDateInt = getFirstDateInt(transactionSet);
         LogController.logMessage(Level.FINE, String.format("First Date Defined for Transaction Set %s", firstDateInt));
         cashCurrencyWrapper = defineCashCurrency();
@@ -140,7 +138,7 @@ public class BulkSecInfo {
         LogController.logMessage(Level.FINE, "All investment accounts, security acounts, and transactions loaded");
     }
 
-    public int getFirstDateInt(TransactionSet transactionSet){
+    public final int getFirstDateInt(TransactionSet transactionSet){
         int dateInt = Integer.MAX_VALUE;
         for(AbstractTxn txn : transactionSet){
             dateInt = Math.min(txn.getDateInt(), dateInt);
@@ -310,10 +308,6 @@ public class BulkSecInfo {
         return transactionSet;
     }
 
-    public HashMap<String, TransactionValues> getSecurityTransactionValues() {
-        return securityTransactionValues;
-    }
-
     public CurrencyWrapper getCashCurrencyWrapper() {
         return cashCurrencyWrapper;
     }
@@ -380,7 +374,7 @@ public class BulkSecInfo {
         }
         // ensure user rate is 1.0
         if(cashCurrencyType.getRelativeRate() != 1.0) cashCurrencyType.setRelativeRate(1.0);
-        CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType, this);
+        CurrencyWrapper cashCurrencyWrapper = new CurrencyWrapper(cashCurrencyType);
         cashCurrencyWrapper.setCash();
         // if verbose, report...
         if (reportConfig.getVerbose()){
@@ -412,7 +406,7 @@ public class BulkSecInfo {
                 CurrencyType.Type.SECURITY).forEach(currency -> {
             String thisID = currency.getParameter("id");
             LogController.logMessage(Level.FINE, String.format("load currency: %s | %s", currency.getName(), thisID));
-            wrapperHashMap.put(thisID, new CurrencyWrapper(currency, this));
+            wrapperHashMap.put(thisID, new CurrencyWrapper(currency));
         });
         // make sure new Currency is added!
         wrapperHashMap.put(cashCurrencyWrapper.getCurID(),
@@ -450,7 +444,7 @@ public class BulkSecInfo {
                     selectedSubAccount.getAccountName(), selectedSubAccount.getUUID()));
             //Load investment account into Wrapper Class
             InvestmentAccountWrapper invAcctWrapper =
-                    new InvestmentAccountWrapper(selectedSubAccount, this, reportConfig);
+                    new InvestmentAccountWrapper(selectedSubAccount, this);
             invAcctWrappers.add(invAcctWrapper);
         } // end Investment Accounts Loop
         return invAcctWrappers;

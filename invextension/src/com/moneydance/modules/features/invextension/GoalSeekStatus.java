@@ -25,7 +25,7 @@ package com.moneydance.modules.features.invextension;
  * @version : 1.0.0
  *          Date: Oct 19, 2005, Time: 7:54:37 AM
  */
-public class GoalSeekStatus {
+public final class GoalSeekStatus {
 
     public static final int GOAL_SEEK_OK = 0;
     public static final int GOAL_SEEK_ERROR = 1;

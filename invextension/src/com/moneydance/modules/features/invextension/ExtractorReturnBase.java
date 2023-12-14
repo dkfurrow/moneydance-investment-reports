@@ -76,7 +76,8 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
                     this.startDateInt = Integer.MAX_VALUE;
                     this.endDateInt = Integer.MIN_VALUE;
                 } else {
-                    ArrayList<TransactionValues> transSet = secAccountWrapper.getTransactionValues();
+                    ArrayList<TransactionValues> transSet = new ArrayList<>(secAccountWrapper
+                            .getTransactionValues().values());
                     if (!transSet.isEmpty()) {
                         this.startDateInt = DateUtils.getPrevBusinessDay(transSet.get(0).getDateInt());
                         this.endDateInt = endDateInt;
@@ -297,7 +298,7 @@ public class ExtractorReturnBase extends ExtractorBase<Double> {
         }
     }
 
-    public class ReturnValueElement implements Comparable<ReturnValueElement> {
+    public final class ReturnValueElement implements Comparable<ReturnValueElement> {
         public final int date;
         public long value;
         public String txnId;

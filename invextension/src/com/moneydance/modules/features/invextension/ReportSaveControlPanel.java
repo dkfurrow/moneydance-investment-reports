@@ -45,7 +45,7 @@ import java.util.prefs.BackingStoreException;
  * @version 1.0
  * @since 1.0
  */
-public class ReportSaveControlPanel extends JPanel implements ActionListener {
+public final class ReportSaveControlPanel extends JPanel implements ActionListener {
     @Serial
     private static final long serialVersionUID = -1521332923539321021L;
     private static final String SAVE_CONFIG = "saveConfig";

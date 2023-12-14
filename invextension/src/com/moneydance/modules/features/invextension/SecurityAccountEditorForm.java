@@ -43,7 +43,7 @@ import java.util.LinkedHashSet;
  * Edits Security Account Information, initialized by double-click
  * on report output
  */
-public class SecurityAccountEditorForm extends JFrame implements ActionListener {
+public final class SecurityAccountEditorForm extends JFrame implements ActionListener {
     @Serial
     private static final long serialVersionUID = 4955951732443697372L;
     private static final String SECURITY_TYPE_CHANGED = "securityTypeChanged";
@@ -57,7 +57,7 @@ public class SecurityAccountEditorForm extends JFrame implements ActionListener 
     JButton addSecuritySubTypeButton = new BasicArrowButton(BasicArrowButton.EAST, Color.BLACK,
             Color.lightGray, Color.WHITE, Color.WHITE);
     JButton updateSecurityButton = new JButton("Update Security");
-    private final SecurityAccountWrapper securityAccountWrapper;
+    private final transient SecurityAccountWrapper securityAccountWrapper;
     private final TotalReportOutputPane.FormattedTable table;
 
 
