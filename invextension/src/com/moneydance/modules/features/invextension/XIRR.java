@@ -30,7 +30,7 @@ package com.moneydance.modules.features.invextension;
  * @author : gsatpath
  * @version : 1.0.0 Date: Oct 19, 2005, Time: 12:09:58 PM
  */
-public class XIRR {
+public final class XIRR {
 
 	/*
      *  Excel stores dates as sequential serial numbers so they can be used

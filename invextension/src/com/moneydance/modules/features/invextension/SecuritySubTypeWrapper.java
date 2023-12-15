@@ -42,7 +42,7 @@ import java.util.LinkedHashSet;
  * @author Dale Furrow
  */
 
-public class SecuritySubTypeWrapper implements Aggregator {
+public final class SecuritySubTypeWrapper implements Aggregator {
     // build static map of Moneydance included sub types
     static final String[] stockSubsetVals = new String[]{"None", "Large Cap", "Mid Cap", "Small Cap", "Growth", "Value"};
     static final String[] mutualSubsetVals = new String[]{"None", "U.S. Stocks", "International Stocks", "Bond",

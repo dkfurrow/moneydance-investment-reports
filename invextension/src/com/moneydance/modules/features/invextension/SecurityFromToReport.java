@@ -41,7 +41,7 @@ import java.util.Arrays;
  *
  * @author Dale Furrow
  */
-public class SecurityFromToReport extends SecurityReport {
+public final class SecurityFromToReport extends SecurityReport {
     /**
      * Generic constructor, which produces either the SecurityReport associated
      * with a given SecurityAccountWrapper or a blank report

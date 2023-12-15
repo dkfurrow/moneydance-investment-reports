@@ -38,13 +38,16 @@ import java.util.*;
 /**
  * Field chooser panel to identify which income is investment income.
  */
-public class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPanelBase<Account> {
+public final class ReportConfigInvestIncomeChooserPanel extends ReportConfigChooserPanelBase<Account> {
 
     @Serial
     private static final long serialVersionUID = -9116375590457256545L;
 
     public ReportConfigInvestIncomeChooserPanel(ReportControlPanel reportControlPanel) {
-        super(reportControlPanel, "<<-Remove Income", "Add Income->>", "Reset", "Income", "Actions", "Investment Income");
+        super(reportControlPanel, "<<-Remove Income", "Add Income->>",
+                "Reset",
+                "Income", "Actions", "Investment Income");
+        super.setupGui();
     }
 
     public void populateBothIncomeLists(ReportConfig reportConfig) {

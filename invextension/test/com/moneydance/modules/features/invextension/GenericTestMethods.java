@@ -28,6 +28,7 @@
 package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.Account;
+import com.infinitekind.moneydance.model.AccountBook;
 import com.moneydance.apps.md.controller.io.FileUtils;
 
 import java.io.File;
@@ -59,10 +60,11 @@ public class GenericTestMethods {
 //        System.out.println("DataFile Path: " + root.getDataFile().getParentFile().getAbsolutePath());
 //        long sampleDateValue = DateUtils.getExcelDateValue(20100208);
 //        System.out.println("Sample Date Value" + sampleDateValue);
-        GregorianCalendar gc = new GregorianCalendar(1900, 1, 1);
-        gc.setTimeInMillis(0L);
+//        GregorianCalendar gc = new GregorianCalendar(1900, 1, 1);
+//        gc.setTimeInMillis(0L);
 
-        System.out.println("Long time: " + gc.getTime());
+//        System.out.println("Long time: " + gc.getTime());
+//        Account account = new Account(AccountBook.nullAccountBook());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

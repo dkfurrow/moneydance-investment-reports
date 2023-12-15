@@ -302,11 +302,11 @@ public abstract class TotalReport {
          * Class provides a generic TableModel which receives data from the
          * reporting methods above.
          */
-    public class ReportTableModel extends AbstractTableModel {
+    public final class ReportTableModel extends AbstractTableModel {
         @Serial
         private static final long serialVersionUID = -3662731131946834218L;
         public String[] columnNames;
-        public Object[][] data;
+        public transient Object[][] data;
 
         public ReportTableModel(Object[][] body, LinkedList<String> colNameList) {
             super();

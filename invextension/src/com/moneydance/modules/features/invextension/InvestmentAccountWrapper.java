@@ -28,14 +28,11 @@
 package com.moneydance.modules.features.invextension;
 
 
-import com.infinitekind.moneydance.model.Account;
-import com.infinitekind.moneydance.model.AccountBook;
-import com.infinitekind.moneydance.model.CurrencyType;
-import com.infinitekind.moneydance.model.SecurityType;
+import com.infinitekind.moneydance.model.*;
 
-import java.util.ArrayList;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -46,7 +43,7 @@ import java.util.logging.Level;
  * @author Dale Furrow
  */
 
-public class InvestmentAccountWrapper implements Aggregator {
+public final class InvestmentAccountWrapper implements Aggregator {
     // name of aggregation method
     static String reportingName = "Investment Account";
     // column name for sorting
@@ -58,31 +55,38 @@ public class InvestmentAccountWrapper implements Aggregator {
     // Account Id
     private final String acctId;
     // associated CashAccount
-    private SecurityAccountWrapper cashWrapper;
+    private SecurityAccountWrapper cashAccountWrapper;
     // Security Account Wrappers
     private ArrayList<SecurityAccountWrapper> securityAccountWrappers;
     private String name;
 
-    public InvestmentAccountWrapper(Account invAcct, BulkSecInfo currentInfo,
-                                    ReportConfig reportConfig) throws Exception {
+    public InvestmentAccountWrapper(Account invAcct, BulkSecInfo currentInfo) throws Exception {
         this.currentInfo = currentInfo;
         this.investmentAccount = invAcct;
         this.acctId = this.investmentAccount.getUUID();
         this.securityAccountWrappers = new ArrayList<>();
-        this.name = investmentAccount.getAccountName().trim();
+        this.name = Objects.requireNonNull(investmentAccount.getAccountName()).trim();
         //get Security Sub Accounts
         TreeSet<Account> subSecAccts = BulkSecInfo.getSelectedSubAccounts(invAcct,
                 Account.AccountType.SECURITY);
         //Loop through Security Sub Accounts
         // FIXME: potential problem here if no tradeable securities defined for investment account
         for (Account subSecAcct : subSecAccts) {
+            CurrencyWrapper currencyWrapper = getBulkSecInfo()
+                    .getCurrencyWrappers().get(subSecAcct.getCurrencyType()
+                            .getParameter("id"));
+            TxnSet txnSet = getBulkSecInfo().getTransactionSet()
+                    .getTransactionsForAccount(subSecAcct);
+            GainsCalc gainsCalc = getBulkSecInfo().getGainsCalc();
+            AccountBook accountBook = getBulkSecInfo().getAccountBook();
             //Load Security Account into Wrapper Class
-            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct, this);
+            SecurityAccountWrapper secAcctWrapper = new SecurityAccountWrapper(subSecAcct,
+                    currencyWrapper, txnSet,this,gainsCalc ,accountBook);
             // add Security Account to Investment Account
             this.securityAccountWrappers.add(secAcctWrapper);
         }
         createCashWrapper();  //creates basic cash wrapper
-        this.securityAccountWrappers.add(cashWrapper);   //add cash wrapper to total securityAccountWrappers
+        this.securityAccountWrappers.add(cashAccountWrapper);   //add cash wrapper to total securityAccountWrappers
         createCashTransactions(); //populates cash wrapper with synthetic cash transactions
     }
     // constructors associated with aggregation, assign random accountid
@@ -95,7 +99,6 @@ public class InvestmentAccountWrapper implements Aggregator {
         this.acctId = UUID.randomUUID().toString();
     }
 
-
     /**
      * Populate Synthetic Cash Transactions for a given Investment Account
      *
@@ -103,27 +106,31 @@ public class InvestmentAccountWrapper implements Aggregator {
     public void createCashTransactions() throws Exception {
         // add to tempTransValues all Security and Account-Level Cash
         // transactions for this InvestmentAccountWrapper
-        ArrayList<TransactionValues> tempTransValues = new ArrayList<>(this.getTransactionValues());
-        var cashTransactions = new ArrayList<TransactionValues>();
+        LinkedHashMap<String, TransactionValues> tempTransValues = this.getTransactionValues();
+        LinkedHashMap<String, TransactionValues> cashTransactions = new LinkedHashMap<>();
 
         // add initial balance as a transValues object (use day before first
         // transaction date if available, creation date if not
         int firstDateInt = tempTransValues.isEmpty()
                 ? DateUtils.getPrevBusinessDay(this.investmentAccount.getCreationDateInt())
-                : DateUtils.getPrevBusinessDay(tempTransValues.get(0).getDateInt());
+                : DateUtils.getPrevBusinessDay(tempTransValues.firstEntry().getValue().getDateInt());
         TransactionValues initialTransactionValues = new TransactionValues(this, firstDateInt);
-        cashTransactions.add(initialTransactionValues);
+        String initialId = initialTransactionValues.getTxnID();
+        cashTransactions.put(initialId, initialTransactionValues);
 
         // now there is guaranteed to be one transaction, so prevTransValues always exists
-        for (TransactionValues transactionValues : tempTransValues) {
-            TransactionValues prevCashTransValues = cashTransactions.get(cashTransactions.size() - 1);
+        for (Map.Entry<String, TransactionValues> entry : tempTransValues.entrySet()) {
+            TransactionValues transactionValues = entry.getValue();
+            TransactionValues prevCashTransValues = cashTransactions.lastEntry().getValue();
             // add synthetic cash transaction to overall cashTransactions set
             TransactionValues newTransactionValues = new TransactionValues(transactionValues,
                     prevCashTransValues, this);
-            cashTransactions.add(newTransactionValues);
+            String parentId = newTransactionValues.getTxnID();
+            cashTransactions.put(parentId, newTransactionValues);
             //Collections.sort(cashTransactions, TransactionValues.transComp);
         }
-        this.cashWrapper.setAllTransactionValues(cashTransactions);
+
+        this.cashAccountWrapper.setAllTransactionValues(cashTransactions);
     }
 
     /**
@@ -133,7 +140,21 @@ public class InvestmentAccountWrapper implements Aggregator {
     private void createCashWrapper() throws Exception {
         LogController.logMessage(Level.FINE, String.format("Creating Cash Account for %s",
                 this.getInvestmentAccount().getAccountName()));
-        Account cashAccount = new Account(null);
+        /* runaround to ensure backwards compatiblity */
+
+        Account cashAccount;
+        try {
+            Class<AccountBook> clazz = AccountBook.class;
+            Method method = clazz.getMethod("nullAccountBook");
+            AccountBook nullAccountBook = (AccountBook) method.invoke(null);
+            cashAccount = new Account(nullAccountBook);
+        } catch (NoSuchMethodException e) {
+            cashAccount = new Account(null);
+        } catch (SecurityException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        /* end of runaround to ensure backwards compatiblity */
+
         cashAccount.setAccountName("CASH");
         cashAccount.setComment("New Security to hold cash transactions");
         cashAccount.setSecurityType(SecurityType.MUTUAL);
@@ -142,8 +163,14 @@ public class InvestmentAccountWrapper implements Aggregator {
         cashAccount.setParentAccount(this.investmentAccount);
         LogController.logMessage(Level.FINE, String.format("Cash account created: %s, %s, with currency type %s",
                 cashAccount.getAccountName(), cashAccount.getUUID(), cashAccount.getCurrencyType().getUUID()));
-        this.cashWrapper = new SecurityAccountWrapper(cashAccount, this);
-        currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashWrapper);
+
+        TxnSet txnSet = getBulkSecInfo().getTransactionSet()
+                .getTransactionsForAccount(investmentAccount);
+        GainsCalc gainsCalc = getBulkSecInfo().getGainsCalc();
+        AccountBook accountBook = getBulkSecInfo().getAccountBook();
+        this.cashAccountWrapper = new SecurityAccountWrapper(cashAccount,
+                getCashCurrencyWrapper(), txnSet, this, gainsCalc, accountBook);
+        currentInfo.getCashCurrencyWrapper().secAccts.add(this.cashAccountWrapper);
 //        cashWrapper.generateTransValues();  Don't need to call this twice!
     }
 
@@ -182,7 +209,12 @@ public class InvestmentAccountWrapper implements Aggregator {
 
 
     public SecurityAccountWrapper getCashAccountWrapper() {
-        return this.cashWrapper;
+        return this.cashAccountWrapper;
+    }
+
+    public CurrencyWrapper getCashCurrencyWrapper() {
+        return currentInfo.getCashCurrencyWrapper();
+
     }
 
 
@@ -194,26 +226,33 @@ public class InvestmentAccountWrapper implements Aggregator {
         this.name = name;
     }
 
+    static <K, V> void orderByValue(
+            LinkedHashMap<K, V> m, Comparator<? super V> c) {
+        List<Map.Entry<K, V>> entries = new ArrayList<>(m.entrySet());
+        m.clear();
+        entries.stream()
+                .sorted(Map.Entry.comparingByValue(c))
+                .forEachOrdered(e -> m.put(e.getKey(), e.getValue()));
+    }
+
     /**
      * Returns sorted transaction value lines for this investment account
      *
      * @return sorted transaction values list
      */
-    public ArrayList<TransactionValues> getTransactionValues() throws Exception {
-        ArrayList<TransactionValues> outputTransactionValues = new ArrayList<>();
+    public LinkedHashMap<String, TransactionValues> getTransactionValues() {
+        LinkedHashMap<String, TransactionValues> outputTransactionValues = new LinkedHashMap<>();
         for (SecurityAccountWrapper securityAccountWrapper : securityAccountWrappers) {
-            ArrayList<TransactionValues> accountTransactionValues = securityAccountWrapper.getTransactionValues();
+            LinkedHashMap<String, TransactionValues> accountTransactionValues = securityAccountWrapper
+                    .getTransactionValues();
             if (accountTransactionValues != null) {
-                for (TransactionValues transactionValues : accountTransactionValues) {
-                    boolean success = outputTransactionValues.add(transactionValues);
-                    if (!success)
-                        throw new Exception("Error: Failed on "
-                                + this.investmentAccount.getAccountName()
-                                + "getTransValues");
+                for (String thisId : accountTransactionValues.keySet()) {
+                    TransactionValues transactionValues = accountTransactionValues.get(thisId);
+                    outputTransactionValues.put(thisId, transactionValues);
                 }
             }
         }
-        outputTransactionValues.sort(TransactionValues.transComp);
+        orderByValue(outputTransactionValues, TransactionValues.transComp);
         return outputTransactionValues;
     }
 

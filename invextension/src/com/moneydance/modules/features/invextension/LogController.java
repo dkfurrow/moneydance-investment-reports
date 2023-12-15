@@ -40,7 +40,7 @@ import java.util.logging.*;
 /**
  * Class which controls in-program instantiation of logger functionality
  */
-public class LogController {
+public final class LogController {
     private final Logger logger;
     private static final String errorLogFilenamePattern = "investment_reports_error.%u.%g.xml";
     private Handler errorFileHandler;
@@ -136,7 +136,7 @@ public class LogController {
         }
     }
 
-    public class SingleLineFormatter extends Formatter {
+    public final class SingleLineFormatter extends Formatter {
 
         Date dat = new Date();
         private final static String format = "{0,date} {0,time}";

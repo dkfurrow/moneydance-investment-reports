@@ -31,7 +31,7 @@ package com.moneydance.modules.features.invextension;
 
 import com.infinitekind.moneydance.model.CurrencyType;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Implementation of Average Cost Method
@@ -40,8 +40,8 @@ import java.util.ArrayList;
  *
  * @author Dale Furrow
  */
-public class GainsAverageCalc implements GainsCalc {
-    private static final double positionTheshold = 0.00001;
+public final class GainsAverageCalc implements GainsCalc {
+    private static final double positionThreshold = 0.00001;
     TransactionValues currentTrans;
     TransactionValues prevTransValues;
     long adjPrevPos;
@@ -55,7 +55,7 @@ public class GainsAverageCalc implements GainsCalc {
      */
     @Override
     public long getLongBasis() {
-        if (currentTrans.getPosition() <= positionTheshold) {// position short or closed
+        if (currentTrans.getPosition() <= positionThreshold) {// position short or closed
             return 0;
         } else if (currentTrans.getPosition() > (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger position
@@ -82,7 +82,7 @@ public class GainsAverageCalc implements GainsCalc {
      */
     @Override
     public long getShortBasis() {
-        if (currentTrans.getPosition() >= -positionTheshold) { // position long or closed
+        if (currentTrans.getPosition() >= -positionThreshold) { // position long or closed
             return 0;
         } else if (currentTrans.getPosition() < (prevTransValues == null ? 0 : adjPrevPos)) {
             // first trans or subsequent larger (more negative) position
@@ -105,19 +105,19 @@ public class GainsAverageCalc implements GainsCalc {
     }
 
     @Override
-    public void initializeGainsCalc(BulkSecInfo currentInfo,
-                                    TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses) {
-        this.currentTrans = thisTrans;
-        this.prevTransValues = prevTranses.isEmpty() ? null : prevTranses.get(prevTranses.size() - 1);
+    public void initializeGainsCalc(TransactionValues thisTransactionValues,
+                                    LinkedHashMap<String, TransactionValues> previousTransactionValues) {
+        this.currentTrans = thisTransactionValues;
+        this.prevTransValues = previousTransactionValues.isEmpty() ? null :
+                previousTransactionValues.lastEntry().getValue();
 
-        int currentDateInt = thisTrans.getParentTxn().getDateInt();
-        CurrencyType cur = thisTrans.getReferenceAccount().getCurrencyType();
-        double currentRate = cur == null ? 1.0
-                : cur.getRate(null, currentDateInt);
+        int currentDateInt = thisTransactionValues.getParentTxn().getDateInt();
+        CurrencyType cur = thisTransactionValues.getReferenceAccount().getCurrencyType();
+        double currentRate = cur.getRate(null, currentDateInt);
         int prevDateInt = prevTransValues == null ? Integer.MIN_VALUE
                 : prevTransValues.getParentTxn().getDateInt();
-        double splitAdjust = (cur == null ? 1.0 : cur.adjustRateForSplitsInt(
-                prevDateInt, currentRate, currentDateInt) / currentRate);
+        double splitAdjust = cur.adjustRateForSplitsInt(prevDateInt, currentRate,
+                currentDateInt) / currentRate;
         this.adjPrevPos = prevTransValues == null ? 0
                 : Math.round(prevTransValues.getPosition() * splitAdjust);
     }

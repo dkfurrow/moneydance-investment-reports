@@ -38,7 +38,7 @@ package com.moneydance.modules.features.invextension;
  */
 @SuppressWarnings("unused")
 //Suppressed warnings because of static field name use in method getDeclaredField
-public class AllAggregate implements Aggregator {
+public final class AllAggregate implements Aggregator {
     static String columnName = "InvAcct";
     private static AllAggregate uniqueInstance;
 

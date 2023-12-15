@@ -38,7 +38,7 @@ import com.infinitekind.moneydance.model.SecurityType;
  * @author Dale Furrow
  */
 
-public class SecurityTypeWrapper implements Aggregator {
+public final class SecurityTypeWrapper implements Aggregator {
 
 
     // name of aggregation method

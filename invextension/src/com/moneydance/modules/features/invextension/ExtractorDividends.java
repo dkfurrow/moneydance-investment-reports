@@ -38,7 +38,7 @@ import java.util.Stack;
 
 
 @SuppressWarnings("ALL")
-public class ExtractorDividends extends ExtractorBase<List<Number>> {
+public final class ExtractorDividends extends ExtractorBase<List<Number>> {
     private TransactionValues firstTransactionBasis;
     private TransactionValues lastTransactionBasis;
 

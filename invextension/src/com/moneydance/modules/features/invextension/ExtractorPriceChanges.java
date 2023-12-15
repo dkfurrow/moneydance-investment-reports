@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Created by larus on 11/27/14.
  */
-public class ExtractorPriceChanges extends ExtractorBase<List<Number>> {
+public final class ExtractorPriceChanges extends ExtractorBase<List<Number>> {
     public ExtractorPriceChanges(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {
         super(securityAccount, startDateInt, endDateInt);
     }

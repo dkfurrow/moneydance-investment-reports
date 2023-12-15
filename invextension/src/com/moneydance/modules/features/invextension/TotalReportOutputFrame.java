@@ -42,7 +42,7 @@ import java.util.Date;
 /**
  * Handle external controls for TotalReportOutputPane
  */
-class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, PropertyChangeListener {
+public final class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListener, PropertyChangeListener {
     public static final String SET_FROZEN_COLUMNS = "setFrozenColumns";
     public static final String REFRESH_TRANSACTIONS = "refreshTransactions";
     public static final String SORT_ROWS = "sortRows";
@@ -55,7 +55,7 @@ class TotalReportOutputFrame extends JFrame implements ActionListener, ItemListe
     public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("H:mm:ss z");
     TotalReportOutputPane totalReportOutputPane;
     String frameText;
-    ReportConfig reportConfig;
+    transient ReportConfig reportConfig;
     JComboBox<Integer> freezeColsBox;
     JCheckBox hideClosedBox;
     JButton sortButton;

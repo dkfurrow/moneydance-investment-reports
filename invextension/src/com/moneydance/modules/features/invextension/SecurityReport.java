@@ -124,8 +124,10 @@ public abstract class SecurityReport extends ComponentReport {
      * @param securityAccount input security account wrapper
      * @param dateRange              input date range
      */
-    public SecurityReport(ReportConfig reportConfig, SecurityAccountWrapper securityAccount,
-                          CompositeReport compositeReport ,DateRange dateRange) {
+    public SecurityReport(final ReportConfig reportConfig,
+                          final SecurityAccountWrapper securityAccount,
+                          final CompositeReport compositeReport ,
+                          final DateRange dateRange) {
         this.reportConfig = reportConfig;
         this.dateRange = dateRange;
         simpleMetric = new TreeMap<>();
@@ -160,13 +162,79 @@ public abstract class SecurityReport extends ComponentReport {
             positionScale = 10000.0;
             priceScale = 100.0;
         }
-        loadAggregators();
+        if(this.securityAccount != null){
+            outputLine.add(investmentAccount);
+            outputLine.add(securityAccount);
+            outputLine.add(securityType);
+            outputLine.add(securitySubType);
+            outputLine.add(currency);
+
+        } else {
+            assert(compositeReport != null);
+            String firstAggregateName;
+            String secondAggregateName;
+            COMPOSITE_TYPE compositeType = compositeReport.getCompositeType();
+            AggregationController aggregationController = compositeReport.getAggregationController();
+            Aggregator firstAggregator = compositeReport.getFirstAggregator();
+            Aggregator secondAggregator = compositeReport.getSecondAggregator();
+
+            if (compositeType == COMPOSITE_TYPE.ALL) {
+                firstAggregateName = aggregationController.getFirstAggregator().getAllTypesName();
+                secondAggregateName = aggregationController.getSecondAggregator().getAllTypesName();
+            } else if (compositeType == COMPOSITE_TYPE.FIRST) {
+                firstAggregateName = firstAggregator.getAggregateName() + " ";
+                secondAggregateName = secondAggregator.getAllTypesName();
+            } else if (compositeType == COMPOSITE_TYPE.SECOND) {
+                firstAggregateName = firstAggregator.getAllTypesName();
+                secondAggregateName = secondAggregator.getAggregateName();
+            } else { //"Both" Case
+                firstAggregateName = firstAggregator.getAggregateName();
+                secondAggregateName = secondAggregator.getAggregateName();
+            }
+
+            //generate dummy aggregator objects
+            InvestmentAccountWrapper investmentAccountWrapper = new InvestmentAccountWrapper("");
+            SecurityAccountWrapper securityAccountWrapper = new SecurityAccountWrapper("");
+            SecurityTypeWrapper securityTypeWrapper = new SecurityTypeWrapper("");
+            SecuritySubTypeWrapper securitySubTypeWrapper = new SecuritySubTypeWrapper("");
+            CurrencyWrapper currencyWrapper = new CurrencyWrapper("");
+
+            Aggregator controllerFirstAggregator = aggregationController.getFirstAggregator();
+            //sets name for first aggregator
+            if (controllerFirstAggregator instanceof InvestmentAccountWrapper)
+                investmentAccountWrapper.setName(firstAggregateName);//investmentAccountStr = firstAggStrName;
+            if (controllerFirstAggregator instanceof SecurityTypeWrapper)
+                securityTypeWrapper.setName(firstAggregateName);//securityTypeStr = firstAggStrName;
+            if (controllerFirstAggregator instanceof SecuritySubTypeWrapper)
+                securitySubTypeWrapper.setName(firstAggregateName); //securitySubTypeStr = firstAggStrName;
+            if (controllerFirstAggregator instanceof Tradeable)
+                securityAccountWrapper.setName(firstAggregateName); //securityAccountStr = firstAggStrName;
+            if (controllerFirstAggregator instanceof CurrencyWrapper)
+                currencyWrapper.setTicker(firstAggregateName);
+
+            Aggregator controllerSecondAggregator = aggregationController.getSecondAggregator();
+            //sets name for second aggregator
+            if (controllerSecondAggregator instanceof InvestmentAccountWrapper)
+                investmentAccountWrapper.setName(secondAggregateName);//investmentAccountStr = secondAggStrName;
+            if (controllerSecondAggregator instanceof SecurityTypeWrapper)
+                securityTypeWrapper.setName(secondAggregateName);//securityTypeStr = secondAggStrName;
+            if (controllerSecondAggregator instanceof SecuritySubTypeWrapper)
+                securitySubTypeWrapper.setName(secondAggregateName);//securitySubTypeStr = secondAggStrName;
+            if (controllerSecondAggregator instanceof Tradeable) {
+                securityAccountWrapper.setName(secondAggregateName);//securityAccountStr = secondAggStrName;
+            }
+            outputLine.add(0, investmentAccountWrapper);
+            outputLine.add(1, securityAccountWrapper);
+            outputLine.add(2, securityTypeWrapper);
+            outputLine.add(3, securitySubTypeWrapper);
+            outputLine.add(4, currencyWrapper);
+        }
     }
 
     @SuppressWarnings("unchecked")
     protected void doCalculations(SecurityAccountWrapper securityAccount) {
         if (securityAccount != null && securityAccount.getTransactionValues() != null) {
-            for (TransactionValues transaction : securityAccount.getTransactionValues()) {
+            for (TransactionValues transaction : securityAccount.getTransactionValues().values()) {
                 int transactionDateInt = transaction.getDateInt();  // CSE across loops and method invocations
                 simpleMetric.values().stream().filter(p -> p.extractor != null)
                         .forEach(p -> p.extractor.processNextTransaction(transaction, transactionDateInt));
@@ -388,83 +456,6 @@ public abstract class SecurityReport extends ComponentReport {
 
     public int getReturnMetricStartDateInt(String name) {
         return returnsMetric.get(name).extractor.startDateInt;
-    }
-
-
-    public void loadAggregators(){
-        if(this.securityAccount != null){
-            outputLine.add(investmentAccount);
-            outputLine.add(securityAccount);
-            outputLine.add(securityType);
-            outputLine.add(securitySubType);
-            outputLine.add(currency);
-
-        } else {
-            assert(compositeReport != null);
-            String firstAggregateName;
-            String secondAggregateName;
-            COMPOSITE_TYPE compositeType = compositeReport.getCompositeType();
-            AggregationController aggregationController = compositeReport.getAggregationController();
-            Aggregator firstAggregator = compositeReport.getFirstAggregator();
-            Aggregator secondAggregator = compositeReport.getSecondAggregator();
-
-            if (compositeType == COMPOSITE_TYPE.ALL) {
-                firstAggregateName = aggregationController.getFirstAggregator().getAllTypesName();
-                secondAggregateName = aggregationController.getSecondAggregator().getAllTypesName();
-            } else if (compositeType == COMPOSITE_TYPE.FIRST) {
-                firstAggregateName = firstAggregator.getAggregateName() + " ";
-                secondAggregateName = secondAggregator.getAllTypesName();
-            } else if (compositeType == COMPOSITE_TYPE.SECOND) {
-                firstAggregateName = firstAggregator.getAllTypesName();
-                secondAggregateName = secondAggregator.getAggregateName();
-            } else { //"Both" Case
-                firstAggregateName = firstAggregator.getAggregateName();
-                secondAggregateName = secondAggregator.getAggregateName();
-            }
-
-            //generate dummy aggregator objects
-            InvestmentAccountWrapper investmentAccountWrapper = new InvestmentAccountWrapper("");
-            SecurityAccountWrapper securityAccountWrapper = new SecurityAccountWrapper("");
-            SecurityTypeWrapper securityTypeWrapper = new SecurityTypeWrapper("");
-            SecuritySubTypeWrapper securitySubTypeWrapper = new SecuritySubTypeWrapper("");
-            CurrencyWrapper currencyWrapper = new CurrencyWrapper("");
-
-            Aggregator controllerFirstAggregator = aggregationController.getFirstAggregator();
-            //sets name for first aggregator
-            if (controllerFirstAggregator instanceof InvestmentAccountWrapper)
-                investmentAccountWrapper.setName(firstAggregateName);//investmentAccountStr = firstAggStrName;
-            if (controllerFirstAggregator instanceof SecurityTypeWrapper)
-                securityTypeWrapper.setName(firstAggregateName);//securityTypeStr = firstAggStrName;
-            if (controllerFirstAggregator instanceof SecuritySubTypeWrapper)
-                securitySubTypeWrapper.setName(firstAggregateName); //securitySubTypeStr = firstAggStrName;
-            if (controllerFirstAggregator instanceof Tradeable)
-                securityAccountWrapper.setName(firstAggregateName); //securityAccountStr = firstAggStrName;
-            if (controllerFirstAggregator instanceof CurrencyWrapper)
-                currencyWrapper.setTicker(firstAggregateName);
-
-            Aggregator controllerSecondAggregator = aggregationController.getSecondAggregator();
-            //sets name for second aggregator
-            if (controllerSecondAggregator instanceof InvestmentAccountWrapper)
-                investmentAccountWrapper.setName(secondAggregateName);//investmentAccountStr = secondAggStrName;
-            if (controllerSecondAggregator instanceof SecurityTypeWrapper)
-                securityTypeWrapper.setName(secondAggregateName);//securityTypeStr = secondAggStrName;
-            if (controllerSecondAggregator instanceof SecuritySubTypeWrapper)
-                securitySubTypeWrapper.setName(secondAggregateName);//securitySubTypeStr = secondAggStrName;
-            if (controllerSecondAggregator instanceof Tradeable) {
-                securityAccountWrapper.setName(secondAggregateName);//securityAccountStr = secondAggStrName;
-            }
-            outputLine.add(0, investmentAccountWrapper);
-            outputLine.add(1, securityAccountWrapper);
-            outputLine.add(2, securityTypeWrapper);
-            outputLine.add(3, securitySubTypeWrapper);
-            outputLine.add(4, currencyWrapper);
-        }
-
-
-
-
-
-
     }
 
     public String getDescription(){

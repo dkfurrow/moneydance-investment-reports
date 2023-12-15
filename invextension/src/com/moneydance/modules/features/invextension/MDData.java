@@ -21,7 +21,7 @@ import java.util.*;
  * Singleton Class holds all Moneydance Data
  */
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-class MDData {
+public final class MDData {
     File mdFolder;
     private FeatureModuleContext featureModuleContext;
     private AccountBook accountBook;
@@ -30,9 +30,11 @@ class MDData {
     private ObservableLastTransactionDate observableLastTransactionDate;
     private Date lastPriceUpdateTime;
     private final HashMap<String, Double> userRateMap = new HashMap<>();
+    private LinkedHashMap<String, String> metainfo;  /*parsed from metainfo.dict */
     private Main extension;
     private Thread transactionMonitorThread;
     private TransactionMonitor transactionMonitor;
+    private int buildInfo;
 
 
     private static MDData uniqueInstance;
@@ -158,6 +160,8 @@ class MDData {
 
     java.util.List<String> getTransactionStatus(){
         List<String> msgs = new ArrayList<>();
+        msgs.add(String.format(" Moneydance Build %s Investment Reports Version %s",
+                buildInfo, metainfo.get("module_build")));
         msgs.add("MD last modified: " + DATE_PATTERN_MEDIUM.format
                 (observableLastTransactionDate.getLastTransactionDate()));
         generateCurrentPriceData();
@@ -176,6 +180,9 @@ class MDData {
     }
 
     public void initializeMDDataInApplication(boolean newObservable) {
+        MetaInfoParse metaInfoParse = new MetaInfoParse();
+        metainfo = metaInfoParse.getMetaInfo();
+        buildInfo = new com.moneydance.apps.md.controller.Main().getBuild();
         featureModuleContext = extension.getUnprotectedContext();
         accountBook = featureModuleContext.getCurrentAccountBook();
         root = accountBook.getRootAccount();
@@ -187,6 +194,9 @@ class MDData {
     }
 
     protected void initializeMDDataHeadless(boolean newObservable) throws Exception{
+        MetaInfoParse metaInfoParse = new MetaInfoParse();
+        metainfo = metaInfoParse.getMetaInfo();
+        buildInfo = new com.moneydance.apps.md.controller.Main().getBuild();
         AccountBookWrapper wrapper = AccountBookWrapper.wrapperForFolder(mdFolder);
         // must add this section or get null pointer error
         ArrayList<File> folderFiles = new ArrayList<>();

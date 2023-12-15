@@ -36,7 +36,7 @@ import java.util.HashSet;
  *
  * @author Dale Furrow
  */
-public class CompositeReport extends ComponentReport {
+public final class CompositeReport extends ComponentReport {
 
     private final AggregationController aggregationController;
     private Aggregator firstAggregator; //aggregator value of first Aggregate Type

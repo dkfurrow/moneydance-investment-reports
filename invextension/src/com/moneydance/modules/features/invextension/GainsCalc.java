@@ -27,7 +27,7 @@
  */
 package com.moneydance.modules.features.invextension;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Interface for gains calculations
@@ -38,8 +38,7 @@ import java.util.ArrayList;
  */
 public interface GainsCalc {
 
-    void initializeGainsCalc(BulkSecInfo currentInfo,
-                             TransactionValues thisTrans, ArrayList<TransactionValues> prevTranses);
+    void initializeGainsCalc(TransactionValues thisTrans, LinkedHashMap<String, TransactionValues> prevTranses);
 
     long getLongBasis();
 

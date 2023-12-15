@@ -32,7 +32,7 @@ package com.moneydance.modules.features.invextension;
 /**
  * Created by larus on 11/28/14.
  */
-public class ExtractorBuy extends ExtractorBase<Long> {
+public final class ExtractorBuy extends ExtractorBase<Long> {
     private long buys;
 
     public ExtractorBuy(SecurityAccountWrapper securityAccount, int startDateInt, int endDateInt) {

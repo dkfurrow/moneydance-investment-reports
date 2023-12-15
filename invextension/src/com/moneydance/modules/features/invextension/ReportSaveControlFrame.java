@@ -36,7 +36,7 @@ import java.util.prefs.BackingStoreException;
 /**
  * Frame which controls custom report configuration
  */
-public class ReportSaveControlFrame extends JFrame {
+public final class ReportSaveControlFrame extends JFrame {
     @Serial
     private static final long serialVersionUID = -8818472017634165380L;
     ReportControlFrame reportControlFrame;

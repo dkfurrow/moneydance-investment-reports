@@ -40,7 +40,7 @@ import java.util.prefs.Preferences;
  * @author Dale Furrow
  */
 @SuppressWarnings("ALL")
-public class Prefs {
+public final class Prefs {
 
 
     public static final String REPORT_CONFIG_PATH = "/com/moneydance/modules/features/invextension/ReportConfig";

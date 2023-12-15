@@ -39,7 +39,7 @@ import java.io.Serial;
 /**
  * Diplays contents of ExtractorTotalReturn or ExtractorIRR
  */
-public class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
+public final class ReturnsAuditDisplayFrame extends JFrame implements ActionListener {
     @Serial
     private static final long serialVersionUID = -3102906929058309264L;
     public static final String COPY_CLIPBOARD = "copyClipboard";

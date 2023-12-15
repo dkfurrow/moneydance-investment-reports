@@ -50,7 +50,7 @@ public class ExtractorModifiedDietzReturn extends ExtractorReturnBase {
 
     public ExtractorModifiedDietzReturn(ExtractorOrdinaryReturn extractorOrdinaryReturn){
         super(extractorOrdinaryReturn);
-        getResult();
+        /* getResult(); removed, causes compilation warning */
     }
 
     // Compute Modified Dietz return

@@ -40,7 +40,7 @@ import java.util.TreeSet;
  * Compute the IRR for an investment.
  */
 @SuppressWarnings("ALL")
-public class ExtractorIRR extends ExtractorModifiedDietzReturn {
+public final class ExtractorIRR extends ExtractorModifiedDietzReturn {
     private TreeSet<ReturnValueElement> incomeValues;
 
     private boolean resultCurrent = false;
