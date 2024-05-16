@@ -1,14 +1,16 @@
-# Moneydance Investment Reports
+# Investment Reports Extension for the [Moneydance](https://infinitekind.com/moneydance) Application
 
-The Investment Reports Extension (invextension.mxt) is a set of four useful investment reports which are displayed in table form or downloaded in .csv form to a directory of the user's choosing. Reports are detailed below, and a basic overview of classes is provided. Reference website is: http://code.google.com/p/moneydance-investment-reports/. Email for more info is: dkfurrow@gmail.com.
+The Investment Reports Extension (invextension.mxt) is a set of four useful investment reports which are displayed in table form or downloaded in .csv form to a directory of the user's choosing. Reports are detailed below, and a basic overview of classes is provided.
+
+Please note that _this project is not affiliated the Moneydance application or its developer [Infinite Kind](https://infinitekind.com/) in any way, and **this project is no longer under active development**.  As with all open-source projects, **use of any code associated with this project is at your own risk**._
 
 ## Getting Started
 
-To download the executable (*.mxt) file from its official source, got to the "Extensions/Manage Extension" in your moneydance app, and add this extension.  To build the app on your own machine, use ANT, the build.xml file is in the src directory.
+To download the executable (*.mxt) file from its official source, go to the "Extensions/Manage Extension" in your moneydance app, and add this extension (there will be a warning that the extension is _unsafe_, you must acknowlege to continue).  To build the app on your own machine, use ANT, the build.xml file is in the src directory.
 
 ### Prerequisites
 
-The current java version I used to build the .mxt file for this project is OpenJDK 15.0.2.  build.xml will build the invextension.mxt file, buildbundled.xml will build the invextension_bundled.jar file which is useful in 'headless' operation.
+The current java version I used to build the .mxt file for this project is OpenJDK 21.  build.xml will build the invextension.mxt file, buildbundled.xml will build the invextension_bundled.jar file which is useful in 'headless' operation.
 
 ## Running the tests
 
